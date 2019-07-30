@@ -1,0 +1,95 @@
+All bytes are in big endian order.
+
+P9SongPref | band_objects
+"P9 Song Specific dreamscape and venue preferences"
+
+File Format:
+============
+INT32 - Some kind of count (Always 20?)
+INT32 - Always 2
+BYTES(9)
+
+String - Venue
+* budokan
+* cavern
+* dreamscape
+* rooftop
+* shea
+* sullivan
+
+============ USED FOR DREAMSCAPES ==============
+String[] - Scenes (Studio)
+* abbeyroad01default (herecomesthesun, lucyinthesky, octopusgarden)
+* abbeyroad01hillside (heresomesthesun)
+* abbeyroad01ocean (octopusgarden)
+* hillside (herecomesthesun)
+* ocean (octopusgarden)
+
+String[] - Mini Venues (Dreamscape)
+* lucykaleido (lucyinthesky)
+* kaleido01 (lucyinthesky)
+* herecomesthesun01 (herecomesthesun)
+
+INT32 - Count of Scene Groups (Debug?)
+* Scene Group
+* ===========
+* String - Group Name
+* String - Scene Trigger
+=================================================
+
+String - Dreamscape Outfit
+* sgtpepper (boys, imemine)
+* sixtyeight (octopusgarden)
+* sixtyeight02 (herecomesthesun)
+
+String - Studio Outfit
+* cavern (boys, imemine)
+* sixtyeight_hdp (octopusgarden)
+* sixtyeight02_hdp (herecomesthesun)
+
+String[] - George Instrument
+* guitar_rh_ricken360_12 (aharddaysnight)
+
+String[] - John Instrument
+guitar_rh_gibson62j160 (aharddaysnight)
+
+String[] - Paul Instrument
+* bass_lh_hofner63_pick (aharddaysnight)
+
+String[] - Ringo Instrument
+* drum_sullivan (aharddaysnight)
+
+^^ Usually array of 1 ^^
+
+String - Tempo "Animation tempo for characters and crowd"
+* slow (Under 94 BPM)
+* medium (94-135 BPM)
+* fast (Above 135 BPM)
+
+String - Song Clips (Usually same as song)
+* aharddaysnight
+
+String - Dreamscape Font
+* none (aharddaysnight)
+
+String - George Amp
+* fender_twin_reverb (octopusgarden)
+
+String - John Amp
+* fender_twin_reverb (octopusgarden)
+
+String - Paul Amp
+* fender_bassman (octopusgarden)
+
+String - Mixer
+* emi_tg_mixer (octopusgarden)
+
+INT16 - Dreamscape Camera Shots "What kind of camera shots to use in dreamscapes"
+* 0 (aharddaysnight, boys, imemine)
+* 1 (octopusgarden)
+* 4 (lucyinthesky)
+
+BYTES(2) - Zero'd Data
+
+String - Dreamscape Lyric Part "Harmony part to use for the venue lyrics"
+* PART HARM1

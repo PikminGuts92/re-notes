@@ -1,0 +1,103 @@
+Dirctory Types
+==============
+ 1 - BandCharacter
+ 3 - BandCrowdMeterDir
+ 8 - BandLeadMeter
+ 3 - BandScoreDisplay
+ 4 - BandStarMeterDir
+ 4 - BandStreakDisplay
+14 - CharClipSet
+ 9 - Character
+16 - ObjectDir
+ 2 - PanelDir
+ 8 - RndDir
+11 - WorldDir
+ 1 - WorldFx
+
+Hierarchy
+=========
+ObjectDir
+-> CharClipSet
+-> RndDir (Anim Draw Trans Poll)
+   -> BandCrowdMeterDir
+   -> BandLeadMeter
+   -> BandScoreDisplay
+   -> BandStarMeterDir
+   -> Character
+      -> BandCharacter
+   -> PanelDir
+      -> WorldDir
+   -> WorldFx
+
+BandCharacter (1)
+=================
+(superclasses Character)
+
+BandCrowdMeterDir (3)
+=====================
+(superclasses RndDir)
+
+BandLeadMeter (8)
+=================
+(superclasses RndDir)
+
+BandScoreDisplay (3)
+====================
+(superclasses RndDir)
+
+BandStarMeterDir (4)
+====================
+(superclasses RndDir)
+
+BandStreakDisplay (4)
+=====================
+(superclasses RndDir)
+
+CharClipSet (14)
+================
+"A <a href='#CharClip'>CharClip</a> container."
+
+(superclasses ObjectDir)
+
+Character (9)
+=============
+"Base class for Character objects. Contains Geometry,
+    Outfit Loaders, and LOD + Sphere concepts."
+
+(allowed_dirs Character)
+(superclasses RndDir)
+
+ObjectDir (16)
+==============
+"An ObjectDir keeps track of a set of Objects.
+    It can subdir or proxy in other ObjectDirs.
+    To rename subdir or proxy files search for remap_objectdirs in system/run/config/objects.dta"
+
+402 bytes
+
+PanelDir (2)
+============
+"Top-level UI Object,
+    contains UI components and an optional camera"
+
+(superclasses RndDir)
+
+RndDir (8)
+==========
+"A RndDir specially tracks drawable and animatable objects."
+
+(superclasses ObjectDir Anim Draw Trans Poll)
+
+WorldDir (11)
+=============
+"A WorldDir contains world objects."
+
+(superclasses PanelDir)
+
+WorldFx (1)
+=============
+"Drop animatables and drawables into a WorldFx object,
+    TransParent it to something, then start/stop it.
+    Cleans up particles post animation."
+
+(superclasses RndDir)

@@ -1,0 +1,255 @@
+All bytes are in little endian order.
+
+Part 1: Matrix Arrays (0x00)
+============================
+INT32 - Always 25
+INT32  - Always 8
+* Matrix Array 1
+* ============
+* Float*12
+* Matrix Array 2
+* ============
+* Float*12
+
+Part 2: Sub Meshes (0x68)
+=========================
+INT32 - Count of sub meshes (Can be zero)
+* Sub Mesh Names
+* ==============
+* INT32 - Char Count.
+* String - Mesh name
+
+Part 3: Mesh Name - Parent (Position relative to its matrices)
+// May not always be a mesh. It can be a .cam.
+=================
+INT32 - Always 0
+INT32 - Char. Count (Usually 0)
+String - Unknown (Another view?)
+* Observed:
+* 	"6 foot camera.cam" - small_club_multi.rnd_ps2/color_plane.mesh
+BYTE - Always 0
+INT32 - Char Count.
+String - Mesh Name
+
+Part 4: Unknown (25 Bytes)
+===============
+INT32 - Always 1
+BYTE - Either 0 or 1, but usally 1
+* Observed:
+*	0 - small_club_multi.rnd_ps2/color_plane.mesh 
+INT32 - Count of more meshes??? basement.milo/rug1.mesh
+	string[] - Mesh names
+Float(4) - Not sure (Quaternion?)
+
+Part 5: Material
+================
+INT32 - Char Count. (Can be zero)
+String - Mat Name
+
+Part 6: Mesh Name (Again?)
+==========================
+INT32 - Char Count.
+String - Mesh Name
+INT32 - Always 0
+* 31 - classic/face.mesh
+INT32 - Always 1
+BYTE - Always 0
+
+NOTE: Second mesh name does not always match the first one.
+
+Part 7: Vertices + Faces
+========================
+INT16 - Number of Verts
+INT16 - "IDontKnow"
+* Vertices Table (48 Bytes)
+* ==============
+* Float - X
+* Float - Y
+* Float - Z
+* Float - NX
+* Float - NY
+* Float - NZ
+* Float - Color R
+* Float - Color G
+* Float - Color B
+* Float - Color A (Muliply to RGB?)
+* Float - U
+* Float - V
+INT16 - Number of Faces - Highest value seen is 3200 in splash/splash_light.mesh
+INT16 - Unknown
+* Faces Table (6 Bytes)
+* ===========
+* INT16 - Index 1
+* INT16 - Index 2
+* INT16 - Index 3
+
+---Undocumented in ghmesher---
+
+Part 8: (5 Strings? Might only be 4)
+====================================
+INT32 - Count of Face Groups
+BYTE[] - Face Group Sizes (Sum = Total mesh faces)
+
+If (Next INT32 != 0)
+	// Bones names - Up to 4!
+	INT32 - Char Count.
+	String - Bone
+	INT32 - Char Count.
+	String - Bone
+	INT32 - Char Count.
+	String - Bone
+	INT32 - Char Count.
+	String - Not yet observed
+	
+	MATRIX[4] - Bone Transforms (192 bytes total)
+
+* Face Group Entry
+* ================
+* INT32 - Count of Numbers
+* INT32 - Count of Vertex Offsets
+* INT32[] - Numbers (Ascending, last being equal to count of numbers)
+* INT16[Count of Vertex Offsets]
+
+Part 9: A bunch of floats?
+==========================
+Transforms + Face Data (Collison box?)
+4 Transforms: 4 * 48 bytes =  192 bytes
+Faces?
+
+========================================
+alterna_mesh.10.mesh (Offset = 10620)
+--------------------
+192 verts
+198 faces
+
+QD1 (81 68 49) <-- Sum to faces
+bone_spine1.mesh
+bone_pelvis.mesh
+bone_R-thigh.mesh
+one_L-thigh.mesh
+
+ 13 numbers
+107 vert indicies
+
+ 19
+ 25
+ 39
+ 43
+ 52
+ 68
+ 73
+ 79
+ 85
+ 92
+ 97
+100
+107
+
+ 3 numbers
+74 vert indices
+
+23
+33
+74
+
+ 6 numbers
+61 vert indices
+
+ 3
+18
+38
+44
+51
+61
+
+122 bytes
+
+
+========================================
+alterna_mesh.19.mesh (Offset = 1473)
+--------------------
+23 verts
+25 faces
+
+25
+bone_L-foreArm.mesh
+bone_L-upperArm.mesh
+bone_L-foreTwist1.mesh
+null
+
+ 5 numbers
+35 vert indices
+
+ 7
+12
+23
+30
+35 
+
+alterna_mesh.22.mesh (Offset = 2559)
+--------------------
+42 verts
+54 faces
+
+54
+bone_L-thumb02.mesh
+bone_L-thumb01.mesh
+bone_L-thumb03.mesh
+null
+
+ 6 numbers
+66 vert indices
+
+11
+25
+35
+44
+56
+66
+
+alterna/face.mesh (Offset = 46205)
+-----------------
+791 verts
+1340 faces
+
+mcghbljegfNYR:
+null
+
+(no transforms)
+
+ 10 numbers
+129 vert indices
+
+ 18
+ 37
+ 58
+ 72
+ 86
+ 99
+112
+121
+126
+129
+
+ 18 numbers
+135 vert indices
+
+ 10
+ 20
+ 30
+ 36
+ 43
+ 48
+ 53
+ 56
+ 76
+ 83
+ 96
+103
+108
+116
+121
+127
+130
+135
+

@@ -1,0 +1,10 @@
+Version:
+* 24 - GH2(PS2)
+* 25 - GH2(X360)
+
+Directory Type:
+Directory Name:
+Directory Entries:
+
+Secondary Directory Name:
+Embedded DTB File:

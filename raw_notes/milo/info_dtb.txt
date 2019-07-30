@@ -1,0 +1,91 @@
+All bytes are in little endian order.
+
+Header (7 bytes):
+=================
+BYTE  - Always 1
+INT16 - Count of children nodes
+INT32 - Node ID / Version (1 or 2) // 0 in TBRB cache
+
+Header (11 bytes): Fantasia
+==================
+BYTE  - Always 1
+INT32 - Always 0?
+INT16 - Count of children nodes
+INT32 - Node ID (2^16) / Version (1 or 2)
+
+Header (9 bytes): RBVR/AMP
+=================
+BYTE  - Always 1
+INT32 - Node ID / Version (1 or 2)
+INT16 - Count of children nodes
+INT16 - Unknown - Always 1?
+
+Known Chuncks:
+==============
+0x00 - INT32
+0x01 - Float (32-bit)
+0x02 - String: Variable ("$")
+0x04 - String: // Found embedded in GH2 (PS2) Milos
+0x05 - String: Keyword, no quotes or uses ''
+0x06 - String: kDataUnhandled Marker ("kDataUnhandled ")
+0x07 - String: #ifdef directive ("#ifdef ")
+0x08 - String: #else directive ("#else ")
+0x09 - String: #endif directive ("endif ")
+0x10 - Sub-Tree: "()"
+0x11 - Sub-Tree: "{}"
+0x12 - String: String - Like Keyword, but Quoted
+0x13 - Sub-Tree: "[]"
+0x20 - String: #define directive ("#define ")
+0x21 - String: #include directive ("#include ")
+0x22 - String: #merge directive ("#merge ")
+0x23 - String: #ifndef directive ("#ifndef ")
+0x24 - Unknown: 4-bytes, usually zero'd
+
+Sub-Trees -------------------
+0x10 - () Inner Node
+0x11 - {} Script Inner Node
+0x13 - [] Property Inner Node
+
+String:
+=======
+INT32 - Char. Count
+Char[*] - String
+
+Sub-Tree (6 bytes):
+===================
+INT16 - Count of children
+INT32 - Node ID
+
+Sub-Tree (10 bytes): Fantasia
+====================
+INT32 - Unknown
+INT32 - Count of children
+INT16 - Node ID
+
+Sub-Tree (8 bytes): RBVR
+===================
+INT32 - Unknown - Always 1?
+INT16 - Count of children
+INT16 - Node ID
+
+../../system/run/config/macros.dta
+================================== kData
+0x00 - Int
+0x01 - Float
+0x02 - Var
+0x03 - Func
+0x04 - Object
+0x05 - Symbol
+0x06 - Unhandled
+//0x07 - String: #ifdef directive ("#ifdef ")
+//0x08 - String: #else directive ("#else ")
+//0x09 - String: #endif directive ("endif ")
+0x10 - Array
+0x11 - Command
+0x12 - String
+0x13 - Property
+//0x20 - String: #define directive ("#define ")
+//0x21 - String: #include directive ("#include ")
+//0x22 - String: #merge directive ("#merge ")
+//0x23 - String: #ifndef directive ("#ifndef ")
+//0x24 - Unknown: 4-bytes, usually zero'd

@@ -1,0 +1,64 @@
+All bytes are in little endian order. Similiar to DTB?
+
+Header
+======
+BYTE - Always 2
+INT32 - Count of embedded .txt names
+
+txt Name
+========
+* INT32 - Char. Count
+* String - Name
+
+INT16 - Node Count?
+INT32 - Node ID? (Always 1)
+INT32 - Always 0
+
+Known Chuncks:
+==============
+ 1 - String: Keyword, quotes (Can be either "" or '')
+ 3 - Sub-Tree?
+13 - String: Keyword, no quotes
+
+-1 - Next line?
+
+Header (7 bytes):
+=================
+BYTE  - Always 1
+INT16 - Count of children nodes
+INT32 - Node ID
+
+Known Chuncks:
+==============
+0x00 - INT32
+0x01 - Float (32-bit)
+0x02 - String: Variable Name ("$")
+0x04 - String:
+0x05 - String: Keyword, no quotes
+0x06 - String: kDataUnhandled Marker ("kDataUnhandled ")
+0x07 - String: #ifdef directive ("#ifdef ")
+0x08 - String: #else directive ("#else ")
+0x09 - String: #endif directive ("endif ")
+0x10 - Sub-Tree: "()"
+0x11 - Sub-Tree: "{}"
+0x12 - String: Keyword, quotes (Can be either "" or '')
+0x13 - Sub-Tree: "[]"
+0x20 - String: #define directive ("#define ")
+0x21 - String: #include directive ("#include ")
+0x22 - String: #merge directive ("#merge ")
+0x23 - String: #ifndef directive ("#ifndef ")
+0x24 - Unknown: 4-bytes, usually zero'd
+
+() - Inner Node
+{} - Script Inner Node
+[] - Property Inner Node
+
+String:
+=======
+INT32 - Char. Count
+Char[*] - String
+
+Sub-Tree:
+=========
+INT16 - Count of children
+INT32 - Node ID

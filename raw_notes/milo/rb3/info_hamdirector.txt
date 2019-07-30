@@ -1,0 +1,71 @@
+All bytes are in big endian order.
+
+HamDirector - Found in DC1 Milos
+
+======== OBSERVED ========
+
+shot
+====
+* VENUE
+* CLOSEUP
+* Area1_FAR
+* Area1_NEAR
+* Area3_MOVEMENT
+* DC_PLAYER_FREESTYLE
+* Area2_FAR
+* Area2_MOVEMENT
+* Area1_MOVEMENT
+
+postproc
+^^ postproc_interp
+========
+* default.pp
+
+move // Avatar Dance Commands
+^^ move_interp
+====
+* Rest.move
+* Crook.move
+* Gank.move
+* Frenchy_L.move
+* Frenchy_R.move
+* Pony.move
+* Smush.move
+* Pose_1.move
+* Pose_2.move
+* Freestyle.move
+* Hey_Girl_Hey.move
+* Pony_&_End.move
+* Finishing_Move.move
+
+clip // Visible Directions
+====
+* Crook
+* Gank
+* Frenchy_L
+* Frenchy_R
+* Pony
+* Smush
+* Pose_1
+* Pose_2
+* Freestyle
+* Hey_Girl_Hey
+* Pony_&_End
+* Finishing_Move
+
+practice
+========
+* Frenchy_R->Frenchy_L
+* Frenchy_R->Frenchy_L_end
+* Pony
+* Pony_end
+* Smush
+* Smush_end
+* Pose_1->Pose_2
+* Freestyle
+* Crook
+* Crook_end
+* Gank
+* Gank_end
+* Hey_Girl_Hey_end
+* Gank_loop_end

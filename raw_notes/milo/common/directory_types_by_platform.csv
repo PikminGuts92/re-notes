@@ -1,0 +1,67 @@
+Title,Platform,DirectoryType,DirectoryMagic
+Guitar Hero,PS2,,-1
+Guitar Hero Encore: Rocks the 80s,PS2,BandCharacter,1
+Guitar Hero Encore: Rocks the 80s,PS2,BandCrowdMeterDir,3
+Guitar Hero Encore: Rocks the 80s,PS2,BandLeadMeter,8
+Guitar Hero Encore: Rocks the 80s,PS2,BandScoreDisplay,3
+Guitar Hero Encore: Rocks the 80s,PS2,BandStarMeterDir,4
+Guitar Hero Encore: Rocks the 80s,PS2,BandStreakDisplay,4
+Guitar Hero Encore: Rocks the 80s,PS2,CharClipSet,14
+Guitar Hero Encore: Rocks the 80s,PS2,Character,9
+Guitar Hero Encore: Rocks the 80s,PS2,ObjectDir,16
+Guitar Hero Encore: Rocks the 80s,PS2,PanelDir,2
+Guitar Hero Encore: Rocks the 80s,PS2,RndDir,8
+Guitar Hero Encore: Rocks the 80s,PS2,WorldDir,11
+Guitar Hero Encore: Rocks the 80s,PS2,WorldFx,1
+Guitar Hero II,PS2,BandCharacter,1
+Guitar Hero II,PS2,BandCrowdMeterDir,3
+Guitar Hero II,PS2,BandLeadMeter,8
+Guitar Hero II,PS2,BandScoreDisplay,3
+Guitar Hero II,PS2,BandStarMeterDir,4
+Guitar Hero II,PS2,BandStreakDisplay,4
+Guitar Hero II,PS2,CharClipSet,14
+Guitar Hero II,PS2,Character,9
+Guitar Hero II,PS2,ObjectDir,16
+Guitar Hero II,PS2,PanelDir,2
+Guitar Hero II,PS2,RndDir,8
+Guitar Hero II,PS2,WorldDir,11
+Guitar Hero II,PS2,WorldFx,1
+Guitar Hero II,X360,BandCharacter,1
+Guitar Hero II,X360,BandCrowdMeterDir,3
+Guitar Hero II,X360,BandLeadMeter,8
+Guitar Hero II,X360,BandScoreDisplay,3
+Guitar Hero II,X360,BandStarMeterDir,5
+Guitar Hero II,X360,BandStreakDisplay,4
+Guitar Hero II,X360,CharClipSet,16
+Guitar Hero II,X360,Character,10
+Guitar Hero II,X360,GHTrackDir,3
+Guitar Hero II,X360,ObjectDir,17
+Guitar Hero II,X360,PanelDir,2
+Guitar Hero II,X360,RndDir,9
+Guitar Hero II,X360,WorldDir,12
+Guitar Hero II Demo,PS2,BandCharacter,1
+Guitar Hero II Demo,PS2,BandCrowdMeterDir,3
+Guitar Hero II Demo,PS2,BandLeadMeter,8
+Guitar Hero II Demo,PS2,BandScoreDisplay,3
+Guitar Hero II Demo,PS2,BandStarMeterDir,4
+Guitar Hero II Demo,PS2,BandStreakDisplay,4
+Guitar Hero II Demo,PS2,CharClipSet,14
+Guitar Hero II Demo,PS2,Character,9
+Guitar Hero II Demo,PS2,ObjectDir,15
+Guitar Hero II Demo,PS2,PanelDir,2
+Guitar Hero II Demo,PS2,RndDir,6
+Guitar Hero II Demo,PS2,WorldDir,11
+Guitar Hero II Demo,PS2,WorldFx,1
+Guitar Hero II Demo (OPM),PS2,BandCharacter,1
+Guitar Hero II Demo (OPM),PS2,BandCrowdMeterDir,3
+Guitar Hero II Demo (OPM),PS2,BandLeadMeter,8
+Guitar Hero II Demo (OPM),PS2,BandScoreDisplay,3
+Guitar Hero II Demo (OPM),PS2,BandStarMeterDir,4
+Guitar Hero II Demo (OPM),PS2,BandStreakDisplay,4
+Guitar Hero II Demo (OPM),PS2,CharClipSet,12
+Guitar Hero II Demo (OPM),PS2,Character,7
+Guitar Hero II Demo (OPM),PS2,ObjectDir,14
+Guitar Hero II Demo (OPM),PS2,PanelDir,1
+Guitar Hero II Demo (OPM),PS2,RndDir,6
+Guitar Hero II Demo (OPM),PS2,WorldDir,11
+Guitar Hero II Demo (OPM),PS2,WorldFx,1

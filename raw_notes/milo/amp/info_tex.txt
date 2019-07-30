@@ -1,0 +1,24 @@
+All bytes are in little endian order.
+
+Extensions: .rnd_ps2
+
+Part 1: Tex Header
+==================
+INT32 - Always 5
+INT32 - Width
+INT32 - Height
+INT32 - Bits Per Pixel (Either 4 or 8)
+INT32 - Char Count.
+String - Texture Path
+BYTES(5) - Zero'd
+
+**NOTE: The following parts may not always be present.**
+
+Part 2: BMP_PS2 Header (16 bytes)
+======================
+BYTE - Always 0
+BYTE - Bits Per Pixel (Either 4 or 8)
+INT16 - Image Format (Always 3)
+INT16 - Width
+INT16 - Height
+INT16 - Bytes Per Line

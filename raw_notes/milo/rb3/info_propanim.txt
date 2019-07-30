@@ -1,0 +1,127 @@
+All bytes are in big endian order.
+
+PropAnim | rnd_objects
+"Animate any properties on target object"
+
+BandDirector | band_objects
+"Band Director, sits in each song file and manages camera + scene changes"
+
+File Format:
+============
+INT32 - Always 13
+INT32 - Always 2
+String - Animation Type
+* "song_anim" - Most common
+* "song_facial_exp" - DC1 Milos
+
+Usually
+=======
+ BYTES(5) - Zero'd Data
+
+DC1
+===
+ INT16 - Always 256
+ INT16 - Always 512
+ BYTES(3) - Always 0?
+ INT32 - Always 5
+ String - Import type
+ * "lip_sync"
+ IN32 - Always 4
+ String - Import path?
+ * "backup_face.lipsync"
+ * "dancer_face.lipsync"
+ INT32 - Always 0
+
+INT32 - Rate To Animate (Usually 4)
+Float - Total Animation Frames
+* 0.0 (rumine)
+* 5685.771 (20thcenturyboy)
+* 8806.0625 (25or6to4)
+* 4483.4102 (antibodies)
+* 10215.604 (beastandtheharlot)
+* 12603.852 (freebird)
+* 3820.593 (getfree)
+
+INT32 - Always 1
+INT32 - Band Object Count (Usually 23)
+* 19 (rumine)
+* 23 (rizeofthefenix)
+*  5 (superfreak - DC1)
+
+* Band Object
+* ===========
+* INT32 - Idef-1 (Usually 6, sometimes 2)
+* INT32 - Idef-2 (Usually 6, sometimes 2)
+* String - Director Type?
+* * "BandDirector" - RB3
+* * "HamDirector" - DC1
+* BYTES(3) - "01 00 01"
+* INT32 - Always 0
+* INT32 - Always 5
+* String - Song Property Name
+* * bass_intensity
+* * guitar_intensity
+* * drum_intensity
+* * mic_intensity
+* * keyboard_intensity
+* * shot_bg
+* * shot_bk
+* * shot_gk
+* * stagekit_fog
+* * lightpreset_keyframe
+* * lightpreset
+* * spot_bass
+* * spot_guitar
+* * spot_vocal
+* * part2_sing
+* * part3_sing
+* * part4_sing
+* * crowd
+* * shot_5
+* * postproc
+* * world_event
+* * spot_drums
+* * spot_keyboard
+//////--- DC1 ---//////
+* * shot
+* * postproc
+* * move
+* * clip
+* * practice
+
+* INT32 - No idea (Always 0)
+
+* String - Secondary Property Name?
+* * lightpreset_interp
+* * lightpreset_keyframe_interp
+
+* INT32 - No idea
+* * 0 - Default
+* * 1 - Enabled in 'stagekit_fog'
+* * 5 - Enabled in 'lightpreset' and 'lightpreset_keyframe'
+
+* BYTES(1) - Zero'd Data
+* INT32 - Count of Events
+
+When Idef-1 and Idef-2 are 6
+============================
+* * Event
+* * =====
+* * String - Event Name
+* * Float - Keyframe (*33.32848484848485)
+* * 38.45105322586123 - 25or6to4
+
+When Idef-1 and Idef-2 are 2
+============================
+* * << Obeserved in 'postproc' >>
+* *
+* * Event
+* * =====
+* * INT32 - Always 0
+* * String - Event Name
+* * Float - Keyframe
+* * 33.32976521801185 - getfree
+* * 33.32848484848485 - rizeofthefenix?
+* * 33.33333333333333 - whativedone2 (120bpm)
+
+BYTES(1) - Zero'd Data (Part of original data from top)

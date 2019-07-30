@@ -1,0 +1,218 @@
+All bytes are in big endian order.
+
+Part I: Directory Name + Entries
+================================
+INT32 - Version (Always 25)
+INT32 - Char. Count
+String - Directory Type
+INT32 - Char. Count
+String - Directory Name
+
+INT32 - Count of Strings (All Strings in this part)
+INT32 - Count of Names + Total Length
+INT32 - Count of Entries
+
+* -------Entry-------
+* ===================
+* INT32  - Char. Count
+* String - File Type
+* INT32  - Char. Count
+* String - File Name
+
+Part II: Secondary Name
+==========================
+#INT32 - Always 3 (TBRB: amplitude-medium(32).milo_xbox)
+ or INT32 - Always 7 (TBRB: first_time_guitar_keep.milo_xbox)
+
+#INT32 - Always 10 (TBRB: chat.milo_xbox)
+INT32 - Unknown
+* Observed Values:
+* * Usually 22
+INT32 - Always 2
+
+INT32 - Char. Count (Can be zero)
+String - Secondary milo name?
+
+
+Part III: View Matrices?
+=======================
+INT32 - Matrix Count (Always 7?) = 336 bytes
+
+* -------Matrix--------
+* =====================
+* Float*12
+
+Part III: Parent Milo Files
+===========================
+INT32 - Unknown
+* Obeserved Values:
+* * Usually 0
+* * 5 - (TBRB: chat.milo_xbox)
+* * 7 - (TBRB: first_time_guitar_keep.milo_xbox)
+
+BYTE - Always 1
+INT32 - Always 0
+INT32 - Count of parent milo files?
+
+* --------Milo---------
+* =====================
+* INT32 - Char. Count (Can be zero)
+* String - Milo Name (Including path)
+* Observed Values:
+* * "../../world/shared/camera.milo" (TBRB: tomorrowwithin.milo_xbox)
+* * "../../world/shared/director.milo" (TBRB: tomorrowwithin.milo_xbox)
+
+
+Part IV: Sub-Milo Data
+======================
+BYTE - Either 0 or 1
+* If 1, add four bytes.
+
+INT32 - Always 0
+INT32 - Sub-Milo Count (Usually 4)
+
+* --------Sub-Milo Data---------
+* ==============================
+* INT32 - Char. Count (Can be zero)
+* String - Milo Name
+* Observed Values:
+* * "george.milo" (TBRB: tomorrowwithin.milo_xbox)
+* * "john.milo" (TBRB: tomorrowwithin.milo_xbox)
+* * "paul.milo" (TBRB: tomorrowwithin.milo_xbox)
+* * "ringo.milo" (TBRB: tomorrowwithin.milo_xbox)
+* % Begin of directoy + entry data %
+* BYTES(13) - Zero'd Data
+
+INT32 - Char. Count (Can be zero)
+String - File Name(from current milo?)
+* Observed Values:
+* * "venue_anims.grp" (GH2: sel_venue.milo_ps2) Group
+* * "t3_hopo_anim.view" (GH2: tut_script.milo_ps2) Group
+* * "ss_songlist.tnm" (GH2: sel_song.milo_ps2) TransAnim
+* * "alterna_main" (GH2: alterna1_main.milo_ps2) Refereneces self? CharClipSet
+* * "sky01.tnm" (GH2: stone_geom.milo_ps2) TransAnim
+
+INT32 - Char. Count (Can be zero)
+String - File Name (from current milo?)
+* Observed Values:
+* * "guitar_setup.cam" (GH2: guitar_display.milo_ps2) Cam
+* * "splash.cam" (GH2: activision_splash.milo_ps2) Cam
+* * "char_multi.cam" (GH2: char_multi.milo_ps2) Cam
+* * "receipt_on.tnm" (GH2: endgame.milo_ps2) TransAnim
+* * "default.cam" (GH2: stone_geom.milo_ps2) Cam
+
+-------------------------------------
+
+INT32 - Unknown % Referencing Part VI?
+* Observed Values:
+* * Usually 4
+
+Float - Unknown
+* Observed Values:
+* * Usually 0
+* * 500.0 (GH2: sel_venue.milo_ps2)
+
+INT32 - Unknown
+* Observed Values:
+* * Usually 1
+* * 0 (GH2: stone_geom.milo_ps2)
+INT32 - Always 3
+BYTE - Always 1
+
+--------------------------------------
+
+or... when part II version = 14?
+
+Float - Unknown
+* Observed Values:
+* * 1.0 (GH2: alterna1_main.milo_ps2, classic.milo_ps2)
+
+INT32 - Some kind of count?
+* * Observed Values:
+* * 8192 (GH2: alterna1_main.milo_ps2, classic.milo_ps2)
+
+INT32 - Char. Count
+String - File Name (CharClipSamples)
+INT32 - Unknown
+* Observed Values:
+* * 12582912
+INT32 - Unknown
+* Observed Values:
+* * 15348
+
+
+INT32 - Always 3
+BYTE - Always 1
+
+Part V: More Floats
+===================
+
+Float*5 - Unknown
+* Observed Values:
+* * Usually all 0.0
+* * ~9.86 ~203.78 ~3086.16 7658.481 0.0 (GH2: stone_geom.milo_ps2)
+
+INT32 - Vertices Count or View? (Always 9) = 108 bytes | X360  = 96
+
+* -----Vertex------
+* =================
+* Float*3 - Unknown
+
+* Observed Values:
+* * GH2: button.milo_ps2,
+* * * *  char_mutli.milo_ps2
+* * ========================
+* * *  X   Y   Z 
+* * * 1.0 0.0 0.0 Right
+* * * 0.0 1.0 0.0 Up
+* * * 0.0 0.0 1.0 Forward
+* * * 0.0 0.0 0.0 Position
+
+* * * 1.0 0.0 0.0 Right
+* * * 0.0 1.0 0.0 Up
+* * * 0.0 0.0 1.0 Forward
+* * * 0.0 0.0 0.0 Position
+
+* * * 0.0 0.0 0.0 - This probably isn't part of it.
+
+
+Part VI: A Few Strings
+======================
+$ Note: Any one of the counts may be zero.
+BYTE - Always 0
+
+INT32 - Char. Count
+String - String 1
+* Observed Values:
+* * "ui.env" (GH2: char_multi.milo_ps2, complete.milo_ps2)
+* * ^^ Found in metacam.milo_ps2 : Environ
+* * ^^ Called from part IV.
+
+INT32 - Char. Count
+String - String 2
+* Observed Values:
+* * "start" (GH2: char_multi.milo_ps2)
+
+INT32 - Char. Count
+String - String 3
+* Observed Values:
+* * "start" (GH2: char_multi.milo_ps2)
+* * "play_encore_fx" (GH2: stone_geom.milo_ps2)
+
+INT32 - Char. Count
+String - String 4
+* Observed Values:
+* * "start" (GH2: char_multi.milo_ps2)
+
+--- These last two are only presesnt if first INT32 in Part II is 2 --
+
+INT32 - Char. Count
+String - String 5
+* Observed Values:
+* * "meta.cam" (GH2: char_multi.milo_ps2, complete.milo_ps2)
+* * "meta_proxy.cam" (GH2: guitar_display.milo_ps2)
+
+INT32 - Char. Count
+String - String 6
+* Observed Values:
+* * "ui_enter" (GH2: char_multi.milo_ps2, complete.milo_ps2)

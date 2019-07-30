@@ -1,0 +1,155 @@
+All bytes are in little endian order.
+
+========================
+---- BEGIN REVISION ----
+========================
+
+INT32 - Always 21
+INT32 - Count of texture entries
+
+* Texture Entry
+* =============
+* INT32 - Unknown
+* 	2 - guitar_sg.milo/guitar_sg_cherry.mat/sg_cherry.tex
+* INT32 - Unknown
+*	0 - guitar_sg.milo/guitar_sg_cherry.mat/sg_cherry.tex
+*	5 - guitar_sg.milo/guitar_sg_cherry.mat/guitar_envi01.tex
+* MATRX - Not sure
+* 	1.0 0.0 0.0 0.0
+* 	1.0 0.0 0.0 0.0
+* 	1.0 0.0 0.0 0.0
+* INT32 - Unknown
+*	0
+*	1
+* INT32 - Char. Count
+* STRNG - Texture Name
+
+INT32 - Always 3
+FLOAT - R \
+FLOAT - G  | Base material color
+FLOAT - B  | (Values between 0-1)
+FLOAT - A /
+BYTES(13)
+
+alterna.milo/enviro.mat
+-----------------------
+01 00 00 01
+00 00 00 00
+00 01 00 00
+00 00 00
+
+======================
+---- END REVISION ----
+======================
+
+
+Part 1: The First Stuff
+=======================
+INT32 - Always 21
+INT32 - Count of textures
+INT32 - Unknown // Doesn't affect byte count
+*Observed Values
+* 2 - fsinger_arms02.mat
+* 3 - fsinger_earings.mat fsinger_boot.mat
+
+Part 2: No Idea
+===============
+* Observed in harmonix_splash.mat
+*  The negative zeroes are probably just mistakes
+
+12 Floats (48 bytes)
+-------------------- 
+ 0.0 1.0  0.0  -0.0
+-0.0 1.0  0.0   0.0
+ 0.0 1.0 -0.089 0.0
+----------------------------------------------
+INT32 - Always 0
+INT32 - Either 0 or 1
+
+Part 3: Texture Name (0x44)
+===========================
+INT32 - Char Count.
+String - Texture name in milo
+
+NOTE: May not be present.
+
+Part 4: More Floats?
+====================
+INT32 - Always 3?
+FLOAT - Always 1 \
+FLOAT - Always 1  | Yes, there's 4 of them
+FLOAT - Always 1  |
+FLOAT - Always 1 /
+
+15 bytes
+========
+
+alterna.milo/torso.mat
+======================
+01 00 00 01
+00 00 00 00
+00 01 00 00
+00 00 00
+
+guitar_battleaxe.milo/guitar_battleaxe.mat
+========================================== battleaxe.tex
+2
+5
+1.0
+0.0
+-0.0
+-0.0
+1.0
+0.0
+0.0
+0.0
+0.2
+0.0
+0.0
+0.0
+
+01 00 00 00
+
+========================================== guitar_envi01.tex
+3
+1.0
+1.0
+1.0
+1.0
+01 00 00 01
+01 00 00 00
+00 01 00 00
+00 00 00
+
+guitar_sg.milo/guitar_sg_cherry.mat
+========================================== sg_cherry.tex
+2
+5
+1.0
+0.0
+-0.0
+-0.0
+1.0
+0.0
+0.0
+0.0
+0.1
+0.0
+0.0
+0.0
+
+01 00 00 00
+
+========================================== guitar_envi01.tex
+3
+1.0
+1.0
+1.0
+1.0
+01 00 00 01
+01 00 00 00
+00 01 00 00
+00 00 00
+
+INT32 - Always 1?
+BYTES(11) - Zeroed Data

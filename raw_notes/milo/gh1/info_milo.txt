@@ -1,0 +1,27 @@
+All bytes are in little endian order.
+
+Part I: Entries
+===============
+INT32 - Version (Always 10)
+INT32 - Count of Entries
+
+* -------Entry-------
+* ===================
+* INT32  - Char Count.
+* String - File Type
+* INT32  - Char Count.
+* String - File Name
+
+PART II: External Resources?
+============================
+INT32 - Count of Resources
+* Observed:
+*	0 - strum_open.rnd_ps2
+
+* ----Resource----
+* ================
+* INT32 - Char. Count (Can be zero)
+* STRNG - External Resource Path
+* * Observed:
+* * "image/brick03.bmp"	- splash.gh
+* * "image/splash.bmp"	- splash.gh

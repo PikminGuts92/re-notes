@@ -1,0 +1,9 @@
+
+0x01 ( 1) - 		*.acg
+0x04 ( 4) - TransAnim	*.tnm
+0x07 ( 7) - View	*.view, *.anim
+0x08 ( 8) - Tex		*.tex
+0x09 ( 9) - Cam		*.cam
+0x0A (10) - Milo?	*.gh, *.rnd_ps2
+0x15 (21) - Mat		*.mat
+0x19 (25) - Mesh	*.mesh

@@ -1,0 +1,78 @@
+ButtonEx
+	.btn
+Cam
+	.cam
+CamAnim
+	.cnm
+CreditList
+	.lst
+EnvAnim	
+	.enm
+	.envanim
+Environ		
+	(empty)
+	.env
+	.envanim
+Flare
+	(empty)
+	.flare
+Font
+	.font
+LabelEx
+	.lbl
+Light
+	.lit
+LightAnim
+	.litanim
+List
+	.lst
+Mat
+	(empty)	
+	.mat
+	.Mat
+MatAnim
+	(empty)
+	.manim
+	.matanim
+	.MatAnim
+	.mnm
+Mesh
+	.mesh
+MeshAnim
+	.msnm
+Morph
+	.mrf
+Movie
+	.mov
+MultiMesh
+	.mm
+ParticleSys
+	(empty)
+	.part
+ParticleSysAnim
+	.panim
+	.panm
+	.partanim
+	.pnm
+PictureEx
+	.pic
+PictureToggle
+	.tog
+Placer
+	.placer
+Slider
+	.sld
+Tex
+	.bmp
+	.tex
+Text
+	.text
+	.txt
+TextEntry
+	.ten
+TransAnim
+	.tnm
+View
+	(empty)
+	.anim
+	.view

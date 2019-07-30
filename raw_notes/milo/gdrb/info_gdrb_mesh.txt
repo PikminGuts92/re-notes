@@ -1,0 +1,113 @@
+All bytes are in big endian order.
+
+Part 1: Matrix Arrays (0x00)
+============================
+INT32 - Always 37
+INT32  - Always 2
+
+BYTES(9) - Zero'd Data
+INT32 - Always 9
+
+* Matrix Array 1
+* ============
+* Float*12
+* Matrix Array 2
+* ============
+* Float*12
+
+BYTES(9) - Zero'd Data
+
+Part 2: Sub Meshes *NOT PRESENT*
+
+Part 3: View Parent (Position relative to its matrices)
+// May not always be a mesh. It can be a .cam.
+// Might even point to milo. I bet there are matrix arrays in the directory header.
+=================
+BYTES(9) - Zero'd Data
+INT32 - Char Count.
+String - Mesh Name
+
+Part 4: Unknown (29 Bytes)
+===============
+INT32 - Always 4
+BYTE - Always 1
+INT32 - Some kind of count but usually 0
+Float(4) - Not sure
+INT32 - Always 0
+
+Part 5: Matrial
+===============
+INT32 - Char Count. (Can be zero)
+String - Mat Name
+
+Part 6: Mesh Name
+==========================
+INT32 - Char Count.
+String - Mesh Name
+INT32 - Always 0
+INT32 - Always 1
+BYTE - Always 0
+
+NOTE: Second mesh name does not always match the first one.
+
+Part 7: Vertices + Faces
+========================
+INT32 - Number of Verts
+BYTE - Always 1
+INT32 - Number of Bytes in each vert table? Always 36.
+INT32 - Always 1
+
+
+* Vertices Table (48 Bytes) // RB1 = 80 bytes
+* ==============
+* Float - X
+* Float - Y
+* Float - Z
+*
+* BYTE - B1 "FF"
+* BYTE - B2 "FF"
+* BYTE - B3 "FF"
+* BYTE - B4 "FF"
+*
+* Float - NX
+* Float - NY
+* Float - NZ
+*
+* BYTE - B5 "FF"
+* BYTE - B6 "FF"
+* BYTE - B7 "FF"
+* BYTE - B8 "FF"
+*
+* BYTE - B9  "3" <-- Possibly face data.
+* BYTE - B10 "2" <-- ^^
+* BYTE - B11 "1" <-- ^^
+* BYTE - B12 "0" <-- ^^
+
+INT16 - Number of Faces - Highest value seen is 3200 in splash/splash_light.mesh
+INT16 - Unknown
+* Faces Table (6 Bytes)
+* ===========
+* INT16 - IDX1
+* INT16 - IDX2
+* INT16 - IDX3
+
+
+---Undocumented in ghmesher---
+
+Part 8: (5 Strings? Might only be 4)
+====================================
+INT32 - Char Count.
+String - Type or gibberish?
+INT32 - Char Count.
+String - Bone
+INT32 - Char Count.
+String - Bone
+INT32 - Char Count.
+String - Bone
+INT32 - Char Count.
+String - Not yet observed
+
+Four Zero Bytes
+
+Part 9: A bunch of floats?
+==========================

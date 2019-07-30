@@ -1,0 +1,60 @@
+All bytes are in little endian order.
+
+Part 1:
+============================
+INT32 - Char. Count
+String - Animation Type
+INT32 - Char. Count
+String - Animation Name
+
+INT32 - Always 18?
+FLOAT(4) - Quaternions?
+* Observed:
+* 	 0.64 11.19 1.18 -2.35^-38 alterna_idle_ui.acp
+* 	 0.52 10.12 2.39 -1.76^-38 alterna_walk_left_fast.acp
+*       -0.086 6.65 1.61 -1.76^-38 alterna_walk_left_medium.acp
+*	 0.0   0.55 1.66 -0.0      finger_open.acp
+INT32 - Not Sure
+* Oberved:
+* 	10 alterna_idle_ui.acp
+* 	 2 alterna_walk_left_fast.acp
+* 	 2 alterna_walk_left_medium.acp
+
+FLOAT - Always 1.0?
+* Oberved:
+* 	1.0  alterna_idle_ui.acp
+*	0.23 finger_open.acp
+INT32 - Always 5
+
+Part 2: First Set of Names
+==========================
+INT32 - Count of Quat/Pos/Rotz Names (Can be 0)
+
+* Quat/Pos Name
+* =============
+* INT32 - Char. Count
+* String - Quat/Pos Name
+
+INT32 - # of positions for each thing (Used later)
+INT32 - Always 1
+
+Part 3: Second Set of Names
+===========================
+INT32 - Count of more Quat/Pos/Rotz Names
+
+* Quat/Pos Name
+* =============
+* INT32 - Char. Count
+* String - Quat/Pos Name
+
+INT32 - Usually 1
+INT32 - Always 1
+
+BYTES(?) - Data 1 > Size determined by fist set of names and extensions
+BYTES(?) - Data 2 > Size determined by second set names and extensions
+
+pos:  FLOAT(3) - 12 bytes
+quat:          -  8 bytes
+rotz: 	       -  2 bytes
+
+If the number of positions in part 2 is more than 1 then multiply size of data 1 by it.

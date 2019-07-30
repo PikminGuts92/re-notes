@@ -1,0 +1,20 @@
+All bytes are in big endian order.
+
+It looks like milo files were replaced with this.
+
+BYTES(4) - "CHNK"
+INT32 - Always 255 -> Max block count?
+INT32 - Block Count
+INT32 - Largest Block (Uncompressed)
+INT16 - Always 1
+INT16 - Always 2
+BlockDetails[Block Count]
+
+* ----Block Details----
+* =====================
+* INT32 - Size
+* INT32 - Decompressed Size
+* Bool? - If "01 00 00 00", then it's compressed.
+* INT32 - Offset
+
+Begin ZLib'd blocks!

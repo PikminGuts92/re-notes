@@ -1,0 +1,193 @@
+All bytes are in little endian order.
+
+--LibTomCrypt 0.70--
+	Endianess: Big (64-bit words)
+	Clean Stack: Disabled
+	Ciphers Built-In: Rijndael
+	Hashes Built-In: MD4
+	Block Chaining Modes: CTR
+
+--Mogg Version Map--
+	11 : -1 or 1
+	12 :  2
+	14 :  3
+	16 : 20
+--------------------
+Significance? I'm not sure but it might have something to do with map version.
+Found in songs_verify.dtb on TBRB/GDRB.
+
+GH2 Details:
+============
+Version = 10
+SomeCount = 14
+Unknown1 = 20,000
+Embedded Key = None
+
+RB1 Details:
+============
+Version = 11
+SomeCount = 14
+Unknown1 = 20,000
+Embedded Key = 16 bytes
+
+000000009D0E21DCF097DBEC9F364CAE : 29fingers
+000000008A6F0D68ADA5D4C4D23AD7DF : areyougonnabemygirl
+00000000A7927AF1734456F3CD8FDF4A : ballroomblitz
+00000000E1F40EF6CEA993BF2553C3EB : blackholesun
+
+000000002E0CDAAB70BF47982E86EFA4 : foreplaylongtime
+00000000F2D73FD268D736ACB8107983 : foreplaylongtime_short
+
+FC5C84D39FB5860F82F6CA3E4282CF74
+454068C007ED8BCAAF9C205828199FD3
+8E5DC48FDDADEAD579EC4687DE8A66F7
+RB2 Details:
+============
+Version = 12
+SomeCount = 14
+Unknown1 = 20,000
+Embedded Key = 72 bytes
+
+00000000B9085AF2B12FC68B1D8FCA83675A590900000000 7C644705000000005F0762B5DAD62DDDA418D9FB30A0DC68 FDB41FB5353B9FC0553550756F2A7A710400000000000000 : aceofspades
+00000000B32FE8DA591D7094D23057A48E6FAF2200000000 8B274162000000008D7D62FA74DBB13589E4F980E516AAD1 B6082925E4F0D2BCCA0EE41FF10963A70300000000000000 : ajaggedgorgeouswinter
+000000007CFA609BF706FD480076257ADB85DB2800000000 B65C8A21000000002FB535EA198D268B0C075449369A2578 31FF8EDA551ACE42F66B30F3AFF98C780300000000000000 : alabamagetaway
+00000000065994E16573F3D95D39EA187C3F4E0600000000 DCCC5539000000003F756F219626E6D675718AD8FCA92E06 24F908A88CA036F2AB99990EBF3C9A8A0000000000000000 : alexchilton
+
+TBRB Details:
+=============
+Version = 16
+SomeCount = 14
+Unknown1 = 20,000
+Embedded Key = 63612 bytes
+
+LEGO/GDRB Details:
+==================
+Version = 14
+SomeCount = 14/15
+*14: accidentallyinlove, breakout
+*15: aliensexist, apunk
+Unknown1 = 20,000
+Embedded Key = 72 bytes
+
+00000000BA0324803AB102562D194FA80FE7530400000000 E996436D00000000D4CB836DC63DB0376D64DA2F4DBCD4E2 69C988A5AC786817F1BFDB23B0891EBA0700000000000000 : accidentallyinlove
+00000000A0E2C2E862F92590251D6C9F6FF6A76C00000000 84CE0F0800000000302A8DE361C2644954DD513A78D8AD43 C8C7D031B2094AA61D7E9A462A6230E60A00000000000000 : aliensexist
+0000000022A357589ACF4A759853E6D1EAF1626900000000 5808C32900000000F40640ECBB203ACF7B5025F1539C2C49 A9977233BF290054321E32302F12DC750800000000000000 : apunk
+000000007436B51808C78DF629FF69FAC8516E6000000000 A4BC480C00000000B1D4EB75C7266BCFE1E43CE45A808FC2 B68120E96725A9A302C44F2A6EA011790700000000000000 : breakout
+
+RB3/Blitz Details:
+==================
+Version = 16
+SomeCount = 16
+Unknown1 = 20,000
+Embedded Key = 72 bytes
+
+00000000C2FEDC4B1F4F15166AC47CAF2599BB7D00000000 47C71B770000000084ACDA9A6777ECCA91CA18EC3FC64DAA 6357CD6CB7271A6012F5B07AD70FB6710300000000000000 : 20thcenturyboy
+00000000142BAE160443506EDE2804DCE75EF93700000000 1F4545570000000036CB99A8C8D5434FD0818038EDAB58E1 0B51B03DA3099A6292126BD2B782597F0100000000000000 : 25or6to4
+000000003C7125EFCEC6AB27AA744BE1FE23AD7D00000000 6E68C106000000004AE438590C4407DA0154C646F562B138 1DEB9160677101363CF79CB4A1E539A50000000000000000 : antibodies
+000000000C542ED5D242EB9F35BEFEC3EDB61B3800000000 0AB2CD5F00000000F59CA9EC35181128ACFE73811A6C0F7A 31AFB2C5066DC416F2909D53653FC2240900000000000000 : beastandtheharlot
+
+DC3 Details:
+============
+Version = 14
+SomeCount = 16
+Unknown1 = 20,000
+Embedded Key = 72 bytes
+
+DLC Details:
+============
+Charlene (RB1)
+--Version = 12
+--SomeCount = 14
+--Unknown1 = 20,000
+--Embedded Key = 72 bytes
+
+The Black Parade (RB1)
+--Version = 14
+--SomeCount = 16
+--Unknown1 = 20,000
+--Embedded Key = 72 bytes
+
+Upstream (RBN1)
+--Version = 15
+--SomeCount = 15
+--Unknown1 = 20,000
+--Embedded Key = 72 bytes
+
+Hey (RBN2)
+--Version = 15
+--SomeCount = 16
+--Unknown1 = 20,000
+--Embedded Key = 72 bytes
+
+
+File Structure:
+===============
+A mogg file contains the multi-track audio for a song.
+Karaoke Revolution Party on Xbox uses seperate files for ogg and ogg maps (*.ogg + *.oggmap).
+Every subsequent HMX game on X360/PS3 use mogg which contain both files.
+
+Part 1: Encryption + Offset Info
+================================
+INT32 - Encryption Version
+* Observed:
+* * 10 - None (GH2/RBN)
+* * 11 - RB1 On-disc
+* * 12 - RB1 DLC/RB2 On-disc
+* * 13 - NOT USED!
+* * 14 - RB1/RB2 DLC + DC3 + LEGO + GDRB
+* * 15 - RBN1/RBN2
+* * 16 - TBRB/RB3
+
+"I noticed that the actual decryption function will accept 0D as well as 0C,
+	but it does the same thing. The initial check for file type, however, only accepts 0C."
+- hcs
+
+"i checked loads of them but it would appear "0E" begins from the song "Space Truckin'" (Dec. 30, 2008)
+	& the last file with "0C" is a week before "DOA" (Dec. 23, 2008) & i checked the RB2 Disc for the 360 too,
+	& there all "0C" so for some reason "0D" doesn't actually exist which is strange"
+- placedo
+
+http://hcs64.com/mboard/forum.php?showthread=20002
+
+INT32 - Ogg Offset
+
+Part 2: Ogg Map
+===============
+INT32 - Ogg Map Version
+* Observed:
+* * 14 - KRP/GH2/RB1/TBRB
+* * 15 - RBN1
+* * 16 - RBN2/RB3/DC3
+
+INT32 - Unknown (Always 20,000)
+INT32 - Count of Mogg Entries
+
+* Mogg Entry (8 bytes)
+* ====================
+* INT32 - Unknown
+* INT32 - Unknown
+
+
+Part 3: Nonce + Moggfield
+=========================
+0x0B - 16 byte Nonce
+
+0x0C - 16 byte Nonce
+     - 56 byte Moggfield
+
+* Moggfield - Used to generate key (56 bytes)
+* ===========================================
+* INT32 - unk0
+* INT32 - junk0
+* INT32 - unk2
+* INT32 - junk1
+* INT32 - junk2
+* INT32 - junk3
+* INT32 - junk4
+* INT32 - junk5
+* BYTES(16) - key
+* INT32 - unk12
+* INT32 - unk13
+
+Part 4:  Ogg File
+=================

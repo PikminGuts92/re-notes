@@ -1,0 +1,41 @@
+All bytes are in big endian order.
+
+Used as file entries?
+
+BYTES(4) - "LAYR"
+INT32 - Always 61?
+INT16 - Always 1
+INT32 - 6, 56 (2x entry count)
+INT32 - 52, 41, 673 (Total string size of types + names?)
+INT32 - Count of File Entries
+
+File Entry
+==========
+* INT32 - Char. Count
+* String - File Type
+* INT32 - Char. Count
+* String - File Name
+
+Each File
+=========
+INT32 - 0
+INT32 - Size of File
+BYTE[] - Data
+
+Last Bytes
+==========
+BYTE[8] - Zero'd data
+INT32 -  0
+INT32 -  0 or 458
+
+INT32 - 26
+INT32 - 6
+INT32 - 8
+INT32 - 1
+
+INT32 - Char. Count
+String - "PulseBgAnimCom"
+
+Interesting Finds
+=================
+"../../audio/fusion/patches/_song_specific/scoutsong/scoutsong_beatwheel.fusion"

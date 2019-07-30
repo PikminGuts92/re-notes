@@ -1,0 +1,120 @@
+All bytes are in big endian order.
+
+BandSongPref | band_objects
+"Band Song Preferences, per song file settable properties"
+
+File Format:
+============
+INT32 - Some kind of count (Always 3?)
+INT32 - Always 2
+BYTES(9)
+
+"guitar"
+"bass"
+"drum"
+
+String - Part 2 Instrument ("Who should sing the vocal part2?")
+String - Part 3 Instrument ("Who should sing the vocal part3?")
+String - Part 4 Instrument ("Who should sing the vocal part4?")
+String - Animation Genre ("Animation genre for the song")
+* Choices:
+* * banger
+* * dramatic
+* * rocker
+* * spazz
+
+=============
+
+Absent:
+beforeiforget
+breakonthrough
+falsealarm
+freebird
+getupstandup
+goodvibrations
+heymanniceshot
+humanoid
+icanseeformiles
+iloverocknroll
+ineedtoknow
+jerrywasaracecar
+kinggeorge
+lasso
+lastdance
+llama
+lowrider
+meanamora
+onearmedscissors
+outerspace
+oyemiamor
+somethingbigger
+vivalaresistance
+walkoflife
+
+String - Crowd?
+* Observed Values:
+* * "banger"
+* * * beastandtheharlot
+* * * caughtinamosh
+* * * duhast
+* * * thebeautifulpeople
+
+* * "dramatic"
+* * * centerfold
+* * * dontstandsoclosetome
+* * * everybodywantstorule
+* * * imagine
+* * * justlikeheaven
+* * * killinglonliness
+* * * needyoutonight
+* * * portionsforfoxes
+* * * rehab
+* * * spaceoddity
+* * * stopmeifyouthink
+* * * thecon
+* * * thekillingmoon
+* * * thelook
+* * * whipit
+* * * yoshimibattles
+
+* * "rocker"
+* * * 20thcenturyboy
+* * * 25or6to4
+* * * beencaughtstealing
+* * * bohemianrhapsody
+* * * chinagrove
+* * * coldasice
+* * * combatbaby
+* * * crazytrain
+* * * crosstowntraffic
+* * * deadendfriends
+* * * flylikeaneagle
+* * * foolin
+* * * heartofglass
+* * * hereigoagain
+* * * ifeelgoodalt
+* * * inabigcountry
+* * * inthemeantime
+* * * livinginamerica
+* * * midlifecrisis
+* * * miserybusiness2
+* * * nooneknows
+* * * ohmygod
+* * * plush
+* * * radarlove
+* * * rainbowinthedark
+* * * rocklobster
+* * * roundabout
+* * * saturdaynightsalright
+* * * sisterchristian
+* * * smokeonthewater
+* * * thehardestbutton
+* * * thepoweroflove
+* * * walkingonthesun
+* * * werewolvesoflondon
+
+* * "spazz"
+* * * getfree
+* * * dontburyme
+* * * iwannabesedated
+* * * thisbastardslife

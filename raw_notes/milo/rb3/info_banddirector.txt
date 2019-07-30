@@ -1,0 +1,160 @@
+All bytes are in big endian order.
+
+BandDirector | band_objects
+"Band Director, sits in each song file and manages camera + scene changes"
+
+======== OBSERVED ========
+
+bass_intensity
+==============
+"bass play intensity"
+* idle
+* idle_realtime
+* intense
+* play
+
+guitar_intensity
+================
+"guitar play intensity"
+* idle
+* idle_realtime
+* intense
+* play
+
+drum_intensity
+==============
+"drum play intensity"
+* idle
+* idle_realtime
+* intense
+* play
+
+mic_intensity
+=============
+"mic play intensity"
+* idle
+* idle_realtime
+* intense
+* play
+
+keyboard_intensity
+==================
+"keyboard play intensity"
+* idle
+* idle_realtime
+* intense
+* play
+
+shot_bg
+=======
+"Bass + Guitar BandCamShot categories"
+
+shot_bk
+=======
+"Bass + Keyboard BandCamShot category"
+
+shot_gk
+=======
+"Guitar + Keyboard BandCamShot categories"
+
+stagekit_fog
+============
+"author Stage Kit fog machine start/stop events"
+* on
+* off
+
+lightpreset_keyframe
+====================
+"author next/prev/first keyframe commands for manual presets: strobes, etc."
+
+lightpreset
+===========
+"the current light preset"
+
+spot_bass
+=========
+"author character-specific spotlights"
+* on
+* off
+
+spot_guitar
+===========
+"author character-specific spotlights"
+* on
+* off
+
+spot_vocal
+==========
+"author character-specific spotlights"
+* on
+* off
+
+part2_sing
+==========
+"sing on/off for second vocal part"
+
+part3_sing
+==========
+"sing on/off for third vocal part"
+
+part4_sing
+==========
+"sing on/off for fourth vocal part"
+
+crowd
+=====
+"Crowd commands"
+
+shot_5
+======
+"Five instrument authored BandCamShot categories"
+* COOP_CAM_CATS
+* DIRECTED_CAM_CATS
+
+postproc
+========
+"the current venue postproc."
+
+world_event
+===========
+"author bonusfx"
+* none
+* bonusfx
+
+spot_drums
+==========
+"author character-specific spotlights"
+* on
+* off
+
+spot_keyboard
+=============
+"author character-specific spotlights"
+* on
+* off
+
+==========================
+
+====== FOUND IN DTB ======
+
+cur_shot
+========
+"currently shown camshot, nice for debugging."
+
+cur_world
+=========
+"currently shown world, nice for debugging."
+
+excitement (INT32)
+==================
+"excitement level"
+
+num_players_failed (INT32)
+==========================
+"how many have failed"
+
+cam_postproc
+============
+"camera postproc override.  If set, does no postproc blends"
+
+==========================

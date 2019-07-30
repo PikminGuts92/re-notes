@@ -1,0 +1,37 @@
+All bytes are in little endian order.
+
+Structure:
+Header
+File Name Index
+Folder Name Index
+String Table 
+Padding
+Files
+
+Part 1: Header
+==============
+BYTES(4) - Magic Word "ARK."
+INT32 - Version (Always 2)
+INT32 - Offset: File Entry Table (Always 256)
+INT32 - Count: Entries
+INT32 - Offset: Folder Offset Table
+INT32 - Count: Folder Index Count
+INT32 - Offset: String Table
+INT32 - Count: 00's in String Table
+INT32 - Offset: End of String Table.
+INT32 - Buffer Size? (Always 2048)
+
+Part 2: File Entry Table (24 Bytes)
+===================================
+INT32 - Unknown
+INT32 - File Name Offset
+INT16 - Folder Name Index
+INT16 - File Offset
+INT32 - Multiple of File Offset?
+INT32 - File Size
+INT32 - Unknown
+
+Part 3: Folder Offset Table (8 Bytes)
+=====================================
+INT32 - Unknown
+INT32 - Folder Name Offset

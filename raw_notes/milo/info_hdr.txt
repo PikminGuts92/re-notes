@@ -1,0 +1,103 @@
+All bytes are in little endian order.
+
+Part 1: Version + Other Info
+============================
+INT32 - Version
+* Known Values:
+* * 3 - GH1, GH2, RB1 
+* * 4 - ACDC, RB1 (Wii)
+* * 5 - RB2, TBRB, LRB, GDRB, Magma v1
+* * 6 - RB3, DC series, Blitz, Magma v2
+* * 7 - Fantasia
+
+-- Version 6 (And Up) --------
+INT32 - Always 1?
+BYTES(16) - Some kind of hash?
+------------------------------
+
+Part 2: Ark Parts Info
+======================
+INT32 - Count of ark files
+INT32 - Count of ark files (Same as above)
+* Ark Size
+* ========
+* INT32 - Size
+
+-- Version 4 (And Up) --------
+If not V3,
+INT32 - Count of Custom Ark Names (Same as part count or zero)
+* Note: It's usually 0 if ark naming style is default (e.g. main_0.ark, main_1.ark, main_2.ark).
+*       Use this if ark files use platform appended names.
+* Ark Name
+* ========
+* INT32 - Char. Count
+* String - Name
+------------------------------
+
+-- Version 6 (And Up) --------
+INT32 - Count of Strange Entries (Same as ark count)
+* No Idea
+* =======
+* INT32 - No Idea (Observed: 0, 2, 3, and "FF FF FF FF")
+------------------------------
+
+-- Version 7 -----------------
+INT32 - Count of Entries
+* Entry
+* =====
+* INT32 - Count of Entries
+* * Sub-Entry
+* * =========
+* * INT32 - Char. Count
+* * String - No Idea
+
+"toccata_applause"
+
+"pulse_underwater_01"
+"einekleinenachtmuzik"
+"radioactive"
+"pulse_forest_01"
+"feelgoodinc"
+"applause"
+"pulse_city_01"
+"royals"
+"bohemianrhapsody"
+------------------------------
+
+
+Part 3: String Table
+====================
+INT32 - Size of String Table
+String - String Table
+
+Part 4: String Index Entries
+======================
+INT32 - Count of Entries
+* Index Entry
+* ===========
+* INT32 - Index
+
+Part 5: File Entries
+====================
+INT32 - Count of Entries
+* File Entry
+* ==========
+* INT32 - Offset (V3 or V4)
+* INT64 - Offset (>=V5)
+* INT32 - File Name Index
+* INT32 - File Path Index
+* INT32 - Size
+* INT32 - Decompressed Size (0 if not compressed)
+
+
+
+RBVR
+====
+INT32 - Count of Entries
+
+* File Entry
+* ==========
+* INT64 - Offset
+* STRNG - Full File Path
+* INT32 - Flags
+* INT32 - Size

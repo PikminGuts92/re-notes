@@ -1,0 +1,93 @@
+Entry Types
+===========
+ 1 - AnimFilter
+10 - BandButton
+ 1 - BandCharacter
+ 3 - BandCrowdMeterDir
+12 - BandLabel
+ 8 - BandLeadMeter
+ 2 - BandPlacer
+ 3 - BandScoreDisplay
+ 2 - BandSlider
+ 4 - BandStarMeterDir
+ 4 - BandStreakDisplay
+ 3 - BandTextEntry
+12 - Cam
+ 2 - CamAnim
+20 - CamShot
+ 2 - CharBone
+ 0 - CharClipFilter
+ 1 - CharClipGroup
+10 - CharClipSamples
+ 3 - CharDriver
+ 1 - CharDriver
+ 3 - CharDriverMidi
+ 3 - CharEyes
+ 1 - CharForeTwist
+ 2 - CharHair
+ 1 - CharHair
+ 2 - CharIKHand
+ 1 - CharIKHand
+ 4 - CharIKMidi
+ 2 - CharIKMidi
+ 2 - CharIKRod
+ 2 - CharLookAt
+ 2 - CharPosConstraint
+ 1 - CharServoBone
+ 1 - CharUpperTwist
+ 3 - CharUpperTwist
+ 1 - CharWalk
+ 5 - CharWalk
+ 2 - CharWeightSetter
+ 1 - CharWeightSetter
+ 9 - Character
+ 0 - CheckBox
+ 4 - EnvAnim
+ 5 - Environ
+ 8 - EventTrigger
+ 5 - FaceFxLipSyncServo
+ 2 - FaceFxLipSyncServo
+15 - Font
+12 - Group
+28 - Group
+ 6 - Light
+ 2 - LightAnim
+ 8 - LightPreset
+27 - Mat
+ 7 - MatAnim
+28 - Mesh
+ 0 - Mesh
+ 1 - MeshAnim
+ 0 - Object
+ 4 - Object
+16 - ObjectDir
+ 1 - OutfitLoader
+ 9 - OutfitLoader
+27 - ParticleSys
+ 3 - ParticleSysAnim
+ 1 - RandomGroupSeq
+ 8 - RndDir
+ 2 - ScreenMask
+ 1 - Screenshot
+ 1 - SerialGroupSeq
+ 0 - Set
+ 4 - Sfx
+ 3 - SfxSeq
+20 - Spotlight
+ 5 - SynthSample
+10 - Tex
+17 - Text
+ 9 - Trans
+12 - Trans
+ 6 - TransAnim
+ 2 - UIList
+ 0 - UIPicture
+ 0 - UIProxy
+ 0 - UITrigger
+ 1 - VenueVerify
+ 2 - WaitSeq
+ 3 - Waypoint
+ 6 - WorldCrowd
+ 1 - WorldFx
+ 2 - WorldFx
+ 0 - WorldFx

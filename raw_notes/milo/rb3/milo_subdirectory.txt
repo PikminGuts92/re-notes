@@ -1,0 +1,8 @@
+MoveDir
+=======
+INT32 - Always 25
+INT32 - Always 3
+INT32 - Always 8
+INT32 - Always 10
+
+...begin secondary milo type

@@ -1,0 +1,31 @@
+^^ Each block is limited to ~0x20000 for uncompressed data ^^
+
+Container Info:
+* Offset
+* ======
+*  216 - Amplitude
+		   50 Max blocks
+	    6,553,600 Actu. bytes
+	  83,8860,750 Theor. bytes
+*  272 - Karaoke Revolution, Karaoke Revolution Vol. 2, Karaoke Revolution Vol. 3
+		   64 Max blocks
+	    8,388,608 Actu. bytes
+	1,073,741,760 Theor. bytes
+*  528 - Guitar Hero I, Guitar Hero II (PS2), Guitar Hero Encore: Rocks The 80's
+		  128 Max blocks
+	   16,777,216 Actu. bytes
+	2,147,483,520 Theor. bytes
+* 2064 - Guitar Hero II (X360), All Rock Band and Dance Central Titles
+		  512 Max blocks
+	   67,108,864 Actu. bytes
+	8,589,934,080 Theor. bytes
+
+Directory Info:
+* Version
+* =======
+* 6 - Frequency
+* 10 - Amplitude, Karaoke Revolution, Karaoke Revolution Vol. 2, Karaoke Revolution Vol. 3, Guitar Hero I
+* 24 - Guitar Hero II (PS2) -> Includes both demos!
+* 25 - Guitar Hero II (X360), Rock Band, Rock Band 2
+* 28 - Rock Band 3 | RBN
+* 32 - Rock Band Blitz

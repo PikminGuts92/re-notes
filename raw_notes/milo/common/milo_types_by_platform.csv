@@ -1,0 +1,431 @@
+Title,Platform,MiloType,MiloMagic
+Guitar Hero,PS2,ButtonEx,4
+Guitar Hero,PS2,Cam,9
+Guitar Hero,PS2,CamAnim,0
+Guitar Hero,PS2,CreditList,0
+Guitar Hero,PS2,EnvAnim,3
+Guitar Hero,PS2,Environ,1
+Guitar Hero,PS2,Flare,3
+Guitar Hero,PS2,Font,7
+Guitar Hero,PS2,LabelEx,6
+Guitar Hero,PS2,Light,3
+Guitar Hero,PS2,LightAnim,1
+Guitar Hero,PS2,List,2
+Guitar Hero,PS2,Mat,21
+Guitar Hero,PS2,MatAnim,5
+Guitar Hero,PS2,Mesh,25
+Guitar Hero,PS2,MeshAnim,0
+Guitar Hero,PS2,Morph,3
+Guitar Hero,PS2,Movie,6
+Guitar Hero,PS2,MultiMesh,0
+Guitar Hero,PS2,ParticleSys,22
+Guitar Hero,PS2,ParticleSysAnim,2
+Guitar Hero,PS2,PictureEx,1
+Guitar Hero,PS2,PictureToggle,0
+Guitar Hero,PS2,Placer,0
+Guitar Hero,PS2,Slider,1
+Guitar Hero,PS2,Tex,8
+Guitar Hero,PS2,Text,15
+Guitar Hero,PS2,TextEntry,0
+Guitar Hero,PS2,TransAnim,4
+Guitar Hero,PS2,View,7
+Guitar Hero Encore: Rocks the 80s,PS2,AnimFilter,1
+Guitar Hero Encore: Rocks the 80s,PS2,AnimFilter,12
+Guitar Hero Encore: Rocks the 80s,PS2,BandButton,10
+Guitar Hero Encore: Rocks the 80s,PS2,BandButton,12
+Guitar Hero Encore: Rocks the 80s,PS2,BandCharacter,1
+Guitar Hero Encore: Rocks the 80s,PS2,BandCrowdMeterDir,3
+Guitar Hero Encore: Rocks the 80s,PS2,BandLabel,12
+Guitar Hero Encore: Rocks the 80s,PS2,BandLabel,10
+Guitar Hero Encore: Rocks the 80s,PS2,BandLabel,1
+Guitar Hero Encore: Rocks the 80s,PS2,BandLabel,0
+Guitar Hero Encore: Rocks the 80s,PS2,BandLabel,6
+Guitar Hero Encore: Rocks the 80s,PS2,BandLeadMeter,8
+Guitar Hero Encore: Rocks the 80s,PS2,BandPlacer,2
+Guitar Hero Encore: Rocks the 80s,PS2,BandScoreDisplay,3
+Guitar Hero Encore: Rocks the 80s,PS2,BandSlider,2
+Guitar Hero Encore: Rocks the 80s,PS2,BandStarMeterDir,4
+Guitar Hero Encore: Rocks the 80s,PS2,BandStreakDisplay,4
+Guitar Hero Encore: Rocks the 80s,PS2,BandTextEntry,3
+Guitar Hero Encore: Rocks the 80s,PS2,Cam,12
+Guitar Hero Encore: Rocks the 80s,PS2,CamAnim,2
+Guitar Hero Encore: Rocks the 80s,PS2,CamShot,20
+Guitar Hero Encore: Rocks the 80s,PS2,CharBone,2
+Guitar Hero Encore: Rocks the 80s,PS2,CharClipFilter,0
+Guitar Hero Encore: Rocks the 80s,PS2,CharClipGroup,1
+Guitar Hero Encore: Rocks the 80s,PS2,CharClipSamples,10
+Guitar Hero Encore: Rocks the 80s,PS2,CharDriver,3
+Guitar Hero Encore: Rocks the 80s,PS2,CharDriverMidi,3
+Guitar Hero Encore: Rocks the 80s,PS2,CharEyes,3
+Guitar Hero Encore: Rocks the 80s,PS2,CharForeTwist,1
+Guitar Hero Encore: Rocks the 80s,PS2,CharHair,2
+Guitar Hero Encore: Rocks the 80s,PS2,CharIKHand,2
+Guitar Hero Encore: Rocks the 80s,PS2,CharIKMidi,4
+Guitar Hero Encore: Rocks the 80s,PS2,CharIKRod,2
+Guitar Hero Encore: Rocks the 80s,PS2,CharLookAt,2
+Guitar Hero Encore: Rocks the 80s,PS2,CharPosConstraint,2
+Guitar Hero Encore: Rocks the 80s,PS2,CharServoBone,1
+Guitar Hero Encore: Rocks the 80s,PS2,CharUpperTwist,1
+Guitar Hero Encore: Rocks the 80s,PS2,CharWalk,1
+Guitar Hero Encore: Rocks the 80s,PS2,CharWeightSetter,2
+Guitar Hero Encore: Rocks the 80s,PS2,Character,9
+Guitar Hero Encore: Rocks the 80s,PS2,CheckBox,0
+Guitar Hero Encore: Rocks the 80s,PS2,EnvAnim,4
+Guitar Hero Encore: Rocks the 80s,PS2,Environ,5
+Guitar Hero Encore: Rocks the 80s,PS2,EventTrigger,8
+Guitar Hero Encore: Rocks the 80s,PS2,FaceFxLipSyncServo,5
+Guitar Hero Encore: Rocks the 80s,PS2,Font,15
+Guitar Hero Encore: Rocks the 80s,PS2,Group,12
+Guitar Hero Encore: Rocks the 80s,PS2,Group,28
+Guitar Hero Encore: Rocks the 80s,PS2,Light,6
+Guitar Hero Encore: Rocks the 80s,PS2,LightAnim,2
+Guitar Hero Encore: Rocks the 80s,PS2,LightPreset,8
+Guitar Hero Encore: Rocks the 80s,PS2,Mat,27
+Guitar Hero Encore: Rocks the 80s,PS2,Mat,10
+Guitar Hero Encore: Rocks the 80s,PS2,MatAnim,7
+Guitar Hero Encore: Rocks the 80s,PS2,Mesh,28
+Guitar Hero Encore: Rocks the 80s,PS2,Mesh,27
+Guitar Hero Encore: Rocks the 80s,PS2,MeshAnim,1
+Guitar Hero Encore: Rocks the 80s,PS2,Object,0
+Guitar Hero Encore: Rocks the 80s,PS2,ObjectDir,16
+Guitar Hero Encore: Rocks the 80s,PS2,OutfitLoader,1
+Guitar Hero Encore: Rocks the 80s,PS2,ParticleSys,27
+Guitar Hero Encore: Rocks the 80s,PS2,ParticleSysAnim,3
+Guitar Hero Encore: Rocks the 80s,PS2,RandomGroupSeq,1
+Guitar Hero Encore: Rocks the 80s,PS2,RndDir,8
+Guitar Hero Encore: Rocks the 80s,PS2,ScreenMask,2
+Guitar Hero Encore: Rocks the 80s,PS2,Screenshot,1
+Guitar Hero Encore: Rocks the 80s,PS2,SerialGroupSeq,1
+Guitar Hero Encore: Rocks the 80s,PS2,Set,0
+Guitar Hero Encore: Rocks the 80s,PS2,Sfx,4
+Guitar Hero Encore: Rocks the 80s,PS2,SfxSeq,3
+Guitar Hero Encore: Rocks the 80s,PS2,Spotlight,20
+Guitar Hero Encore: Rocks the 80s,PS2,SynthSample,5
+Guitar Hero Encore: Rocks the 80s,PS2,Tex,10
+Guitar Hero Encore: Rocks the 80s,PS2,Tex,12
+Guitar Hero Encore: Rocks the 80s,PS2,Text,17
+Guitar Hero Encore: Rocks the 80s,PS2,Trans,9
+Guitar Hero Encore: Rocks the 80s,PS2,TransAnim,6
+Guitar Hero Encore: Rocks the 80s,PS2,TransAnim,12
+Guitar Hero Encore: Rocks the 80s,PS2,TransAnim,10
+Guitar Hero Encore: Rocks the 80s,PS2,UIList,2
+Guitar Hero Encore: Rocks the 80s,PS2,UIPicture,0
+Guitar Hero Encore: Rocks the 80s,PS2,UIProxy,0
+Guitar Hero Encore: Rocks the 80s,PS2,UITrigger,0
+Guitar Hero Encore: Rocks the 80s,PS2,UITrigger,12
+Guitar Hero Encore: Rocks the 80s,PS2,WaitSeq,2
+Guitar Hero Encore: Rocks the 80s,PS2,Waypoint,3
+Guitar Hero Encore: Rocks the 80s,PS2,WorldCrowd,6
+Guitar Hero Encore: Rocks the 80s,PS2,WorldFx,1
+Guitar Hero II,PS2,AnimFilter,1
+Guitar Hero II,PS2,BandButton,10
+Guitar Hero II,PS2,BandCharacter,1
+Guitar Hero II,PS2,BandCrowdMeterDir,3
+Guitar Hero II,PS2,BandLabel,12
+Guitar Hero II,PS2,BandLeadMeter,8
+Guitar Hero II,PS2,BandPlacer,2
+Guitar Hero II,PS2,BandScoreDisplay,3
+Guitar Hero II,PS2,BandSlider,2
+Guitar Hero II,PS2,BandStarMeterDir,4
+Guitar Hero II,PS2,BandStreakDisplay,4
+Guitar Hero II,PS2,BandTextEntry,3
+Guitar Hero II,PS2,Cam,12
+Guitar Hero II,PS2,CamAnim,2
+Guitar Hero II,PS2,CamShot,20
+Guitar Hero II,PS2,CharBone,2
+Guitar Hero II,PS2,CharClipFilter,0
+Guitar Hero II,PS2,CharClipGroup,1
+Guitar Hero II,PS2,CharClipSamples,10
+Guitar Hero II,PS2,CharDriver,3
+Guitar Hero II,PS2,CharDriver,1
+Guitar Hero II,PS2,CharDriverMidi,3
+Guitar Hero II,PS2,CharEyes,3
+Guitar Hero II,PS2,CharForeTwist,1
+Guitar Hero II,PS2,CharHair,2
+Guitar Hero II,PS2,CharHair,1
+Guitar Hero II,PS2,CharIKHand,2
+Guitar Hero II,PS2,CharIKHand,1
+Guitar Hero II,PS2,CharIKMidi,4
+Guitar Hero II,PS2,CharIKMidi,2
+Guitar Hero II,PS2,CharIKRod,2
+Guitar Hero II,PS2,CharLookAt,2
+Guitar Hero II,PS2,CharPosConstraint,2
+Guitar Hero II,PS2,CharServoBone,1
+Guitar Hero II,PS2,CharUpperTwist,1
+Guitar Hero II,PS2,CharUpperTwist,3
+Guitar Hero II,PS2,CharWalk,1
+Guitar Hero II,PS2,CharWalk,5
+Guitar Hero II,PS2,CharWeightSetter,2
+Guitar Hero II,PS2,CharWeightSetter,1
+Guitar Hero II,PS2,Character,9
+Guitar Hero II,PS2,CheckBox,0
+Guitar Hero II,PS2,EnvAnim,4
+Guitar Hero II,PS2,Environ,5
+Guitar Hero II,PS2,EventTrigger,8
+Guitar Hero II,PS2,FaceFxLipSyncServo,5
+Guitar Hero II,PS2,FaceFxLipSyncServo,2
+Guitar Hero II,PS2,Font,15
+Guitar Hero II,PS2,Group,12
+Guitar Hero II,PS2,Group,28
+Guitar Hero II,PS2,Light,6
+Guitar Hero II,PS2,LightAnim,2
+Guitar Hero II,PS2,LightPreset,8
+Guitar Hero II,PS2,Mat,27
+Guitar Hero II,PS2,MatAnim,7
+Guitar Hero II,PS2,Mesh,28
+Guitar Hero II,PS2,Mesh,0
+Guitar Hero II,PS2,MeshAnim,1
+Guitar Hero II,PS2,Object,0
+Guitar Hero II,PS2,Object,4
+Guitar Hero II,PS2,ObjectDir,16
+Guitar Hero II,PS2,OutfitLoader,1
+Guitar Hero II,PS2,OutfitLoader,9
+Guitar Hero II,PS2,ParticleSys,27
+Guitar Hero II,PS2,ParticleSysAnim,3
+Guitar Hero II,PS2,RandomGroupSeq,1
+Guitar Hero II,PS2,RndDir,8
+Guitar Hero II,PS2,ScreenMask,2
+Guitar Hero II,PS2,Screenshot,1
+Guitar Hero II,PS2,SerialGroupSeq,1
+Guitar Hero II,PS2,Set,0
+Guitar Hero II,PS2,Sfx,4
+Guitar Hero II,PS2,SfxSeq,3
+Guitar Hero II,PS2,Spotlight,20
+Guitar Hero II,PS2,SynthSample,5
+Guitar Hero II,PS2,Tex,10
+Guitar Hero II,PS2,Text,17
+Guitar Hero II,PS2,Trans,9
+Guitar Hero II,PS2,Trans,12
+Guitar Hero II,PS2,TransAnim,6
+Guitar Hero II,PS2,UIList,2
+Guitar Hero II,PS2,UIPicture,0
+Guitar Hero II,PS2,UIProxy,0
+Guitar Hero II,PS2,UITrigger,0
+Guitar Hero II,PS2,VenueVerify,1
+Guitar Hero II,PS2,WaitSeq,2
+Guitar Hero II,PS2,Waypoint,3
+Guitar Hero II,PS2,WorldCrowd,6
+Guitar Hero II,PS2,WorldFx,1
+Guitar Hero II,PS2,WorldFx,2
+Guitar Hero II,PS2,WorldFx,0
+Guitar Hero II,X360,AnimFilter,1
+Guitar Hero II,X360,BandButton,10
+Guitar Hero II,X360,BandCharacter,1
+Guitar Hero II,X360,BandCrowdMeterDir,3
+Guitar Hero II,X360,BandLabel,12
+Guitar Hero II,X360,BandLeadMeter,8
+Guitar Hero II,X360,BandPlacer,2
+Guitar Hero II,X360,BandScoreDisplay,3
+Guitar Hero II,X360,BandSlider,2
+Guitar Hero II,X360,BandStarMeterDir,5
+Guitar Hero II,X360,BandStreakDisplay,4
+Guitar Hero II,X360,BandTextEntry,3
+Guitar Hero II,X360,Cam,12
+Guitar Hero II,X360,CamAnim,2
+Guitar Hero II,X360,CamShot,27
+Guitar Hero II,X360,CharBone,3
+Guitar Hero II,X360,CharClipFilter,1
+Guitar Hero II,X360,CharClipGroup,1
+Guitar Hero II,X360,CharClipSamples,11
+Guitar Hero II,X360,CharDriver,5
+Guitar Hero II,X360,CharDriverMidi,3
+Guitar Hero II,X360,CharEyes,4
+Guitar Hero II,X360,CharForeTwist,1
+Guitar Hero II,X360,CharHair,2
+Guitar Hero II,X360,CharIKHand,5
+Guitar Hero II,X360,CharIKMidi,4
+Guitar Hero II,X360,CharIKRod,2
+Guitar Hero II,X360,CharLookAt,3
+Guitar Hero II,X360,CharPosConstraint,2
+Guitar Hero II,X360,CharServoBone,1
+Guitar Hero II,X360,CharServoBone,10
+Guitar Hero II,X360,CharUpperTwist,1
+Guitar Hero II,X360,CharWalk,1
+Guitar Hero II,X360,CharWeightSetter,3
+Guitar Hero II,X360,Character,10
+Guitar Hero II,X360,CheckBox,0
+Guitar Hero II,X360,CubeTex,1
+Guitar Hero II,X360,EnvAnim,4
+Guitar Hero II,X360,Environ,5
+Guitar Hero II,X360,EventTrigger,10
+Guitar Hero II,X360,FaceFxLipSyncServo,5
+Guitar Hero II,X360,Flare,4
+Guitar Hero II,X360,Font,15
+Guitar Hero II,X360,FxSendReverb,1
+Guitar Hero II,X360,GHTrackDir,3
+Guitar Hero II,X360,Group,12
+Guitar Hero II,X360,Light,9
+Guitar Hero II,X360,LightAnim,2
+Guitar Hero II,X360,LightPreset,9
+Guitar Hero II,X360,Mat,28
+Guitar Hero II,X360,MatAnim,7
+Guitar Hero II,X360,Mesh,28
+Guitar Hero II,X360,MeshAnim,1
+Guitar Hero II,X360,ObjectDir,17
+Guitar Hero II,X360,OutfitLoader,2
+Guitar Hero II,X360,ParticleSys,30
+Guitar Hero II,X360,ParticleSysAnim,3
+Guitar Hero II,X360,PostProc,9
+Guitar Hero II,X360,RandomGroupSeq,1
+Guitar Hero II,X360,RndDir,9
+Guitar Hero II,X360,ScreenMask,2
+Guitar Hero II,X360,Screenshot,1
+Guitar Hero II,X360,SerialGroupSeq,1
+Guitar Hero II,X360,Set,0
+Guitar Hero II,X360,Sfx,5
+Guitar Hero II,X360,SfxSeq,3
+Guitar Hero II,X360,Spotlight,25
+Guitar Hero II,X360,SynthSample,5
+Guitar Hero II,X360,Tex,10
+Guitar Hero II,X360,Text,17
+Guitar Hero II,X360,TrackWidget,4
+Guitar Hero II,X360,Trans,9
+Guitar Hero II,X360,TransAnim,6
+Guitar Hero II,X360,UILabel,1
+Guitar Hero II,X360,UIList,3
+Guitar Hero II,X360,UIPicture,0
+Guitar Hero II,X360,UIProxy,0
+Guitar Hero II,X360,UITrigger,0
+Guitar Hero II,X360,WaitSeq,2
+Guitar Hero II,X360,Waypoint,3
+Guitar Hero II,X360,WorldCrowd,6
+Guitar Hero II Demo,PS2,AnimFilter,1
+Guitar Hero II Demo,PS2,BandButton,10
+Guitar Hero II Demo,PS2,BandCharacter,1
+Guitar Hero II Demo,PS2,BandCrowdMeterDir,3
+Guitar Hero II Demo,PS2,BandLabel,12
+Guitar Hero II Demo,PS2,BandLabel,11
+Guitar Hero II Demo,PS2,BandLabel,6
+Guitar Hero II Demo,PS2,BandLabel,2
+Guitar Hero II Demo,PS2,BandLabel,0
+Guitar Hero II Demo,PS2,BandLeadMeter,8
+Guitar Hero II Demo,PS2,BandPlacer,1
+Guitar Hero II Demo,PS2,BandScoreDisplay,3
+Guitar Hero II Demo,PS2,BandSlider,2
+Guitar Hero II Demo,PS2,BandStarMeterDir,4
+Guitar Hero II Demo,PS2,BandStreakDisplay,4
+Guitar Hero II Demo,PS2,BandTextEntry,2
+Guitar Hero II Demo,PS2,Cam,12
+Guitar Hero II Demo,PS2,CamAnim,2
+Guitar Hero II Demo,PS2,CamShot,18
+Guitar Hero II Demo,PS2,CharBone,1
+Guitar Hero II Demo,PS2,CharClipFilter,0
+Guitar Hero II Demo,PS2,CharClipGroup,1
+Guitar Hero II Demo,PS2,CharClipSamples,8
+Guitar Hero II Demo,PS2,CharDriver,3
+Guitar Hero II Demo,PS2,CharDriverMidi,3
+Guitar Hero II Demo,PS2,CharForeTwist,1
+Guitar Hero II Demo,PS2,CharHair,2
+Guitar Hero II Demo,PS2,CharIKHand,1
+Guitar Hero II Demo,PS2,CharIKMidi,4
+Guitar Hero II Demo,PS2,CharIKRod,2
+Guitar Hero II Demo,PS2,CharPosConstraint,1
+Guitar Hero II Demo,PS2,CharServoBone,1
+Guitar Hero II Demo,PS2,CharUpperTwist,1
+Guitar Hero II Demo,PS2,CharWalk,1
+Guitar Hero II Demo,PS2,CharWeightSetter,2
+Guitar Hero II Demo,PS2,Character,9
+Guitar Hero II Demo,PS2,CheckBox,0
+Guitar Hero II Demo,PS2,EnvAnim,4
+Guitar Hero II Demo,PS2,Environ,4
+Guitar Hero II Demo,PS2,EventTrigger,8
+Guitar Hero II Demo,PS2,FaceFxLipSyncServo,5
+Guitar Hero II Demo,PS2,Font,14
+Guitar Hero II Demo,PS2,Group,11
+Guitar Hero II Demo,PS2,Group,28
+Guitar Hero II Demo,PS2,Light,5
+Guitar Hero II Demo,PS2,LightAnim,2
+Guitar Hero II Demo,PS2,LightPreset,8
+Guitar Hero II Demo,PS2,Mat,27
+Guitar Hero II Demo,PS2,Mat,10
+Guitar Hero II Demo,PS2,MatAnim,7
+Guitar Hero II Demo,PS2,Mesh,28
+Guitar Hero II Demo,PS2,Mesh,27
+Guitar Hero II Demo,PS2,MeshAnim,1
+Guitar Hero II Demo,PS2,ObjectDir,15
+Guitar Hero II Demo,PS2,OutfitLoader,1
+Guitar Hero II Demo,PS2,ParticleSys,26
+Guitar Hero II Demo,PS2,ParticleSysAnim,3
+Guitar Hero II Demo,PS2,RandomGroupSeq,1
+Guitar Hero II Demo,PS2,RndDir,6
+Guitar Hero II Demo,PS2,Screenshot,1
+Guitar Hero II Demo,PS2,Set,0
+Guitar Hero II Demo,PS2,Sfx,4
+Guitar Hero II Demo,PS2,SfxSeq,3
+Guitar Hero II Demo,PS2,Spotlight,20
+Guitar Hero II Demo,PS2,SynthSample,5
+Guitar Hero II Demo,PS2,Tex,10
+Guitar Hero II Demo,PS2,Tex,-33691930
+Guitar Hero II Demo,PS2,Text,17
+Guitar Hero II Demo,PS2,Trans,9
+Guitar Hero II Demo,PS2,TransAnim,6
+Guitar Hero II Demo,PS2,TransAnim,12
+Guitar Hero II Demo,PS2,UIList,2
+Guitar Hero II Demo,PS2,UIList,12
+Guitar Hero II Demo,PS2,UIPicture,0
+Guitar Hero II Demo,PS2,UIProxy,0
+Guitar Hero II Demo,PS2,UITrigger,0
+Guitar Hero II Demo,PS2,UITrigger,6
+Guitar Hero II Demo,PS2,Waypoint,3
+Guitar Hero II Demo,PS2,WorldCrowd,5
+Guitar Hero II Demo,PS2,WorldFx,1
+Guitar Hero II Demo (OPM),PS2,AnimFilter,0
+Guitar Hero II Demo (OPM),PS2,BandButton,10
+Guitar Hero II Demo (OPM),PS2,BandCharacter,1
+Guitar Hero II Demo (OPM),PS2,BandCrowdMeterDir,3
+Guitar Hero II Demo (OPM),PS2,BandLabel,12
+Guitar Hero II Demo (OPM),PS2,BandLeadMeter,8
+Guitar Hero II Demo (OPM),PS2,BandPlacer,1
+Guitar Hero II Demo (OPM),PS2,BandScoreDisplay,3
+Guitar Hero II Demo (OPM),PS2,BandSlider,2
+Guitar Hero II Demo (OPM),PS2,BandStarMeterDir,4
+Guitar Hero II Demo (OPM),PS2,BandStreakDisplay,4
+Guitar Hero II Demo (OPM),PS2,BandTextEntry,1
+Guitar Hero II Demo (OPM),PS2,Cam,12
+Guitar Hero II Demo (OPM),PS2,CamShot,11
+Guitar Hero II Demo (OPM),PS2,CharClipSamples,8
+Guitar Hero II Demo (OPM),PS2,CharDriver,2
+Guitar Hero II Demo (OPM),PS2,CharDriverMidi,3
+Guitar Hero II Demo (OPM),PS2,CharForeTwist,1
+Guitar Hero II Demo (OPM),PS2,CharIKHand,1
+Guitar Hero II Demo (OPM),PS2,CharIKMidi,4
+Guitar Hero II Demo (OPM),PS2,CharServoBone,1
+Guitar Hero II Demo (OPM),PS2,CharUpperTwist,1
+Guitar Hero II Demo (OPM),PS2,CharWalk,1
+Guitar Hero II Demo (OPM),PS2,CharWeightSetter,2
+Guitar Hero II Demo (OPM),PS2,Character,7
+Guitar Hero II Demo (OPM),PS2,CheckBox,0
+Guitar Hero II Demo (OPM),PS2,EnvAnim,4
+Guitar Hero II Demo (OPM),PS2,Environ,4
+Guitar Hero II Demo (OPM),PS2,EventTrigger,6
+Guitar Hero II Demo (OPM),PS2,FaceFxLipSyncServo,5
+Guitar Hero II Demo (OPM),PS2,Font,14
+Guitar Hero II Demo (OPM),PS2,Group,11
+Guitar Hero II Demo (OPM),PS2,Light,5
+Guitar Hero II Demo (OPM),PS2,LightAnim,2
+Guitar Hero II Demo (OPM),PS2,LightPreset,6
+Guitar Hero II Demo (OPM),PS2,Mat,25
+Guitar Hero II Demo (OPM),PS2,MatAnim,7
+Guitar Hero II Demo (OPM),PS2,Mesh,28
+Guitar Hero II Demo (OPM),PS2,MeshAnim,1
+Guitar Hero II Demo (OPM),PS2,ObjectDir,14
+Guitar Hero II Demo (OPM),PS2,OutfitLoader,1
+Guitar Hero II Demo (OPM),PS2,ParticleSys,26
+Guitar Hero II Demo (OPM),PS2,ParticleSysAnim,3
+Guitar Hero II Demo (OPM),PS2,RandomGroupSeq,1
+Guitar Hero II Demo (OPM),PS2,Screenshot,1
+Guitar Hero II Demo (OPM),PS2,Sfx,4
+Guitar Hero II Demo (OPM),PS2,SfxSeq,3
+Guitar Hero II Demo (OPM),PS2,Spotlight,19
+Guitar Hero II Demo (OPM),PS2,SynthSample,5
+Guitar Hero II Demo (OPM),PS2,Tex,10
+Guitar Hero II Demo (OPM),PS2,Text,17
+Guitar Hero II Demo (OPM),PS2,Trans,9
+Guitar Hero II Demo (OPM),PS2,TransAnim,6
+Guitar Hero II Demo (OPM),PS2,UILabel,0
+Guitar Hero II Demo (OPM),PS2,UIList,2
+Guitar Hero II Demo (OPM),PS2,UIPicture,0
+Guitar Hero II Demo (OPM),PS2,UIProxy,0
+Guitar Hero II Demo (OPM),PS2,Waypoint,3
+Guitar Hero II Demo (OPM),PS2,WorldCrowd,5
+Guitar Hero II Demo (OPM),PS2,WorldFx,1

@@ -1,0 +1,167 @@
+All bytes are in big endian order.
+
+Part I: Directory Name + Entries
+================================
+INT32 - Version (Always 28)
+INT32 - Char. Count
+String - Directory Type
+INT32 - Char. Count
+String - Directory Name
+
+INT32 - Count of Strings (All Strings in this part)
+INT32 - Count of Names + Total Length
+INT32 - Count of Entries
+
+* -------Entry-------
+* ===================
+* INT32  - Char Count.
+* String - File Type
+* INT32  - Char Count.
+* String - File Name
+
+Part II 1/2: No idea
+====================
+// Found on superfreak.milo_xbox
+INT32 - Always 25
+INT32 - Always 3
+INT32 - Always 8
+INT32 - Always 10
+
+Part II 1/2: No idea
+====================
+// Found on greenday_blue.milo_wii
+INT32 - Always 17
+INT32 - Always 10
+
+Part II: Secondary milo type
+============================
+INT32 - Unknown (Always 27)
+INT32 - Unknown (Usually 2)
+
+INT32 - Char. Count (Can be zero)
+String - Secondary milo type?
+* Observed:
+* * "song"
+* * "band_icon"
+
+INT32 - Always 0
+INT32 - Always 0
+
+Part III: View Matrices
+=======================
+INT32 - Matrix Count (Always 7?) = 336 bytes
+
+* -------Matrix--------
+* =====================
+* Float*12
+
+Part IV: External Milo
+======================
+INT32 - Usually 0
+* Observed:
+* * 5 - bandlogo.milo_xbox
+* * 6 - greenday_blue.milo_xbox
+* * 7 - world.milo_xbox, camera.milo_xbox
+BYTE - Always 1
+INT32 - Char. Count
+String - Alternate milo name?
+* Observed:
+* * "easy.milo"
+* * "clips.milo" - superfreak.milo_xbox (DC1)
+* * "moves.milo"
+* * "midi_bank.milo" - superfreak.milo_xbox (DC1)
+
+INT32 - External Milo Count
+
+* ---External Milo----- Merge With?
+* =====================
+* INT32 - Char. Count
+* String - Milo Path
+* * Observed:
+* * * "../../world/shared/director.milo" - rizeofthefenix.milo_xbox
+* * * "../char/crowd/anim/shared_clips.milo"
+* * * "video_01_base.milo"
+* * * "camera.milo"
+* * * "fx/post_process_fx_venue.milo"
+* * * "track_shared.milo"
+* * * "../../world/shared/director.milo"
+* * * "lipsync.milo"
+* * * "../../sfx/audio_mixer.milo" - superfreak.milo_xbox (DC1)
+* * * "../shared/colorpalettes.milo"
+
+PART IV: V10 Alternate
+======================
+INT32 - Always 0
+INT32 - Char. Count
+String - Camera Name?
+* Observed:
+* * "world.cam" camera.milo_xbox
+
+BYTE - Always 0
+INT32 - Always 0
+INT32 - Always 4?
+
+.......
+
+
+Part V: Embedded Milos
+======================
+BYTE - Always 0 (Milo embed depth?)
+	EXCEPTION: 1 on thecrystalship.milo_xbox > uniq0
+		   1 on 25or6to4.milo_xbox > uniq0
+
+INT32 - Embedded Milo Count
+
+* Embedded Milo
+* =========================
+* INT32 - Char. Count
+* String - Milo Name
+* - "lipsync.milo"
+* INT16 - Always 256
+*
+* ^^ Begin embedded data for milo file ^^
+
+Part VI: Zeros
+==============
+BYTES(13) - Zero'd Data
++ BYTES(14) - Zero'd Data if V4 (snake_resource.milo_xbox)
+
+Part VI: Additional 
+===================
+// Found on greenday_blue.milo_wii (264 bytes)
+INT32 - Always 4
+BYTES(9) - Zero'd Data
+INT32 - Some kind of count?
+* 769
+FLOAT - 2.6567764
+FLOAT - -12.236028
+FLOAT - 2.8081627
+FLOAT - 45.940773
+FLOAT - 0.0
+INT32 - Always 9? Count of vectors?
+
+* VECTOR (12 bytes)
+* =================
+* FLOAT - X
+* FLOAT - Y
+* FLOAT - Z
+
+BYTES(18) - Zero'd Data
+String - Imported or default mesh?
+* "bone_guitar_lh_mod.mesh"
+
+FLOAT - -13.354494
+FLOAT - 0.10821247
+FLOAT - 40.832157
+FLOAT - 45.940773
+BYTE(1) - Always 0?
+BYTE(4) - 0xFFFFFFFF
+INT32 - Mesh Effect?
+* "translucent.grp"
+INT32 - Always 15?
+BYTES(20) - Zero'd Data
+String - Not sure
+* "none"
+INT32 - Always 0
+BYTE(1) - Always 1?
+BYTE(8) - Zero'd Data

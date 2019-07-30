@@ -1,0 +1,97 @@
+All bytes are in big endian order.
+
+"A full lipsync animation, basically a changing set of weights for a set of named visemes.  Sampled at 30hz"
+
+Part I: Version Stuff
+=====================
+INT32 - Version?
+* Observed Values:
+* * 0 TBRB/LEGO/GDRB
+* * 1 RB3/RBN/DC1
+* * 2 DC3
+INT32 - Sub-Version? (Always 2)
+INT32 - Char. Count (Yes, it can be zero)
+String - Imported DTA/DTB
+* Observed Values:
+* * "proj9" - TBRB
+* * "facial_exp" - DC1/DC3
+
+Part II: Embedded DTB File
+==========================
+BYTE - DTB Switch
+* 0 = False
+* 1 = True
+
+Usually structured as keyword + 32-bit float, repeated.
+
+------DC3------
+Keyword - Facial Expression
+32-bit Float - Weight (Must be between 0 and 1)
+* Default = 0.0
+---------------
+
+------RB3------
+Keyword - Vignette
+32-bit Float - Weight (Must be between 0 and 1)
+* Default = 0.0
+---------------
+
+BYTES(4)
+
+Part III: Viseme Names
+======================
+INT32 - Count of Visemes
+* Observed Values:
+* * 36 - RB3 (rizeofthefenix, backtotheshack)
+* * 37 - RB3 (freebird, 20thcenturyboy)
+* * 65 - GDRB/RB1 (Charlene)
+
+* -------Viseme-------
+* ====================
+* INT32  - Char. Count
+* String - Viseme Name
+
+Part IV: A Bit Fuzzy
+=====================
+INT32 - Number of keyframes (~Song length in seconds * 30)
+INT32 - Size of following data (in bytes)
+BYTES(Varies)
+
+BYTE  - Number of Viseme Entries (Usually between 0-3)
+
+Viseme Entry
+============
+BYTE - Viseme Index
+BYTE - Weight
+
+----ONLY PRESENT ON VERSION 1----
+PART V: Prop Animation
+======================
+INT32 - Char. Count (Can be zero)
+String - Animation File
+* Observed Values:
+* * "dancer_face.anim" - becauseofyou.milo_xbox (DC1 DLC)
+
+"PropAnim to control this lipsync"
+^^NOTE: Version 2 does not have this but included milo will contain dancer_face.anim.^^
+
+
+00 - Null
+01 - 2 Bytes
+	00: Viseme Index
+	01: Weight
+02 - 4 bytes
+	00: Viseme Index
+	01: Weight
+03 - 6 bytes
+	00: Viseme Index
+	01: Weight
+
+
+Morph
+=====
+"A Morph object animates between multiple Mesh poses using
+        weight keyframes. This is an expensive technique, equivalent to a
+        MeshAnim for each active pose, so use only when skinning or a
+        single MeshAnim isn't enough. For example, we use it for
+        viseme-driven facial animation.")

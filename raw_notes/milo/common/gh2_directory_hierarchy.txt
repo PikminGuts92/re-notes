@@ -1,0 +1,29 @@
+Entry Types
+===========
+11 - Group
+
+ 4 - Anim
+ 3 - Draw
+ ? - Poll
+ 9 - Trans
+
+Directory Types
+===============
+14 - ObjectDir
+ 6 - RndDir
+
+Hierarchy
+=========
+ObjectDir
+-> CharClipSet
+-> RndDir (Anim Draw Trans Poll)
+   -> BandCrowdMeterDir
+   -> BandLeadMeter
+   -> BandScoreDisplay
+   -> BandStarMeterDir
+   -> BandStreakDisplay
+   -> Character
+      -> BandCharacter
+   -> PanelDir
+      -> WorldDir
+   -> WorldFx

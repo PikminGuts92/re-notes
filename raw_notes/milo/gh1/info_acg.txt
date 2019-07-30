@@ -1,0 +1,11 @@
+All bytes are in little endian order.
+
+Part 1:
+============================
+INT32 - Always 1
+INT32 - Always 1
+INT32 - Always 1
+INT32 - Always 0?
+
+FLOAT - No Idea
+FLOAT - No Idea

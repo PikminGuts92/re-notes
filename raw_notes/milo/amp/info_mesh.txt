@@ -1,0 +1,21 @@
+All bytes are in little endian order.
+
+Part 1: Matrix Arrays (0x00)
+============================
+INT32 - Always 14
+INT32  - Always 5
+* Matrix Array 1
+* ============
+* Float*12
+* Matrix Array 2
+* ============
+* Float*12
+
+
+Part 2: Sub Meshes (0x68)
+=========================
+INT32 - Count of sub meshes (Can be zero)
+* Sub Mesh Names
+* ==============
+* INT32 - Char Count.
+* String - Mesh name

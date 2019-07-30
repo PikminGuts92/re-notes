@@ -1,0 +1,54 @@
+All bytes are in little endian order.
+
+Part 1: Matrix Arrays (0x00)
+============================
+INT32 - Always 7
+BYTES(4) - Zero'd Data
+
+INT32 - Count of entries
+* Some Entry
+* ==========
+* String - Usually 0 or 1 in length
+* Float - \
+* Float - | Usually 0 or very close to 0
+
+INT32 - Count of sub views?
+	string[] - View names
+
+INT32  - Always 8
+* Matrix Array 1
+* ============
+* Float*12
+* Matrix Array 2
+* ============
+* Float*12
+
+Part 2: Camera + Mesh Names (0x78)
+==================================
+INT32 - Count of meshes/cameras
+	string[] - Mesh names
+
+BYTES(9) - Zero'd Data
+
+Part 3: View Name?
+==================
+INT32 - Char. Count
+String - View (splash.view)
+
+INT32 - Always 1
+BYTE - Always 1
+
+Part 4: Camera + Mesh Names (Again??!)
+======================================
+INT32 - Count of meshes/cameras
+	string[] - Mesh names
+
+Float(4) - Not sure (Usually 0)
+
+Part 5: View Name? (Again)
+==========================
+INT32 - Char. Count
+String - View (splash.view)
+
+INT32 - Always 0
+INT32 - Always 0

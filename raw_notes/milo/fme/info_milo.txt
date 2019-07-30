@@ -1,0 +1,75 @@
+All bytes are in big endian order.
+
+Used as a directory?
+
+BYTES(4) - "MILO"
+INT32 - Always 61?
+INT16 - Always 0
+INT32 - 0, 8
+INT32 - 0
+INT32 - 0
+
+INT32 - Char. Count
+String - Directory Type
+INT32 - Char. Count
+String - Directory Name
+
+32
+64
+0
+3849749 - Layer Size?
+12
+34
+35
+6
+1
+
+INT32 - Char. Count
+String - "main"
+
+INT32 - 0
+INT16 - 4096
+INT16 - 8
+
+INT32 - Char. Count
+String - Description? "authoring"
+
+INT32 - Char. Count
+String - Path? "../../neopulse/bg_authoring.layer"
+
+8288
+
+INT32 - Char. Count
+String - Description? "pulse_01"
+
+INT32 - Char. Count
+String - Description? "pulse_01.layer"
+
+INT16 - 4096
+INT16 - 0
+
+INT32 - Char. Count
+String - Description? "pulse_02"
+
+INT32 - Char. Count
+String - Description? "pulse_02.layer"
+
+INT16 - 4096
+INT16 - 0
+
+INT32 - Char. Count
+String - Description? "pulse_03"
+
+INT32 - Char. Count
+String - Description? "pulse_03.layer"
+
+INT16 - 4096
+INT16 - 0
+
+INT32 - 0
+
+// Embedded
+18
+34
+6
+0

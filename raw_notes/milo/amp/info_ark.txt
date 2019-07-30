@@ -1,0 +1,46 @@
+All bytes are in little endian order.
+
+Part 1: Version + Entry Table
+=============================
+INT32 - Version (Always 2)
+INT32 - Count of Entries
+* File Entry
+* ============
+* INT32 - Offset
+* INT32 - Name Index
+* INT32 - Folder Index
+* INT32 - Size
+* INT32 - Inflated Size (0 = File is non-GZip)
+
+Part 2: String Table
+====================
+INT32 - Size of String Table
+String - String Table
+
+Part 3: String Index Table
+==========================
+INT32 - Count of Entries
+* String Index Entries
+* ====================
+* INT32 - 0-based Index of String
+
+Part 4: Actual Files
+====================
+* Begin of of all the files smooshed together.
+
+
+Amplitude
+==========
+ 4526 Entries
+68204 String Table Size
+ 9252 String Table Entries (Always Entries * 2 + 200)
+
+195748 Total Header Size
+
+Antigrav
+========
+ 9099 Entries
+59433 String Table Size
+18398 String Table Entries
+
+315021 Total Header Size

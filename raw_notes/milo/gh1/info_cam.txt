@@ -1,0 +1,48 @@
+All bytes are in little endian order.
+
+Part 1: Matrix Arrays (0x00)
+============================
+INT32 - Always 9
+INT32  - Always 8
+* Matrix Array 1
+* ============
+* Float*12
+* Matrix Array 2
+* ============
+* Float*12
+
+Part 2: Camera Name (0x68)
+==========================
+INT32 - Count of meshes/cameras
+	string[] - Mesh names
+
+BYTES(9) - Zero'd Data
+INT32 - Char. Count
+String - Camera Name - Parent?
+
+Part 3: No Idea
+===============
+INT32 - Always 1
+INT32 - Always 1
+
+BYTES(11) - Zero'd Data (Or 13 when previous = 0?)
+
+Part 4: Transformation?
+=======================
+* Matrix Array 1
+* ============
+* Float*12
+
+* Observed:
+meta.cam
+---------------------------
+0.0        0.0 400.0 1000.0
+0.78539819 0.0   0.0    1.0
+1.0        0.0   0.02   0.0
+---------------------------
+6 foot camera.cam
+---------------------------
+0.0        0.0   1.0 1000.0
+1.04565937 0.0   0.0    1.0
+1.0        0.0   1.0    0.0
+---------------------------

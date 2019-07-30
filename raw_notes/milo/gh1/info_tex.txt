@@ -1,0 +1,45 @@
+All bytes are in little endian order.
+
+Extensions: .gh, .rnd_ps2
+
+Part 1: Tex Header
+==================
+
+- Special Case: (Or bad extraction)
+-- INT32 - Count of strings
+-- * Connected Texture Names
+-- * =======================
+-- * INT32 - Char Count.
+-- * String - Texture Path
+
+INT32 - Always 8
+INT32 - Width
+INT32 - Height
+INT32 - Bits Per Pixel (Either 4 or 8)
+INT32 - Char Count.
+String - Texture Path
+
+Float - Unknown
+* Observed Values:
+*  0.0f in [splash_brick03.tex, splash_poster.tex]
+* -8.0f in [fsinger_arms.tex, fsinger_arms02.tex, fsinger_torso.tex, metal_singer_torso.tex]
+INT32 - Always 1
+BYTE - Boolean: Use external texture?
+* Observed Values:
+* 0 - False [fsinger_arms.tex]
+* 1 - True [splash.gh - splash_brick03.tex]
+
+**NOTE: If external texture is in use then embedded texture will not be present**
+
+**NOTE: The following parts may not always be present.**
+
+Part 2: BMP_PS2 Header
+======================
+BYTE - Always 1
+BYTE - Bits Per Pixel (Either 4 or 8)
+INT32 - Image Format (Always 3)
+BYTE - Always 0
+INT16 - Width
+INT16 - Height
+INT16 - Bytes Per Line
+BYTES(19) - Zero'd Data

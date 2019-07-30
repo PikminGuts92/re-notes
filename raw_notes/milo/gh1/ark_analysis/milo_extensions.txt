@@ -1,0 +1,48 @@
+ButtonEx		.btn
+Cam			.cam
+CamAnim			.cnm
+CreditList		.lst
+EnvAnim			.enm
+EnvAnim			.envanim
+Environ		
+Environ			.env
+Environ			.envanim
+Flare		
+Flare			.flare
+Font			.font
+LabelEx			.lbl
+Light			.lit
+LightAnim		.litanim
+List			.lst
+Mat		
+Mat			.mat
+Mat			.Mat
+MatAnim		
+MatAnim			.manim
+MatAnim			.matanim
+MatAnim			.MatAnim
+MatAnim			.mnm
+Mesh			.mesh
+MeshAnim		.msnm
+Morph			.mrf
+Movie			.mov
+MultiMesh		.mm
+ParticleSys		
+ParticleSys		.part
+ParticleSysAnim		.panim
+ParticleSysAnim		.panm
+ParticleSysAnim		.partanim
+ParticleSysAnim		.pnm
+PictureEx		.pic
+PictureToggle		.tog
+Placer			.placer
+Slider			.sld
+Tex			.bmp
+Tex			.tex
+Text			.text
+Text			.txt
+TextEntry		.ten
+TransAnim		.tnm
+View		
+View			.anim
+View			.view

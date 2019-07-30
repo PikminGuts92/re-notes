@@ -1,0 +1,87 @@
+Entry Types
+===========
+ 4 - ButtonEx
+ 9 - Cam*
+ 0 - CamAnim*
+ 0 - CreditList
+ 3 - EnvAnim*
+ 1 - Environ*
+ 3 - Flare
+ 7 - Font*
+ 6 - LabelEx
+ 3 - Light*
+ 1 - LightAnim*
+ 2 - List
+21 - Mat*
+ 5 - MatAnim*
+25 - Mesh*
+ 0 - MeshAnim*
+ 3 - Morph
+ 6 - Movie
+ 0 - MultiMesh
+22 - ParticleSys*
+ 2 - ParticleSysAnim*
+ 1 - PictureEx
+ 0 - PictureToggle
+ 0 - Placer
+ 1 - Slider
+ 8 - Tex*
+15 - Text*
+ 0 - TextEntry
+ 4 - TransAnim*
+ 7 - View
+
+ 0 - Anim
+ 1 - Draw
+ 8 - Trans
+
+* Appears in GH2 PS2 (Note: View becomes Group in GH2)
+ 
+Hierarchy
+=========
+Object
+-> Anim (Not observed)
+   -> CamAnim
+   -> LightAnim
+   -> MatAnim
+   -> MeshAnim
+   -> Morph
+   -> Movie
+   -> ParticleSys (Draw Trans)
+   -> ParticleSysAnim
+   -> TransAnim
+-> Draw (Not observed)
+   -> Flare (Trans)
+   -> Mesh (Trans)
+   -> MultiMesh
+   -> ParticleSys
+   -> Text (Trans)
+-> Environ
+-> Font
+-> Mat
+-> Tex
+-> Trans (Not observed)
+   -> Cam
+   -> Flare
+   -> Light
+   -> Mesh
+   -> ParticleSys
+   -> Text
+
+Not In GH2
+==========
+ButtonEx
+CreditList
+LabelEx
+List
+PictureEx
+PictureToggle
+Placer
+Slider
+TextEntry
+View
+
+Trans
+=====
+Base class for transformable objects.
+Trans objects have a 3D position, rotation, and scale.

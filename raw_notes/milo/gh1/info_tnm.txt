@@ -1,0 +1,26 @@
+All bytes are in little endian order.
+
+Part 1:
+============================
+INT32 - Always 4
+
+More stuff...
+
+Part 2: Quaternions?
+====================
+INT32 - Count of Quats
+
+* Quat Entry
+* ==========
+* FLOAT - X
+* FLOAT - Y
+* FLOAT - Z
+* FLOAT - W
+
+Part 3: TransAnim Name
+======================
+INT32 - Char. Count
+String - TransAnim Name
+
+INT32 - Always 1
+BYTES(5) - Zero'd Data

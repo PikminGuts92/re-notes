@@ -1,0 +1,99 @@
+All bytes are in big endian order.
+
+INT16 - Platform Identifier
+* 6 is Wii
+* 0 is Xbox 360
+INT16 - Always 38?
+INT32  - Always 2
+BYTES(9) - Zero'd Data
+INT32 - Always 9
+
+* Matrix Array 1
+* ============
+* Float*12
+* Matrix Array 2
+* ============
+* Float*12
+
+BYTES(9) - Zero'd Data
+String - View Matrix Location?
+* "greenday_blue" - Directory
+* "bone_guitar_lh_mod.mesh"
+
+INT32 - Always 3
+BYTE - Always 1
+Float(4) - Not sure
+INT32 - Some kind of count but usually 0
+
+String - Material?
+* "greenday_base.mat"
+
+String - Mesh Name?
+* "greenday_resource.mesh"
+
+INT32 - Always 0
+INT32 - Always 1
+BYTE(1) - Always 0
+
+INT32 - Count of Vertices
+* 0xFFFFFFFF (Only on Wii)
+
+BYTE - Always 1?
+INT32 - Size of each vertex. Always 36?
+INT32 - Always 1?
+
+Vertices Table (36 bytes)
+=========================
+Float - Vert X
+Float - Vert Y
+Float - Vert Z
+BYTE - Color R
+BYTE - Color G
+BYTE - Color B
+BYTE - Color A
+Half - Texture Coord. U
+Half - Texture Coord. V
+Half - Norm X
+Half - Norm Y
+Half - Norm Z
+Half - Norm W?
+BYTE Unknown 1 - 1 or 0
+BYTE Unknown 2 - 1 or 0
+BYTE Unknown 3 - 1 or 0
+BYTE Unknown 4 - 1 or 0
+BYTE Unknown 5  3 \
+BYTE Unknown 6  2  | Polygon draw order?
+BYTE Unknown 7  1  |
+BYTE Unknown 8  0 /
+
+INT32 - Count of Faces
+
+Face Table (6 bytes)
+====================
+INT16 - Vertex 1 Index
+INT16 - Vertex 2 Index
+INT16 - Vertex 3 Index
+
+String - Gibberish?
+* "kh^gaRid=C9-.5@QT?98.-+55/)/<A$" - greenday_resource.mesh (X360)
+* "FIF13/)8J;-IWC3." - greenday_resource.mesh (Wii)
+* "H("
+INT32 - Count of bones?
+
+* Bone
+* ====
+* String - Bone Name
+* * "bone_guitar_lh_mod.mesh"
+* * "bone_nut.mesh"
+* * "bone_bridge.mesh"
+* * "bone_vibrate_low.mesh"
+* * "bone_vibrate_hi.mesh"
+* * "bone_bend_string04.mesh"
+* * "bone_bend_string03.mesh"
+* * "bone_bend_string06.mesh"
+* * "bone_bend_string05.mesh"
+* * "bone_bend_string02.mesh"
+* * "bone_bend_string01.mesh"
+* Matrix Array (Float*12)
+
+INT16 - Always 1

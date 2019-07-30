@@ -1,0 +1,63 @@
+GH1 / GH2: 48 bytes
+===================
+float Vert X
+float Vert Y
+float Vert Z
+float Norm X
+float Norm Y
+float Norm Z
+float Color R
+float Color G
+float Color B
+float Color A
+float Texture Coordinate U
+float Texture Coordinate V
+
+RB1 - RB2: 80 bytes
+===================
+float Vert X
+float Vert Y
+float Vert Z
+float Vert W *
+float Norm X
+float Norm Y
+float Norm Z
+float Norm W *
+float Color R
+float Color G
+float Color B
+float Color A
+float Texture Coordinate U
+float Texture Coordinate V
+short Unknown 1 *
+short Unknown 2 *
+short Unknown 3 *
+short Unknown 4 *
+float Unknown 5 *
+float Unknown 6 *
+float Unknown 7 *
+float Unknown 8 *
+
+TBRB - RB3: 36 bytes
+====================
+float Vert X
+float Vert Y
+float Vert Z
+byte Color R
+byte Color G
+byte Color B
+byte Color A
+half Texture Coordinate U
+half Texture Coordinate V
+half Norm X
+half Norm Y
+half Norm Z
+half Norm W
+byte Unknown 1 - 1 or 0
+byte Unknown 2 - 1 or 0
+byte Unknown 3 - 1 or 0
+byte Unknown 4 - 1 or 0
+byte Unknown 5  3
+byte Unknown 6  2
+byte Unknown 7  1
+byte Unknown 8  0

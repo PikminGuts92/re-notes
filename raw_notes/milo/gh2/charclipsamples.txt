@@ -1,0 +1,207 @@
+All bytes are in little endian order.
+
+INT32 - Always 10
+INT32 - Always 5
+BYTES(9) - Zero'd Data
+
+FLOAT - X \
+FLOAT - Y  |- Starting Position?
+FLOAT - Z /
+
+BYTES(4) - "0x02 0x08 0xC0 0x00" 12584962
+BYTES(4) - "0x00 0x20 0x00 0x00" 8192
+
+FLOAT - 1.0f
+BYTES(5) - Zero'd Data
+INT32 - Count of Animation Entries?
+
+--------------------------------------------
+Animation Entry
+===============
+INT32 - Char. Count
+String - Animation Name
+INT32 - Always 1?
+FLOAT - Not Sure
+FLOAT - Not Sure
+
+Observed:
+
+goth1_main\turn_backward_fast
+=============================
+00 walk_backward_fast          3.05f  1.05f
+01 walk_backward_medium        2.55f  0.55f
+02 walk_forward_fast           3.45f  1.45f
+03 walk_forward_medium         2.45f  0.45f
+
+04 walk_left_fast              3.45f  1.45f
+05 walk_left_medium            3.45f  3.45f
+06 walk_normal_backward_fast   2.35f  0.35f
+07 walk_normal_backward_medium 3.15f  1.15f
+
+08 walk_normal_forward_fast    3.05f  1.05f
+09 walk_normal_forward_medium  2.75f  0.75f
+10 walk_normal_left_fast       3.45f -0.55f
+11 walk_normal_left_medium     2.85f  0.85f
+
+12 walk_normal_right_fast      3.45f  1.45f
+13 walk_normal_right_medium    2.75f  0.75f
+14 walk_right_fast             3.45f  1.45f
+15 walk_right_medium           3.45f  1.45f
+
+-------------------------------------------
+
+
+BYTES(12) - Zero'd Data
+INT32 - Count of Bone Entries?
+
+-------------------------------------------
+Bone Entry
+==========
+INT32 - Char. Count
+String - Bone Name
+
+Observed:
+
+goth1_main\turn_backward_fast
+=============================
+00 bone_facing.pos
+01 bone_pelvis.pos
+02 bone_pos_guitar.pos
+
+03 bone_L-ankle.quat
+04 bone_L-clavicle.quat
+05 bone_L-hand.quat
+06 bone_L-thigh.quat
+07 bone_L-upperArm.quat
+08 bone_R-ankle.quat
+09 bone_R-thigh.quat
+10 bone_R-upperArm.quat
+11 bone_head.quat
+12 bone_pelvis.quat
+13 bone_pos_guitar.quat
+14 bone_spine1.quat
+15 bone_spine2.quat
+16 bone_spine3.quat
+
+17 bone_L-foreArm.rotz
+18 bone_L-knee.rotz
+19 bone_L-toe.rotz
+20 bone_R-knee.rotz
+21 bone_R-toe.rotz
+22 bone_facing.rotz
+
+-------------------------------------------
+
+INT32 - Always 0?
+INT32 - Always 3?
+INT32 - Always 3?
+
+INT32 - Always 17?
+INT32 - Always 17?
+INT32 - Always 17?
+
+INT32 - Always 23?
+INT32 - Always 23?
+INT32 - Always 23?
+INT32 - Always 23?
+
+INT32 - Always 1?
+INT32 - Always 57?
+
+INT32 - Count of Bone Entries?
+
+-------------------------------------------
+Bone Entry
+==========
+INT32 - Char. Count
+String - Bone Name
+
+Observed:
+
+goth1_main\turn_backward_fast
+=============================
+00 bone_L-index01.quat
+01 bone_L-middlefinger01.quat
+02 bone_L-pinky01.quat
+03 bone_L-ringfinger01.quat
+04 bone_L-thumb01.quat
+05 bone_R-clavicle.quat
+06 bone_R-hand.quat
+07 bone_R-index01.quat
+08 bone_R-middlefinger01.quat
+09 bone_R-pinky01.quat
+10 bone_R-ringfinger01.quat
+11 bone_R-thumb01.quat
+12 bone_neck.quat
+
+13 bone_L-index02.rotz
+14 bone_L-index03.rotz
+15 bone_L-middlefinger02.rotz
+16 bone_L-middlefinger03.rotz
+17 bone_L-pinky02.rotz
+18 bone_L-pinky03.rotz
+19 bone_L-ringfinger02.rotz
+20 bone_L-ringfinger03.rotz
+21 bone_L-thumb02.rotz
+22 bone_L-thumb03.rotz
+23 bone_R-foreArm.rotz
+24 bone_R-index02.rotz
+25 bone_R-index03.rotz
+26 bone_R-middlefinger02.rotz
+27 bone_R-middlefinger03.rotz
+28 bone_R-pinky02.rotz
+29 bone_R-pinky03.rotz
+30 bone_R-ringfinger02.rotz
+31 bone_R-ringfinger03.rotz
+32 bone_R-thumb02.rotz
+33 bone_R-thumb03.rotz
+
+-------------------------------------------
+
+BYTES(16) - Zero'd Data
+INT32 - Always 13?
+INT32 - Always 13?
+INT32 - Always 13?
+
+INT32 - Always 34?
+INT32 - Always 34?
+INT32 - Always 34?
+INT32 - Always 34?
+
+INT32 - Always 1?
+INT32 - Always 1?
+
+BYTES(44) - Zero'd Data
+INT32 - Always 1?
+INT32 - Always 0?
+
+156 bytes between Four 0x00's
+
+turn_backward_fast 8306
+turn_forward_fast 9906
+walk_normal_left_fast 9266
+
+
+Entry
+=====
+00: -2.38f
+01: -0.25f
+02: 38.02f
+03: -4.41f
+04:  6.75f
+05: -6.36f
+06: "0x19 0x00 0x21 0xFF"
+07: "0xE7 0x16 0xED 0x7D"
+08: "0xAA 0x57 0x0B 0x01"
+09: "0x93 0x5A 0x33 0x16"
+
+10: "0xFD 0x84 0x44 0xF5"
+11: "0xD3 0xF3 0x67 0x1F"
+12: "0x48 0xEA 0xEB 0x81"
+13: "0xAF 0xFC 0x71 0x01"
+14: "0x67 0x07 0x4F 0x50"
+15: "0x5F 0x20 0xF9 0x5D"
+16: "0x20 0xFF 0xB3 0x09"
+17: "0x3A 0x0E 0xD4 0x7E"
+18: "0x9D 0x16 0x54 0x7D"
+19: "0x6A 0xF9 0x04 0x0B"

@@ -1,0 +1,110 @@
+{
+    "ButtonEx": [
+        ".btn"
+    ],
+    "Cam": [
+        ".cam"
+    ],
+    "CamAnim": [
+        ".cnm"
+    ],
+    "CreditList": [
+        ".lst"
+    ],
+    "EnvAnim": [
+        ".enm",
+        ".envanim"
+    ],
+    "Environ": [
+        "",
+        ".env",
+        ".envanim"
+    ],
+    "Flare": [
+        "",
+        ".flare"
+    ],
+    "Font": [
+        ".font"
+    ],
+    "LabelEx": [
+        ".lbl"
+    ],
+    "Light": [
+        ".lit"
+    ],
+    "LightAnim": [
+        ".litanim"
+    ],
+    "List": [
+        ".lst"
+    ],
+    "Mat": [
+        "",
+        ".mat",
+        ".Mat"
+    ],
+    "MatAnim": [
+        "",
+        ".manim",
+        ".matanim",
+        ".MatAnim",
+        ".mnm"
+    ],
+    "Mesh": [
+        ".mesh"
+    ],
+    "MeshAnim": [
+        ".msnm"
+    ],
+    "Morph": [
+        ".mrf"
+    ],
+    "Movie": [
+        ".mov"
+    ],
+    "MultiMesh": [
+        ".mm"
+    ],
+    "ParticleSys": [
+        "",
+        ".part"
+    ],
+    "ParticleSysAnim": [
+        ".panim",
+        ".panm",
+        ".partanim",
+        ".pnm"
+    ],
+    "PictureEx": [
+        ".pic"
+    ],
+    "PictureToggle": [
+        ".tog"
+    ],
+    "Placer": [
+        ".placer"
+    ],
+    "Slider": [
+        ".sld"
+    ],
+    "Tex": [
+        ".bmp",
+        ".tex"
+    ],
+    "Text": [
+        ".text",
+        ".txt"
+    ],
+    "TextEntry": [
+        ".ten"
+    ],
+    "TransAnim": [
+        ".tnm"
+    ],
+    "View": [
+        "",
+        ".anim",
+        ".view"
+    ]
+}

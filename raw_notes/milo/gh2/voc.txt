@@ -1,0 +1,39 @@
+All bytes are in little endian order.
+
+BYTES(4) - "FACE" Magic
+INT32 - Unknown
+* Observed:
+* * 1200 - PS2 - arterialblack, _blinktrack
+* * 1500 - X360
+
+INT16 - Always 1? - 0 on arterialblack (PS2)
+INT32 - Char. Count
+String - "Harmonix"
+
+INT16 - Always 1? - 0 on arterialblack (PS2)
+INT32 - Char. Count
+String - Game Specific Data
+* Observed:
+* * "Karaoke Revolution Vol 4" - GH2 (PS2)
+* * "5 projects developed before 5/7/2007" - GH2 (X360)
+
+INT32 - Always 1000?
+BYTES(6) - Zero'd Data
+
+INT16 - Always 1? - 0 on arterialblack (PS2)
+INT32 - Char. Count
+String - Song Specific Data
+* Observed:
+* * PS2:
+* * ====
+* * "arterialblack_voxdry_16m"
+* * "blinkTrack"
+* * X360:
+* * =====
+* * "CherryPie VOC DRY 16M"
+* * "collide"
+* * "CrazyOnYou2"
+* * "trogdor"
+
+INT16 - Always 3? - 0 on arterialblack (PS2)
+INT32 - Size of entire file.

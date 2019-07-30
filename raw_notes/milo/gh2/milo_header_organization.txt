@@ -1,0 +1,118 @@
+Identifier: Failing on coop_streak_display.milo
+	    Dragging on lead_meter.milo
+
+* 1 -
+* * Files:
+* * ======
+* * alterna1.milo
+* * cheat_headflames.milo
+
+* 2 - Camera + Button
+* * Files:
+* * ======
+* * credits.milo
+
+* 3 - Filters + View
+* * Files:
+* * ======
+* * coop_crowd_meter.milo
+* * - 
+* * - rock_meter_warning.filt
+* * - crowd_red.filt
+* * - crowd_yellow.filt
+* * - crowd_green.filt
+* * - hud1_rock_needle.view
+* *
+* * coop_score.milo
+
+* 4 -
+* * Files:
+* * ======
+* * coop_star.milo
+* * - glow.grp
+* * - star_meter_fill.grp
+* * - ready.grp
+* * - sp_eng_lft.filt
+* * - sp_eng_rgt.filt
+* * - 0.5f
+* * - "0xFF 0xFF 0xFF 0xFF"
+* * - "0x00 0x00"
+* *
+* * coop_streak_display.milo
+* * - score_colors.mnm
+* * - score_shake.tnm
+* * - score_frame.mat
+* * - score_mult_glow.mesh
+* * - 
+
+* 8 - 
+* * Files:
+* * ======
+* * test.milo
+* * lead_meter.milo
+
+* 9 -
+* * Files:
+* * ======
+* * 650_white.milo
+
+* 10 -
+* * Files:
+* * ======
+* * coop_score.milo
+* * - 11 (INT32)
+* * - score_0.mat
+* * - score_1.mat
+* * - score_2.mat
+* * - score_3.mat
+* * - score_4.mat
+* * - score_5.mat
+* * - score_6.mat
+* * - score_7.mat
+* * - score_8.mat
+* * - score_9.mat
+* * - score_none.mat
+* * - 3768 (INT32)
+* * - "0xFF 0xFF 0xFF 0xFF"
+
+* 11 - Warning! Does not contain 16!
+* * Files:
+* * ======
+* * arena.milo ../../../hud/hud_2p_nocam.milo
+* * battle.milo ../../../hud/hud_1p_nocam.milo
+* * battle_coop.milo ../../../hud/hud_2p_nocam.milo
+
+* 14 - Animation Data?
+* * Files:
+* * ======
+* * alterna1_main.milo
+* * goth1_main.milo
+
+* 16 - Always present?
+* * Files:
+* * ======
+* * chartest.milo
+* * battle_bank.milo
+* * big_bank.milo
+
+INT32 - Always 0?
+INT32 - Char. Count (Can be zero)
+String - Secondary milio name?
+
+BYTES(?) - Embedded DTB File
+ If DTB file is not present there will be a single 0x00 byte.
+
+INT32 - Matrix Count (Always 7 : 364 bytes)
+
+* -------Matrix--------
+* =====================
+* Float*12
+* Float - Unknown
+* * Observed Values:
+* * "0x40 0x00 0x00 0x00" (GH2)
+* * "0xCC 0xCC 0xCC 0xCC" (GH2)
+* * "0x5A 0x1E 0x7C 0x00" (GH2: alterna1.milo_ps2)
+* * "0xF8 0xD7 0xED 0x01" (GH2: char_multi.milo_ps2)
+* * "0x6E 0x26 0x5C 0x00" (GH2: button.milo_ps2)
+
+
