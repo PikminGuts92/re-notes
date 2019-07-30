@@ -1,0 +1,22 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// A Text object draws a 3D character string.
+// Super: Draw Trans
+// Ext: .txt, .text
+
+struct Text
+{
+    int version; // Always 15
+    Draw draw;
+    Trans trans;
+    
+    NumString font;
+    int fontSize; // Usually 18 or 34
+    NumString text; // Can be empty
+    
+    float floats[9];
+    byte either0or1;
+    int always0;
+} file;

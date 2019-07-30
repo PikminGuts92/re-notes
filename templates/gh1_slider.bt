@@ -1,0 +1,27 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// (None)
+// Super: Trans Draw
+// Ext: .sld
+
+struct Slider
+{
+    int version; // Always 1
+    Trans trans;
+    Draw draw;
+    
+    NumString type; // Always 'char'
+    NumString unknown; // GUITAR, BAND, SOUND_FX, gs_sound_fx
+    int always0;
+} file;
+
+// In GH2
+// ======
+// UIComponent (Draw Trans Poll)
+// UISlider (UIComponent)
+//  A component with animatable whose frames correspond to a
+//  range of values. The resources don't have to look like a slider;
+//  they could easily be a knob, dial, etc.
+// BandSlider (UISlider)

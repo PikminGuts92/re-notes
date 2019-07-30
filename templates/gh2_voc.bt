@@ -1,0 +1,47 @@
+#include "milo_common.bt"
+
+LittleEndian();
+
+typedef struct
+{
+    // 18 bytes
+    short always0;
+
+    int always1;
+    short always0;
+
+    int always1;
+    short always0;
+    
+    float unknown;
+} VocEntry2;
+
+typedef struct
+{
+    // 18 bytes
+    byte zeros[6];
+
+    float unknown1; // Time in seconds?
+    float unknown2; // 0-1
+
+    int always0;
+} VocEntry1;
+
+struct Voc
+{
+    char magic[4]; // "FACE"
+    int sampleRate; // 1200 = ps2, 1500 = x360
+    short always1;
+    NumString developer;
+    short always1;
+    NumString gamemeta;
+    int always1000;
+    byte zeros[6];
+    short always1;
+    NumString songname;
+    short always3;
+    int fileSize; // Includes everything, not just remaining bytes
+} file;
+
+// 207.9472
+// 208.06

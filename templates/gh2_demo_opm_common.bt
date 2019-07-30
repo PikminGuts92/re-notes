@@ -1,0 +1,149 @@
+#include "milo_common.bt"
+
+LittleEndian();
+
+#ifndef GH2_DEMO_OPM_COMMON
+#define GH2_DEMO_OPM_COMMON
+
+// Base class for transformable objects.
+// Trans objects have a 3D position, rotation, and scale.
+// Super: (None)
+// Ext: .trans
+
+typedef struct
+{
+    int version; // Always 9
+    Matrix mat1;
+    Matrix mat2;
+    
+    int transformableCount;
+    NumString transformables[transformableCount]<optimize=false>; // Trans types?  
+    
+    //int usually0; // 0, 5, 7, 8
+    //NumString camera; // ?
+    Bool usuallyFalse; // Some kind of boolean?
+    
+    NumString transform; // View?
+} Trans;
+
+// Base class for animatable objects. Anim objects change their state or other objects.
+// Super: (None)
+// Ext: (None)
+
+typedef struct
+{
+    int version; // Always 3
+    Bool showing; // Whether the object and its Draw children are drawn or collided with. - Always 1?
+    
+    // Represents a bounding sphere around this object and its
+    // drawn children, which is used for culling of draw and
+    // collision commands. X, Y, Z are the sphere center in local
+    // coordinates, R is the sphere radius in world coordinates.
+    // Culling is not performed when the radius is zero. The world
+    // transform of the object must be baked into the radius.
+    Sphere bounding;
+    
+    int drawableCount; // Drawables (mesh, env, view)
+    NumString drawables[drawableCount]<optimize=false>;
+} Draw;
+
+// Base class for animatable objects. Anim objects change their state or other objects.
+// Super: (None)
+// Ext: (None)
+
+typedef struct
+{
+    typedef struct
+    {
+        NumString name; // Usually 0 or 1 in length
+        float f1; // Usually 0 or very close to 0
+        float f2;
+    } AnimEntry;
+    
+    int version; // Always 4
+    int entryCount;
+    //AnimEntry entries[entryCount]<optimize=false>;
+    int animatableCount;
+    //NumString animatables[animatableCount]<optimize=false>;
+} Anim;
+
+// Abstract base class for pollable RND objects
+// Super: (None)
+// Ext: (None)
+
+typedef struct
+{
+    int version; // Always 0;
+    int always0;
+    
+    NumString str1; // start
+    NumString str2; // start
+    NumString str3; // start
+} Poll;
+
+// An ObjectDir keeps track of a set of Objects.
+// Super: (None)
+// Ext: (None)
+
+typedef struct
+{
+    typedef struct
+    {
+        Matrix mat;
+        int unknown; // Usually 35-41 or 0xCCCCCCCC
+    } MatEntry;
+
+    int version; // Always 14
+
+    int always0;
+    NumString name;
+    
+    // DTB
+    DTB script;
+    
+    int matEntryCount; // Usually 7
+    MatEntry matEntries[matEntryCount]<optimize=false>;
+    
+    int usually0; // 0, 7
+    int always0;
+    
+    int importedMiloCount;
+    NumString importedMilos[importedMiloCount]<optimize=false>;
+    
+    // Both are usually empty
+    NumString rndDirName; // Self-referening? Can be any base class
+    NumString mainTrans; // splash.cam
+} ObjectDir;
+
+// A RndDir specially tracks drawable and animatable objects.
+// Super: ObjectDir Anim Draw Trans Poll
+// Ext: (None)
+
+typedef struct
+{
+    int version; // Always 6
+    ObjectDir objDir;
+
+    // Anim, Draw, Trans, Poll
+    Anim anim;
+    Draw draw;
+    Trans trans;
+    Poll poll;
+    
+    float always100[4];
+    float onezero[4]; // 1.0, 0.0, 1.0, 0.0
+    
+    /*
+    float unknown; // Range: 0-1? Seen 0.0, 0.24, 1.0
+    int usually0; // 0 or 8192?
+    NumString charClipSample; // Root?
+    */
+    /*
+    int always0_int;
+    int unknown;
+    
+    int boneCount;
+    NumString bones[boneCount]<optimize=false>;*/
+} RndDir;
+
+#endif

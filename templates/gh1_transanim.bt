@@ -1,0 +1,45 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// TransAnim objects animate the position, rotation, and scale of transformable objects.
+// Super: Anim
+// Ext: .tnm
+
+typedef struct
+{
+    Vector4 v4;
+    float index;
+} Entry1;
+
+typedef struct
+{
+    Vector3 v3;
+    float index;
+} Entry2;
+
+struct TransAnim
+{
+    int version; // Always 4
+    Anim anim;
+    
+    int always1;
+    int always1;
+    byte zeros[17]; // Zero'd data
+    
+    NumString mesh;
+
+    int entryCount1;
+    Entry1 entries1[entryCount1];
+    
+    int entryCount2;
+    Entry2 entries2[entryCount2];
+
+    NumString transAnim;
+    
+    short always1;
+    int vecCount;
+    
+    Vector4 vectors[vecCount];
+    byte unknown[3];
+} file;

@@ -1,0 +1,22 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// (None)
+// Super: Trans Draw
+// Ext: .pic
+
+struct PictureEx
+{
+    int version; // Always 1
+    Trans trans;
+    Draw draw;
+
+    NumString texture; // Path to png
+} file;
+
+// In GH2
+// ======
+// UIComponent (Draw Trans Poll)
+// UIPicture (UIComponent)
+//  A picture object with asynchronously loading texture

@@ -1,0 +1,43 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// A ParticleSys object generates, animates, and draws large
+// numbers of similar sprites. Currently particles are rendered only
+// as points on the PC.
+// Super: Anim Draw Trans
+// Ext: .part, (None)
+
+typedef struct
+{
+    Vector3 position;
+    Sphere bounding;
+    float unknown;
+} ParticleSysEntry;
+
+struct ParticleSys // Particle System
+{
+    int version; // Always 22
+    Anim anim;
+    Trans trans;
+    Draw draw;
+    
+    float unknown1[38];
+    byte unknown2;
+    float unknown3[5];
+    
+    NumString sprite; // Either tex or mat
+    float unknown4[12];
+    
+    int maxParticles; // Usually same as entry count?
+    Vector4 vector; // Some kind of scalar?
+    int idk1;
+    byte idk2[5];
+    
+    byte extended;
+    if (extended == 1)
+    {
+        int entryCount;
+        ParticleSysEntry entries[entryCount];
+    }
+} file;

@@ -1,0 +1,216 @@
+/*
+; "Intrinsic" types.
+#define SPHERE ((struct (x float) (y float) (z float) (radius float)))
+#define VECTOR3 ((vector (x float) (y float) (z float)))
+#define VECTOR2 ((vector (x float) (y float)))
+#define COLOR ((struct (r float) (g float) (b float)))
+#define RECT ((struct (x float) (y float) (w float) (h float)))
+#define MATRIX3 ((struct (pitch float) (roll float) (yaw float) (x_scale float) (y_scale float) (z_scale float)))
+#define TRANSFORM ((struct (pitch float) (roll float) (yaw float) (x_scale float) (y_scale float) (z_scale float) (x float) (y float) (z float)))
+#define QUAT ((struct (x float) (y float) (z float) (w float)))
+#define BOX ((struct (min_x float) (max_x float) (min_y float) (max_y float) (min_z float) (max_z float)))
+*/
+
+#ifndef MILO_COMMON
+#define MILO_COMMON
+
+typedef enum <byte>
+{
+    False = 0,
+    True = 1
+} Bool;
+
+typedef struct
+{
+    uint count;
+    char text[count]<optimize=false>;
+} NumString<read=readNumString>;
+
+string readNumString(NumString& ns)
+{
+    return ns.count > 0 ? ns.text : "";
+}
+
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+    float radius;
+} Sphere<read=readSphere>;
+
+string readSphere(Sphere& sp)
+{
+    local string s;
+    SPrintf(s, "(%f, %f, %f), r=%f", sp.x, sp.y, sp.z, sp.radius);
+    return s;
+}
+
+typedef struct
+{
+    float m11;
+    float m12;
+    float m13;
+    float m21;
+    float m22;
+    float m23;
+    float m31;
+    float m32;
+    float m33;
+    float m41;
+    float m42;
+    float m43;
+} Matrix;
+
+typedef struct
+{
+    float x;
+    float y;
+} Vector2<read=readVector2>;
+
+string readVector2(Vector2& v)
+{
+    local string s;
+    SPrintf(s, "(%f, %f)", v.x, v.y);
+    return s;
+}
+
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+} Vector3<read=readVector3>;
+
+string readVector3(Vector3& v)
+{
+    local string s;
+    SPrintf(s, "(%f, %f, %f)", v.x, v.y, v.z);
+    return s;
+}
+
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+    float w;
+} Vector4<read=readVector4>;
+
+string readVector4(Vector4& v)
+{
+    local string s;
+    SPrintf(s, "(%f, %f, %f, %f)", v.x, v.y, v.z, v.w);
+    return s;
+}
+
+typedef struct
+{
+    float x;
+    float y;
+    float w;
+    float h;
+} Rect<read=readRect>;
+
+string readRect(Rect& r)
+{
+    local string s;
+    SPrintf(s, "(%f, %f) (%f, %f)", r.x, r.y, r.w, r.h);
+    return s;
+}
+
+typedef struct
+{
+    float r;
+    float g;
+    float b;
+    float a;
+} Color<read=readColor>;
+
+string readColor(Color& c)
+{
+    local string s;
+    SPrintf(s, "(%f, %f, %f, %f)", c.r, c.g, c.b, c.a);
+    return s;
+}
+
+// DTB
+typedef struct
+{
+    struct Node;
+    typedef enum <int>
+    {
+        Int,
+        Float,
+        Variable,
+        Func,
+        Object,
+        Symbol,
+        Unhandled,
+        IfDef,
+        Else,
+        EndIf,
+        Array = 0x10,
+        Command,
+        String,
+        Property,
+        Define = 0x20,
+        Include,
+        Merge,
+        IfNDef,
+        Unknown24
+    } NodeType;
+
+    typedef struct
+    {
+        ushort childCount;
+        uint id;
+        Node children[childCount]<optimize=false>;
+    } Parent;
+
+    typedef struct
+    {
+        NodeType type;
+    
+        switch(type)
+        {
+            // Integer
+            case 0x00:
+                uint value;
+                break;
+            // Float
+            case 0x01: // Float
+                float value;
+                break;
+            // String
+            case 0x02: // Variable
+            case 0x04: // Object (gh2 milos)
+            case 0x05: // Symbol, Keyword
+            case 0x06: // Unhandled "KDataUnhandled"
+            case 0x07: // IfNDef
+            case 0x08: // Else
+            case 0x09: // EndIf
+            case 0x12: // String
+            case 0x20: // Define
+            case 0x21: // Include
+            case 0x22: // Merge
+            case 0x23: // IfNDef
+            case 0x24: // Idk, in some rb3 dtb files
+                NumString value;
+                break;
+            case 0x10: // Array
+            case 0x11: // Command, Script
+            case 0x13: // Property
+                Parent value;
+                break;
+        }
+    } Node;
+
+    Bool hasTree;
+    if (hasTree == True)
+    {
+        Parent root;
+    }
+} DTB;
+
+#endif

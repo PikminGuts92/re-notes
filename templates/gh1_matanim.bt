@@ -1,0 +1,38 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// MatAnim objects animate material properties.
+// Super: Anim
+// Ext: .matanim, .mnm
+
+typedef struct
+{
+    NumString tex;
+    float strength; // Actually draw index? Usually goes from 0->(n-1) textures
+} TexEntry;
+
+typedef struct
+{
+    int always0[3];
+    int texCount;
+    TexEntry texEntries[texCount]<optimize=false>;
+} MatAnimEntry;
+
+struct MatAnim
+{
+    int version; // Always 5
+    Anim anim;
+
+    NumString mat;
+    int entryCount;
+    MatAnimEntry entries[entryCount]<optimize=false>;    
+    
+    NumString matAnim;
+
+    int unknownFloatCount;
+    float unknownFloats[unknownFloatCount * 5];
+    
+    int floatCount;
+    float unknown[floatCount << 1];
+} file;

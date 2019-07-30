@@ -1,0 +1,23 @@
+#include "milo_common.bt"
+
+LittleEndian();
+
+typedef struct
+{
+    int unknown; // Frame count? - Matches acpentry index when entry count2 = 1
+    float f1;
+    float f2;
+} AcgEntry2;
+
+typedef struct
+{
+    int count2;
+    AcgEntry2 entries2[count2];
+} AcgEntry1;
+
+struct Acg
+{
+    int version; // Always 1
+    int count1;
+    AcgEntry1 entries1[count1]<optimize=false>;   
+} file;

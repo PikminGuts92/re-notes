@@ -1,0 +1,77 @@
+#include "milo_common.bt"
+
+LittleEndian();
+// Material objects determine texturing, blending, and the effect of lighting on drawn polys.
+// Super: (None)
+// Ext: .mat
+
+typedef enum
+{
+    TexWrap_Clamp,
+    TexWrap_Repeat // 1
+} TexWrap;
+
+typedef enum
+{
+    TexGen_None,
+    TexGen_Xfm,
+    TexGen_Sphere,
+    TexGen_Projected,
+    TexGen_XfmOrigin,
+    TexGen_Environ // 5
+} TexGen;
+
+// Result = src_color * src_factor + dest_color * dest_factor ?
+typedef enum
+{
+    Blend_Dest, // Equal to dest rgb color
+    Blend_Src, // Equal to src rgb color
+    Blend_Add, // Alpha
+    Blend_SrcAlpha,
+    Blend_SrcAlphaAdd,
+    Blend_Subtract,
+    Blend_Multiply // 6
+} Blend; // D3DBLEND?
+
+typedef enum
+{
+    ZMode_Disable,
+    ZMode_Normal,
+    ZMode_Transparent,
+    ZMode_Force,
+    ZMode_Decal // 4
+} ZMode;
+
+typedef struct
+{
+    // 2-0: Regular
+    // 3-0: Idk - eyes
+    // 2-2: Shiny - torsoenv
+    // 3-2: Shiny - enviro, shinplates
+    int unknown1; // 1-4
+    TexGen texGen; // 0,1,2,5
+    Matrix mat; // "Transform for coordinate generation" ?
+    TexWrap texWrap; // 0-1
+    NumString texName; // Diffuse texture
+} TextureEntry;
+
+struct Mat
+{
+    int version; // Always 21
+    int textureCount;
+    TextureEntry textures[textureCount]<optimize=false>;
+    
+    // Note: An int value might be for default texture index (Used for skins?)
+    int always3; // 0, 1, 2, 3, 4, 5 (0, 5 = KRPAI)
+    Color baseColor;
+    
+    // This part is a mess
+    // These will all be 0 when material is used for shadow?
+    byte always1;
+    short always0;
+    int always1;
+    short always0;
+    
+    Blend blend; // Only 0-4 observed?
+    short always0;
+} file;

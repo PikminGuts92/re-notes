@@ -1,0 +1,26 @@
+#include "milo_common.bt"
+
+LittleEndian();
+// Font objects determine the appearance for Text objects.
+// Super: (None)
+// Ext: .font
+
+typedef struct
+{
+    int value1;
+    float value2;
+} FontEntry;
+
+struct Font
+{
+    int version; // Always 7
+    
+    NumString mat;
+    float floats[4]; // [0] = width, [1] = height, [2] = always 26?, [3] = always 0?
+    
+    NumString characters;
+    byte always1;
+
+    int entryCount;
+    FontEntry entries[entryCount];
+} file;

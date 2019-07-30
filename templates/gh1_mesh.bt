@@ -1,0 +1,86 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// A Mesh object is composed of triangle faces.
+// Super: Draw Trans
+// Ext: .mesh
+
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+    float nx;
+    float ny;
+    float nz;
+    float colorR;
+    float colorG;
+    float colorB;
+    float colorA;
+    float u;
+    float v;
+} Vertex;
+
+typedef struct
+{
+    ushort idx1;
+    ushort idx2;
+    ushort idx3;
+} Face;
+
+typedef struct
+{
+    int sectionCount;
+    int vertCount;
+    int sections[sectionCount]; // Ascending, last being equal to count of verts
+    ushort vertOffsets[vertCount];
+} GroupSection;
+
+struct Mesh
+{
+    int version; // 25
+    Trans trans;
+    Draw draw;
+    
+    NumString material;
+    NumString meshName;
+    
+    int usually0; // 0, 31, 33, 37, 63
+    int always1; // 0 = KRPAI
+    byte always0;
+    
+    int vertCount;
+    Vertex verts[vertCount];
+    
+    int faceCount;
+    Face faces[faceCount];
+    
+    // Weight groups?
+    int groupSizesCount;
+    ubyte groupSizes[groupSizesCount]; // Sum should equal count of faces
+    
+    local int charCount = ReadInt();
+    
+    if (charCount > 0)
+    {
+        // Either 3 or none (Last one is always empty?)
+        // 2 also observed
+        // face: punk has 4 bones, alterna has none
+        NumString bones[4]<optimize=false>;
+        
+        // Always 4?
+        Matrix boneTransforms[4];
+    }
+    else
+    {
+        int noBones; // Always 0
+    }
+    
+    if (groupSizesCount > 0 && groupSizes[0] > 0 && !FEof())
+    {
+        // If eof, then groups should be divided equally? Empty only for light meshes?
+        GroupSection groups[groupSizesCount]<optimize=false>;
+    }
+} file;
+

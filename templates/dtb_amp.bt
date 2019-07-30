@@ -1,0 +1,64 @@
+#include "milo_common.bt"
+
+LittleEndian();
+struct Node;
+
+typedef struct
+{
+    uint childCount;
+    uint id;
+    Node children[childCount & 0xFFFF]<optimize=false>;
+} Parent;
+
+typedef struct
+{
+    uint type;
+    
+    switch(type & 0xFFFF)
+    {
+        // Integer
+        case 0x00:
+            uint value;
+            break;
+        // Float
+        case 0x01: // Float
+            float value;
+            break;
+        // String
+        case 0x02: // Variable
+        case 0x04: // Object (gh2 milos)
+        case 0x05: // Symbol, Keyword
+        case 0x06: // Unhandled "KDataUnhandled"
+        case 0x07: // IfNDef
+        case 0x08: // Else
+        case 0x09: // EndIf
+        case 0x12: // String
+        case 0x20: // Define
+        case 0x21: // Include
+        case 0x22: // Merge
+        case 0x23: // IfNDef
+        case 0x24: // Idk, in some rb3 dtb files
+            NumString value;
+            break;
+        case 0x10: // Array
+        case 0x11: // Command, Script
+        case 0x13: // Property
+            Parent value;
+            break;
+    }
+} Node;
+
+typedef struct
+{
+    NumString name;
+    Parent value;
+} Property;
+
+byte always2;
+uint scriptCount;
+NumString scriptPaths[scriptCount]<optimize=false>;
+
+//uint propertyCount;
+//Property prop[propertyCount]<optimize=false>;
+
+Parent p;

@@ -1,0 +1,27 @@
+#include "milo_common.bt"
+
+uint version; // Always 12 (11 in OPM demo)
+byte emptyData1[9]; // Should always be 0
+
+uint always4;
+uint always0;
+uint always1;
+
+uint always9; // Always 9
+
+Matrix matrix1;
+Matrix matrix2;
+
+byte emptyData2[9]; // Should always be 0
+
+NumString viewName; // Not always present
+
+uint always3_0;
+uint always1_0;
+
+byte unknownJunk[17]; // Unknown junk
+
+uint viewsCount;
+NumString views[viewsCount]<optimize=false>;
+
+uint always0_0;

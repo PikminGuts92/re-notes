@@ -1,0 +1,25 @@
+#include "milo_common.bt"
+#include "gh2_demo_opm_common.bt"
+
+LittleEndian();
+
+// A <a href='#CharClip'>CharClip</a> container.
+// Super: ObjectDir
+// Ext: (None)
+
+struct CharClipSet
+{
+    int version; // Always 12
+    ObjectDir objDir;
+    
+    float unknown; // Range: 0-1? Seen 0.0, 0.24, 1.0
+    int usually0; // 0 or 8192?
+    NumString charClipSample; // Root?
+    
+    /*
+    int always0_int;
+    int unknown;
+    
+    int boneCount;
+    NumString bones[boneCount]<optimize=false>;*/
+} file;

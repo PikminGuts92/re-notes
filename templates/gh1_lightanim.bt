@@ -1,0 +1,26 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// LightAnim objects animate light object properties using keyframe interpolation.
+// Super: Anim
+// Ext: .litanim
+
+typedef struct
+{
+    Sphere sphere;
+    float keyframe;
+} LightEvent;
+
+struct LightAnim
+{
+    int version; // Always 1
+    Anim anim;
+    
+    NumString light;
+    
+    int eventCount;
+    LightEvent events[eventCount];
+    
+    NumString lightAnim;
+} file;

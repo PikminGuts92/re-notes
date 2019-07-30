@@ -1,0 +1,20 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// A MultiMesh object draws a simple Mesh in many places
+// quickly. Create a multimesh by instancing the base mesh lots of
+// times in Max, then using the multiobject wizard.
+// Super: Draw
+// Ext: .mm
+
+struct MultiMesh
+{
+    int version; // Always 0
+    Draw draw;
+    
+    NumString mesh;
+
+    int matCount;
+    Matrix mat[matCount];
+} file;

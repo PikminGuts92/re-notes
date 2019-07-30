@@ -1,0 +1,31 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// (None)
+// Super: Trans Draw
+// Ext: .lbl
+
+struct LabelEx
+{
+    int version; // Always 6
+    Trans trans;
+    Draw draw;
+    
+    byte either0or1; // Usually 0
+    Vector3 position;
+    
+    int size;
+    Sphere unknown;
+    
+    NumString fontType;
+    byte always0;
+    
+    NumString text;
+    float size;
+} file;
+
+// In GH2
+// ======
+// UIComponent (Draw Trans Poll)
+// UILabel (UIComponent)

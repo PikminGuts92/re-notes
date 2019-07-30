@@ -1,0 +1,85 @@
+#include "milo_common.bt"
+
+LittleEndian();
+// Tex objects represent bitmaps used by materials. These can be created automatically with 'import tex' on the file menu.
+// Super: (None)
+// Ext: .tex, .bmp
+
+// PS2 = RGBa, Xbox = BGRa
+// Alpha channel appears to be 7-bit, at least on PS2
+
+typedef enum
+{
+    bitmap = 3
+} Format;
+
+typedef struct
+{
+    ubyte color;
+    ubyte a;
+} Color2;
+
+typedef struct
+{
+    ubyte r;
+    ubyte g;
+    ubyte b;
+} Color3;
+
+typedef struct
+{
+    ubyte r;
+    ubyte g;
+    ubyte b;
+    ubyte a;
+} Color4;
+
+typedef struct
+{
+    byte version; // Always 1 - Unless Xbox OG?
+    byte bpp;
+    Format format;
+    byte mipmap; // Even ps2 textures can have mip maps!
+    ushort width;
+    ushort height;
+    ushort bpl; // Bytes per line
+    byte zeros[19];
+    
+    if (bpp == 4 || bpp == 8)
+    {
+        Color4 colorPalette[2 << (bpp - 1)]; // 2^bpp
+        ubyte data[((width * height) / 8) * bpp];
+    }
+    else if (bpp == 16)
+    {
+        // Grayscale
+        Color2 pixels[width * height];
+    }
+    else if (bpp == 24)
+    {
+        Color3 pixels[width * height];
+    }
+    else if (bpp == 32)
+    {
+        Color4 pixels[width * height];
+    }
+} Bitmap;
+
+struct Tex
+{
+    int version; // Always 8
+    // Note: 0px X 0px image possible
+    //  Also, width/height doesn't need to match embedded
+    int width;
+    int height;
+    int bpp; // Bits per pixel
+    NumString texPath;
+    // KRAI: -13.0, -12.0, -11.0, -10.5, -9.0, -8.75, -8.5, -8.0625, -7.75, -7.25, -6.75, -6.628447, -5.5, -5.0, -3.0
+    float unknown; // -10.0, -9.0, -8.0, -7.0, -6.0, -0.5, 0.0
+    int always1; // 1, 2, 4, 34
+    byte useExternal;
+    
+    // The rest is embedded image data
+    if (!useExternal && !FEof())
+        Bitmap bitmap;
+} file;

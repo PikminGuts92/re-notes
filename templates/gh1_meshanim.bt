@@ -1,0 +1,40 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// A MeshAnim object animates Mesh vertices. This should be
+// done only when an effect can't be achieved with material
+// animation, because animating vertices directly is less efficient.
+// Super: Anim
+// Ext: .msnm
+
+typedef struct
+{
+    int posCount;
+    Vector3 positions[posCount];
+    float unknown; // Between 0 and 100?
+} MeshAnimEntry1;
+
+typedef struct
+{
+    int posCount;
+    float positions[posCount * 2]; // Usually between -1 and 1
+    float unknown; // Between 0 and 100?
+} MeshAnimEntry2;
+
+struct MeshAnim
+{
+    int version; // Always 0
+    Anim anim;
+    
+    NumString mesh;
+    
+    int entryCount1;
+    MeshAnimEntry1 entries1[entryCount1]<optimize=false>;
+    
+    int entryCount2;
+    MeshAnimEntry2 entries2[entryCount2]<optimize=false>; 
+    
+    int always0;
+    NumString meshAnim;
+} file;

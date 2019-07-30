@@ -1,0 +1,40 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// Object that animates Particle System properties.
+// Super: Anim
+// Ext: .partanim, .pnm, .panim, .panm
+
+typedef struct
+{
+    Vector4 unknown;
+    float unknown;
+} ParticleSysAnimEntry;
+
+struct ParticleSysAnim // Particle System
+{
+    int version; // Always 22
+    Anim anim;
+    
+    NumString particle;
+    int entryCount1;
+    ParticleSysAnimEntry entries1[entryCount1];
+
+    int entryCount2;
+    ParticleSysAnimEntry entries2[entryCount2];
+    
+    int posCount1;
+    Vector3 positions1[posCount1]<optimize=false>;
+    
+    NumString particleAnim;
+    
+    int posCount2;
+    Vector3 positions2[posCount2]<optimize=false>;    
+    
+    int posCount3;
+    Vector3 positions3[posCount3]<optimize=false>;    
+
+    int posCount4;
+    Vector3 positions4[posCount4]<optimize=false>;    
+} file;

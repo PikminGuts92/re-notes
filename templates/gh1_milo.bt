@@ -1,0 +1,79 @@
+#include "milo_common.bt"
+
+LittleEndian();
+local uint adde = 0xADDEADDE;
+
+typedef struct
+{
+    NumString type;
+    NumString name;
+    //byte data[0];
+    local uint offset;
+    local uint size;
+
+} MiloEntry;
+
+typedef struct
+{
+    uint version;
+    uint entryCount;
+    MiloEntry entries[entryCount]<optimize=false>;
+    uint extCount;
+    NumString extFiles[extCount]<optimize=false>;
+} MiloFile;
+
+// Returns current file size
+uint findNextFile(uint magic)
+{
+    local uint startPos = FTell();
+    local uint currentPos = startPos;
+    local uint currentMagic = 0;
+    
+    while(magic != currentMagic)
+    {
+        if (FEof()) return -1;
+
+        currentMagic = (currentMagic << 8) | ReadUByte(currentPos);
+        currentPos++;
+    }
+
+    return currentPos - (startPos + 4);
+}
+
+MiloFile milo;
+
+local uint i;
+local uint fileSize;
+local uint startOffset = FTell();
+
+for (i = 0; i < milo.entryCount; i++)
+{
+    fileSize = findNextFile(adde);
+    if (fileSize == -1) break;
+    
+    //byte file[fileSize];
+    milo.entries[i].offset = FTell();
+    milo.entries[i].size = fileSize;
+    FSkip(fileSize + 4);
+}
+
+i = 0;
+FSeek(startOffset);
+
+typedef struct
+{
+    FSeek(milo.entries[i].offset);
+    local string type = milo.entries[i].type.text;
+    local string name = milo.entries[i].name.text;
+    byte data[milo.entries[i].size];
+    uint padding<format=hex>;
+    i++;
+} Blob<read=getFileName>;
+
+string getFileName(Blob& blob)
+{
+    return blob.type + " | " + blob.name;
+}
+
+Blob files[milo.entryCount]<optimize=false>;
+//Blob first;

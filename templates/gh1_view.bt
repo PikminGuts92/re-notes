@@ -1,0 +1,22 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+// Represents a group of objects to which to propogate animation and messages.
+// Super: Anim Draw Trans
+// Ext: .view
+
+struct View
+{
+    uint version; // Always 7
+    
+    Anim anim;
+    Trans trans;
+    Draw draw;
+    
+    NumString viewName2;
+    
+    // lod_screen_size? "Ratio of screen height for lod"
+    // When both values are greater than 0.0, ratio should be 4:3 or 16:9
+    float lodHeight;
+    float lodWidth; // Usually 0, 1920.0, or 9999.0 - 29999.0
+} file;

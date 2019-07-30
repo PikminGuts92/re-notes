@@ -1,0 +1,33 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// (None)
+// Super: Trans Draw
+// Ext: .btn
+
+struct ButtonEx
+{
+    int version; // Always 4
+    Trans trans;
+    Draw draw;
+    
+    int unknown; // 0 or 2?
+    Vector3 always0;
+    
+    NumString textType;
+    
+    byte always1; // Visibility?
+    byte either0or1; // Usually 0 - Enabled?
+    
+    float hundredSomething;
+    float tenSomething;
+    
+    NumString buttonText;
+} file;
+
+// In GH2
+// ======
+// UIComponent (Draw Trans Poll)
+// UILabel (UIComponent)
+// UIButton (UILabel)

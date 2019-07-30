@@ -1,0 +1,27 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// Flare objects are particles that are rendered based on
+// the visibility of their center.
+
+// Use them to implement sun flare peeking through tree leaves and
+// around buildings, flares on lamps and stage lights that get
+// occluded by characters, etc.  Flares should be drawn last in a
+// frame, and since they depend on the z-buffer for visibility
+// testing, previously drawn translucent or cutout objects must
+// properly use translucent or SrcAlphaCutout materials.
+
+// Super: Draw Trans
+// Ext: .flare, (None)
+
+struct Flare
+{
+    int version; // Always 3
+    Trans trans;
+    Draw draw;
+    
+    NumString material;
+    Sphere sphere;
+    int strength; // No idea
+} file;

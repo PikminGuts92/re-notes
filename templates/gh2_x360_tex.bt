@@ -1,0 +1,116 @@
+#include "milo_common.bt"
+
+LittleEndian();
+
+// PS2 = RGBa, Xbox = BGRa
+// Alpha channel appears to be 7-bit, at least on PS2
+
+int calculateSize(int w, int h, int b)
+{
+    return (w * h * b) / 8;
+}
+
+typedef enum
+{
+    bitmap = 0x03,
+    dxt1 = 0x08,
+    dxt5 = 0x18,
+    ati2 = 0x20
+} Format;
+
+typedef struct
+{
+    ubyte r;
+    ubyte g;
+    ubyte b;
+} Color3;
+
+typedef struct
+{
+    ubyte r;
+    ubyte g;
+    ubyte b;
+    ubyte a;
+} Color4;
+
+typedef struct
+{
+    byte version; // Always 1 - Unless Xbox OG?
+    byte bpp;
+    Format format;
+    byte mipmap; // 0 when format is bitmap
+    ushort width;
+    ushort height;
+    ushort bpl; // Bytes per line
+    byte zeros[19];
+    
+    if (bpp == 4 || bpp == 8)
+    {
+        if (format == 0x03)
+            Color4 colorPalette[2 << (bpp - 1)]; // 2^bpp
+        
+        local int mip = 0;
+        local int size;
+        do
+        {
+            size = calculateSize(width >> mip, height >> mip, bpp);
+            
+            struct
+            {
+                ubyte data[size];
+            } pixels;
+
+            mip++;
+        } while (mip <= mipmap);
+    }
+    else if (bpp == 24)
+    {
+        Color3 pixels[width * height];
+    }
+    else if (bpp == 32)
+    {
+        Color4 pixels[width * height];
+    }
+} Bitmap;
+
+struct Tex
+{
+    int version; // Always 8
+    if (version >= 10)
+    {
+        int idk1;
+        if (idk1 == 0)
+        {
+            // 17 bytes
+            byte idk2[5];
+            
+            int tex_width;
+            int tex_height;
+            int tex_bpp; // Bits per pixel
+        }
+        else
+        {
+            // 21 bytes
+            byte idxk2[9];
+
+            int tex_width;
+            int tex_height;
+            int tex_bpp;
+        }
+    }
+    else
+    {
+        // 12 bytes
+        int tex_width;
+        int tex_height;
+        int tex_bpp; // Bits per pixel
+    }
+    
+    NumString texPath;
+    float unknown; // -8.0
+    int always1;
+    byte useEmbedded; // 0 = Use External, 1 = Use embedded
+    
+    // The rest is embedded image data
+    Bitmap bitmap;
+} file;

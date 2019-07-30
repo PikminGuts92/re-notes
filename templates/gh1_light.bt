@@ -1,0 +1,18 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// Light objects are added to environments for drawing.
+// Super: Trans
+// Ext: .lit
+
+struct Light
+{
+    int version; // Always 3
+    Trans trans;
+    
+    Sphere sphere;
+    float keyframe;
+    
+    int always1;
+} file;

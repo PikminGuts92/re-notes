@@ -1,0 +1,29 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// An environment object is drawable. When drawn it sets up
+// dynamic lighting and fogging for subsequently drawn siblings.
+// Super: (None)
+// Ext: .env, (None)
+
+struct Environ
+{
+    int version; // Always 1
+    Draw draw;
+    
+    // Dynamic lights for this environment
+    // The PS2 supports three concurrent directional lights
+    // or one point light. These have roughly the same cost, and are
+    // more expensive than just ambient and fogging.
+    int lightCount;
+    NumString lights[lightCount]<optimize=false>;
+    
+    Color ambientColor; // Ambient color for this environment
+
+    float fogStart;
+    float fogEnd;
+    Color fogColor;
+
+    Bool enableFog; // or animate_from_preset?
+} file;

@@ -1,0 +1,21 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// (None)
+// Super: Trans Draw
+// Ext: .ten, .texten (Not observed)
+
+struct TextEntry
+{
+    int version; // Always 0
+    Trans trans;
+    Draw draw;
+
+    NumString type; // Either 'high_score' or 'band_name'
+} file;
+
+// In GH2
+// ======
+// UIComponent (Draw Trans Poll)
+// BandTextEntry (UIComponent)

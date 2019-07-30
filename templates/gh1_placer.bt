@@ -1,0 +1,20 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// (None)
+// Super: Trans Draw
+// Ext: .placer, .place (Not observed)
+
+struct Placer
+{
+    int version; // Always 0
+    Draw draw;
+    Trans trans;
+    
+    NumString type; // Either 'char' or 'guitar'
+} file;
+
+// In GH2
+// ======
+// BandPlacer (Trans Draw)

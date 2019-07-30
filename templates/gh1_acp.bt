@@ -1,0 +1,35 @@
+#include "milo_common.bt"
+
+LittleEndian();
+
+struct Acp
+{
+    NumString animType; // AnimClipSamples
+    NumString animName;
+    int always18;
+    float f1;
+    float f2;
+    float f3;
+    float f4;
+
+    int unknown;
+    float max1; // range = 0.0-1.0?
+    int always5;
+    int names1Count; // Hero channels
+    NumString names1[names1Count]<optimize=false>;
+    
+    int count; // Multiply by names1Count * size
+    int always1;
+    
+    int names2Count; // Left hand channels (Max = 17?)
+    NumString names2[names2Count]<optimize=false>;
+    
+    int always1;
+    int always1;
+} file;
+
+// pos = 16 bytes, quat = 8 bytes, rotz = 2 bytes
+
+// acs - Pre-caches animations
+// acg - Has entries for acp files?
+// acp - Lists transforms for channels (bones)?

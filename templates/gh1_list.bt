@@ -1,0 +1,29 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// (None)
+// Super: Trans Draw
+// Ext: .lst
+
+struct List
+{
+    int version; // Always 2
+    Trans trans;
+    Draw draw;
+    
+    NumString name;
+    
+    int always60;
+    float always40;
+    int always2;
+} file;
+
+// In GH2
+// ======
+// UIComponent (Draw Trans Poll)
+// UIList (UIComponent)
+//  Component for displaying 1- or 2-dimensional lists of data.
+//  Can be oriented horizontally or vertically, can scroll normally or
+//  circularly, and can have any number of visible elements (even just
+//  one, a.k.a. a spin button).

@@ -1,0 +1,69 @@
+#include "milo_common.bt"
+
+LittleEndian();
+
+#ifndef GH1_COMMON
+#define GH1_COMMON
+
+// Base class for transformable objects.
+// Trans objects have a 3D position, rotation, and scale.
+// Super: (None)
+// Ext: .trans
+
+typedef struct
+{
+    int version; // Always 8
+    Matrix mat1;
+    Matrix mat2;
+    
+    int transformableCount;
+    NumString transformables[transformableCount]<optimize=false>; // Trans types?  
+    
+    int usually0; // 0, 1, 2, 3, 5, 6, 7, 8 (1, 2, 3, 6 = KRPAI)
+    NumString camera; // ?
+    byte usually0; // Some kind of boolean?
+    
+    NumString transform; // View?
+} Trans;
+
+// Base class for animatable objects. Anim objects change their state or other objects.
+// Super: (None)
+// Ext: (None)
+
+typedef struct
+{
+    int version; // Always 1
+    byte showing; // Whether the object and its Draw children are drawn or collided with. - Always 1?
+    
+    int drawableCount; // Drawables (mesh, env, view)
+    NumString drawables[drawableCount]<optimize=false>;
+    // Represents a bounding sphere around this object and its
+    // drawn children, which is used for culling of draw and
+    // collision commands. X, Y, Z are the sphere center in local
+    // coordinates, R is the sphere radius in world coordinates.
+    // Culling is not performed when the radius is zero. The world
+    // transform of the object must be baked into the radius.
+    Sphere bounding;
+} Draw;
+
+// Base class for animatable objects. Anim objects change their state or other objects.
+// Super: (None)
+// Ext: (None)
+
+typedef struct
+{
+    typedef struct
+    {
+        NumString name; // Usually 0 or 1 in length
+        float f1; // Usually 0 or very close to 0
+        float f2;
+    } AnimEntry;
+    
+    int version; // Always 0
+    int entryCount;
+    AnimEntry entries[entryCount]<optimize=false>;
+    int animatableCount;
+    NumString animatables[animatableCount]<optimize=false>;
+} Anim;
+
+#endif

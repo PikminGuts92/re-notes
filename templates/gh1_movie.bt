@@ -1,0 +1,45 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// A Movie object animates a compressed video through a
+// texture. It works on Xbox and PS2 now, soon GC.
+// Super: Anim
+// Ext: .mov
+
+struct Movie
+{
+    int always6;
+    Anim anim;
+    
+    NumString movie;
+    NumString tex;
+
+    byte always0;
+    byte always1;
+} file;
+
+// The file extension is replaced by 'xmv' on Xbox and
+// by 'ipu' on PS2. These files must be pregenerated according to
+// a platform-specific process.
+
+// The IPU format is a subset of mpeg (no motion compression)
+// that is decompressed by the IPU chip. Multiple movies can be
+// decompressed simultaneously, each with different dimensions,
+// frame lengths, and playback rates, but they all have to finish
+// decompressing in one game cycle.
+
+// To make an IPU movie, start with an uncompressed AVI. Each
+// dimension must be power-of-2, not necessarily the same (same
+// requirement as PS2 textures). Turn it into an IPU file using
+// run/clcomp.exe like clcomp [avi file] [ipu file] [max frame size in bytes]
+
+// Make the max frame size as low as you can stand it. Don't
+// worry if you get warnings like 'exceeded max frame size', that
+// just means that clcomp compressed a frame as much as it could
+// and it was still above the max frame size. 'Real' movies
+// compress much better than 'graphical' movies.
+
+// Movies are decompressed into a 16-bit texture. Black pixels
+// (r=g=b=0) are transparent (a=0), which you'll see with SrcAlph
+// blending. Use Src blending if you don't want them to be.

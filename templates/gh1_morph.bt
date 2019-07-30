@@ -1,0 +1,37 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// A Morph object animates between multiple Mesh poses using
+// weight keyframes. This is an expensive technique, equivalent to a
+// MeshAnim for each active pose, so use only when skinning or a
+// single MeshAnim isn't enough. For example, we use it for
+// viseme-driven facial animation.
+// Super: Anim
+// Ext: .mrf, .morph
+
+typedef struct
+{
+    float w1;
+    float w2; // Always index of weight entry?
+} WeightEntry;
+
+typedef struct
+{
+    NumString mesh;
+    int weightCount;
+    WeightEntry weights[weightCount];
+} MorphEntry;
+
+struct Morph
+{
+    int version; // Always 3
+    Anim anim;
+    
+    int entryCount;
+    MorphEntry entries[entryCount]<optimize=false>;
+
+    short always0;
+    float always0;
+    float always1;
+} file;

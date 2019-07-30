@@ -1,0 +1,105 @@
+#include "milo_common.bt"
+
+BigEndian();
+
+typedef struct
+{
+    uint visemeCount;
+    NumString visemes[visemeCount]<optimize=false>;
+} Visemes;
+
+typedef struct
+{
+    // drums, guitar+bass, mic
+    uint playerCount;
+    NumString playerType[playerCount]<optimize=false>;
+} Players;
+
+typedef struct
+{
+    byte visemeIndex;
+    byte weight;
+} VisemeChange<read=VC_READ>;
+
+typedef struct
+{
+    byte changeCount;
+    if (changeCount > 0)
+        VisemeChange changes[changeCount];
+} KeyFrame<read=KF_READ>;
+
+typedef struct
+{
+    uint keyFrameCount;
+    uint byteCount;
+    KeyFrame frame[keyFrameCount]<optimize=false>;
+} KeyFrames;
+
+local uint i = 0;
+typedef struct
+{
+    byte data[keyFrames.offset[i+1] - keyFrames.offset[i]];
+    i++;
+} KeyFrame2;
+
+typedef struct
+{
+    uint keyFrameCount;
+    uint offset[keyFrameCount];
+    i = 0;
+    KeyFrame2 frame[keyFrameCount-1]<optimize=false>;
+} KeyFrames2;
+
+uint version; // 0-2
+uint always2;
+
+if (always2 == 2)
+{
+    NumString dtaImport;
+    // TODO: Write DTB parser
+
+    byte embedDtb;
+    // DTB structure would go here if embedded
+    uint unknown1; // Always 0?
+}
+else
+{
+    float sampledFps; // Should be 30.0f
+}
+
+Visemes visemes;
+
+if (always2 == 0)
+{
+    Players players;
+}
+
+if (always2 == 2)
+{
+    KeyFrames keyFrames;
+}
+else
+{
+    KeyFrames2 keyFrames;
+}
+
+if (version == 1)
+{
+    NumString propanim;
+}
+
+string VC_READ(VisemeChange &vc){
+    return visemes.visemes[vc.visemeIndex].text;
+}
+
+string KF_READ(KeyFrame &kf){
+    if (kf.changeCount <= 0) return "(None)";
+    
+    local string str = visemes.visemes[kf.changes[0].visemeIndex].text;
+    local int i;
+    
+    for (i = 1; i < kf.changeCount; i++)
+        str += ", " + visemes.visemes[kf.changes[i].visemeIndex].text;
+    
+    return str;
+}

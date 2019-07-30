@@ -1,0 +1,18 @@
+#include "milo_common.bt"
+#include "gh1_common.bt"
+
+LittleEndian();
+// A CamAnim object animates Camera properties.
+// Super: Anim
+// Ext: .cnm
+
+struct CamAnim
+{
+    int version; // Always 0
+    Anim anim;
+    
+    NumString camera;
+    
+    int always0;
+    NumString cameraAnim;
+} file;
