@@ -1,0 +1,135 @@
+LittleEndian();
+
+/*
+Beat track is 1st/3rd beats?
+
+black magic
+===========
+bpm: 112
+length: 2min 41s?
+
+notes: song starts on 9th visible marker (5th measure)
+*/
+
+typedef enum <int>
+{
+    False = 0,
+    True = 1
+} Bool;
+
+typedef struct
+{
+    uint count;
+    char text[count]<optimize=false>;
+} NumString<read=readNumString>;
+
+string readNumString(NumString& ns)
+{
+    return ns.count > 0 ? ns.text : "";
+}
+
+uint roundTo4(uint num)
+{
+    if (num % 4 == 0)
+        return num;
+    
+    return num + (4 - (num % 4));
+}
+
+typedef struct
+{
+    int always1;
+    int always2;
+} UnkSubEntry_0;
+
+typedef struct
+{
+    // Position?
+    float x;
+    float y;
+    float z;
+    // String ids?
+    int64 unkStringId1;
+    int64 unkStringId2;
+    int64 unkStringId3;
+    int64 unkStringId4;
+    int64 unkStringId5;
+    int64 unkStringId6;
+} UnkSubEntry_1;
+
+typedef struct
+{
+    int always1;
+    int always0;
+} UnkSubEntry_2;
+
+typedef struct
+{
+    // 72 bytes
+    float start;
+    int value1; // Usually 1 (0, 1)
+    int value2; // Second entry type? Usually 1 (0, 1, 2)
+    float transform[12];
+    
+    int always0;
+    int always0;
+    
+    Bool extended; // Usually false
+    if (extended == True)
+    {
+        switch (value2)
+        {
+            case 0:
+                UnkSubEntry_0 extendedData;
+                break;
+            case 1:
+                UnkSubEntry_1 extendedData;
+                break;
+            case 2:
+                UnkSubEntry_2 extendedData;
+                break;
+        }
+    }
+} UnkEntry1;
+
+typedef struct
+{
+    int fileId;
+    int64 pathId;
+    Bool enabled;
+} GameObjectMeta;
+
+typedef struct
+{
+    int fileId;
+    int64 pathId;
+    NumString name;
+
+    local uint rem = roundTo4(name.count) - name.count;
+    if (rem > 0)
+        byte remBytes[rem];
+} ScriptMeta;
+
+
+struct TrackData
+{
+    GameObjectMeta gameObject;
+    ScriptMeta scriptMeta;
+    
+    int unkId1;
+    int64 unkStrId1;
+    int unkValue1;
+
+    int unkId2;
+    int64 unkStrId2;
+    float unkValue2;
+
+    // spawn time?
+    int floatArraySize;
+    float floatArray[floatArraySize];
+
+    int unkEntry1Size;
+    UnkEntry1 unkEntries1[unkEntry1Size]<optimize=false>;
+} file;
+
+// 2.14 3.21 2.15 0.53
