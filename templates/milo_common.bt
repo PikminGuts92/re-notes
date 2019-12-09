@@ -213,4 +213,24 @@ typedef struct
     }
 } DTB;
 
+local uint adde = 0xADDEADDE;
+
+// Returns current file size
+uint findNextFile(uint magic)
+{
+    local uint startPos = FTell();
+    local uint currentPos = startPos;
+    local uint currentMagic = 0;
+    
+    while(magic != currentMagic)
+    {
+        if (FEof()) return -1;
+
+        currentMagic = (currentMagic << 8) | ReadUByte(currentPos);
+        currentPos++;
+    }
+
+    return currentPos - (startPos + 4);
+}
+
 #endif

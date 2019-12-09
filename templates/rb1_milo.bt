@@ -1,60 +1,12 @@
+BigEndian();
+
 #include "milo_common.bt"
-
-//LittleEndian();
-local uint adde = 0xADDEADDE;
-
-typedef struct
-{
-    NumString type;
-    NumString name;
-    //byte data[0];
-    local uint offset;
-    local uint size;
-
-} MiloEntry;
-
-typedef struct
-{
-    uint version;
-    NumString type;
-    NumString name;
-    uint count1;
-    uint count2;
-    uint entryCount;
-    MiloEntry entries[entryCount]<optimize=false>;
-} MiloFile;
-
-typedef struct
-{
-    int always4;
-    int always10;
-    int always19;
-    int always7;
-    Matrix mat1;
-    Matrix mat2;
-    
-} ExtraData;
-
-// Returns current file size
-uint findNextFile(uint magic)
-{
-    local uint startPos = FTell();
-    local uint currentPos = startPos;
-    local uint currentMagic = 0;
-    
-    while(magic != currentMagic)
-    {
-        if (FEof()) return -1;
-
-        currentMagic = (currentMagic << 8) | ReadUByte(currentPos);
-        currentPos++;
-    }
-
-    return currentPos - (startPos + 4);
-}
+#include "rb1_common.bt"
 
 MiloFile milo;
-ExtraData data;
+//ObjectDir dir;
+
+//ExtraData data;
 
 // 4 - Unknown (No data) or 12?
 

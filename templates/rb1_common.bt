@@ -1,0 +1,151 @@
+#include "milo_common.bt"
+#include "tbrb_propanim.bt"
+
+#ifndef RB1_COMMON
+#define RB1_COMMON
+
+// An ObjectDir keeps track of a set of Objects.
+// Super: (None)
+// Ext: (None)
+
+struct ObjectDir
+{
+    int version; // Always 22
+    int always0; // Always 2
+    NumString name;
+    
+    int matEntryCount; // Usually 7
+    Matrix matEntries[matEntryCount];
+    
+    int usually0; // 0, 7
+    Bool alwaysTrue; // When true, sub directories?
+    int always0;
+    
+    int importedMiloCount;
+    NumString importedMilos[importedMiloCount]<optimize=false>;
+    
+    // Both are usually empty
+    //NumString rndDirName; // Self-referening? Can be any base class
+    //NumString mainTrans; // splash.cam
+    
+    Bool alwaysFalse;
+    int subDirCount;
+    NumString subDirs[subDirCount]<optimize=false>;
+
+    // List file entries...
+    //ObjectDir dir2;
+    
+    //byte zeroes[13];
+};
+
+struct MiloEntry
+{
+    NumString type;
+    NumString name;
+
+    local uint offset;
+    local uint size;
+};
+
+struct MiloDir
+{
+    uint version; // Always 25?
+    NumString type;
+    NumString name;
+    uint count1;
+    uint count2;
+    uint entryCount;
+    MiloEntry entries[entryCount]<optimize=false>;
+
+    ObjectDir dir;
+    /*
+    
+    for (local int i = 0; i < dir.subDirCount; i++)
+    {
+        ObjectDir subDirs;
+        break;
+    }*/
+    //ObjectDir subDirs;
+};
+
+
+typedef struct (char dirName[], char type[], char name[], uint size)
+{
+    local string dirName = dirName;
+    local string type = type;
+    local string name = name;
+    
+    local uint current = FTell();
+    switch (type)
+    {
+        case "PropAnim":
+            PropAnim propAnim;
+            FSeek(current + size);
+            break;
+        default:
+            byte data[size];
+            break;
+    }
+    
+    uint padding<format=hex>;
+} Blob<read=getFileName>;
+
+string getFileName(Blob& blob)
+{
+    return blob.dirName + " >> " + blob.type + " | " + blob.name;
+}
+
+void readMiloEntries(MiloDir& milo)
+{
+    local uint i;
+    local uint fileSize;
+    local uint startOffset = FTell();
+
+    for (i = 0; i < milo.entryCount; i++)
+    {
+        fileSize = findNextFile(adde);
+        if (fileSize == -1) break;
+    
+        //byte file[fileSize];
+        milo.entries[i].offset = FTell();
+        milo.entries[i].size = fileSize;
+        FSkip(fileSize + 4);
+    }
+
+    i = 0;
+    FSeek(startOffset);
+
+    
+    
+    for (i = 0; i < milo.entryCount; i++)
+    {
+        Blob files(milo.name.text, milo.entries[i].type.text, milo.entries[i].name.text, milo.entries[i].size);
+        //Blob files("", "", milo.entries[i].size);
+        //break;
+    }
+}
+
+void readMiloDir(MiloDir& milo)
+{
+    local int i;
+    for (i = 0; i < milo.dir.subDirCount; i++)
+    {
+        MiloDir subDir;
+        readMiloDir(subDir);
+        //byte zeroes[13];
+        //FSkip(17);
+
+        //break;
+    }
+
+    FSkip(17);
+    readMiloEntries(milo);
+}
+
+struct MiloFile
+{
+    MiloDir dir;
+    readMiloDir(dir);
+};
+
+#endif
