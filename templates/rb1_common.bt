@@ -1,4 +1,6 @@
 #include "milo_common.bt"
+
+#include "rb_charlipsync.bt"
 #include "tbrb_propanim.bt"
 
 #ifndef RB1_COMMON
@@ -78,6 +80,10 @@ typedef struct (char dirName[], char type[], char name[], uint size)
     local uint current = FTell();
     switch (type)
     {
+        case "CharLipSync":
+            CharLipSync charLipSync;
+            FSeek(current + size);
+            break;
         case "PropAnim":
             PropAnim propAnim;
             FSeek(current + size);

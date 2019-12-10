@@ -233,4 +233,13 @@ uint findNextFile(uint magic)
     return currentPos - (startPos + 4);
 }
 
+struct MiloMeta
+{
+    int version;
+    int revision; // Usually 1 or 2
+    NumString projName;
+    DTB script; // Usually empty
+    NumString comment;
+};
+
 #endif

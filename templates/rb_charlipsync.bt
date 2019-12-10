@@ -1,0 +1,82 @@
+#include "milo_common.bt"
+
+#ifndef RB_CHARLIPSYNC
+#define RB_CHARLIPSYNC
+
+typedef struct
+{
+    int visemeCount;
+    NumString visemes[visemeCount]<optimize=false>;
+} Visemes<read=getVisemesText>;
+
+string getVisemesText(Visemes& v)
+{
+    local string s;
+    SPrintf(s, "(%d visemes)", v.visemeCount);
+    return s;
+}
+
+typedef struct (NumString& viseme)
+{
+    local string viseme = viseme.text;
+    byte visemeIdx;
+    ubyte weight;
+} VisemeChange<read=getVisemeChangeText>;
+
+string getVisemeChangeText(VisemeChange& vc)
+{
+    local string s;
+    SPrintf(s, "%s %.2f", vc.viseme, vc.weight / 256.0);
+    return s;
+}
+
+typedef struct (int pos, Visemes& collection)
+{
+    local int pos = pos;
+    byte changeCount;
+    
+    if (changeCount)
+    {
+        local int i;
+        for (i = 0; i < changeCount; i++)
+        {
+            VisemeChange changes(collection.visemes[i]);
+        }
+    }
+} KeyFrame<read=getKeyFrameText>;
+
+string getKeyFrameText(KeyFrame& kf)
+{
+    local string s;
+    SPrintf(s, "Frame: %d (%d changes)", kf.pos, kf.changeCount);
+    return s;
+}
+
+typedef struct (Visemes& collection)
+{
+    int keyFrameCount;
+    int totalKeyFrameSize; // Size in bytes
+    
+    local int i;
+    for (i = 0; i < keyFrameCount; i++)
+    {
+        KeyFrame keyFrames(i, collection);
+    }
+} KeyFrameCollection<read=getKeyFrameCollectionText>;
+
+string getKeyFrameCollectionText(KeyFrameCollection& kfc)
+{
+    local string s;
+    SPrintf(s, "(%d frames)", kfc.keyFrameCount);
+    return s;
+}
+
+struct CharLipSync
+{
+    // Version is usually 0
+    MiloMeta meta;
+    Visemes visemeCollection;
+    KeyFrameCollection keyFrames(visemeCollection);
+};
+
+#endif
