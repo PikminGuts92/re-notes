@@ -1,0 +1,64 @@
+typedef struct
+{
+    uint count;
+    char text[count]<optimize=false>;
+} NumString<read=readNumString>;
+
+string readNumString(NumString& ns)
+{
+    return ns.count > 0 ? ns.text : "";
+}
+
+typedef struct
+{
+    int type; // 1, 3, 4, 6
+    uint size;
+    uint chunkSize;
+} ChunkInfo;
+
+
+typedef struct (ChunkInfo& info)
+{
+    switch (info.type)
+    {
+        case 3:
+            int imgPathCount;
+            NumString imgPaths[imgPathCount]<optimize=false>;
+            break;
+        case 4:
+            int shaderPathCount;
+            NumString shaderPaths[shaderPathCount]<optimize=false>;
+            break;
+        default:
+            byte data[info.size];
+            break;
+    }
+} Chunk;
+
+struct Msb
+{
+    char magic[4]; // "FSG*"
+    uint fileSize; // Size includes this int + magic
+    char unknown[4]; // Always "*3X*" ?
+
+    int always13;
+    int always201;
+
+    int chunkCount;
+    int startOffset; // Always 32?
+    uint largestChunkSize;
+    
+    local uint chunkSize;
+    local int i;
+    for (i = 0; i < chunkCount; i++)
+    {
+        ChunkInfo info;
+        FSkip(20);
+        
+        chunkSize = Min(info.chunkSize, fileSize - FTell());
+        Chunk chunk(info);
+        FSkip(chunkSize - info.size);
+    }
+};
+
+Msb file;
