@@ -2,6 +2,7 @@
 
 #include "rb_charlipsync.bt"
 #include "tbrb_propanim.bt"
+#include "tbrb_p9songpref.bt"
 
 #ifndef RB1_COMMON
 #define RB1_COMMON
@@ -40,6 +41,18 @@ struct ObjectDir
     //byte zeroes[13];
 };
 
+struct WorldDir
+{
+    int version; // Always 18
+    Vector3 origin; // Always (0, 1, 0) ?
+    
+    int always7;
+    int always10;
+    
+    ObjectDir baseDir;
+    byte data[265];
+};
+
 struct MiloEntry
 {
     NumString type;
@@ -58,8 +71,21 @@ struct MiloDir
     uint count2;
     uint entryCount;
     MiloEntry entries[entryCount]<optimize=false>;
-
-    ObjectDir dir;
+    
+    local Bool derived;
+    switch (type.text)
+    {
+        default:
+        case "ObjectDir":
+            ObjectDir dir;
+            derived = False;
+            break;
+        case "WorldDir":
+            WorldDir dir;
+            derived = True;
+            break;
+    }
+    
     /*
     
     for (local int i = 0; i < dir.subDirCount; i++)
@@ -82,6 +108,10 @@ typedef struct (char dirName[], char type[], char name[], uint size)
     {
         case "CharLipSync":
             CharLipSync charLipSync;
+            FSeek(current + size);
+            break;
+        case "P9SongPref":
+            P9SongPref songPref;
             FSeek(current + size);
             break;
         case "PropAnim":
@@ -134,7 +164,11 @@ void readMiloEntries(MiloDir& milo)
 void readMiloDir(MiloDir& milo)
 {
     local int i;
-    for (i = 0; i < milo.dir.subDirCount; i++)
+    local int subDirCount = milo.derived == True
+        ? milo.dir.baseDir.subDirCount
+        : milo.dir.subDirCount;
+
+    for (i = 0; i < subDirCount; i++)
     {
         MiloDir subDir;
         readMiloDir(subDir);

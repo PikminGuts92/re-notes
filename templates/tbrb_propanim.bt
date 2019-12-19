@@ -34,6 +34,19 @@ string getTimeEvent2Text(TimeEvent2& ev)
     return s;
 }
 
+typedef struct
+{
+    Bool enabled;
+    float evTime;
+} TimeEvent3<read=getTimeEvent3Text>;
+
+string getTimeEvent3Text(TimeEvent3& ev)
+{
+    local string s;
+    SPrintf(s, "Start: %.2f, Value: %s", ev.evTime, readBoolString(ev.enabled));
+    return s;
+}
+
 typedef struct 
 {
     Vector4 rot;
@@ -103,6 +116,9 @@ typedef struct
         case 2:
             TimeEvent2 events[eventCount]<optimize=false>;
             break;
+        case 3:
+            TimeEvent3 events[eventCount];
+            break;
         case 4:
             TimeEvent4 events[eventCount];
             break;
@@ -134,8 +150,13 @@ struct PropAnim
 
     float totalTime;
     int always1;
-    int bandObjCount;
     
+    if (version >= 12)
+    {
+        byte always0;
+    }
+
+    int bandObjCount;
     PropAnimEvent evs[bandObjCount]<optimize=false>;
 };
 

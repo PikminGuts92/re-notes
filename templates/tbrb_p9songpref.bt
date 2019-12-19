@@ -1,0 +1,61 @@
+#include "milo_common.bt"
+
+#ifndef TBRB_P9SONGPREF
+#define TBRB_P9SONGPREF
+
+// Note: Contstants are found in ../../system/run/band/band_macros.dta
+
+typedef enum <int>
+{
+    kP9DreamSlow = 1 << 16,
+    kP9DreamFast = 1 << 17,
+    kP9DreamPsych = 1 << 18
+} DreamConfig;
+
+struct P9SongPref
+{
+    // Version is always 20
+    MiloMeta meta;
+    
+    // Note: Uses outfit for venue when not dreamscape
+    NumString venue; // (budokan cavern dreamscape rooftop shea sullivan)
+
+    int miniVenueCount;
+    NumString miniVenues[miniVenueCount]<optimize=false>;
+
+    int sceneCount;
+    NumString scenes[sceneCount]<optimize=false>;
+
+    int always0; // scene groups?
+    
+    NumString studioOutfit; // P9_OUTFITS
+    NumString dreamscapeOutfit; // P9_OUTFITS
+
+    int georgeAssetsCount;
+    NumString georgeAssets[georgeAssetsCount]<optimize=false>;
+
+    int johnAssetsCount;
+    NumString johnAssets[johnAssetsCount]<optimize=false>;
+
+    int paulAssetsCount;
+    NumString paulAssets[paulAssetsCount]<optimize=false>;
+
+    int ringoAssetsCount;
+    NumString ringoAssets[ringoAssetsCount]<optimize=false>;
+
+    NumString tempo; // (slow medium fast)
+
+    NumString songClips; // P9_SONG_CLIPS - Usually same as song name or 'none'
+    NumString dreamscapeFont; // P9_VENUE_FONTS
+    
+    // Configs for abbey road studio
+    NumString georgeAmp; // P9_GEORGE_AMPS
+    NumString johnAmp; // P9_JOHN_AMPS
+    NumString paulAmp; // P9_PAUL_AMPS
+    NumString mixer; // P9_MIXERS
+
+    DreamConfig dreamscapeCamera;
+    NumString lyricPart; // ('PART HARM1' 'PART HARM2' 'PART HARM3')
+};
+
+#endif

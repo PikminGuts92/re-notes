@@ -45,10 +45,17 @@ typedef struct (int pos, Visemes& collection)
     }
 } KeyFrame<read=getKeyFrameText>;
 
+string convertFrameToTime(int pos, int fps)
+{
+    local string s;
+    SPrintf(s, "%02d:%06.3f", pos / (60 * fps), (pos % 1800) / (float)fps);
+    return s;
+}
+
 string getKeyFrameText(KeyFrame& kf)
 {
     local string s;
-    SPrintf(s, "Frame: %d (%d changes)", kf.pos, kf.changeCount);
+    SPrintf(s, "Pos: %s (%d changes)", convertFrameToTime(kf.pos, 30), kf.changeCount);
     return s;
 }
 

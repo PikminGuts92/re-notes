@@ -18,7 +18,14 @@ typedef enum <byte>
 {
     False = 0,
     True = 1
-} Bool;
+} Bool<read=readBoolString>;
+
+string readBoolString(Bool& b)
+{
+    return (b == True)
+        ? "True"
+        : "False";
+}
 
 typedef struct
 {
