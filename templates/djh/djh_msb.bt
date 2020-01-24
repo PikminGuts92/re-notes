@@ -16,6 +16,35 @@ typedef struct
     uint chunkSize;
 } ChunkInfo;
 
+typedef struct
+{
+    /*
+    char unknown[4];
+    int always7;
+    int always1;
+
+    int count1;
+    int always12;
+    
+    int count2;
+    int count3;
+    
+    int unknown1;
+    int unknown2;
+
+    float floats1[8];
+    float floats2[8];*/
+    
+    int unknown;
+    int unknown;
+
+    int dirSize;
+    int nameSize;
+    float mat[12];
+    
+    char dir[dirSize];
+    char name[nameSize];
+} Chunk6;
 
 typedef struct (ChunkInfo& info)
 {
@@ -28,6 +57,9 @@ typedef struct (ChunkInfo& info)
         case 4:
             int shaderPathCount;
             NumString shaderPaths[shaderPathCount]<optimize=false>;
+            break;
+        case 6:
+            Chunk6 chunk6;
             break;
         default:
             byte data[info.size];
