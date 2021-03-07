@@ -165,7 +165,8 @@ typedef struct
         Include,
         Merge,
         IfNDef,
-        Unknown24
+        Autorun,
+        Undef
     } NodeType;
 
     typedef struct
@@ -194,7 +195,7 @@ typedef struct
             case 0x04: // Object (gh2 milos)
             case 0x05: // Symbol, Keyword
             case 0x06: // Unhandled "KDataUnhandled"
-            case 0x07: // IfNDef
+            case 0x07: // IfDef
             case 0x08: // Else
             case 0x09: // EndIf
             case 0x12: // String
@@ -202,7 +203,8 @@ typedef struct
             case 0x21: // Include
             case 0x22: // Merge
             case 0x23: // IfNDef
-            case 0x24: // Idk, in some rb3 dtb files
+            case 0x24: // Autorun
+            case 0x25: // Undef
                 NumString value;
                 break;
             case 0x10: // Array
