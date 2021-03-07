@@ -1,7 +1,6 @@
 #include "milo_common.bt"
 
 LittleEndian();
-local uint adde = 0xADDEADDE;
 
 typedef struct
 {
@@ -21,24 +20,6 @@ typedef struct
     uint extCount;
     NumString extFiles[extCount]<optimize=false>;
 } MiloFile;
-
-// Returns current file size
-uint findNextFile(uint magic)
-{
-    local uint startPos = FTell();
-    local uint currentPos = startPos;
-    local uint currentMagic = 0;
-    
-    while(magic != currentMagic)
-    {
-        if (FEof()) return -1;
-
-        currentMagic = (currentMagic << 8) | ReadUByte(currentPos);
-        currentPos++;
-    }
-
-    return currentPos - (startPos + 4);
-}
 
 MiloFile milo;
 

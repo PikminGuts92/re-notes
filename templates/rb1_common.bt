@@ -1,5 +1,6 @@
 #include "milo_common.bt"
 
+#include "rb_charclipsamples.bt"
 #include "rb_charlipsync.bt"
 #include "tbrb_propanim.bt"
 #include "tbrb_p9songpref.bt"
@@ -31,9 +32,9 @@ struct ObjectDir
     //NumString rndDirName; // Self-referening? Can be any base class
     //NumString mainTrans; // splash.cam
     
-    Bool alwaysFalse;
+    Bool alwaysFalse; // Seems to be true when sub directory
     int subDirCount;
-    NumString subDirs[subDirCount]<optimize=false>;
+    NumString subDirs[subDirCount]<optimize=false>; // Appears in reverse order?
 
     // List file entries...
     //ObjectDir dir2;
@@ -41,16 +42,74 @@ struct ObjectDir
     //byte zeroes[13];
 };
 
+// For GDRB
+struct CharClipSet
+{
+    int version; // Always 25
+    int always22; // Always 22
+
+    int always2;
+    NumString name;
+    
+    int matEntryCount; // Usually 7
+    Matrix matEntries[matEntryCount];
+    
+    int usually0; // 0, 7
+    Bool alwaysTrue; // When true, sub directories?
+    int always0;
+    
+    int importedMiloCount;
+    NumString importedMilos[importedMiloCount]<optimize=false>;
+    
+    // Both are usually empty
+    //NumString rndDirName; // Self-referening? Can be any base class
+    //NumString mainTrans; // splash.cam
+    
+    Bool alwaysFalse;
+    int subDirCount;
+    NumString subDirs[subDirCount]<optimize=false>;
+
+    // List file entries...
+    //ObjectDir dir2;
+    
+    byte data[25]; // TODO: Figure out
+};
+
+struct PanelDir
+{
+    int always7;
+    int always10;
+    
+    ObjectDir baseDir;
+    byte data[180]; // TBRB demo
+};
+
+struct RndDir
+{
+    int always13;
+    ObjectDir baseDir;
+};
+
+struct SynthDir
+{
+    int always_idk;
+    ObjectDir baseDir;
+};
+
 struct WorldDir
 {
     int version; // Always 18
-    Vector3 origin; // Always (0, 1, 0) ?
+    
+    //Vector3 origin; // Always (0, 1, 0) ?
+    int always0;
+    float always1;
+    NumString unknownStr;
     
     int always7;
     int always10;
     
     ObjectDir baseDir;
-    byte data[265];
+    //byte data[265];
 };
 
 struct MiloEntry
@@ -73,12 +132,37 @@ struct MiloDir
     MiloEntry entries[entryCount]<optimize=false>;
     
     local Bool derived;
+    local Bool skipParse = false;
+
     switch (type.text)
     {
         default:
+            // Skip data for now
+            local uint fileSize = findNextFile(adde);
+            byte rawEntryData[fileSize];
+            FSkip(4);
+            //FSkip(fileSize + 4);
+            skipParse = true;
+            break;
         case "ObjectDir":
             ObjectDir dir;
             derived = False;
+            break;
+        case "CharClipSet":
+            CharClipSet dir;
+            derived = False;
+            break;
+        case "PanelDir":
+            PanelDir dir;
+            derived = True;
+            break;
+        case "RndDir":
+            RndDir dir;
+            derived = True;
+            break;
+        case "SynthDir":
+            SynthDir dir;
+            derived = True;
             break;
         case "WorldDir":
             WorldDir dir;
@@ -97,15 +181,29 @@ struct MiloDir
 };
 
 
-typedef struct (char dirName[], char type[], char name[], uint size)
+typedef struct (MiloDir& milo, char type[], char name[], uint size)
 {
-    local string dirName = dirName;
+    // milo.type.text, milo.name.text
+    local string dirType = milo.type.text;
+    local string dirName = milo.name.text;
     local string type = type;
     local string name = name;
-    
+
     local uint current = FTell();
+
+    if (dirType == "PanelDir")
+    {
+        byte data[size];
+        uint padding<format=hex>;
+        return;
+    }
+
     switch (type)
     {
+        case "CharClipSamples":
+            CharClipSamples charClipSamples;
+            FSeek(current + size);
+            break;
         case "CharLipSync":
             CharLipSync charLipSync;
             FSeek(current + size);
@@ -155,7 +253,7 @@ void readMiloEntries(MiloDir& milo)
     
     for (i = 0; i < milo.entryCount; i++)
     {
-        Blob files(milo.name.text, milo.entries[i].type.text, milo.entries[i].name.text, milo.entries[i].size);
+        Blob files(milo, milo.entries[i].type.text, milo.entries[i].name.text, milo.entries[i].size);
         //Blob files("", "", milo.entries[i].size);
         //break;
     }
@@ -164,9 +262,14 @@ void readMiloEntries(MiloDir& milo)
 void readMiloDir(MiloDir& milo)
 {
     local int i;
-    local int subDirCount = milo.derived == True
-        ? milo.dir.baseDir.subDirCount
-        : milo.dir.subDirCount;
+    local int subDirCount = 0;
+    
+    if (milo.skipParse == False)
+    {
+        subDirCount = milo.derived == True
+            ? milo.dir.baseDir.subDirCount
+            : milo.dir.subDirCount;
+    }
 
     for (i = 0; i < subDirCount; i++)
     {
@@ -177,8 +280,11 @@ void readMiloDir(MiloDir& milo)
 
         //break;
     }
-
-    FSkip(17);
+    
+    if (milo.skipParse == False)
+    {
+        FSkip(17);
+    }
     readMiloEntries(milo);
 }
 

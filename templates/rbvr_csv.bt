@@ -1,0 +1,20 @@
+LittleEndian();
+
+typedef struct
+{
+    uint columnCount;
+    uint cols[columnCount];
+} CsvRow;
+
+int always1;
+int always2;
+char separator; // Always ','
+
+uint textSize;
+char text[textSize];
+
+uint headerSize;
+uint headerIdices[headerSize];
+
+uint rowCount;
+CsvRow rows[rowCount]<optimize=false>;

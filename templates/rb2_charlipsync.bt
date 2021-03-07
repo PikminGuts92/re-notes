@@ -3,5 +3,4 @@ BigEndian();
 #include "milo_common.bt"
 #include "rb1_common.bt"
 
-FSkip(2064);
-MiloFile milo;
+CharLipSync charLipSync;

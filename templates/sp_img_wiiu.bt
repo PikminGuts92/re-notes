@@ -1,0 +1,31 @@
+
+BigEndian();
+
+struct IMG
+{
+    short width;
+    short height;
+    short idk; // 1
+    short bpl;
+    
+    int unknown; // 5 = DXT1, 9 = ?
+    short unknown; // 255
+    short unknown; // 256
+
+    int unknown; // 768
+    
+    // Encoded data starts at offset 176
+    // 4bpp?
+
+    int always5;
+    int width;
+    int height;
+
+    int always1;
+    int always1;
+
+    int num;
+    int always0;
+    int always1;
+    int encodedSize;
+} file;

@@ -2,6 +2,7 @@
 
 LittleEndian();
 
+/*
 typedef struct
 {
     // 18 bytes
@@ -25,7 +26,51 @@ typedef struct
     float unknown2; // 0-1
 
     int always0;
-} VocEntry1;
+} VocEntry1;*/
+
+typedef enum <short>
+{
+    LipSync = 1,
+    Definition = 1 << 4
+} FaceType;
+
+
+typedef struct
+{
+    // 18 bytes
+    short always0;
+    float evTime; // Time in seconds?
+    float evValue; // 0-1
+    
+    int zeros[2];
+} VocEvent1<read=getVocEvent1Text>;
+
+string getVocEvent1Text(VocEvent1& ev)
+{
+    local string s;
+    SPrintf(s, "Start: %.2f, Value: %.2f", ev.evTime, ev.evValue);
+    return s;
+}
+
+typedef struct
+{
+    byte zeros1[6];
+    short always1;
+    NumString name;
+
+    int always0;
+    int always0;
+
+    int eventCount;
+    VocEvent1 events[eventCount];
+} VisemeEntry<read=getVisemeEntryText>;
+
+string getVisemeEntryText(VisemeEntry& v)
+{
+    local string s;
+    SPrintf(s, "Viseme: %s (%d events)", readNumString(v.name), v.eventCount);
+    return s;
+}
 
 struct Voc
 {
@@ -37,11 +82,44 @@ struct Voc
     NumString gamemeta;
     int always1000;
     byte zeros[6];
-    short always1;
-    NumString songname;
-    short always3;
-    int fileSize; // Includes everything, not just remaining bytes
+    FaceType type;
+
+    if (type == LipSync)
+    {
+        NumString songname;
+        short always3;
+        int fileSize; // Includes everything, not just remaining bytes
+
+        short always0;
+
+        int visemeCount;
+        VisemeEntry visemes[visemeCount]<optimize=false>;
+    }
+    else if (type == Definition)
+    {
+        int always0;
+        int always0;
+        NumString test;
+        int count;
+
+        int always0;
+        int always0;
+        NumString test2;
+        
+        short always1;
+        int always0;
+        
+        float always1;
+
+    }
 } file;
 
 // 207.9472
 // 208.06
+
+/*
+
+0 - parent node?
+1 - string
+3 - int
+*/

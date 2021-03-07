@@ -1,0 +1,59 @@
+#include "milo_common.bt"
+
+#ifndef RB1_CHARCLIPSAMPLES
+#define RB1_CHARCLIPSAMPLES
+
+/*
+"This is the simple but inefficient format that just stores
+   samples and interpolates. Data is grouped by time, not channel, for
+   better storage, interpolation, etc."
+
+super: CharClip
+*/
+
+typedef struct
+{
+    NumString name;
+    float weight;
+} CharClipName<read=getCharClipNameText>;
+
+string getCharClipNameText(CharClipName& clip)
+{
+    local string s;
+    SPrintf(s, "%.2f - %s", clip.weight, readNumString(clip.name));
+    return s;
+}
+
+struct CharClipSamples
+{
+    int version; // Always 16
+    int subVersion; // Always 12
+    int always2;
+
+    NumString name;
+
+    byte unknown[59];
+
+    int clipCount;
+    CharClipName names[clipCount]<optimize=false>;
+
+    int always0;
+
+    int count_a1;
+    int count_a2;
+
+    int count_b1;
+    int count_b2;
+    int count_b3;
+    
+    int clipCount2;
+
+    int always2;
+
+    int max_float_value; // More like limit
+    int float_count;
+
+    float incrFloats[float_count];
+};
+
+#endif
