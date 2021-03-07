@@ -5,8 +5,10 @@
 
 // Note: Contstants are found in ../../system/run/band/band_macros.dta
 
+// P9_DREAM_CONFIGS
 typedef enum <int>
 {
+    None, // Seen in twistandshout
     kP9DreamSlow = 1 << 16,
     kP9DreamFast = 1 << 17,
     kP9DreamPsych = 1 << 18
@@ -15,7 +17,7 @@ typedef enum <int>
 struct P9SongPref
 {
     // Version is always 20
-    MiloMeta meta;
+    MiloMeta meta; // 25 = GDRB
     
     // Note: Uses outfit for venue when not dreamscape
     NumString venue; // (budokan cavern dreamscape rooftop shea sullivan)
@@ -28,8 +30,8 @@ struct P9SongPref
 
     int always0; // scene groups?
     
-    NumString studioOutfit; // P9_OUTFITS
     NumString dreamscapeOutfit; // P9_OUTFITS
+    NumString studioOutfit; // P9_OUTFITS
 
     int georgeAssetsCount;
     NumString georgeAssets[georgeAssetsCount]<optimize=false>;
@@ -48,14 +50,39 @@ struct P9SongPref
     NumString songClips; // P9_SONG_CLIPS - Usually same as song name or 'none'
     NumString dreamscapeFont; // P9_VENUE_FONTS
     
-    // Configs for abbey road studio
-    NumString georgeAmp; // P9_GEORGE_AMPS
-    NumString johnAmp; // P9_JOHN_AMPS
-    NumString paulAmp; // P9_PAUL_AMPS
-    NumString mixer; // P9_MIXERS
+    // TBRB
+    if (meta.version <= 20)
+    {
+        // Configs for abbey road studio
+        NumString georgeAmp; // P9_GEORGE_AMPS
+        NumString johnAmp; // P9_JOHN_AMPS
+        NumString paulAmp; // P9_PAUL_AMPS
+        NumString mixer; // P9_MIXERS
+        
+        DreamConfig dreamscapeCamera;
+    }
+    else // GDRB
+    {
+        int always0;
+    }
 
-    DreamConfig dreamscapeCamera;
     NumString lyricPart; // ('PART HARM1' 'PART HARM2' 'PART HARM3')
+    
+    // GDRB
+    if (meta.version >= 25)
+    {
+        NumString normal_outfit; // 21st, dookie
+        NumString bonus_outfit; // 21st, dookie
+        NumString drum_set; // drum_dw, drum_leedy
+        
+        NumString era; // early, dream
+        
+        NumString cam_directory; // "Milo file containing song-specific cameras for this song"
+        NumString media_directory; // "Milo file containing song-specific cameras for this song"
+        
+        NumString song_intro_cam; // wh_song_intro_1.shot
+        NumString win_cam; // wh_win_2.shot
+    }
 };
 
 #endif
