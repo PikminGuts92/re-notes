@@ -1,0 +1,60 @@
+BigEndian(); 
+
+typedef struct { 
+    int version; 
+    int checksum; 
+    uint numEvents; 
+    uint stringTableSize; 
+    uint unk1; 
+    uint numChunks; 
+    uint numTimeSigs;
+} XmkHdr; 
+
+typedef struct {
+    uint unk; 
+    float start; 
+    uint tempo; 
+} XmkTempo; 
+
+typedef struct { 
+    //uint unk; 
+    ushort unk1;
+    //  1 = Vox Phrase
+    //  3 = Practice
+    //  4 = HOPO threshold
+    // 57 = Vox Note
+    //
+    // 00000000
+    // 00000001
+    // 00000010 
+    // 00000100 HOPO Threshold
+    // 00001000
+    // 00100000
+    // 01000000
+    // 10000000 Foced HOPO
+    byte unk2;
+    byte midi_note; 
+    float start_time; 
+    float end_time; 
+    //uint unk3; 
+    uint string_offset; 
+} XmkEvent<read=EVENT>; 
+
+// Xmk File structure begins here
+XmkHdr   hdr;
+XmkTempo tempo_map[hdr.numChunks]; 
+int      time_signatures[4 * hdr.numTimeSigs];
+XmkEvent midi_events[hdr.numEvents];
+char     stringTable[hdr.stringTableSize];
+// Xmk File Structure ends here
+
+// Function for reading the text content of a midi event
+string EVENT(XmkEvent& l) {
+    local int offset = l.string_offset - sizeof(XmkEvent) * hdr.numEvents;
+    local char c[128];
+    c[0] = '\0';
+    if(offset >= 0) {
+     Memcpy(c, stringTable, 128, 0, offset);
+    }
+    return c;
+}

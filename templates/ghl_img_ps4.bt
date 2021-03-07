@@ -1,0 +1,25 @@
+
+LittleEndian();
+
+struct IMG
+{
+    /*
+    short width;
+    short height;
+    short idk; // 1
+    short bpl;
+    
+    int unknown; // 5 = DXT1, 9
+    short unknown; // 255
+    short unknown; // 256
+
+    int unknown; // 768*/
+    
+    char magic[4]; // "GNF "
+    int always248;
+    short always258;
+    short always8;
+    int compressedSize;
+    
+    // Encoded data starts at offset 256 (0x100)
+} file;
