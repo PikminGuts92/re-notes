@@ -1,0 +1,19 @@
+BigEndian();
+
+typedef struct
+{
+    uint size_unknown;
+    uint unknown[7];
+    
+    ushort always_1040;
+    ushort someEnum; // 2, 3, 4, 5
+    
+    uint size;
+
+    uint always_16;
+    char always_ff[4];
+
+    uint str_key_or_empty; // Possibly string key?
+} GH3Skin;
+
+GH3Skin skin;

@@ -1,0 +1,82 @@
+BigEndian();
+
+// 40 bytes
+typedef struct
+{
+    ushort always_2600;
+    ushort mask; // Always 512?
+
+    uint hash; // No idea
+
+    ushort width;
+    ushort height;
+    ushort always_1;
+
+    // Repeat. Maybe stored vs rendered resolutions?
+    ushort width;
+    ushort height;
+    ushort always_1;
+    
+    ushort always_1084;
+    ushort always_256;
+
+    uint always_0;
+    
+    uint tex_offset;
+    uint tex_size;
+    
+    uint always_0;
+} TexMeta;
+
+typedef struct (TexMeta& meta)
+{
+    local uint size = meta.tex_size;
+    local uint offset = meta.tex_offset;
+
+    local uint width = meta.width;
+    local uint height = meta.height;
+    
+    // Read encoding (DXT1, DXT5, or null)
+    local char encoding[5] = ReadString(FTell() + 84, 4);
+
+    FSeek(offset);
+    byte raw_data[size];
+} DDSImage<read=getDDSImageText>;
+
+string getDDSImageText(DDSImage& dds)
+{
+    local string s;
+    SPrintf(s, "%+4s | %dx%d", dds.encoding, dds.width, dds.height);
+    return s;
+}
+
+typedef struct
+{
+    byte magic[2]; // 0xFACE
+    byte sub_magic[2]; // 0xCAA7
+    
+    ushort unknown; // Always 284?
+    ushort tex_count;
+
+    uint offset_1; // End of padding
+    
+    uint offset_2;
+
+    uint always_ff;
+    
+    uint unknown;
+    uint offset_3; // Start of padding, or repeated bitmasks?
+    
+    byte padding[offset_1 - offset_3];
+
+    TexMeta metas[tex_count];
+    
+    local int i;
+
+    for (i = 0; i < tex_count; i++)
+    {
+        DDSImage image(metas[i]);
+    }
+} GH3Tex;
+
+GH3Tex tex;

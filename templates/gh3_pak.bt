@@ -1,0 +1,98 @@
+BigEndian();
+
+const uint QBKEY_LAST = 0xB524565F; // "last"
+const uint QBKEY_DOT_LAST = 0x2CB3EF3B; // ".last"
+
+const uint PAK_HEADER_ENTRY_SIZE = 32;
+
+typedef struct
+{
+    // 32 bytes
+    uint qbkey_file_type; // qb key
+    uint file_offset;
+    uint file_size;
+
+    uint qbkey_pak_full_file_name;
+    uint qbkey_full_file_name;
+    
+    uint crc_name_only; (no extension)
+    uint unknown;
+
+    uint pak_header_flags; // File name = 0x00000020 (that's it)
+    
+    if ((pak_header_flags & 0x00000020) != 0x00000020)
+    {
+        local uint crc;
+
+        // Get any crc
+        if (qbkey_full_file_name != 0)
+            crc = qbkey_full_file_name;
+        else if (qbkey_pak_full_file_name != 0)
+            crc = qbkey_pak_full_file_name;
+        else if (crc_name_only != 0)
+            crc = crc_name_only;
+        
+        // File name is crc resolved to qb value
+    }
+    else
+    {
+        // Read path from file
+        local long str_start = FTell();
+        
+        local uint str_size = ReadStringLength(FTell(), 160);
+        FSeek(str_start + 160);        
+
+        char file_name[str_size];
+        FSeek(str_start + 160);
+    }
+} PakHeaderEntry;
+
+
+typedef struct
+{
+    local uint entryCount = 0;
+
+    do
+    {
+        PakHeaderEntry headerEntry;
+        entryCount++;
+        
+    } while ((headerEntry.qbkey_file_type != QBKEY_LAST)
+            && (headerEntry.qbkey_file_type != QBKEY_DOT_LAST));
+} PakHeader;
+
+typedef struct (PakHeaderEntry& headerEntry)
+{
+    byte data[headerEntry.file_size];
+} PakFileEntry;
+
+typedef struct (PakHeader& pakHeader)
+{
+    local uint entryCount = pakHeader.entryCount;
+    local uint i;    
+    
+    local uint file_offset;
+
+    for (i = 0; i < (entryCount - 1); i++)
+    {
+        file_offset = pakHeader.headerEntry[i].file_offset + (PAK_HEADER_ENTRY_SIZE * i);
+        FSeek(file_offset);
+
+        PakFileEntry pakEntry(pakHeader.headerEntry[i]);
+    }
+} PakFileEntryCollection;
+
+typedef struct
+{
+    PakHeader header;
+
+    if (header.entryCount > 0)
+    {
+        local uint first_offset = header.headerEntry[0].file_offset;
+        FSeek(first_offset);
+
+        PakFileEntryCollection fileCollection(header);
+    }
+} GH3Pak;
+
+GH3Pak pak;

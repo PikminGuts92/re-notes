@@ -1,0 +1,35 @@
+BigEndian();
+
+enum SectionType // PC version
+{
+    Unknown              = 0x00000000,
+    SectionInteger       = 0x00200100,
+    SectionFloat         = 0x00200200,
+    SectionString        = 0x00200300,
+    SectionStringW       = 0x00200400,
+    SectionFloatsX2      = 0x00200500,
+    SectionFloatsX3      = 0x00200600,
+    SectionScript        = 0x00200700,
+    SectionStruct        = 0x00200A00,
+    SectionArray         = 0x00200C00,
+    SectionQbKey         = 0x00200D00,
+    SectionQbKeyString   = 0x00201A00,
+    SectionStringPointer = 0x00201B00,
+    SectionQbKeyStringQs = 0x00201C00,
+
+    ArrayInteger         = 0x00201C00
+    // TODO: Add more types
+};
+
+typedef struct
+{
+    uint magic;
+    uint file_size; // Includes first 8 bytes
+
+    byte unknown_data[20];
+    
+    SectionType section_type;
+
+} GH3Qb;
+
+GH3Qb qb;
