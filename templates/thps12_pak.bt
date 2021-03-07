@@ -1,0 +1,50 @@
+struct FileInfo
+{
+    uint64 always_0;
+
+    uint64 chunk_size;
+    uint64 chunk_size_uncompressed;
+    
+    uint count_1; // Always 1?
+    byte hash_1[20];
+
+    uint count_2; // Always 1?
+
+    uint64 offset_1;
+    uint64 total_chunk_size; // Includes header?
+
+    uint size_1;
+    byte always_0;
+    
+    byte chunk_data[chunk_size];
+};
+
+//FileInfo info;
+//FSkip(983);
+//FileInfo info;
+
+local int count = 10;
+local int64 offset;
+
+while (count > 0)
+{
+    if (FEof())
+    {
+        break;
+    }
+
+    FileInfo info;
+    
+    if ((FTell() % 0x800) != 0)
+    {
+        FSkip(0x800 - (FTell() % 0x800));
+    }
+
+    if (info.count_1 > 1)
+    {
+        break;
+    }
+    
+
+    //count--;
+}
