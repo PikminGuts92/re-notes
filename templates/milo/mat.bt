@@ -8,8 +8,8 @@
     #endif
 #endif
 
-#ifndef OBJECT_TRANS
-#define OBJECT_TRANS
+#ifndef OBJECT_MAT
+#define OBJECT_MAT
 
 #include "common.bt"
 
@@ -55,6 +55,5 @@ if (STANDALONE_FILE == "Mat")
 }
 
 #endif
-
 
 #endif
