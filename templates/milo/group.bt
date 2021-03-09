@@ -1,0 +1,70 @@
+// Represents a group of objects to which to propogate animation and messages.
+// Super: Anim Draw Trans
+// Ext: .grp
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "Group"
+    #endif
+#endif
+
+#ifndef OBJECT_GROUP
+#define OBJECT_GROUP
+
+#include "anim.bt"
+#include "common.bt"
+#include "draw.bt"
+#include "trans.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version;
+    read_metadata(info, super);
+
+    Anim draw(info, True);
+    Trans trans(info, True);
+    Draw draw(info, True);
+
+    int objects_count;
+    NumString objects[objects_count]<optimize=false>;
+
+    if (version <= 11)
+    {
+        // Has less data at end of file
+        return;
+    }
+    
+    // Ratio is usually 4:3
+    float lod_width;
+    float lod_height;
+    
+    if (version >= 14)
+    {
+        byte unknown[9];
+    }
+} Group;
+
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "Group")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    Group group(info, False);
+}
+
+#endif
+
+#endif

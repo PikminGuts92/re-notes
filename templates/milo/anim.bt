@@ -1,0 +1,68 @@
+// Base class for animatable objects. Anim objects change their state or other objects.
+// Super: (None)
+// Ext: 
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "Anim"
+    #endif
+#endif
+
+#ifndef OBJECT_ANIM
+#define OBJECT_ANIM
+
+#include "common.bt"
+
+typedef struct
+{
+    NumString name;
+    float f1;
+    float f2;
+} AnimEntry;
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version;
+    read_metadata(info, super);
+    
+    if (version >= 4)
+    {
+        float anim_rate; // ?
+        int unknown;
+
+        return;
+    }
+
+    // Anim entries
+    int entry_count;
+    AnimEntry entries[entry_count]<optimize=false>;
+
+    // Animatables
+    int anims_count;
+    NumString entries[entry_count]<optimize=false>;
+} Anim;
+
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "Anim")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    Anim anim(info, False);
+}
+
+#endif
+
+#endif
