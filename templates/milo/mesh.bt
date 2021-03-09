@@ -15,6 +15,15 @@
 #include "draw.bt"
 #include "trans.bt"
 
+struct Mesh;
+
+string mesh_to_string(Mesh& mesh)
+{
+    local string s;
+    SPrintf(s, "(%d verts, %d faces)", mesh.vertices.count, mesh.faces.count);
+    return s;
+}
+
 typedef struct (int mesh_version)
 {
     // Coordinates
@@ -49,13 +58,11 @@ typedef struct (int mesh_version)
         hfloat u;
         hfloat v;
         
-        // Unknown 1
-        byte unknown_vert_data_1[8];
-        
         // Normals
-        /*hfloat nx;
+        hfloat nx;
         hfloat ny;
-        hfloat nz;*/
+        hfloat nz;
+        hfloat nw; // Not 100% sure
         
         // Colors
         ubyte colorR;
@@ -64,7 +71,11 @@ typedef struct (int mesh_version)
         ubyte colorA;
 
         // Unknown 2
-        byte unknown_vert_data_2[8];
+        int neg1_or_zero;
+        byte num_3;
+        byte num_2;
+        byte num_1;
+        byte num_0;
     }
 } Vertex;
 
@@ -85,7 +96,7 @@ typedef struct
 
 typedef struct (int mesh_version)
 {
-    int vert_count;
+    int count;
 
     if (mesh_version >= 36)
     {
@@ -95,7 +106,7 @@ typedef struct (int mesh_version)
     }
 
     local int i = 0;
-    while (i < vert_count)
+    while (i < count)
     {
         Vertex verts(mesh_version);
         i++;
@@ -104,10 +115,10 @@ typedef struct (int mesh_version)
 
 typedef struct
 {
-    int face_count;
+    int count;
 
     local int i = 0;
-    while (i < face_count)
+    while (i < count)
     {
         Face faces;
         i++;
@@ -156,7 +167,7 @@ typedef struct (SystemInfo& info, Bool super)
         // If eof, then groups should be divided equally? Empty only for light meshes?
         GroupSection groups[groupSizesCount]<optimize=false>;
     }*/
-} Mesh;
+} Mesh<read=mesh_to_string>;
 
 #ifdef STANDALONE_FILE
 
