@@ -1,0 +1,56 @@
+// Base class for animatable objects. Anim objects change their state or other objects.
+// Super: (None)
+// Ext: (None)
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "Draw"
+    #endif
+#endif
+
+#ifndef OBJECT_DRAW
+#define OBJECT_DRAW
+
+#include "common.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // Always 3
+    read_metadata(info, super);
+
+    Bool showing; // Whether the object and its Draw children are drawn or collided with. - Always 1?
+
+    int drawableCount; // Drawables (mesh, env, view)
+    NumString drawables[drawableCount]<optimize=false>;
+    // Represents a bounding sphere around this object and its
+    // drawn children, which is used for culling of draw and
+    // collision commands. X, Y, Z are the sphere center in local
+    // coordinates, R is the sphere radius in world coordinates.
+    // Culling is not performed when the radius is zero. The world
+    // transform of the object must be baked into the radius.
+    Sphere bounding;
+} Draw;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "Draw")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    Draw draw(info, False);
+}
+
+#endif
+
+#endif

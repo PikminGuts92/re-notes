@@ -1,0 +1,183 @@
+// A Mesh object is composed of triangle faces.
+// Super: Draw Trans
+// Ext: .mesh
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "Mesh"
+    #endif
+#endif
+
+#ifndef OBJECT_MESH
+#define OBJECT_MESH
+
+#include "common.bt"
+#include "draw.bt"
+#include "trans.bt"
+
+typedef struct (int mesh_version)
+{
+    // Coordinates
+    float x;
+    float y;
+    float z;
+    if (mesh_version == 34) float w;
+
+    if (mesh_version < 35)
+    {
+        // Normals
+        float nx;
+        float ny;
+        float nz;
+        if (mesh_version == 34) float nw;
+        
+        // Colors
+        float colorR;
+        float colorG;
+        float colorB;
+        float colorA;
+        
+        // UVs
+        float u;
+        float v;
+
+        if (mesh_version == 34) byte unknown_vert_data[24];
+    }
+    else
+    {
+        // UVs
+        hfloat u;
+        hfloat v;
+        
+        // Unknown 1
+        byte unknown_vert_data_1[8];
+        
+        // Normals
+        /*hfloat nx;
+        hfloat ny;
+        hfloat nz;*/
+        
+        // Colors
+        ubyte colorR;
+        ubyte colorG;
+        ubyte colorB;
+        ubyte colorA;
+
+        // Unknown 2
+        byte unknown_vert_data_2[8];
+    }
+} Vertex;
+
+typedef struct
+{
+    ushort idx1;
+    ushort idx2;
+    ushort idx3;
+} Face;
+
+typedef struct
+{
+    int sectionCount;
+    int vertCount;
+    int sections[sectionCount]; // Ascending, last being equal to count of verts
+    ushort vertOffsets[vertCount];
+} GroupSection;
+
+typedef struct (int mesh_version)
+{
+    int vert_count;
+
+    if (mesh_version >= 36)
+    {
+        byte always1;   //  1
+        int vert_size;  // 36
+        int always1;    //  1
+    }
+
+    local int i = 0;
+    while (i < vert_count)
+    {
+        Vertex verts(mesh_version);
+        i++;
+    }
+} Vertices;
+
+typedef struct
+{
+    int face_count;
+
+    local int i = 0;
+    while (i < face_count)
+    {
+        Face faces;
+        i++;
+    }    
+} Faces;
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 29
+    read_metadata(info, super);
+
+    Trans trans(info, True);
+    Draw draw(info, True);
+
+    NumString material;
+    NumString mesh_name;
+    
+    int usually0; // Bitfield? 0, 31, 33, 37, 63
+    int always1;
+    byte always0;
+
+    Vertices vertices(version);
+    Faces faces;
+    
+    // Weight groups?
+    int groupSizesCount;
+    ubyte groupSizes[groupSizesCount]; // Sum should equal count of faces
+    
+    local int charCount = ReadInt();/*
+    
+    if (charCount > 0)
+    {
+        // Either 3 or none (Last one is always empty?)
+        NumString bones[4]<optimize=false>;
+        
+        // Always 4?
+        Matrix boneTransforms[4];
+    }
+    else
+    {
+        int noBones; // Always 0
+    }
+    
+    if (groupSizesCount > 0 && groupSizes[0] > 0 && !FEof())
+    {
+        // If eof, then groups should be divided equally? Empty only for light meshes?
+        GroupSection groups[groupSizesCount]<optimize=false>;
+    }*/
+} Mesh;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "Mesh")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    Mesh mesh(info, False);
+}
+
+#endif
+
+#endif

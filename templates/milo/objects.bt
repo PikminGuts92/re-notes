@@ -1,0 +1,9 @@
+#ifndef OBJECTS
+#define OBJECTS
+
+#include "common.bt"
+#include "draw.bt"
+#include "mesh.bt"
+#include "trans.bt"
+
+#endif

@@ -1,0 +1,58 @@
+// Base class for transformable objects.
+// Trans objects have a 3D position, rotation, and scale.
+// Super: (None)
+// Ext: .trans
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "Trans"
+    #endif
+#endif
+
+#ifndef OBJECT_TRANS
+#define OBJECT_TRANS
+
+#include "common.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // Always 9
+    read_metadata(info, super);
+
+    Matrix mat1;
+    Matrix mat2;
+
+    // No sub meshes like GH1?
+
+    int always0;
+    NumString camera; // ?
+    byte always0;
+
+    NumString transform; // View?
+} Trans;
+
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "Trans")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    Trans trans(info, False);
+}
+
+#endif
+
+
+#endif
