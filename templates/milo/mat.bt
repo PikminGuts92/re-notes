@@ -1,0 +1,60 @@
+// Material objects determine texturing, blending, and the effect of lighting on drawn polys.
+// Super: (None)
+// Ext: .mat
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "Mat"
+    #endif
+#endif
+
+#ifndef OBJECT_TRANS
+#define OBJECT_TRANS
+
+#include "common.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version;
+    read_metadata(info, super);
+
+    int unknown_enum; // 0, 1, 2, 3, 4, 5
+    Color color;
+    
+    // diffuse, norm, specular
+
+    FSkip(68);
+    NumString diffuse_tex;
+
+    FSkip(26);
+    NumString norm_tex;
+
+    FSkip(4);
+    NumString specular_tex;
+} Mat;
+
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "Mat")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    Mat mat(info, False);
+}
+
+#endif
+
+
+#endif
