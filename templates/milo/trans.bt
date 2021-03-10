@@ -22,16 +22,16 @@ typedef struct (SystemInfo& info, Bool super)
     Matrix mat1;
     Matrix mat2;
 
-    if (version <= 10)
+    if (version <= 8)
     {
         // GH1 and before
         int transformable_count;
         NumString transformables[transformable_count]<optimize=false>; // Trans types? 
     }
 
-    int always0;
+    int unknown_enum; // 0-8
     NumString camera; // ?
-    byte always0;
+    Bool usually_false;
 
     NumString transform; // View?
 } Trans;
