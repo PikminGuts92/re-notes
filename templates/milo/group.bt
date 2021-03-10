@@ -1,6 +1,6 @@
 // Represents a group of objects to which to propogate animation and messages.
 // Super: Anim Draw Trans
-// Ext: .grp
+// Ext: .grp, .view
 
 #ifndef IN_MILO_FILE
     #ifndef STANDALONE_FILE
@@ -31,6 +31,13 @@ typedef struct (SystemInfo& info, Bool super)
     if (version <= 11)
     {
         // Has less data at end of file
+        return;
+    } else if (version <= 13)
+    {
+        // Read environment
+        NumString environ;
+        
+        byte unknown[10];
         return;
     }
     

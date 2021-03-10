@@ -255,7 +255,7 @@ typedef struct (SystemInfo& info)
     DTB script; // Usually empty
 
     // Comment field added in gh2 360
-    if (info.platform != PS2)
+    if (info.version >= 25)
     {
         NumString comment;
     }

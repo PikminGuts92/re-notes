@@ -19,11 +19,16 @@ typedef struct (SystemInfo& info, Bool super)
     read_metadata(info, super);
 
     int unknown_enum; // 0, 1, 2, 3, 4, 5
-    Color color;
+    Color base_color;
     
     // diffuse, norm, specular
+    
+    byte data_1[11]; // Always 0
+    Bool always_true;
 
-    FSkip(68);
+    byte data_always_0[8];
+    
+    Matrix tex_xfm; // "Transform for coordinate generation"
     NumString diffuse_tex;
 
     FSkip(26);
