@@ -1,7 +1,7 @@
 // Base class for transformable objects.
 // Trans objects have a 3D position, rotation, and scale.
 // Super: (None)
-// Ext: .trans
+// Ext: .trans, .mesh
 
 #ifndef IN_MILO_FILE
     #ifndef STANDALONE_FILE

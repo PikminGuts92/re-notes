@@ -21,7 +21,7 @@ typedef struct (SystemInfo& info, Bool super)
     int version;
     read_metadata(info, super);
 
-    Anim draw(info, True);
+    Anim anim(info, True);
     Trans trans(info, True);
     Draw draw(info, True);
 
@@ -32,22 +32,22 @@ typedef struct (SystemInfo& info, Bool super)
     {
         // Has less data at end of file
         return;
-    } else if (version <= 13)
-    {
-        // Read environment
-        NumString environ;
-        
-        byte unknown[10];
-        return;
     }
+
+    // Read environment
+    NumString environ;
     
     // Ratio is usually 4:3
     float lod_width;
     float lod_height;
-    
-    if (version >= 14)
+
+    if (version == 13)
     {
-        byte unknown[9];
+        byte unknown[4];
+    }
+    else if (version >= 14)
+    {
+        byte unknown[5];
     }
 } Group;
 
