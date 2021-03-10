@@ -30,16 +30,37 @@ string readBoolString(Bool& b)
 typedef struct
 {
     uint count;
-
+    
     if (count > 0)
     {
         char text[count]<optimize=false>;
     }
-} NumString<read=readNumString>;
+} NumString<read=read_num_string, write=write_num_string>;
 
-string readNumString(NumString& ns)
+string read_num_string(NumString& ns)
 {
     return ns.count > 0 ? ns.text : "";
+}
+
+void write_num_string(NumString& ns, string s)
+{
+    uint old_count = ns.count;
+    int64 start_pos = startof(ns.count) + 4;
+
+    // Delete old string
+    DeleteBytes(start_pos, old_count);
+    
+    int length = sizeof(s) - 1;
+    ns.count = length;
+
+    if (length > 0)
+    {
+        // Insert new string
+        InsertBytes(start_pos, length, 0);
+        WriteBytes(s, start_pos, length);
+    }
+
+    Printf("WARNING: Refresh template for changes to be recognized");
 }
 
 typedef struct
