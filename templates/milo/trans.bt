@@ -16,13 +16,18 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // Always 9
+    int version;
     read_metadata(info, super);
 
     Matrix mat1;
     Matrix mat2;
 
-    // No sub meshes like GH1?
+    if (version <= 10)
+    {
+        // GH1 and before
+        int transformable_count;
+        NumString transformables[transformable_count]<optimize=false>; // Trans types? 
+    }
 
     int always0;
     NumString camera; // ?

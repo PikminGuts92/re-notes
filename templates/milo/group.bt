@@ -24,17 +24,15 @@ typedef struct (SystemInfo& info, Bool super)
     Anim anim(info, True);
     Trans trans(info, True);
     Draw draw(info, True);
-
-    int objects_count;
-    NumString objects[objects_count]<optimize=false>;
-
-    if (version <= 11)
+    
+    if (version >= 11)
     {
-        // Has less data at end of file
-        return;
+        // Basically drawables again
+        int objects_count;
+        NumString objects[objects_count]<optimize=false>;
     }
 
-    // Read environment
+    // Read environment/view?
     NumString environ;
     
     // Ratio is usually 4:3

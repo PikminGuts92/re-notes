@@ -277,7 +277,7 @@ typedef struct
 
 void read_metadata(SystemInfo& info, Bool super)
 {
-    if (super == True)
+    if (info.version <= 10 || super == True)
     {
         // Skip reading
         return;
