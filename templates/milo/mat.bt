@@ -19,23 +19,42 @@ typedef struct (SystemInfo& info, Bool super)
     read_metadata(info, super);
 
     int unknown_enum; // 0, 1, 2, 3, 4, 5
-    Color base_color;
+    Color color;
+    float alpha;
     
     // diffuse, norm, specular
     
     byte data_1[11]; // Always 0
     Bool always_true;
 
-    byte data_always_0[8];
+    byte data_always_0_1[8];
     
     Matrix tex_xfm; // "Transform for coordinate generation"
     NumString diffuse_tex;
 
-    FSkip(26);
+    byte data_2[5]; // Always 0
+    Bool always_true;
+
+    // 1.0  0.0  0.0  0.0  10.0
+    // 1.0  0.61 0.61 0.61 46.0
+    float data_floats_1[5]; // First 4 are normalized?
+
     NumString norm_tex;
 
-    FSkip(4);
+    int always_0;
     NumString specular_tex;
+
+    byte data_always_0_2[8];
+    Bool always_true;
+
+    byte data_always_0_3[10];
+
+    Color specular_rgb;   // Multiplied by specular texture RGB
+    float specular_power; // Multiplied by specular texture Alpha
+
+    byte data_always_0_4[13];
+
+    float data_floats_2[9];
 } Mat;
 
 

@@ -135,13 +135,12 @@ typedef struct
     float r;
     float g;
     float b;
-    float a;
 } Color<read=readColor>;
 
 string readColor(Color& c)
 {
     local string s;
-    SPrintf(s, "(%f, %f, %f, %f)", c.r, c.g, c.b, c.a);
+    SPrintf(s, "(%f, %f, %f)", c.r, c.g, c.b);
     return s;
 }
 
