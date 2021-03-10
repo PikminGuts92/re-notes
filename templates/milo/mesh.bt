@@ -125,6 +125,12 @@ typedef struct
     }    
 } Faces;
 
+typedef struct
+{
+    NumString bone_name;
+    Matrix mat;
+} BoneTrans;
+
 typedef struct (SystemInfo& info, Bool super)
 {
     int version; // 29
@@ -147,26 +153,45 @@ typedef struct (SystemInfo& info, Bool super)
     int groupSizesCount;
     ubyte groupSizes[groupSizesCount]; // Sum should equal count of faces
     
-    local int charCount = ReadInt();/*
+    local int charCount = ReadInt();
     
     if (charCount > 0)
     {
-        // Either 3 or none (Last one is always empty?)
-        NumString bones[4]<optimize=false>;
+        if (version >= 36)
+        {
+            // Array of bone transform objects for n-bones
+            int bone_count;
+            BoneTrans bones[bone_count]<optimize=false>;
+        }
+        else
+        {
+            // Either 3 or none (Last one is always empty?)
+            NumString bones[4]<optimize=false>;
         
-        // Always 4?
-        Matrix boneTransforms[4];
+            // Always 4?
+            Matrix boneTransforms[4];
+        }
     }
     else
     {
         int noBones; // Always 0
+    }
+
+    if (version == 36)
+    {
+        Bool unknown_b1;
+    }
+    else if (version >= 37)
+    {
+        Bool unknown_b1;
+        Bool unknown_b2;
     }
     
     if (groupSizesCount > 0 && groupSizes[0] > 0 && !FEof())
     {
         // If eof, then groups should be divided equally? Empty only for light meshes?
         GroupSection groups[groupSizesCount]<optimize=false>;
-    }*/
+    }
 } Mesh<read=mesh_to_string>;
 
 #ifdef STANDALONE_FILE

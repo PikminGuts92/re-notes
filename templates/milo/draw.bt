@@ -19,9 +19,14 @@ typedef struct (SystemInfo& info, Bool super)
     read_metadata(info, super);
 
     Bool showing; // Whether the object and its Draw children are drawn or collided with. - Always 1?
+    
+    // Drawables seemingly moved to Group in later games
+    if (version < 3)
+    {
+        int drawableCount; // Drawables (mesh, env, view)
+        NumString drawables[drawableCount]<optimize=false>;
+    }
 
-    int drawableCount; // Drawables (mesh, env, view)
-    NumString drawables[drawableCount]<optimize=false>;
     // Represents a bounding sphere around this object and its
     // drawn children, which is used for culling of draw and
     // collision commands. X, Y, Z are the sphere center in local
@@ -29,6 +34,16 @@ typedef struct (SystemInfo& info, Bool super)
     // Culling is not performed when the radius is zero. The world
     // transform of the object must be baked into the radius.
     Sphere bounding;
+    
+    // Skip 0'd data
+    if (version == 3)
+    {
+        byte data_0[4];
+    }
+    else if (version >= 4)
+    {
+        byte data_0[8];
+    }
 } Draw;
 
 #ifdef STANDALONE_FILE
