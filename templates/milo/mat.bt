@@ -95,11 +95,25 @@ typedef struct (SystemInfo& info, Bool super)
     }
 
     // diffuse, norm, specular
-    
-    byte data_1[11]; // Always 0
-    Bool always_true;
 
-    byte data_always_0_1[8];
+    // Not sure
+    Bool usually_true;
+    Bool usually_false;
+
+    int unknown_enum; // 1 = default, 4 = reflective?
+
+    int always_0;
+    Bool usually_false;
+    Bool usually_false;
+    
+    if (version >= 28)
+    {
+        byte data_always_0_1[8];
+    }
+    else
+    {
+        int always_1;
+    }
     
     Matrix tex_xfm; // "Transform for coordinate generation"
     NumString diffuse_tex;
@@ -110,7 +124,7 @@ typedef struct (SystemInfo& info, Bool super)
 
     // 1.0  0.0  0.0  0.0  10.0
     // 1.0  0.61 0.61 0.61 46.0
-    float data_floats_1[5]; // First 4 are normalized?
+    float data_floats_five_1[5]; // First 4 are normalized?
 
     NumString norm_tex;
 
@@ -119,6 +133,19 @@ typedef struct (SystemInfo& info, Bool super)
 
     byte data_always_0_2[8];
     Bool always_true;
+
+    if (version <= 27)
+    {
+        // GH2 PS2 has less data
+        Bool always_false;
+        return;
+    }
+    else if (version == 28)
+    {
+        // GH2 360
+        byte data_always_0_3[5];
+        return;
+    }
 
     byte data_always_0_3[10];
 
