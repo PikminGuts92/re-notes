@@ -104,7 +104,8 @@ typedef struct (SystemInfo& info, Bool super)
     Matrix tex_xfm; // "Transform for coordinate generation"
     NumString diffuse_tex;
 
-    byte data_2[5]; // Always 0
+    NumString next_pass; // Next material for object
+    Bool always_false;
     Bool always_true;
 
     // 1.0  0.0  0.0  0.0  10.0
