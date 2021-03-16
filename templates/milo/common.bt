@@ -48,7 +48,10 @@ void write_num_string(NumString& ns, string s)
     int64 start_pos = startof(ns.count) + 4;
 
     // Delete old string
-    DeleteBytes(start_pos, old_count);
+    if (old_count > 0)
+    {
+        DeleteBytes(start_pos, old_count);
+    }
     
     int length = sizeof(s) - 1;
     ns.count = length;
