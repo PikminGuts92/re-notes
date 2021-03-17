@@ -1,6 +1,7 @@
 // Base class for animatable objects. Anim objects change their state or other objects.
 // Super: (None)
 // Ext: (None)
+// C++ Class: RndDrawable
 
 #ifndef IN_MILO_FILE
     #ifndef STANDALONE_FILE

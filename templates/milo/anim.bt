@@ -1,6 +1,7 @@
 // Base class for animatable objects. Anim objects change their state or other objects.
 // Super: (None)
 // Ext: 
+// C++ Class: RndAnimatable
 
 #ifndef IN_MILO_FILE
     #ifndef STANDALONE_FILE
@@ -20,6 +21,15 @@ typedef struct
     float f2;
 } AnimEntry;
 
+typedef enum
+{
+    k30_fps,
+    k480_fpb,
+    k30_fps_ui,
+    k1_fpb,
+    k30_fps_tutorial
+} RATE_ENUM;
+
 typedef struct (SystemInfo& info, Bool super)
 {
     int version;
@@ -27,8 +37,8 @@ typedef struct (SystemInfo& info, Bool super)
     
     if (version >= 4)
     {
-        float anim_rate; // ?
-        int unknown;
+        float frame;
+        RATE_ENUM anim_rate;
 
         return;
     }

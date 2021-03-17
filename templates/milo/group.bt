@@ -1,6 +1,7 @@
 // Represents a group of objects to which to propogate animation and messages.
 // Super: Anim Draw Trans
 // Ext: .grp, .view
+// C++ Class: RndGroup
 
 #ifndef IN_MILO_FILE
     #ifndef STANDALONE_FILE
