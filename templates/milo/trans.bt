@@ -2,6 +2,7 @@
 // Trans objects have a 3D position, rotation, and scale.
 // Super: (None)
 // Ext: .trans, .mesh
+// C++ Class: RndTransformable
 
 #ifndef IN_MILO_FILE
     #ifndef STANDALONE_FILE
@@ -14,13 +15,26 @@
 
 #include "common.bt"
 
+typedef enum
+{
+    kConstraintNone,
+    kConstraintLocalRotate,
+    kConstraintParentWorld,
+    kConstraintLookAtTarget,
+    kConstraintShadowTarget,
+    kConstraintBillboardZ,
+    kConstraintBillboardXZ,
+    kConstraintBillboardXYZ,
+    kConstraintFastBillboardXYZ
+} CONSTRAINT_ENUM;
+
 typedef struct (SystemInfo& info, Bool super)
 {
     int version;
     read_metadata(info, super);
 
-    Matrix mat1;
-    Matrix mat2;
+    Matrix localXfm;
+    Matrix worldXfm;
 
     if (version <= 8)
     {
@@ -29,11 +43,11 @@ typedef struct (SystemInfo& info, Bool super)
         NumString transformables[transformable_count]<optimize=false>; // Trans types? 
     }
 
-    int unknown_enum; // 0-8
-    NumString camera; // ?
-    Bool usually_false;
+    CONSTRAINT_ENUM constraint;
+    NumString target;
+    Bool preserve_scale; // Usually false
 
-    NumString transform; // View?
+    NumString parent;
 } Trans;
 
 
