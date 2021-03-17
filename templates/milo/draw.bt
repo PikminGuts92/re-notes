@@ -38,7 +38,7 @@ typedef struct (SystemInfo& info, Bool super)
     // Skip 0'd data
     if (version == 3)
     {
-        byte data_0[4];
+        float draw_order;
     }
     else if (version >= 4)
     {
