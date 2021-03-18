@@ -26,17 +26,23 @@ string getCharClipNameText(CharClipName& clip)
 
 struct CharClipSamples
 {
-    int version; // Always 16
+    int version; // 15 = TBRB, 16 = GDRB
     int subVersion; // Always 12
     int always2;
 
     NumString name;
-
-    byte unknown[59];
+    
+    if (version <= 15)
+    {
+        byte unknown[106];
+    }
+    else
+    {
+        byte unknown[59];
+    }
 
     int clipCount;
     CharClipName names[clipCount]<optimize=false>;
-
     int always0;
 
     int count_a1;
@@ -50,10 +56,23 @@ struct CharClipSamples
 
     int always2;
 
-    int max_float_value; // More like limit
-    int float_count;
+    if (version <= 15)
+    {
+        int always1;
+        short always0;
+    }
+    else
+    {
+        int max_float_value; // More like limit
+    }
 
+    int float_count;
     float incrFloats[float_count];
+
+    if (version <= 15)
+    {
+        byte unknown_data[6];
+    }
 };
 
 #endif
