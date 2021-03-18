@@ -1,3 +1,7 @@
+// An ObjectDir keeps track of a set of Objects.
+// Super: (None)
+// Ext: (None)
+
 #ifndef OBJECT_DIR
 #define OBJECT_DIR
 

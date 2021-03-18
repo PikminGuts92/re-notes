@@ -1,4 +1,78 @@
 #ifndef MILO_FILE
 #define MILO_FILE
 
+#include "common.bt"
+
+struct MiloFile;
+
+typedef struct
+{
+    NumString type;
+    NumString name;
+
+    local uint offset;
+    local uint size;
+} MiloEntry<read=read_milo_entry>;
+
+string read_milo_entry(MiloEntry& me)
+{
+    local string s;
+    SPrintf(s, "%s: %s", me.type.text, me.name.text);
+    return s;
+}
+
+typedef struct (int milo_version)
+{
+    if (milo_version > 10)
+    {
+        NumString dir_type;
+        NumString dir_name;
+
+        // Not sure, related to entry names
+        int count1;
+        int count2;
+    }
+
+    int entry_count;
+    MiloEntry entries[entry_count]<optimize=false>;
+} MiloEntries<read=read_milo_entries>;
+
+string read_milo_entries(MiloEntries& mes)
+{
+    local string s;
+    
+    if (exists(mes.dir_type))
+    {
+        SPrintf(s, "%s: %s (%d entries)", mes.dir_type.text, mes.dir_name.text, mes.entry_count);
+    }
+    else
+    {
+        SPrintf(s, "(%d entries)", mes.entry_count);
+    }
+    
+    return s;
+}
+
+
+typedef struct (SystemInfo& info)
+{
+    int version;
+    MiloEntries meta(version);
+
+} MiloFileListing;
+
+local int milo_version = guess_version();
+
+if (milo_version == -1)
+{
+    // TODO: Read magic and read block offset
+    FSkip(2064);
+    milo_version = guess_version();
+}
+
+local SystemInfo info;
+info.version = milo_version;
+
+MiloFileListing milo(info);
+
 #endif
