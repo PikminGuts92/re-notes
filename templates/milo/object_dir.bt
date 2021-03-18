@@ -1,0 +1,27 @@
+#ifndef OBJECT_DIR
+#define OBJECT_DIR
+
+#include "common.bt"
+
+struct (SystemInfo& info, Bool super)
+{
+    int version; // Always 22
+    int revision; // Usually 1 or 2
+    NumString type;
+
+    int viewport_count; // Usually 7
+    Matrix viewports[viewport_count];
+
+    int usually0; // 0, 6, 7
+    Bool always_true; // When true, sub directories?
+    int always_0;
+
+    int imported_milo_count;
+    NumString imported_milos[imported_milo_count]<optimize=false>;
+
+    Bool always_false; // Seems to be true when sub directory
+    int sub_dir_count;
+    NumString sub_dirs[sub_dir_count]<optimize=false>; // Appears in reverse order?
+} ObjectDir;
+
+#endif
