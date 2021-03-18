@@ -274,13 +274,13 @@ struct SystemInfo;
 typedef struct (SystemInfo& info)
 {
     int revision; // Usually 1 or 2
-    NumString projName;
-    DTB script; // Usually empty
+    NumString type;
+    DTB props; // Usually empty
 
-    // Comment field added in gh2 360
+    // Note field added in gh2 360
     if (info.version >= 25)
     {
-        NumString comment;
+        NumString note;
     }
 } Metadata;
 
