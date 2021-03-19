@@ -53,13 +53,83 @@ string read_milo_entries(MiloEntries& mes)
     return s;
 }
 
+typedef struct
+{
+    int ext_count;
+    NumString ext_paths[ext_count]<optimize=false>;
+} ExternalResources<read=read_ext_resources>;
+
+
+string read_ext_resources(ExternalResources& er)
+{
+    local string s;
+    SPrintf(s, "(%d external resources)", er.ext_count);    
+    return s;
+}
+
+typedef struct (MiloFile& milo, MiloEntry& entry)
+{
+    local string entry_type = entry.type.text;
+    local string entry_name = entry.name.text;
+
+    local uint offset = entry.offset;
+    local uint size = entry.size;
+
+    byte data[size];
+    uint padding<format=hex>;
+} Blob<read=read_blob>;
+
+string read_blob(Blob& blob)
+{
+    local string s;
+    SPrintf(s, "%s: %s (%d bytes)", blob.entry_type, blob.entry_name, blob.size);    
+    return s;
+}
+
+void read_milo_files(MiloFile& milo)
+{
+    local uint i;
+    local uint file_size;
+    local uint startOffset = FTell();
+
+    for (i = 0; i < milo.meta.entry_count; i++)
+    {
+        file_size = findNextFile(adde);
+        if (file_size == -1) break;
+
+        milo.meta.entries[i].offset = FTell();
+        milo.meta.entries[i].size = file_size;
+        FSkip(file_size + 4);
+    }
+
+    FSeek(startOffset);
+    
+    for (i = 0; i < milo.meta.entry_count; i++)
+    {
+        Blob files(milo, milo.meta.entries[i]);
+    }
+}
+
+typedef struct (SystemInfo& info, MiloFile& milo)
+{
+    read_milo_files(milo);
+} MiloFileEntries;
 
 typedef struct (SystemInfo& info)
 {
     int version;
     MiloEntries meta(version);
 
-} MiloFileListing;
+    if (version <= 10)
+    {
+        // Used in GH1-era games
+        // Paths usually reference external textures
+        // Note: Can be collection of nulls
+        ExternalResources ext_resources;
+    }
+
+    MiloFileEntries children(info, this);
+} MiloFile;
 
 local int milo_version = guess_version();
 
@@ -73,6 +143,6 @@ if (milo_version == -1)
 local SystemInfo info;
 info.version = milo_version;
 
-MiloFileListing milo(info);
+MiloFile milo(info);
 
 #endif
