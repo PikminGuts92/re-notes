@@ -1,0 +1,37 @@
+const uint INFLATED_MAGIC = 0xAFDEBECA;
+
+void update_offsets()
+{
+    BigEndian();
+    uint magic = ReadInt();
+
+    // Validate magic
+    if (magic != INFLATED_MAGIC)
+    {
+        Printf("Magic of 0x%08X is not supported", magic);
+        return;
+    }
+
+    LittleEndian();
+
+    uint block_offset = ReadInt(4);
+    uint block_count = ReadInt(8);
+    
+    uint new_block_size = FileSize() - block_offset;
+
+    // Write new size
+    WriteInt(8, 1);
+    WriteInt(12, new_block_size); // Largest inflated block
+    WriteInt(16, new_block_size); // 1st block size
+
+    // Clean up other block sizes if present
+    int i;
+    for (i = 1; i < block_count; i++)
+    {
+        WriteInt(20 + (i - 1) * 4, 0);
+    }
+
+    Printf("Sucessfully updated block sizes");
+}
+
+update_offsets();
