@@ -70,7 +70,7 @@ struct Acp
 
     int unknown;
     float max1; // range = 0.0-1.0?
-    int always5;
+    int always5; // kRotZ?
 
     TransInfo transInfo1;
     TransInfo transInfo2;
