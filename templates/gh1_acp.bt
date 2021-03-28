@@ -2,6 +2,62 @@
 
 LittleEndian();
 
+typedef struct
+{
+    int count;
+
+    if (count > 0)
+    {
+        NumString transNames[count]<optimize=false>;
+    }
+
+    int countPerTrans;
+    int always1;
+} TransInfo;
+
+typedef struct (NumString& transName)
+{
+    local string name = transName.text;
+
+    if (Strstr(name, ".pos") >= 0)
+    {
+        // 12 bytes
+        Vector3 pos;
+    }
+    else if (Strstr(name, ".quat") >= 0)
+    {
+        // 8 bytes
+        float quat[2];
+    }
+    else if (Strstr(name, ".rotz") >= 0)
+    {
+        // 2 bytes
+        byte rotz[2];
+    }
+} TransEntry;
+
+
+typedef struct (TransInfo& info)
+{
+    local int i;
+
+    for (i = 0; i < info.count; i++)
+    {
+        TransEntry transEntries(info.transNames[i]);
+    }
+} TransEntriesFrame;
+
+typedef struct (TransInfo& info)
+{
+    local int i;
+    
+    // Iterate over indicies (frames?)
+    for (i = 0; i < info.countPerTrans; i++)
+    {
+        TransEntriesFrame transFrame(info);
+    }
+} TransEntries;
+
 struct Acp
 {
     NumString animType; // AnimClipSamples
@@ -15,17 +71,19 @@ struct Acp
     int unknown;
     float max1; // range = 0.0-1.0?
     int always5;
-    int names1Count; // Hero channels
-    NumString names1[names1Count]<optimize=false>;
-    
-    int count; // Multiply by names1Count * size
-    int always1;
-    
-    int names2Count; // Left hand channels (Max = 17?)
-    NumString names2[names2Count]<optimize=false>;
-    
-    int always1;
-    int always1;
+
+    TransInfo transInfo1;
+    TransInfo transInfo2;
+
+    if (transInfo1.count > 0)
+    {
+        TransEntries transEntries1(transInfo1);
+    }
+
+    if (transInfo2.count > 0)
+    {
+        TransEntries transEntries2(transInfo2);
+    }
 } file;
 
 // pos = 16 bytes, quat = 8 bytes, rotz = 2 bytes
