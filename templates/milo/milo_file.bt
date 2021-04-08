@@ -67,13 +67,13 @@ string read_ext_resources(ExternalResources& er)
     return s;
 }
 
-typedef struct (MiloFile& milo, MiloEntry& entry)
+typedef struct (MiloFile& milo, NumString& entry_type, NumString& entry_name, uint entry_offset, uint entry_size)
 {
-    local string entry_type = entry.type.text;
-    local string entry_name = entry.name.text;
+    local string type = entry_type.text;
+    local string name = entry_name.text;
 
-    local uint offset = entry.offset;
-    local uint size = entry.size;
+    local uint offset = entry_offset;
+    local uint size = entry_size;
 
     byte data[size];
     uint padding<format=hex>;
@@ -82,7 +82,7 @@ typedef struct (MiloFile& milo, MiloEntry& entry)
 string read_blob(Blob& blob)
 {
     local string s;
-    SPrintf(s, "%s: %s (%d bytes)", blob.entry_type, blob.entry_name, blob.size);    
+    SPrintf(s, "%s: %s (%d bytes)", blob.type, blob.name, blob.size);    
     return s;
 }
 
@@ -106,7 +106,12 @@ void read_milo_files(MiloFile& milo)
     
     for (i = 0; i < milo.meta.entry_count; i++)
     {
-        Blob files(milo, milo.meta.entries[i]);
+        Blob files(
+            milo,
+            milo.meta.entries[i].type,
+            milo.meta.entries[i].name,
+            milo.meta.entries[i].offset,
+            milo.meta.entries[i].size);
     }
 }
 
@@ -127,6 +132,14 @@ typedef struct (SystemInfo& info)
         // Note: Can be collection of nulls
         ExternalResources ext_resources;
     }
+    else
+    {
+        // Read directory entry
+        local uint size = findNextFile(adde);
+
+        Blob dir_entry(this, meta.dir_type, meta.dir_name, FTell(), size);
+        FSkip(4);
+    }
 
     MiloFileEntries children(info, this);
 } MiloFile;
@@ -144,5 +157,10 @@ local SystemInfo info;
 info.version = milo_version;
 
 MiloFile milo(info);
+
+if (!FEof())
+{
+    Printf("WARNING: End of file not reached. Milo may not have been properly parsed.");
+}
 
 #endif
