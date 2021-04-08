@@ -1,0 +1,57 @@
+// This is the simple but inefficient format that just stores samples and interpolates. Data is grouped by time, not channel, for better storage, interpolation, etc.
+// Super: CharClip
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "CharClipSamples"
+    #endif
+#endif
+
+#ifndef OBJECT_CHAR_CLIP_SAMPLES
+#define OBJECT_CHAR_CLIP_SAMPLES
+
+#include "common.bt"
+#include "char_clip.bt"
+
+typedef struct
+{
+    int count;
+
+    if (count > 0)
+    {
+        NumString trans_names[count]<optimize=false>;
+    }
+} TransInfo;
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version;
+    CharClip char_clip(info, False);
+
+    TransInfo trans_info;
+} CharClipSamples;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "CharClipSamples")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        info.version = 24;
+    }
+
+    CharClipSamples char_clip_samples(info, False);
+}
+
+#endif
+
+#endif

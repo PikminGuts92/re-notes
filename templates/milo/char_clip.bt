@@ -1,0 +1,130 @@
+// A clip of animation that you can play. We expect subclasses for stuff like compression
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "CharClip"
+    #endif
+#endif
+
+#ifndef OBJECT_CHAR_CLIP
+#define OBJECT_CHAR_CLIP
+
+#include "common.bt"
+
+typedef struct
+{
+    NumString name;
+    int vec_count; // Usually 1
+        
+    if (vec_count > 0)
+    {
+        Vector2 vecs[vec_count];
+    }
+} ClipEvent;
+
+typedef struct
+{
+    int count;
+
+    if (count > 0)
+    {
+        ClipEvent events[count]<optimize=false>;
+    }
+} ClipEvents;
+
+typedef struct
+{
+    float frame;
+    NumString script;
+} FrameEvent<read=read_frame_event_string>;
+
+
+string read_frame_event_string(FrameEvent& fe)
+{
+    local string s;
+    SPrintf(s, "Start: %.2f, Value: %s", fe.frame, fe.script.text);
+    return s;
+}
+
+typedef struct
+{
+    int count;
+
+    if (count > 0)
+    {
+        FrameEvent events[count]<optimize=false>;
+    }
+} FrameEvents;
+
+// PLAY_BLEND_FLAGS
+// Blend mode, if any, to use by default for this clip
+typedef enum
+{
+    kPlayNoDefault = 0,
+    kPlayNow = 1,
+    kPlayNoBlend = 2,
+    kPlayFirst = 3,
+    kPlayLast = 4,
+    kPlayDirty = 8
+} PLAY_BLEND;
+
+// PLAY_TIME_FLAGS
+// Time units/alignment, if any, for this clip
+typedef enum
+{
+    kPlayBeatTime = 0,
+    kPlayRealTime = 512,
+    kPlayBeatAlign1 = 4096,
+    kPlayBeatAlign2 = 8192,
+    kPlayBeatAlign4 = 16384,
+    kPlayBeatAlign8 = 32768
+} PLAY_TIME;
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version;
+    read_metadata(info, super);
+
+    float start_frame;
+    float end_frame;
+
+    float unknown_float_1;
+
+    PLAY_BLEND default_blend; // PLAY_BLEND_FLAGS
+    PLAY_TIME beat_align; // PLAY_TIME_FLAGS
+
+    float unknown_float_2;
+
+    
+    int always_0;
+    Bool usually_false;
+
+    ClipEvents clip_events;
+
+    byte bytes_always_0[8];
+    FrameEvents events;
+} CharClip;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "CharClip")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    CharClip char_clip(info, False);
+}
+
+#endif
+
+#endif

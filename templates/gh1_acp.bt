@@ -11,9 +11,9 @@ typedef struct
         NumString transNames[count]<optimize=false>;
     }
 
-    int countPerTrans;
+    int countPerSample;
     int always1;
-} TransInfo;
+} SampleSetHeader;
 
 typedef struct (NumString& transName)
 {
@@ -37,32 +37,51 @@ typedef struct (NumString& transName)
 } TransEntry;
 
 
-typedef struct (TransInfo& info)
+typedef struct (SampleSetHeader& header)
 {
     local int i;
 
-    for (i = 0; i < info.count; i++)
+    for (i = 0; i < header.count; i++)
     {
-        TransEntry transEntries(info.transNames[i]);
+        TransEntry transEntries(header.transNames[i]);
     }
 } TransEntriesFrame;
 
-typedef struct (TransInfo& info)
+typedef struct (SampleSetHeader& header)
 {
     local int i;
     
     // Iterate over indicies (frames?)
-    for (i = 0; i < info.countPerTrans; i++)
+    for (i = 0; i < header.countPerSample; i++)
     {
-        TransEntriesFrame transFrame(info);
+        TransEntriesFrame transFrame(header);
     }
-} TransEntries;
+} SampleSetData;
 
-struct Acp
+typedef struct
+{
+    int version; // Always 5
+    
+    SampleSetHeader sampleHeader1;
+    SampleSetHeader sampleHeader2;
+
+    if (sampleHeader1.count > 0)
+    {
+        SampleSetData sampleSetData1(sampleHeader1);
+    }
+
+    if (sampleHeader2.count > 0)
+    {
+        SampleSetData sampleSetData2(sampleHeader2);
+    }
+} AnimClip;
+
+struct AnimClipSamples
 {
     NumString animType; // AnimClipSamples
     NumString animName;
-    int always18;
+    int version; // Always 18
+
     float f1;
     float f2;
     float f3;
@@ -70,20 +89,8 @@ struct Acp
 
     int unknown;
     float max1; // range = 0.0-1.0?
-    int always5; // kRotZ?
 
-    TransInfo transInfo1;
-    TransInfo transInfo2;
-
-    if (transInfo1.count > 0)
-    {
-        TransEntries transEntries1(transInfo1);
-    }
-
-    if (transInfo2.count > 0)
-    {
-        TransEntries transEntries2(transInfo2);
-    }
+    AnimClip animClip;
 } file;
 
 // pos = 16 bytes, quat = 8 bytes, rotz = 2 bytes
