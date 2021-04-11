@@ -1,5 +1,7 @@
 #include "milo_common.bt"
 
+LittleEndian();
+
 typedef struct
 {
     uint fileCount;
@@ -102,19 +104,27 @@ typedef struct (int version, StringOffsetCollection& stringCollection)
     else
         uint64 offset;
 
-    uint fileNameIdx;
-    uint directoryPathIdx;
+    int fileNameIdx;
+    int directoryPathIdx;
     uint size;
     uint inflatedSize; // 0 if not compressed
 
-    local string fileName = stringCollection.stringOffets[fileNameIdx].value;
-    local string directoryPath = stringCollection.stringOffets[directoryPathIdx].value;
+    local string fileName = (fileNameIdx >= 0)
+        ? stringCollection.stringOffets[fileNameIdx].value
+        : "";
+
+    local string directoryPath = (directoryPathIdx >= 0)
+        ? stringCollection.stringOffets[directoryPathIdx].value
+        : "";
 } ArkEntry<read=getArkEntryText>;
 
 string getArkEntryText(ArkEntry& ae)
 {
     local string s;
-    SPrintf(s, "%s/%s", ae.directoryPath, ae.fileName);
+    if (ae.directoryPathIdx >= 0)
+        SPrintf(s, "%s/%s", ae.directoryPath, ae.fileName);
+    else
+        SPrintf(s, "%s", ae.fileName);
     return s;
 }
 
@@ -143,9 +153,57 @@ typedef struct (int version, StringOffsetCollection& stringCollection)
     return i - 1;
 }*/
 
+typedef struct (ArkEntry& entry)
+{
+    local int directoryPathIdx = entry.directoryPathIdx;
+    local string directoryPath = entry.directoryPath;
+    local string fileName = entry.fileName;
+
+    FSeek(entry.offset);
+    byte data[entry.size];
+} ArchivedFile<read=getArchivedFileText>;
+
+string getArchivedFileText(ArchivedFile& af)
+{
+    local string s;
+    if (af.directoryPathIdx >= 0)
+        SPrintf(s, "%s/%s", af.directoryPath, af.fileName);
+    else
+        SPrintf(s, "%s", af.fileName);
+    return s;
+}
+
+typedef struct (ArkEntryCollection& entryCollection)
+{
+    local int i;
+    for (i = 0; i < entryCollection.entryCount; i++)
+    {
+        ArchivedFile files(entryCollection.entries[i]);
+    }
+} ArchivedFiles;
+
 struct ArkFile
 {
     int version;
+
+    if (version < 3)
+    {
+        // Amp/KR structure
+        // String blob, ark entries, string indices
+        local uint str_offset = FTell() + (ReadInt() * 20) + 4;
+        FSeek(str_offset);
+        
+        StringBlob stringBlob;
+        StringOffsetCollection stringOffsetCollection(str_offset + 4);
+        local uint files_offset = FTell();
+
+        FSeek(4);
+        ArkEntryCollection arkEntryCollection(version, stringOffsetCollection);
+        
+        FSeek(files_offset);
+        ArchivedFiles archive(arkEntryCollection);
+        return;
+    }
     
     if (version >= 6)
         HashCollection hashCollection;
@@ -172,6 +230,7 @@ struct ArkFile
     if (version <= 7)
     {
         // Classic file structure
+        // String blob, string indices, ark entries
         local uint startOffset = FTell() + 4;
         StringBlob stringBlob;
         
