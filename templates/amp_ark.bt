@@ -1,0 +1,39 @@
+#include "milo_common.bt"
+
+LittleEndian();
+
+uint version; // Always 2
+
+typedef struct
+{
+    // 20 bytes
+    if (version != 1)
+        uint offset;
+    uint fileNameIdx;
+    uint folderNameIdx;
+    if (version == 1)
+        uint offset;
+    uint size;
+    uint inflatedSize; // 0 = uncompressed
+} FileEntry;
+
+uint entryCount;
+FileEntry entries[entryCount];
+
+uint stringTableSize;
+
+if (version == 1)
+{
+    // PS Magazine demo
+    NumString stringTable[stringTableSize]<optimize=false>;
+}
+else
+{
+    // version should be 2
+    char stringTable[stringTableSize];
+
+    uint stringIdxCount;
+    uint stringIdxEntries[stringIdxCount];
+}
+
+// vvv Start of actual files vvv
