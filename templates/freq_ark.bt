@@ -1,0 +1,44 @@
+typedef struct
+{
+    // 40 bytes
+    char magic[4];
+    uint version; // Always 2
+    uint fileEntryOffset; // Always 256
+    uint fileEntryCount;
+    uint folderEntryOffset;
+    uint folderEntryCount;
+    uint stringTableOffset;
+    uint stringCount;
+    uint unknownOffset;
+    uint unknownSize; // Always 2048?
+} Header;
+
+typedef struct
+{
+    // 24 bytes
+    uint unknown;
+    uint fileNameOffset;
+    ushort folderNameOffset;
+    ushort fileOffset;
+    uint fileOffsetMultiple;
+    uint fileSize;
+    uint unknown;
+} FileEntry;
+
+typedef struct
+{
+    // 8 bytes
+    uint unknown;
+    uint folderNameOffset;
+} FolderEntry;
+
+Header header;
+
+FSeek(header.fileEntryOffset);
+FileEntry fileEntries[header.fileEntryCount];
+
+FSeek(header.folderEntryOffset);
+FolderEntry folderEntries[header.folderEntryCount];
+
+FSeek(header.stringTableOffset);
+char stringTable[header.unknownOffset - FTell()];
