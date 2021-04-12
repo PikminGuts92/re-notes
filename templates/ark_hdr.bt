@@ -92,7 +92,7 @@ typedef struct (uint startOffset)
     local int i;
     for (i = 0; i < stringCount; i++)
     {
-        StringOffset stringOffets(startOffset);
+        StringOffset stringOffsets(startOffset);
     }
 } StringOffsetCollection;
 
@@ -110,11 +110,11 @@ typedef struct (int version, StringOffsetCollection& stringCollection)
     uint inflatedSize; // 0 if not compressed
 
     local string fileName = (fileNameIdx >= 0)
-        ? stringCollection.stringOffets[fileNameIdx].value
+        ? stringCollection.stringOffsets[fileNameIdx].value
         : "";
 
     local string directoryPath = (directoryPathIdx >= 0)
-        ? stringCollection.stringOffets[directoryPathIdx].value
+        ? stringCollection.stringOffsets[directoryPathIdx].value
         : "";
 } ArkEntry<read=getArkEntryText>;
 
@@ -189,7 +189,7 @@ struct ArkFile
     if (version < 3)
     {
         // Amp/KR structure
-        // String blob, ark entries, string indices
+        // Ark entries, string blob, string indices
         local uint str_offset = FTell() + (ReadInt() * 20) + 4;
         FSeek(str_offset);
         
