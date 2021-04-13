@@ -1,3 +1,5 @@
+LittleEndian();
+
 typedef struct
 {
     // 40 bytes
@@ -9,27 +11,27 @@ typedef struct
     uint folderEntryCount;
     uint stringTableOffset;
     uint stringCount;
-    uint unknownOffset;
-    uint unknownSize; // Always 2048?
+    uint totalHdrSize; // Size of header + string offsets + string table
+    uint blockSize; // Used for padding
 } Header;
 
 typedef struct
 {
     // 24 bytes
-    uint unknown;
+    uint unknown; // Path name hash?
     uint fileNameOffset;
     ushort folderNameOffset;
-    ushort fileOffset;
-    uint fileOffsetMultiple;
+    ushort blockOffset;
+    uint block; // Use block * blockSize + blockOffset to get file position
     uint fileSize;
-    uint unknown;
+    uint inflatedSize; // Same as file size if not compressed
 } FileEntry;
 
 typedef struct
 {
     // 8 bytes
-    uint unknown;
-    uint folderNameOffset;
+    uint unknown; // Name hash?
+    uint folderNameIndex;
 } FolderEntry;
 
 Header header;
@@ -41,4 +43,4 @@ FSeek(header.folderEntryOffset);
 FolderEntry folderEntries[header.folderEntryCount];
 
 FSeek(header.stringTableOffset);
-char stringTable[header.unknownOffset - FTell()];
+char stringTable[header.totalHdrSize - FTell()];
