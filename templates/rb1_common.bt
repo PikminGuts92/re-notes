@@ -148,14 +148,14 @@ struct MiloDir
             ObjectDir dir;
             derived = False;
             break;
-        case "CharClipSet":
+        /*case "CharClipSet":
             CharClipSet dir;
             derived = False;
-            break;
-        case "PanelDir":
+            break;*/
+        /*case "PanelDir":
             PanelDir dir;
             derived = True;
-            break;
+            break;*/
         case "RndDir":
             RndDir dir;
             derived = True;
@@ -191,19 +191,19 @@ typedef struct (MiloDir& milo, char type[], char name[], uint size)
 
     local uint current = FTell();
 
-    if (dirType == "PanelDir")
+    /*if (dirType == "PanelDir")
     {
         byte data[size];
         uint padding<format=hex>;
         return;
-    }
+    }*/
 
     switch (type)
     {
-        case "CharClipSamples":
+        /*case "CharClipSamples":
             CharClipSamples charClipSamples;
             FSeek(current + size);
-            break;
+            break;*/
         case "CharLipSync":
             CharLipSync charLipSync;
             FSeek(current + size);
