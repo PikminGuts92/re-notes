@@ -22,6 +22,19 @@ string getTimeEvent0Text(TimeEvent0& ev)
 
 typedef struct
 {
+    Color color;
+    float evTime;
+} TimeEvent1<read=getTimeEvent1Text>;
+
+string getTimeEvent1Text(TimeEvent1& ev)
+{
+    local string s;
+    SPrintf(s, "Start: %.2f, Value: %s", ev.evTime, readColor(ev.color));
+    return s;
+}
+
+typedef struct
+{
     NumString evName1; // Milo source? Usually empty for song.anim
     NumString evName2;
     float evTime;
@@ -125,6 +138,9 @@ typedef struct
     {
         case 0:
             TimeEvent0 events[eventCount];
+            break;
+        case 1:
+            TimeEvent1 events[eventCount];
             break;
         case 2:
             TimeEvent2 events[eventCount]<optimize=false>;
