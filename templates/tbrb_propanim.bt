@@ -142,7 +142,7 @@ typedef struct
 string getPropEventText(PropAnimEvent& ev)
 {
     local string s;
-    SPrintf(s, "%s | %s | %d | (%d events)", readNumString(ev.directorType), readNumString(ev.property.root.children.value), ev.num1, ev.eventCount);
+    SPrintf(s, "%s | %s | %d | (%d events)", readNumString(ev.directorType), readNumString(ev.property.root.children[0].value), ev.num1, ev.eventCount);
     return s;
 }
 
