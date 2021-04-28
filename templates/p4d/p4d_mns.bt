@@ -1,0 +1,47 @@
+LittleEndian();
+
+typedef struct
+{
+    ubyte beat;
+    ubyte beat_frac;    
+
+    ushort measure;
+
+    byte note;
+    byte length;
+
+    byte unk1;
+    byte unk2;
+} NoteEvent<read=read_note_ev>;
+
+string read_note_ev(NoteEvent& ev)
+{
+    local float frac = ev.beat_frac / ((float)255);
+
+    local string s;
+    SPrintf(s, "%d.%d.%.2f | %d %d %d %d", ev.measure, ev.beat, frac, ev.note, ev.length, ev.unk1, ev.unk2);    
+    return s;
+}
+
+typedef struct
+{
+    char magic[4]; // MNS + \0
+
+    int always0;
+    int always1;
+
+    int song_id;
+    
+    short always0;
+    string key; // Song key?
+    
+    byte difficulty; // 0,1,2,3
+    byte always0s[5];
+
+    uint note_count;
+    int always0;
+
+    NoteEvent notes[note_count];
+} MNS;
+
+MNS mns;
