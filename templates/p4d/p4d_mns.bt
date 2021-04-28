@@ -1,5 +1,17 @@
 LittleEndian();
 
+// Probably used more like a bitfield but there's so few permutations used
+typedef enum <byte>
+{
+    DpadDown,
+    FaceDown,
+    DpadLeft,
+    FaceRight,
+    DpadUp,
+    FaceUp,
+    Analog = 8
+} NoteType;
+
 typedef struct
 {
     ubyte beat;
@@ -7,7 +19,7 @@ typedef struct
 
     ushort measure;
 
-    byte note;
+    NoteType note;
     byte length;
 
     byte unk1;
