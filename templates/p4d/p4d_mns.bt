@@ -23,14 +23,14 @@ typedef enum <int>
 typedef struct
 {
     ubyte beat;
-    ubyte beat_frac;    
+    ubyte beat_frac;
 
     ushort measure;
 
     NoteType note;
     byte length;
 
-    byte unk1;
+    byte unk1; // 1 = Fever?
     byte unk2;
 } NoteEvent<read=read_note_ev>;
 
@@ -52,8 +52,8 @@ typedef struct
 
     int song_id;
     
-    short always0;
-    uint unk;
+    float bpm;
+    short unk;
     
     Difficulty diff;
     short always0;
