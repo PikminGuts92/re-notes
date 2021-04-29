@@ -3,14 +3,22 @@ LittleEndian();
 // Probably used more like a bitfield but there's so few permutations used
 typedef enum <byte>
 {
-    DpadDown,
-    FaceDown,
-    DpadLeft,
-    FaceRight,
-    DpadUp,
-    FaceUp,
-    Analog = 8
+    DPAD_DOWN,
+    FACE_DOWN,
+    DPAD_LEFT,
+    FACE_RIGHT,
+    DPAD_UP,
+    FACE_UP,
+    ANALOG = 8
 } NoteType;
+
+typedef enum <int>
+{
+    EASY,
+    NORMAL,
+    HARD,
+    ALL_NIGHT
+} Difficulty;
 
 typedef struct
 {
@@ -31,7 +39,7 @@ string read_note_ev(NoteEvent& ev)
     local float frac = ev.beat_frac / ((float)255);
 
     local string s;
-    SPrintf(s, "%d.%d.%.2f | %d %d %d %d", ev.measure, ev.beat, frac, ev.note, ev.length, ev.unk1, ev.unk2);    
+    SPrintf(s, "%d.%d.%.2d | %s | %d %d %d", ev.measure + 1, ev.beat + 1, (int)(frac * 100.0), EnumToString(ev.note), ev.length, ev.unk1, ev.unk2);    
     return s;
 }
 
@@ -45,15 +53,22 @@ typedef struct
     int song_id;
     
     short always0;
-    string key; // Song key?
+    uint unk;
     
-    byte difficulty; // 0,1,2,3
-    byte always0s[5];
+    Difficulty diff;
+    short always0;
 
     uint note_count;
     int always0;
 
     NoteEvent notes[note_count];
+    
+    // Likely artifact from export
+    if (!FEof())
+    {
+        local int extra_count = (FileSize() - FTell()) / 8;
+        NoteEvent extra_notes[extra_count];
+    }
 } MNS;
 
 MNS mns;
