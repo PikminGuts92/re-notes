@@ -1,0 +1,59 @@
+// TransAnim objects animate the position, rotation, and scale of transformable objects.
+// Super: Anim
+// Ext: .tnm
+// C++ Class: RndTransAnim
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "TransAnim"
+    #endif
+#endif
+
+#ifndef OBJECT_TRANS_ANIM
+#define OBJECT_TRANS_ANIM
+
+#include "anim.bt"
+#include "common.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version;
+    read_metadata(info, super);
+
+    Anim anim(info, True);
+
+    NumString trans_object;
+
+    uint always0;
+
+    uint quat_count;
+    Vector4 quats[quat_count];
+
+    NumString trans_anim_owner;
+
+    byte unknown[9];
+} TransAnim;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "TransAnim")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    TransAnim trans_anim(info, False);
+}
+
+#endif
+
+#endif
