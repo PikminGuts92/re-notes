@@ -138,7 +138,6 @@ typedef struct (SystemInfo& info)
         local uint size = findNextFile(adde);
 
         Blob dir_entry(this, meta.dir_type, meta.dir_name, FTell(), size);
-        FSkip(4);
     }
 
     MiloFileEntries children(info, this);
