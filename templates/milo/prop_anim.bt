@@ -1,0 +1,108 @@
+// Animate any properties on target object
+// Super: Anim
+// Ext: .anim
+// C++ Class: RndPropAnim
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "PropAnim"
+    #endif
+#endif
+
+#ifndef OBJECT_PROP_ANIM
+#define OBJECT_PROP_ANIM
+
+#include "anim.bt"
+#include "common.bt"
+
+typedef enum <int>
+{
+    kPropFloat,
+    kPropColor,
+    kPropObject,
+    kPropBool,
+    kPropQuat,
+    kPropVector3,
+    kPropSymbol
+} PropType;
+
+typedef struct
+{
+    PropType type1;
+    PropType type2; // Should match num1
+
+    NumString target;
+
+    DTB property;
+
+    int interpolation; // 0, 1, 2, 4
+    NumString interp_handler; // Usually empty
+
+    int unknown_enum; // 0, 1, 2, 3, 5, 6
+
+    int keys_count;
+    /*switch (num1)
+    {
+        case 0:
+            TimeEvent0 events[eventCount];
+            break;
+        case 1:
+            TimeEvent1 events[eventCount];
+            break;
+        case 2:
+            TimeEvent2 events[eventCount]<optimize=false>;
+            break;
+        case 3:
+            TimeEvent3 events[eventCount];
+            break;
+        case 4:
+            TimeEvent4 events[eventCount];
+            break;
+        case 5:
+            TimeEvent5 events[eventCount];
+            break;
+        case 6:
+            TimeEvent6 events[eventCount]<optimize=false>;
+            break;
+    }*/
+} PropKeys;
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version;
+    read_metadata(info, super);
+
+    Anim anim(info, True);
+
+    if (version >= 12)
+    {
+        Bool always_false;
+    }
+
+    int prop_keys_count;
+    PropKeys keys[prop_keys_count]<optimize=false>;
+} PropAnim;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "PropAnim")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    PropAnim prop_anim(info, False);
+}
+
+#endif
+
+#endif
