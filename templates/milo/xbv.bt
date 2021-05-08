@@ -7,6 +7,12 @@ typedef struct (uint frame_size)
 
 typedef struct
 {
+    if (ReadInt() == 0x5349565F)
+    {
+        Warning("_VIS xbv not supported!");
+        return;
+    };    
+
     uint width;
     uint height;
     uint frame_count;
