@@ -2,6 +2,7 @@ LittleEndian();
 
 typedef struct (uint frame_size)
 {
+    // DXT1 encoded texture on PS3/360 (not even byte-swapped on 360)
     byte data[frame_size];
 } Frame;
 
@@ -11,7 +12,7 @@ typedef struct
     {
         Warning("_VIS xbv not supported!");
         return;
-    };    
+    };
 
     uint width;
     uint height;
