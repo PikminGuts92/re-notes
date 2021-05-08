@@ -1,0 +1,24 @@
+LittleEndian();
+
+typedef struct (uint frame_size)
+{
+    byte data[frame_size];
+} Frame;
+
+typedef struct
+{
+    uint width;
+    uint height;
+    uint frame_count;
+    uint bytes_per_frame; // Seems to be packed as 4bpp
+    
+    byte padding[16]; // Should be all 0
+
+    local int i;
+    for (i = 0; i < frame_count; i++)
+    {
+        Frame frames(bytes_per_frame);
+    }
+} XbvFile;
+
+XbvFile xbv;
