@@ -1,0 +1,15 @@
+FSeek(0);
+
+local byte xor_value = 0x0A;
+local byte value;
+
+Printf("Script started\n");
+while (FEof() == 0)
+{
+    value = ReadByte() ^ xor_value;
+    WriteByte(FTell(), value);
+    
+    FSkip(1);
+}
+
+Printf("Script completed\n");
