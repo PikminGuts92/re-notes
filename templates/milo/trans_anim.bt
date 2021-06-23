@@ -49,6 +49,10 @@ if (STANDALONE_FILE == "TransAnim")
     else
     {
         info.platform = PS2;
+        if (obj_version == 6)
+        {
+            info.version = 24;
+        }
     }
 
     TransAnim trans_anim(info, False);

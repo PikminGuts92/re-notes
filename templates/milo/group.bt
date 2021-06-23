@@ -66,6 +66,10 @@ if (STANDALONE_FILE == "Group")
     else
     {
         info.platform = PS2;
+        if (obj_version == 12)
+        {
+            info.version = 24;
+        }
     }
 
     Group group(info, False);

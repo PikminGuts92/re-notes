@@ -173,6 +173,10 @@ if (STANDALONE_FILE == "Mat")
     else
     {
         info.platform = PS2;
+        if (obj_version == 27)
+        {
+            info.version = 24;
+        }
     }
 
     Mat mat(info, False);
