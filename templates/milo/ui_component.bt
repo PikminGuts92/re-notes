@@ -1,0 +1,55 @@
+// Base class of all UI components, defines navigation and component state
+// Super: Draw Trans Poll
+// Ext: N/A
+// C++ Class: UIComponent
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "UIComponent"
+    #endif
+#endif
+
+#ifndef OBJECT_UI_COMPONENT
+#define OBJECT_UI_COMPONENT
+
+#include "common.bt"
+#include "draw.bt"
+#include "trans.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version;
+    read_metadata(info, super);
+
+    Trans trans(info, True);
+    Draw draw(info, True);
+
+    // Not sure where Poll goes...
+
+    NumString object_dir1; // Usually empty
+    NumString object_dir2;
+} UIComponent;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "UIComponent")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    UIComponent ui_component(info, False);
+}
+
+#endif
+
+#endif

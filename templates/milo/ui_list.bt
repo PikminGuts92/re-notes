@@ -1,0 +1,58 @@
+// Component for displaying 1- or 2-dimensional lists of data. Can be oriented
+// horizontally or vertically, can scroll normally or circularly, and can have
+// any number of visible elements (even just one, a.k.a. a spin button).
+// Super: UIComponent
+// Ext: N/A
+// C++ Class: UIList
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "UIList"
+    #endif
+#endif
+
+#ifndef OBJECT_UI_LIST
+#define OBJECT_UI_LIST
+
+#include "common.bt"
+#include "ui_component.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version;
+    UIComponent ui_component(info, False);
+
+    float min_display; // "How far from top of list to start scrolling"
+    float max_display; // "How far down can the highlight travel before scoll? Use -1 for no limit"
+
+    float unknown1;
+    float unknown2;
+} UIList;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "UIList")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        if (obj_version == 2)
+        {
+            info.version = 24;
+        }
+    }
+
+    UIList ui_list(info, False);
+}
+
+#endif
+
+#endif
