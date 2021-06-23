@@ -17,6 +17,12 @@ struct ObjectDir
     int version; // Always 22
     int always0; // Always 2
     NumString name;
+
+    if (version >= 28)
+    {
+        // Zero'd data
+        FSkip(8);
+    }
     
     int matEntryCount; // Usually 7
     Matrix matEntries[matEntryCount];
@@ -128,6 +134,10 @@ struct MiloDir
     NumString name;
     uint count1;
     uint count2;
+
+    if (version >= 32)
+        byte unk;
+
     uint entryCount;
     MiloEntry entries[entryCount]<optimize=false>;
     
