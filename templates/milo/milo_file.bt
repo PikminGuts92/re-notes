@@ -3,6 +3,10 @@
 
 struct MiloFile;
 
+#ifndef IN_MILO_FILE
+    #define IN_MILO_FILE 1
+#endif
+
 #include "common.bt"
 #include "object_dir.bt"
 
@@ -150,10 +154,6 @@ typedef struct (SystemInfo& info)
 
     MiloFileEntries children(info, this);
 } MiloFile;
-
-#ifndef IN_MILO_FILE
-    #define IN_MILO_FILE 1
-#endif
 
 local int milo_version = guess_version();
 
