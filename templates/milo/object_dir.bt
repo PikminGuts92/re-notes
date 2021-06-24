@@ -13,6 +13,12 @@ typedef struct (SystemInfo& info, Bool super)
     int revision; // Usually 1 or 2
     NumString type;
 
+    if (version >= 27)
+    {
+        // Zero'd data
+        FSkip(8);
+    }
+
     int viewport_count; // Usually 7
     Matrix viewports[viewport_count];
 
@@ -40,9 +46,9 @@ typedef struct (SystemInfo& info, Bool super)
             MiloFile sub_dirs(info);
         }
     }
-
-    FSkip(13); // Zero'd padding
-    uint padding<format=hex>;
+    
+    NumString name_again; // Not sure
+    FSkip(9); // Zero'd padding
 } ObjectDir;
 
 #endif
