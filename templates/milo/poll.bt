@@ -1,0 +1,14 @@
+// Abstract base class for pollable RND objects
+// Super: (None)
+// Ext: (None)
+
+#ifndef OBJECT_POLL
+#define OBJECT_POLL
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // Always 0
+    int always0;
+} Poll;
+
+#endif

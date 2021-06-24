@@ -10,6 +10,7 @@ struct MiloFile;
 #include "char_clip_set.bt"
 #include "common.bt"
 #include "object_dir.bt"
+#include "rnd_dir.bt"
 
 typedef struct
 {
@@ -148,6 +149,10 @@ typedef struct (SystemInfo& info)
                 break;
             case "ObjectDir":
                 ObjectDir dir_entry(info, False);
+                uint padding<format=hex>;
+                break;
+            case "RndDir":
+                RndDir dir_entry(info, False);
                 uint padding<format=hex>;
                 break;
             default:

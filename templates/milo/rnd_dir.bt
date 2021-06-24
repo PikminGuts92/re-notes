@@ -1,0 +1,26 @@
+// A RndDir specially tracks drawable and animatable objects.
+// Super: ObjectDir Anim Draw Trans Poll MsgSource
+// Ext: (None)
+
+#ifndef RND_DIR_SET
+#define RND_DIR_SET
+
+#include "anim.bt"
+#include "common.bt"
+#include "draw.bt"
+#include "object_dir.bt"
+#include "poll.bt"
+#include "trans.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // Always 10
+    ObjectDir obj_dir(info, True);
+
+    Anim anim(info, True);
+    Draw draw(info, True);
+    Trans trans(info, True);
+    Poll poll(info, True);
+} RndDir;
+
+#endif
