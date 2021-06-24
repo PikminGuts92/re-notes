@@ -1,0 +1,20 @@
+// A CharClip container.
+// Super: ObjectDir
+// Ext: (None)
+
+#ifndef CHAR_CLIP_SET
+#define CHAR_CLIP_SET
+
+#include "common.bt"
+#include "object_dir.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // Always 24
+    ObjectDir obj_dir(info, True);
+
+    int nums[5];
+    byte always_0;
+} CharClipSet;
+
+#endif
