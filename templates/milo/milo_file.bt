@@ -1,9 +1,10 @@
 #ifndef MILO_FILE
 #define MILO_FILE
 
-#include "common.bt"
-
 struct MiloFile;
+
+#include "common.bt"
+#include "object_dir.bt"
 
 typedef struct
 {
@@ -134,14 +135,25 @@ typedef struct (SystemInfo& info)
     }
     else
     {
-        // Read directory entry
-        local uint size = findNextFile(adde);
-
-        Blob dir_entry(this, meta.dir_type, meta.dir_name, FTell(), size);
+        switch (meta.dir_type.text)
+        {
+            case "ObjectDir":
+                ObjectDir dir_entry(info, False);
+                break;
+            default:
+                // Read directory entry
+                local uint size = findNextFile(adde);
+                Blob dir_entry(this, meta.dir_type, meta.dir_name, FTell(), size);
+                break;
+        }
     }
 
     MiloFileEntries children(info, this);
 } MiloFile;
+
+#ifndef IN_MILO_FILE
+    #define IN_MILO_FILE 1
+#endif
 
 local int milo_version = guess_version();
 

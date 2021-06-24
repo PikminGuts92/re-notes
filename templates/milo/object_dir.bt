@@ -7,7 +7,7 @@
 
 #include "common.bt"
 
-struct (SystemInfo& info, Bool super)
+typedef struct (SystemInfo& info, Bool super)
 {
     int version; // Always 22
     int revision; // Usually 1 or 2
@@ -21,11 +21,28 @@ struct (SystemInfo& info, Bool super)
     int always_0;
 
     int imported_milo_count;
-    NumString imported_milos[imported_milo_count]<optimize=false>;
+    if (imported_milo_count > 0)
+    {
+        NumString imported_milos[imported_milo_count]<optimize=false>;
+    }
 
     Bool always_false; // Seems to be true when sub directory
+
     int sub_dir_count;
-    NumString sub_dirs[sub_dir_count]<optimize=false>; // Appears in reverse order?
+    if (sub_dir_count > 0)
+    {
+        NumString sub_dir_names[sub_dir_count]<optimize=false>; // Appears in reverse order?
+        
+        // Iterate over sub directories
+        local int i;
+        for (i = 0; i < sub_dir_count; i++)
+        {
+            MiloFile sub_dirs(info);
+        }
+    }
+
+    FSkip(13); // Zero'd padding
+    uint padding<format=hex>;
 } ObjectDir;
 
 #endif
