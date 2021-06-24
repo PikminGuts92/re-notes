@@ -2,8 +2,8 @@
 // Super: ObjectDir Anim Draw Trans Poll MsgSource
 // Ext: (None)
 
-#ifndef RND_DIR_SET
-#define RND_DIR_SET
+#ifndef RND_DIR
+#define RND_DIR
 
 #include "anim.bt"
 #include "common.bt"
