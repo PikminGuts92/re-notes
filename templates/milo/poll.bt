@@ -5,10 +5,12 @@
 #ifndef OBJECT_POLL
 #define OBJECT_POLL
 
+#include "common.bt"
+
 typedef struct (SystemInfo& info, Bool super)
 {
     int version; // Always 0
-    int always0;
+    NumString str1; // start
 } Poll;
 
 #endif
