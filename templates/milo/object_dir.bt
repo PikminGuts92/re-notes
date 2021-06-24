@@ -46,9 +46,12 @@ typedef struct (SystemInfo& info, Bool super)
             MiloFile sub_dirs(info);
         }
     }
-    
-    NumString name_again; // Not sure
-    FSkip(9); // Zero'd padding
+
+    // Not sure
+    NumString empty_or_name_again;
+    NumString empty_or_cam;
+
+    FSkip(5); // Zero'd padding
 } ObjectDir;
 
 #endif
