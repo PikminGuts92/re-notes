@@ -17,6 +17,13 @@ typedef struct (SystemInfo& info, Bool super)
     int version; // Always 10
     ObjectDir obj_dir(info, True);
 
+    if (ReadInt() == info.version)
+    {
+        // Ends abruptly if milo object entry
+        // Ugh... there's gotta be a better indication in the bytes somewhere
+        //return;
+    }
+
     Anim anim(info, True);
     Draw draw(info, True);
     Trans trans(info, True);

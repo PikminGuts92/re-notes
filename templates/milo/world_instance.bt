@@ -11,7 +11,7 @@
 typedef struct (SystemInfo& info, Bool super)
 {
     int version; // 1 (TBRB), 2 (DC1)
-    int always_0;
+    NumString unk_milo;
 
     RndDir rnd_dir(info, True);
 } WorldInstance;

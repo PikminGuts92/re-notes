@@ -19,6 +19,9 @@ typedef struct (SystemInfo& info, Bool super)
     PanelDir panel_dir(info, True);
 
     Matrix some_trans;
+
+    int always_empty[7];
+    NumString spotlight; // SpotlightDrawer.sd
 } WorldDir;
 
 #endif

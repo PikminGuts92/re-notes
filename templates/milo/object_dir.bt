@@ -71,17 +71,25 @@ typedef struct (SystemInfo& info, Bool super)
         {
             byte unk_bytes<format=hex>;
         }
+
+        if (ReadInt() == info.version)
+        {
+            // Ends abruptly if milo object entry
+            MiloFile sub_dirs(info);
+            byte unk_0;
+        }
+
+        byte zeros[3]<format=hex>;
+    }
+    else
+    {
+        // Not sure
+        NumString empty_or_name_again;
     }
 
-    // Not sure
-    NumString empty_or_name_again;
     NumString empty_or_cam;
 
-    if (version > 22)
-    {
-        DTB props; // Usually empty
-    }
-
+    DTB props; // Usually empty
     if (info.version >= 25)
     {
         NumString note;
