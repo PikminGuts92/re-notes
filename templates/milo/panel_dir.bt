@@ -10,11 +10,21 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // Always 8
+    int version; // 7 (TBRB), 8 (DC1)
     RndDir rnd_dir(info, True);
 
     NumString cam;
-    Bool use_specified_cam; // Usually false
+
+    if (version <= 7)
+    {
+        // Whether or not this panel triggers a WorldEnd
+        Bool can_end_world; // Usually false
+    }
+    else
+    {
+        // Forces the usage of the 'cam' property to render in milo. This is a milo only feature.
+        Bool use_specified_cam; // Usually false
+    }
 
     int front_view_only_panel_count;
     if (front_view_only_panel_count > 0)
@@ -28,7 +38,12 @@ typedef struct (SystemInfo& info, Bool super)
         NumString back_view_only_panels[back_view_only_panel_count]<optimize=false>;
     }
 
-    Bool postprocs_before_draw; // Always true
+    // Added in DC1
+    if (version >= 8)
+    {
+        Bool postprocs_before_draw; // Always true
+    }
+
     Bool show_view_only_panels; // Usually false
 } PanelDir;
 
