@@ -1,0 +1,17 @@
+// Base class for Character objects. Contains Geometry, Outfit Loaders, and LOD + Sphere concepts.
+// Super: Character
+// Ext: (None)
+
+#ifndef CHARACTER
+#define CHARACTER
+
+#include "common.bt"
+#include "rnd_dir.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // Always 17
+    RndDir rnd_dir(info, True);
+} Character;
+
+#endif

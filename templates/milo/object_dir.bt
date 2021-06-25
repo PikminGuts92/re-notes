@@ -38,7 +38,18 @@ typedef struct (SystemInfo& info, Bool super)
     if (sub_dir_count > 0)
     {
         NumString sub_dir_names[sub_dir_count]<optimize=false>; // Appears in reverse order?
-        
+
+        if (version >= 27)
+        {
+            // In new version, sub directories + imports are combined
+            // This array defines reference types
+            // 1 = Import, 3 = Sub dir
+            byte reference_types[sub_dir_count];
+
+            // Usually zero'd
+            byte reference_types_alt[sub_dir_count];
+        }
+
         // Iterate over sub directories
         local int i;
         for (i = 0; i < sub_dir_count; i++)
@@ -51,7 +62,11 @@ typedef struct (SystemInfo& info, Bool super)
     NumString empty_or_name_again;
     NumString empty_or_cam;
 
-    FSkip(5); // Zero'd padding
+    DTB props; // Usually empty
+    if (info.version >= 25)
+    {
+        NumString note;
+    }
 } ObjectDir;
 
 #endif

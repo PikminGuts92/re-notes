@@ -1,0 +1,35 @@
+// Top-level UI Object, contains UI components and an optional camera
+// Super: PanelDir
+// Ext: (None)
+
+#ifndef PANEL_DIR
+#define PANEL_DIR
+
+#include "common.bt"
+#include "rnd_dir.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // Always 8
+    RndDir rnd_dir(info, True);
+
+    NumString cam;
+    Bool use_specified_cam; // Usually false
+
+    int front_view_only_panel_count;
+    if (front_view_only_panel_count > 0)
+    {
+        NumString front_view_only_panels[front_view_only_panel_count]<optimize=false>;
+    }
+
+    int back_view_only_panel_count;
+    if (back_view_only_panel_count > 0)
+    {
+        NumString back_view_only_panels[back_view_only_panel_count]<optimize=false>;
+    }
+
+    Bool postprocs_before_draw; // Always true
+    Bool show_view_only_panels; // Usually false
+} PanelDir;
+
+#endif
