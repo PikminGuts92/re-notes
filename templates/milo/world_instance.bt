@@ -1,0 +1,19 @@
+// Shared instance of a RndDir
+// Super: RndDir
+// Ext: inst
+
+#ifndef WORLD_INSTANCE
+#define WORLD_INSTANCE
+
+#include "common.bt"
+#include "rnd_dir.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 1 (TBRB), 2 (DC1)
+    int always_0;
+
+    RndDir rnd_dir(info, True);
+} WorldInstance;
+
+#endif

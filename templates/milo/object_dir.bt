@@ -15,7 +15,7 @@ typedef enum <byte>
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // Always 22
+    int version; // 22 (TBRB), 27 (DC1)
     int revision; // Usually 1 or 2
     NumString type;
 
@@ -64,11 +64,24 @@ typedef struct (SystemInfo& info, Bool super)
         }
     }
 
+    if (version <= 22)
+    {
+        byte unk_count;
+        if (unk_count > 0)
+        {
+            byte unk_bytes<format=hex>;
+        }
+    }
+
     // Not sure
     NumString empty_or_name_again;
     NumString empty_or_cam;
 
-    DTB props; // Usually empty
+    if (version > 22)
+    {
+        DTB props; // Usually empty
+    }
+
     if (info.version >= 25)
     {
         NumString note;

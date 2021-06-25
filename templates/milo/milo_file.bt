@@ -14,6 +14,7 @@ struct MiloFile;
 #include "panel_dir.bt"
 #include "rnd_dir.bt"
 #include "world_dir.bt"
+#include "world_instance.bt"
 
 typedef struct
 {
@@ -193,6 +194,10 @@ typedef struct (SystemInfo& info)
                 Blob dir_entry(this, meta.dir_type, meta.dir_name, FTell(), size);
 
                 //uint padding<format=hex>;
+                break;
+            case "WorldInstance":
+                WorldInstance dir_entry(info, False);
+                uint padding<format=hex>;
                 break;
             default:
                 // Read directory entry
