@@ -7,6 +7,12 @@
 
 #include "common.bt"
 
+typedef enum <byte>
+{
+    Import = 0x01,
+    SubDir = 0x03
+} MiloReferenceType;
+
 typedef struct (SystemInfo& info, Bool super)
 {
     int version; // Always 22
@@ -44,7 +50,7 @@ typedef struct (SystemInfo& info, Bool super)
             // In new version, sub directories + imports are combined
             // This array defines reference types
             // 1 = Import, 3 = Sub dir
-            byte reference_types[sub_dir_count];
+            MiloReferenceType reference_types[sub_dir_count];
 
             // Usually zero'd
             byte reference_types_alt[sub_dir_count];
