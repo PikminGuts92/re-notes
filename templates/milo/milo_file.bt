@@ -13,6 +13,7 @@ struct MiloFile;
 #include "object_dir.bt"
 #include "panel_dir.bt"
 #include "rnd_dir.bt"
+#include "world_dir.bt"
 
 typedef struct
 {
@@ -116,6 +117,12 @@ void read_milo_files(MiloFile& milo)
 
                 MiloFile sub_dirs(info);
                 break;
+            case "RndDir":
+                RndDir dir_entry(info, False);
+                uint padding<format=hex>;
+
+                MiloFile sub_dirs(info);
+                break;
             default:
                 file_size = findNextFile(adde);
                 if (file_size == -1) break;
@@ -178,6 +185,14 @@ typedef struct (SystemInfo& info)
             case "RndDir":
                 RndDir dir_entry(info, False);
                 uint padding<format=hex>;
+                break;
+            case "WorldDir":
+                WorldDir dir_entry(info, False);
+
+                local uint size = findNextFile(adde);
+                Blob dir_entry(this, meta.dir_type, meta.dir_name, FTell(), size);
+
+                //uint padding<format=hex>;
                 break;
             default:
                 // Read directory entry

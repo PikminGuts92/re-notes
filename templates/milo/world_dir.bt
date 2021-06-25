@@ -1,0 +1,24 @@
+// A WorldDir contains world objects.
+// Super: PanelDir
+// Ext: (None)
+
+#ifndef WORLD_DIR
+#define WORLD_DIR
+
+#include "common.bt"
+#include "panel_dir.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 18 (TBRB)
+
+    float always_0;
+    float always_1;
+    NumString usually_empty_or_milo_path;
+
+    PanelDir panel_dir(info, True);
+
+    Matrix some_trans;
+} WorldDir;
+
+#endif
