@@ -43,7 +43,10 @@ typedef struct (int milo_version)
     }
 
     int entry_count;
-    MiloEntry entries[entry_count]<optimize=false>;
+    if (entry_count > 0)
+    {
+        MiloEntry entries[entry_count]<optimize=false>;
+    }
 } MiloEntries<read=read_milo_entries>;
 
 string read_milo_entries(MiloEntries& mes)
@@ -177,7 +180,10 @@ typedef struct (SystemInfo& info)
         }
     }
 
-    MiloFileEntries children(info, this);
+    if (meta.entry_count > 0)
+    {
+        MiloFileEntries children(info, this);
+    }
 } MiloFile;
 
 local int milo_version = guess_version();
