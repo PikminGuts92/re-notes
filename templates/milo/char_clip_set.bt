@@ -13,6 +13,12 @@ typedef struct (SystemInfo& info, Bool super)
     int version; // Always 24
     ObjectDir obj_dir(info, True);
 
+    // Ends abruptly if milo object entry
+    if (ReadUInt() == 0xADDEADDE)
+    {
+        return;
+    }
+
     int nums[5];
     byte always_0;
 } CharClipSet;

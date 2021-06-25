@@ -30,7 +30,7 @@ typedef struct (SystemInfo& info, Bool super)
 
     int usually0; // 0, 6, 7
     Bool always_true; // When true, sub directories?
-    int always_0;
+    NumString sub_path; // Used for sub dir as regular entry
 
     int imported_milo_count;
     if (imported_milo_count > 0)

@@ -102,28 +102,35 @@ void read_milo_files(MiloFile& milo)
 {
     local uint i;
     local uint file_size;
-    local uint startOffset = FTell();
+    local uint current_offset;
 
     for (i = 0; i < milo.meta.entry_count; i++)
     {
-        file_size = findNextFile(adde);
-        if (file_size == -1) break;
+        current_offset = FTell();
 
-        milo.meta.entries[i].offset = FTell();
-        milo.meta.entries[i].size = file_size;
-        FSkip(file_size + 4);
-    }
+        switch (milo.meta.entries[i].type.text)
+        {
+            case "CharClipSet":
+                CharClipSet dir_entry(info, False);
+                uint padding<format=hex>;
 
-    FSeek(startOffset);
-    
-    for (i = 0; i < milo.meta.entry_count; i++)
-    {
-        Blob files(
-            milo,
-            milo.meta.entries[i].type,
-            milo.meta.entries[i].name,
-            milo.meta.entries[i].offset,
-            milo.meta.entries[i].size);
+                MiloFile sub_dirs(info);
+                break;
+            default:
+                file_size = findNextFile(adde);
+                if (file_size == -1) break;
+
+                milo.meta.entries[i].offset = FTell();
+                milo.meta.entries[i].size = file_size;
+
+                Blob files(
+                    milo,
+                    milo.meta.entries[i].type,
+                    milo.meta.entries[i].name,
+                    milo.meta.entries[i].offset,
+                    milo.meta.entries[i].size);
+                break;
+        }
     }
 }
 
