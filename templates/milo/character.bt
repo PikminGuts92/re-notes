@@ -8,10 +8,65 @@
 #include "common.bt"
 #include "rnd_dir.bt"
 
+typedef struct
+{
+    float some_cutoff; // For loading lods?
+    NumString lod_group;
+    NumString lod_trans_group;
+} LODTarget<read=lod_to_string>;
+
+string lod_to_string(LODTarget& lod)
+{
+    local string s;
+    local string grp_text = "";
+    local string trans_text = "";
+
+    if (exists(lod.lod_group.text))
+    {
+        grp_text = lod.lod_group.text;
+    }
+
+    if (exists(lod.lod_trans_group.text))
+    {
+        trans_text = lod.lod_trans_group.text;
+    }
+
+    SPrintf(s, "%.3f %s %s", lod.some_cutoff, grp_text, trans_text);
+    return s;
+}
+
 typedef struct (SystemInfo& info, Bool super)
 {
     int version; // Always 17
     RndDir rnd_dir(info, True);
+
+    int lod_count;
+    LODTarget lods[lod_count]<optimize=false>;
+
+    NumString shadow_group;
+    Bool usually_false_1;
+
+    NumString some_object_target; // Matches directory name?
+    Vector4 some_vector;
+
+    Bool usually_false_2;
+    uint always_ff<format=hex>;
+
+    int always_10;
+    byte empty_bytes_1[20];
+
+    NumString str_1; // none
+
+    int always_0;
+    Bool always_true;
+    byte empty_bytes_2[7];
+
+    NumString str_2; // none
+
+    short always_0;
+    int always_120;
+
+    Vector3 unk_vec;
 } Character;
 
 #endif
