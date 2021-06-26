@@ -10,7 +10,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // Always 24
+    int version; // 24 (TBRB), 25 (GDRB)
     ObjectDir obj_dir(info, True);
 
     // Ends abruptly if milo object entry
@@ -21,6 +21,12 @@ typedef struct (SystemInfo& info, Bool super)
 
     int nums[5];
     byte always_0;
+
+    if (version >= 25)
+    {
+        // Assuming this is a string
+        NumString unk;
+    }
 } CharClipSet;
 
 #endif
