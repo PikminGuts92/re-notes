@@ -3,7 +3,10 @@
 
 #include "common.bt"
 #include "draw.bt"
+#include "group.bt"
 #include "mesh.bt"
+#include "poll.bt"
+#include "prop_anim.bt"
 #include "trans.bt"
 
 #endif

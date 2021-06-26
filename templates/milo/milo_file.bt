@@ -11,6 +11,7 @@ struct MiloFile;
 #include "character.bt"
 #include "common.bt"
 #include "object_dir.bt"
+#include "objects.bt"
 #include "panel_dir.bt"
 #include "rnd_dir.bt"
 #include "world_dir.bt"
@@ -104,12 +105,9 @@ void read_milo_files(MiloFile& milo)
 {
     local uint i;
     local uint file_size;
-    local uint current_offset;
 
     for (i = 0; i < milo.meta.entry_count; i++)
     {
-        current_offset = FTell();
-
         switch (milo.meta.entries[i].type.text)
         {
             case "CharClipSet":
@@ -117,6 +115,10 @@ void read_milo_files(MiloFile& milo)
                 uint padding<format=hex>;
 
                 MiloFile sub_dirs(info);
+                break;
+            case "Group":
+                Group group(info, False);
+                uint padding<format=hex>;
                 break;
             case "RndDir":
                 RndDir dir_entry(info, False);
@@ -171,11 +173,7 @@ typedef struct (SystemInfo& info)
         {
             case "Character":
                 Character dir_entry(info, False);
-
-                local uint size = findNextFile(adde);
-                Blob dir_entry(this, meta.dir_type, meta.dir_name, FTell(), size);
-
-                //uint padding<format=hex>;
+                uint padding<format=hex>;
                 break;
             case "CharClipSet":
                 CharClipSet dir_entry(info, False);
