@@ -10,7 +10,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 24 (TBRB), 25 (GDRB)
+    int version; // 16 (GH2), 24 (TBRB), 25 (GDRB)
     ObjectDir obj_dir(info, True);
 
     // Ends abruptly if milo object entry

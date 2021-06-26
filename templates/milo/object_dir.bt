@@ -15,9 +15,13 @@ typedef enum <byte>
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 22 (TBRB), 27 (DC1)
-    int revision; // Usually 1 or 2
-    NumString type;
+    int version; // 17 (GH2), 22 (TBRB), 27 (DC1)
+
+    if (version >= 22)
+    {
+        int revision; // Usually 1 or 2
+        NumString type;
+    }
 
     if (version >= 27)
     {
@@ -26,7 +30,17 @@ typedef struct (SystemInfo& info, Bool super)
     }
 
     int viewport_count; // Usually 7
-    Matrix viewports[viewport_count];
+    local int i;
+    for (i = 0; i < viewport_count; i++)
+    {
+        Matrix viewports;
+
+        // Old games have extra padding
+        if (version <= 17)
+        {
+            FSkip(4);
+        }
+    }
 
     int usually0; // 0, 6, 7
     Bool always_true; // When true, sub directories?

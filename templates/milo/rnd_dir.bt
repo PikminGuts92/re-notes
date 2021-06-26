@@ -14,7 +14,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // Always 10
+    int version; // 9 (GH2), 10 (TBRB)
     ObjectDir obj_dir(info, True);
 
     if (ReadInt() == info.version)
