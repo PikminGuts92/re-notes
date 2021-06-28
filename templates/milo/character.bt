@@ -37,7 +37,7 @@ string lod_to_string(LODTarget& lod)
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // Always 17
+    int version; // 15 (TBRB), 17 (DC1)
     RndDir rnd_dir(info, True);
 
     int lod_count;
@@ -52,13 +52,28 @@ typedef struct (SystemInfo& info, Bool super)
     Bool usually_false_2;
     uint always_ff<format=hex>;
 
-    int always_10;
-    byte empty_bytes_1[20];
+    if (version < 17)
+    {
+        int always_10;
+    }
+    else
+    {
+        int always_0;
+        int always_15;
+    }
 
+    byte empty_bytes_1[20];
     NumString str_1; // none
 
     int always_0;
     Bool always_true;
+
+    if (version >= 17)
+    {
+        byte empty_bytes_2[8];
+        return;
+    }
+
     byte empty_bytes_2[7];
 
     NumString str_2; // none
