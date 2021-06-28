@@ -1,0 +1,176 @@
+// A PostProc drives post-processing effects.
+// Ext: .pp
+
+typedef struct Color {
+  float r;
+  float g;
+  float b;
+  float a;
+};
+
+typedef struct RndColorXfm {
+  Color one; // ?
+  Color two; // ?
+  Color three; // ?
+};
+
+typedef struct Vector2 {
+  float x;
+  float y;
+};
+
+enum < int > Revision {
+    RockBand3 = 37,
+    Project9 = 30
+};
+
+BigEndian();
+struct RndPostProc {
+  Revision revision;
+
+  struct Header {
+    int type;
+    int unknown;
+    byte unknown;
+    int unknown;
+  }
+  header;
+
+  struct Bloom {
+    Color bloomcolor;
+    float bloomIntensity;
+    float bloomThreshold;
+  }
+  bloom;
+
+  struct LuminanceMap {
+    int length;
+    char texName[length];
+  }
+  luminanceMap;
+
+  struct ColorCorrection {
+    int unknown; // no clue what this is, not in rnd_objects
+    RndColorXfm colors; // ?
+    float hue;
+    float saturation;
+    float lightness;
+    float contrast;
+    float brightness;
+    Color inLo;
+    Color inHi;
+    Color outLo;
+    Color outHi;
+  }
+  colorCorrect;
+
+  struct Flicker {
+    Vector2 intensity;
+    Vector2 secsRange;
+  }
+  flicker;
+
+  struct Noise {
+    Vector2 tiling;
+    float intensity;
+    float unk;
+    byte isStatic;
+    int length;
+    char texName[length];
+    if (revision == RockBand3) {
+      byte useMidtones;
+    }
+
+  }
+  noise;
+
+  struct Trails {
+    float threshold;
+    float duration;
+  }
+  trails;
+
+  float emulateFramesPerSecond;
+
+  struct Posterize {
+    float numLevels;
+    float minIntensity;
+  }
+  posterize;
+
+  struct Kaleidoscope {
+    float complexity;
+    float size;
+    float angle;
+    float radius;
+    byte flipUVs;
+  }
+  kaleidoscope;
+
+  struct HallOfTime {
+    float rate;
+    Color color;
+    float mix;
+    if (revision == RockBand3) {
+      int type;
+    } else {
+      float unknown;
+      byte type;
+    }
+  }
+  hallOfTime;
+
+  struct MotionBlur {
+    float blend;
+    Color weight;
+    if (revision == RockBand3) {
+      byte velocity;
+    }
+  }
+  motionBlur;
+
+  struct GradientMap {
+    int length;
+    char texName[length];
+    float opacity;
+    float index;
+    float start;
+    float end;
+  }
+  gradient;
+
+  struct Refraction {
+    int length;
+    char texName[length];
+    float distance;
+    Vector2 scale;
+    Vector2 panning;
+    float angle;
+    Vector2 velocity;
+  }
+  refraction;
+
+  struct ChromaticAbberation {
+    float offset;
+    if (revision == RockBand3) {
+      byte sharpen;
+    }
+  }
+  chromaticAbberation;
+
+  struct Vignette {
+    Color color;
+    float intensity;
+  }
+  vignette;
+  if (revision == RockBand3) {
+    struct BloomExtra {
+      byte glare;
+      byte streakAttenuation;
+      float streakAngle;
+    }
+    bloomExtra;
+  }
+
+}
+postproc;
