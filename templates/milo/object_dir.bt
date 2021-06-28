@@ -71,7 +71,6 @@ typedef struct (SystemInfo& info, Bool super)
         }
 
         // Iterate over sub directories
-        local int i;
         for (i = 0; i < sub_dir_count; i++)
         {
             MiloFile sub_dirs(info);
