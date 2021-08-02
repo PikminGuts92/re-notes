@@ -15,7 +15,7 @@ typedef struct
     uint qbkey_pak_full_file_name;
     uint qbkey_full_file_name;
     
-    uint crc_name_only; (no extension)
+    uint crc_name_only; // (no extension)
     uint unknown;
 
     uint pak_header_flags; // File name = 0x00000020 (that's it)
