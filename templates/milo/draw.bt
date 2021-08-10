@@ -20,7 +20,7 @@ typedef struct (SystemInfo& info, Bool super)
     read_metadata(info, super);
 
     Bool showing; // Whether the object and its Draw children are drawn or collided with. - Always 1?
-    
+
     // Drawables seemingly moved to Group in later games
     if (version < 3)
     {
@@ -34,8 +34,8 @@ typedef struct (SystemInfo& info, Bool super)
     // coordinates, R is the sphere radius in world coordinates.
     // Culling is not performed when the radius is zero. The world
     // transform of the object must be baked into the radius.
-    Sphere bounding;
-    
+    Sphere sphere;
+
     // Skip 0'd data
     if (version == 3)
     {

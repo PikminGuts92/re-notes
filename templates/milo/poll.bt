@@ -9,8 +9,9 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    NumString str1; // null.env
-    NumString str2; // start
+    // Not sure of field names
+    NumString exit;  // null.env
+    NumString enter; // start
 } Poll;
 
 #endif

@@ -43,11 +43,11 @@ typedef struct (SystemInfo& info, Bool super)
         NumString transformables[transformable_count]<optimize=false>; // Trans types? 
     }
 
-    CONSTRAINT_ENUM constraint; // Constraint + target are used together
-    NumString target;
-    Bool preserve_scale; // Usually false
+    CONSTRAINT_ENUM trans_constraint; // Trans constraint for the object (Constraint + target are used together)
+    NumString trans_target;           // Target according to the constraint
 
-    NumString parent;
+    Bool preserve_scale;        // Preserve scale if applying dynamic constraint (usually false)
+    NumString trans_parent;    // Object this is linked to
 } Trans;
 
 
