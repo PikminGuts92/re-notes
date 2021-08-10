@@ -168,6 +168,21 @@ string readColor(Color& c)
     return s;
 }
 
+typedef struct
+{
+    float r;
+    float g;
+    float b;
+    float a;
+} Color4<read=readColor4>;
+
+string readColor4(Color4& c)
+{
+    local string s;
+    SPrintf(s, "(%f, %f, %f, %f)", c.r, c.g, c.b, c.a);
+    return s;
+}
+
 // DTB
 typedef struct
 {
