@@ -1,6 +1,7 @@
 // A Mesh object is composed of triangle faces.
 // Super: Draw Trans
 // Ext: .mesh
+// C++ Class: RndMesh
 
 #ifndef IN_MILO_FILE
     #ifndef STANDALONE_FILE
@@ -131,20 +132,28 @@ typedef struct
     Matrix mat;
 } BoneTrans;
 
+typedef enum
+{
+    kVolumeEmpty,
+    kVolumeTriangles,
+    kVolumeBSP,
+    kVolumeBox
+} VOLUME_ENUM;
+
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 29
+    int version; // 29, 36 (TBRB)
     read_metadata(info, super);
 
     Trans trans(info, True);
     Draw draw(info, True);
 
-    NumString material;
-    NumString mesh_name;
+    NumString mat;        // Material used for rendering the Mesh (Mat)
+    NumString geom_owner; // Geometry owner for the mesh (Mesh)
     
-    int usually0; // Bitfield? 0, 31, 33, 37, 63
-    int always1;
-    byte always0;
+    int mutable; // Bitfield? 0, 31, 33, 37, 63
+    VOLUME_ENUM volume; // Volume of the Mesh (usually kVolumeTriangles)
+    byte bsp; // Never observed, always 0
 
     Vertices vertices(version);
     Faces faces;
@@ -179,7 +188,7 @@ typedef struct (SystemInfo& info, Bool super)
 
     if (version == 36)
     {
-        Bool unknown_b1;
+        Bool keep_mesh_data; // Whether or not to keep mesh vertices and faces.  Mutable meshes will always keep this data.
     }
     else if (version >= 37)
     {

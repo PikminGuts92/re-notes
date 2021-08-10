@@ -16,7 +16,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version;
+    int version; // 3 (TBRB)
     read_metadata(info, super);
 
     Bool showing; // Whether the object and its Draw children are drawn or collided with. - Always 1?
