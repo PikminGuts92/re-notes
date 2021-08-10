@@ -9,8 +9,8 @@
     #endif
 #endif
 
-#ifndef CHAR_HAIR
-#define CHAR_HAIR
+#ifndef OBJECT_CHAR_HAIR
+#define OBJECT_CHAR_HAIR
 
 #include "common.bt"
 #include "poll.bt"
