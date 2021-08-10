@@ -73,7 +73,7 @@ typedef struct (PakHeader& pakHeader)
     
     local uint file_offset;
 
-    for (i = 0; i < (entryCount - 1); i++)
+    for (i = 0; i < entryCount; i++)
     {
         file_offset = pakHeader.headerEntry[i].file_offset + (PAK_HEADER_ENTRY_SIZE * i);
         FSeek(file_offset);
