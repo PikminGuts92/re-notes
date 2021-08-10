@@ -1,0 +1,108 @@
+// Hair physics, deals with strands of hair.
+// Super: CharPollable
+// Ext: .hair
+// C++ Class: CharHair
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "CharHair"
+    #endif
+#endif
+
+#ifndef CHAR_HAIR
+#define CHAR_HAIR
+
+#include "common.bt"
+#include "poll.bt"
+
+typedef struct
+{
+    float unknown_1[3];
+    NumString bone; // hair bone we set the transform of
+    float unknown_2[4];
+    float unknown_3[3];
+} CharHairPoint;
+
+typedef struct
+{
+    NumString root; // The root Trans for the hair strand
+    float angle;    // Angle in degrees of starting flip
+
+    int points_count;
+    CharHairPoint points[points_count]<optimize=false>;
+    
+    /*
+        Defaults:
+          [ 0] = 1.0 
+          [ 1] =
+          [ 2] =
+          [ 3] =
+          [ 4] = 1.0
+          [ 5] =
+          [ 6] =
+          [ 7] =
+          [ 8] = 1.0
+          [ 9] = 1.0 RootMat?
+          [10] =
+          [11] =
+          [12] =
+          [13] = 1.0
+          [14] =
+          [15] =
+          [16] =
+          [17] = 1.0
+        
+        * The rest are zeros
+    */
+    float unknown_3[18];
+    int unknown_int; // 1, 65, 68, 76, 129, 141, 193
+} CharHairStrand;
+
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 11 (TBRB)
+    read_metadata(info, super);
+
+    float stiffness; // stiffness of each strand
+    float torsion;   // rotational stiffness of each strand
+    float inertia;   // Inertia of the hair, zero means none
+    float gravity;   // Gravity of the hair, one is normal
+
+    float weight;    // Gravity of the hair, one is normal (duplicate dev comment?)
+    float friction;  // Hair friction against each other
+    float min_slack; // If using sides, determines how far in it could go
+    float max_slack; // If using sides, determines how far out it could go
+
+    int strand_count;
+    CharHairStrand strands[strand_count]<optimize=false>;
+
+    Bool simulate;  // Simulate physics or not
+    NumString wind; // wind object to use
+
+    //Poll poll(info, True);
+} CharHair;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "CharHair")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    CharHair char_hair(info, False);
+}
+
+#endif
+
+#endif
