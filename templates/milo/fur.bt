@@ -1,5 +1,5 @@
 // Parameters for fur shading, to be set on a material
-// Super: CharPollable
+// Super: (None)
 // Ext: .fur
 // C++ Class: RndFur
 
