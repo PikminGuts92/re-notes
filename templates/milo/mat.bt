@@ -1,6 +1,7 @@
 // Material objects determine texturing, blending, and the effect of lighting on drawn polys.
 // Super: (None)
 // Ext: .mat
+// C++ Class: RndMat
 
 #ifndef IN_MILO_FILE
     #ifndef STANDALONE_FILE
@@ -65,7 +66,7 @@ typedef struct
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version;
+    int version; // 55 (TBRB)
     read_metadata(info, super);
 
     if (version <= 21)
@@ -78,7 +79,7 @@ typedef struct (SystemInfo& info, Bool super)
     int unknown_enum; // 0, 1, 2, 3, 4, 5
     Color color;
     float alpha;
-    
+
     if (version <= 21)
     {
         // This part is a mess
