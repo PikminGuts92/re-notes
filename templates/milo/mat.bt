@@ -54,6 +54,20 @@ typedef enum
     kZModeDecal // 4
 } ZMODE_ENUM;
 
+typedef enum
+{
+    kStencilIgnore,
+    kStencilWrite,
+    kStencilTest
+} STENCILMODE_ENUM;
+
+typedef enum
+{
+    kShaderVariationNone,
+    kShaderVariationSkin,
+    kShaderVariationHair
+} SHADERVARIATION_ENUM;
+
 typedef struct
 {
     // 2-0: Regular
@@ -91,7 +105,7 @@ typedef struct (SystemInfo& info, Bool super)
         short always0;
         int always1;
         short always0;
-    
+
         BLEND_ENUM blend; // Only 0-4 observed?
         short always0;
 
@@ -106,7 +120,7 @@ typedef struct (SystemInfo& info, Bool super)
 
     ZMODE_ENUM z_mode; // 1 = default, 4 = reflective?
     Bool alpha_cut;
-    uint alpha_threshold;
+    int alpha_threshold;
     Bool alpha_write;
     
     if (version >= 28)
@@ -118,25 +132,28 @@ typedef struct (SystemInfo& info, Bool super)
     {
         int always_1;
     }
-    
+
     Matrix tex_xfm; // "Transform for coordinate generation"
     NumString diffuse_tex;
 
     NumString next_pass; // Next material for object
-    Bool always_false;
-    Bool always_true;
+    Bool intensify;      // Always false
+    Bool cull;           // Always true
 
     // 1.0  0.0  0.0  0.0  10.0
     // 1.0  0.61 0.61 0.61 46.0
-    float data_floats_five_1[5]; // First 4 are normalized?
 
-    NumString norm_tex;
+    float emissive_multiplier;
+    Color specular_rgb;
+    float specular_power;
 
-    int always_0;
-    NumString specular_tex;
-
-    byte data_always_0_2[8];
-    Bool always_true;
+    NumString normal_map;
+    NumString emissive_map;
+    NumString specular_map;
+    NumString environ_map;
+    
+    Bool per_pixel_lit; // Always true
+    STENCILMODE_ENUM stencil_mode;
 
     if (version <= 27)
     {
@@ -151,14 +168,38 @@ typedef struct (SystemInfo& info, Bool super)
         return;
     }
 
-    byte data_always_0_3[10];
+    NumString fur;
+    float de_normal;
+    float anistrophy;
 
-    Color specular_rgb;   // Multiplied by specular texture RGB
-    float specular_power; // Multiplied by specular texture Alpha
+    float norm_detail_tiling;
+    float norm_detail_strength;
+    NumString norm_detail_map;
 
-    byte data_always_0_4[13];
+    Bool point_lights;
+    Bool proj_lights;
+    Bool fog;
+    Bool fade_out;
+    Bool color_adjust;
 
-    float data_floats_2[9];
+    Color rim_rgb;
+    float rim_power;
+    NumString rim_map;
+    Bool rim_always_show;
+
+    Bool screen_aligned;
+    SHADERVARIATION_ENUM shader_variation;
+
+    Color specular2_rgb;
+    float specular2_power;
+
+    // Not mapped to SyncProperty()
+    // Values are usually 0.0 or 1.0
+    // Default: (1.0, 1.0, 1.0, 1.0, 0.0)
+    float unknown_floats[5];
+
+    NumString alpha_mask; // ScreenMask
+    Bool ps3_force_trilinear;
 } Mat;
 
 
