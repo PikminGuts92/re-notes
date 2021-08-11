@@ -16,40 +16,43 @@
 
 typedef enum
 {
-    TexWrap_Clamp,
-    TexWrap_Repeat // 1
-} TexWrap;
+    kTexWrapClamp,
+    kTexWrapRepeat, // 1
+    kTexBorderBlack,
+    kTexBorderWhite,
+    kTexWrapMirror
+} TEXWRAP_ENUM;
 
 typedef enum
 {
-    TexGen_None,
-    TexGen_Xfm,
-    TexGen_Sphere,
-    TexGen_Projected,
-    TexGen_XfmOrigin,
-    TexGen_Environ // 5
-} TexGen;
+    kTexGenNone,
+    kTexGenXfm,
+    kTexGenSphere,
+    kTexGenProjected,
+    kTexGenXfmOrigin,
+    kTexGenEnviron // 5
+} TEXGEN_ENUM;
 
 // Result = src_color * src_factor + dest_color * dest_factor ?
 typedef enum
 {
-    Blend_Dest, // Equal to dest rgb color
-    Blend_Src, // Equal to src rgb color
-    Blend_Add, // Alpha
-    Blend_SrcAlpha,
-    Blend_SrcAlphaAdd,
-    Blend_Subtract,
-    Blend_Multiply // 6
-} Blend; // D3DBLEND?
+    kBlendDest, // Equal to dest rgb color
+    kBlendSrc, // Equal to src rgb color
+    kBlendAdd, // Alpha
+    kBlendSrcAlpha,
+    kBlendSubtract,
+    kBlendMultiply,
+    kPreMultAlpha // 6
+} BLEND_ENUM; // D3DBLEND?
 
 typedef enum
 {
-    ZMode_Disable,
-    ZMode_Normal,
-    ZMode_Transparent,
-    ZMode_Force,
-    ZMode_Decal // 4
-} ZMode;
+    kZModeDisable,
+    kZModeNormal,
+    kZModeTransparent,
+    kZModeForce,
+    kZModeDecal // 4
+} ZMODE_ENUM;
 
 typedef struct
 {
@@ -58,9 +61,9 @@ typedef struct
     // 2-2: Shiny - torsoenv
     // 3-2: Shiny - enviro, shinplates
     int unknown1; // 1-4
-    TexGen texGen; // 0,1,2,5
+    TEXGEN_ENUM texGen; // 0,1,2,5
     Matrix mat; // "Transform for coordinate generation" ?
-    TexWrap texWrap; // 0-1
+    TEXWRAP_ENUM texWrap; // 0-1
     NumString texName; // Diffuse texture
 } TextureEntry;
 
@@ -76,7 +79,7 @@ typedef struct (SystemInfo& info, Bool super)
         TextureEntry textures[tex_count]<optimize=false>;
     }
 
-    int unknown_enum; // 0, 1, 2, 3, 4, 5
+    BLEND_ENUM blend; // 0, 1, 2, 3, 4, 5
     Color color;
     float alpha;
 
@@ -89,7 +92,7 @@ typedef struct (SystemInfo& info, Bool super)
         int always1;
         short always0;
     
-        Blend blend; // Only 0-4 observed?
+        BLEND_ENUM blend; // Only 0-4 observed?
         short always0;
 
         return;
@@ -98,18 +101,18 @@ typedef struct (SystemInfo& info, Bool super)
     // diffuse, norm, specular
 
     // Not sure
-    Bool usually_true;
-    Bool usually_false;
+    Bool prelit;      // Usually true
+    Bool use_environ; // Usually false
 
-    int unknown_enum; // 1 = default, 4 = reflective?
-
-    int always_0;
-    Bool usually_false;
-    Bool usually_false;
+    ZMODE_ENUM z_mode; // 1 = default, 4 = reflective?
+    Bool alpha_cut;
+    uint alpha_threshold;
+    Bool alpha_write;
     
     if (version >= 28)
     {
-        byte data_always_0_1[8];
+        TEXGEN_ENUM tex_gen;
+        TEXWRAP_ENUM tex_wrap;
     }
     else
     {
