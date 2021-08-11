@@ -93,9 +93,9 @@ typedef struct (SystemInfo& info, Bool super)
         TextureEntry textures[tex_count]<optimize=false>;
     }
 
-    BLEND_ENUM blend; // 0, 1, 2, 3, 4, 5
-    Color color;
-    float alpha;
+    BLEND_ENUM blend; // How to blend poly into screen
+    Color color;      // Base material color
+    float alpha;      // Base material alpha
 
     if (version <= 21)
     {
@@ -112,48 +112,43 @@ typedef struct (SystemInfo& info, Bool super)
         return;
     }
 
-    // diffuse, norm, specular
-
     // Not sure
-    Bool prelit;      // Usually true
-    Bool use_environ; // Usually false
+    Bool prelit;      // Use vertex color and alpha for base or ambient - Usually true
+    Bool use_environ; // Modulate with environment ambient and lights - Usually false
 
-    ZMODE_ENUM z_mode; // 1 = default, 4 = reflective?
-    Bool alpha_cut;
-    int alpha_threshold;
-    Bool alpha_write;
+    ZMODE_ENUM z_mode;   // How to read and write z-buffer
+    Bool alpha_cut;      // Cut zero alpha pixels from z-buffer
+    int alpha_threshold; // Alpha level below which gets cut (0-255)
+    Bool alpha_write;    // Write pixel alpha to screen
     
     if (version >= 28)
     {
-        TEXGEN_ENUM tex_gen;
-        TEXWRAP_ENUM tex_wrap;
+        TEXGEN_ENUM tex_gen;   // How to generate texture coordinates
+        TEXWRAP_ENUM tex_wrap; // Texture mapping mode
     }
     else
     {
         int always_1;
     }
 
-    Matrix tex_xfm; // "Transform for coordinate generation"
-    NumString diffuse_tex;
+    Matrix tex_xfm;        // Transform for coordinate generation
+    NumString diffuse_tex; // Base texture map, modulated with color and alpha
 
-    NumString next_pass; // Next material for object
-    Bool intensify;      // Always false
-    Bool cull;           // Always true
+    NumString next_pass; // Next material for object (Mat)
+    Bool intensify;      // Double the intensity of base map - Always false
+    Bool cull;           // Cull backface polygons - Always true
 
-    // 1.0  0.0  0.0  0.0  10.0
-    // 1.0  0.61 0.61 0.61 46.0
+    float emissive_multiplier; // Multiplier to apply to emission
+    Color specular_rgb;        // Color to use; multiplied by specular texture RGB if present
+    float specular_power;      // Power to use; multiplied by specular texture Alpha if present - 10.0-50.0 not uncommon
 
-    float emissive_multiplier;
-    Color specular_rgb;
-    float specular_power;
-
-    NumString normal_map;
-    NumString emissive_map;
-    NumString specular_map;
-    NumString environ_map;
+    NumString normal_map;   // Texture map to define lighting normals. Requires per-pixel lighting
+    NumString emissive_map; // Map for self illumination
+    NumString specular_map; // Texture map for specular color and power. Requires per-pixel lighting
+    NumString environ_map;  // Cube texture for reflections
     
-    Bool per_pixel_lit; // Always true
-    STENCILMODE_ENUM stencil_mode;
+    Bool per_pixel_lit;            // Use per-pixel lighting - Always true
+    STENCILMODE_ENUM stencil_mode; // How to read and write the stencil buffer
 
     if (version <= 27)
     {
@@ -168,38 +163,38 @@ typedef struct (SystemInfo& info, Bool super)
         return;
     }
 
-    NumString fur;
-    float de_normal;
-    float anistrophy;
+    NumString fur;    // Use fur shader
+    float de_normal;  // Amount to diminish normal map bumpiness, 0 is neutral, 1 is no bumps, -1 exaggerates (range: -3 to -1)
+    float anisotropy; // Specular power in downward (strand) direction, 0 to disable (range: 0.0 to 100.0)
 
-    float norm_detail_tiling;
-    float norm_detail_strength;
-    NumString norm_detail_map;
+    float norm_detail_tiling;   // Texture tiling scale for the detail map
+    float norm_detail_strength; // Strength of the detail map bumpiness
+    NumString norm_detail_map;  // Detail map texture
 
-    Bool point_lights;
-    Bool proj_lights;
-    Bool fog;
-    Bool fade_out;
-    Bool color_adjust;
+    Bool point_lights; // Is the Mat lit with point lights?
+    Bool proj_lights;  // Is the Mat lit with projected lights?
+    Bool fog;          // Is the Mat affected by fog?
+    Bool fade_out;     // Is the Mat affected its Environment's fade_out?
+    Bool color_adjust; // Is the Mat affected its Environment's color adjust?
 
-    Color rim_rgb;
-    float rim_power;
-    NumString rim_map;
-    Bool rim_always_show;
+    Color rim_rgb;        // Rim lighting color; multiplied by the rim texture RGB if present
+    float rim_power;      // Rim lighting power; multiplied by the rim texture Alpha if present (range: 0.0 to 64.0)
+    NumString rim_map;    // Texture map that defines the rim lighting color (in the RGB channels) and power (in the Alpha channel). Requires per-pixel lighting.
+    Bool rim_always_show; // When enabled, this causes the rim effect to be visible regardless of the lighting direction. This is useful when simulating materials such as cloth
 
-    Bool screen_aligned;
-    SHADERVARIATION_ENUM shader_variation;
+    Bool screen_aligned;                   // Projected material from camera's POV
+    SHADERVARIATION_ENUM shader_variation; // Select a variation on the shader to enable a new range of rendering features
 
-    Color specular2_rgb;
-    float specular2_power;
+    Color specular2_rgb;   // Secondary specular color. Only valid for certain shader variations
+    float specular2_power; // Secondary specular power. Only valid for certain shader variations
 
     // Not mapped to SyncProperty()
     // Values are usually 0.0 or 1.0
     // Default: (1.0, 1.0, 1.0, 1.0, 0.0)
     float unknown_floats[5];
 
-    NumString alpha_mask; // ScreenMask
-    Bool ps3_force_trilinear;
+    NumString alpha_mask;     // Alpha mask coordinates (in widescreen) and texture (ScreenMask)
+    Bool ps3_force_trilinear; // Force trilinear filtering of diffuse map (PS3 only)
 } Mat;
 
 
