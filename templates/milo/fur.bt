@@ -35,7 +35,7 @@ typedef struct (SystemInfo& info, Bool super)
     Color4 ends_tint;  // Tint at hair ends
 
     NumString fur_detail; // Detail map for finer fur. Only the alpha channel is used. (Tex)
-    float fur_tiling;     // Tiling for fur detail map.\nUVs of fur_detail are multiplied by this value. (range: 2.0e-2-100.0)
+    float fur_tiling;     // Tiling for fur detail map. UVs of fur_detail are multiplied by this value. (range: 2.0e-2-100.0)
     NumString wind;       // Wind Object, if set, blows on the fur. (Wind)
 } Fur;
 
