@@ -68,6 +68,15 @@ typedef enum
     kShaderVariationHair
 } SHADERVARIATION_ENUM;
 
+// Starting w/ v56
+typedef enum
+{
+    kPerPixelOff,
+    kPerPixelXbox360Only,
+    kPerPixelPs3Only,
+    kPerPixelAllNgPlatforms
+} PERPIXEL_ENUM;
+
 typedef struct
 {
     // 2-0: Regular
@@ -83,7 +92,7 @@ typedef struct
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 55 (TBRB)
+    int version; // 55 (TBRB), 56 (GDRB)
     read_metadata(info, super);
 
     if (version <= 21)
@@ -120,7 +129,7 @@ typedef struct (SystemInfo& info, Bool super)
     Bool alpha_cut;      // Cut zero alpha pixels from z-buffer
     int alpha_threshold; // Alpha level below which gets cut (0-255)
     Bool alpha_write;    // Write pixel alpha to screen
-    
+
     if (version >= 28)
     {
         TEXGEN_ENUM tex_gen;   // How to generate texture coordinates
@@ -146,9 +155,12 @@ typedef struct (SystemInfo& info, Bool super)
     NumString emissive_map; // Map for self illumination
     NumString specular_map; // Texture map for specular color and power. Requires per-pixel lighting
     NumString environ_map;  // Cube texture for reflections
-    
-    Bool per_pixel_lit;            // Use per-pixel lighting - Always true
-    STENCILMODE_ENUM stencil_mode; // How to read and write the stencil buffer
+
+    if (version <= 55)
+        Bool per_pixel_lit;          // Use per-pixel lighting
+    else
+        PERPIXEL_ENUM per_pixel_lit; // Per-pixel lighting mode for this material
+    STENCILMODE_ENUM stencil_mode;   // How to read and write the stencil buffer
 
     if (version <= 27)
     {
