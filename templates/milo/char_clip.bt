@@ -55,6 +55,7 @@ typedef struct
 
     if (count > 0)
     {
+        Printf("TODO: Support CharClip frames\n");
         FrameEvent events[count]<optimize=false>;
     }
 } FrameEvents;
@@ -136,6 +137,7 @@ typedef struct (SystemInfo& info, Bool super)
     if (version < 8)
     {
         // TODO
+        Printf("TODO: Support 9+ CharClip versions\n");
     }
     else
     {
@@ -143,6 +145,10 @@ typedef struct (SystemInfo& info, Bool super)
         uint some_size;
 
         // TODO
+        if (nodes_size > 0 || some_size > 0)
+        {
+            Printf("TODO: CharClip nodes\n");
+        }
     }
     
     if (version < 3)
@@ -154,6 +160,7 @@ typedef struct (SystemInfo& info, Bool super)
     if (version < 7)
     {
         // TODO
+        Printf("TODO: Support <7 CharClip versions\n");
     }
     else
     {

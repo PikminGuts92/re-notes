@@ -29,7 +29,14 @@ typedef struct
 {
     NumString symbol;
     float weight;
-} CharBone4Bone;
+} CharBone4Bone<read=read_char_bone>;
+
+string read_char_bone(CharBone4Bone& bone)
+{
+    local string s;
+    SPrintf(s, "%1.2f %s", bone.weight, bone.symbol.text);
+    return s;
+}
 
 struct CharBonesSamples;
 
@@ -79,6 +86,9 @@ void recompute_sizes(CharBonesSamples& char_bones)
     }
 
     char_bones.sample_size = (char_bones.computed_sizes[6] + 0xF) & 0xFFFFFFF0;
+
+    Printf("Last computed number is %d\n", char_bones.computed_sizes[6]);
+    Printf("Computed sample_size is %d\n", char_bones.sample_size);
 }
 
 typedef struct (uint sample_size)
