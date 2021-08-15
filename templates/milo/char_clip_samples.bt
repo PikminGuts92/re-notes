@@ -31,6 +31,61 @@ typedef struct
     float weight;
 } CharBone4Bone;
 
+struct CharBonesSamples;
+
+uint get_type_size(CharBonesSamples& char_bones, uint idx)
+{
+    if (idx < 2)
+    {
+        return (char_bones.compression < 2) ? 16 : 6;
+    }
+
+    if (idx != 2)
+    {
+        return (char_bones.compression == 2) ? 4 : 2;
+    }
+
+    if (char_bones.compression > 2)
+    {
+        return 4;
+    }
+
+    if (char_bones.compression == 0)
+    {
+        return 16;
+    }
+
+    return 8;
+}
+
+void recompute_sizes(CharBonesSamples& char_bones)
+{
+    char_bones.computed_sizes[0] = 0;
+
+    local int i = 0;
+    local uint curr_count;
+    local uint next_count;
+    local uint type_size;
+
+    while (i < 6)
+    {
+        curr_count = char_bones.counts[i];
+        next_count = char_bones.counts[i + 1];
+
+        type_size = get_type_size(char_bones, i);
+
+        char_bones.computed_sizes[i + 1] = char_bones.computed_sizes[i] + (next_count - curr_count) * type_size;
+        i++;
+    }
+
+    char_bones.sample_size = (char_bones.computed_sizes[6] + 0xF) & 0xFFFFFFF0;
+}
+
+typedef struct (uint sample_size)
+{
+    byte data[sample_size];
+} CharBoneSample;
+
 // TODO: Maybe move to separate file
 typedef struct (SystemInfo& info, Bool super)
 {
@@ -39,12 +94,25 @@ typedef struct (SystemInfo& info, Bool super)
     int bone_count;
     CharBone4Bone bones[bone_count]<optimize=false>;
 
-    uint some_sizes[7];
-    uint compression_enum; // 2
+    uint counts[7];
+    uint compression; // 0-4 (2 observed)
     uint num_samples;
 
-    float frames[num_samples];
+    local uint computed_sizes[7];
+    local uint sample_size; // Packed size
 
+    recompute_sizes(this);
+    
+    if (sample_size > 0)
+    {
+        local int i;
+        for (i = 0; i < num_samples; i++)
+        {
+            CharBoneSample samples(sample_size);
+        }
+    }
+    
+    uint unknown_flag;
 } CharBonesSamples;
 
 typedef struct (SystemInfo& info, Bool super)
@@ -54,6 +122,9 @@ typedef struct (SystemInfo& info, Bool super)
 
     CharBonesSamples full(info, False);
     CharBonesSamples one(info, False);
+
+    int bone_count;
+    CharBone4Bone bones[bone_count]<optimize=false>;
 
     //TransInfo trans_info;
 } CharClipSamples;
