@@ -1,4 +1,7 @@
 // A clip of animation that you can play. We expect subclasses for stuff like compression
+// Super: (None)
+// Ext: (None)
+// C++ Class: CharClip
 
 #ifndef IN_MILO_FILE
     #ifndef STANDALONE_FILE
@@ -56,8 +59,6 @@ typedef struct
     }
 } FrameEvents;
 
-// PLAY_BLEND_FLAGS
-// Blend mode, if any, to use by default for this clip
 typedef enum
 {
     kPlayNoDefault = 0,
@@ -66,10 +67,17 @@ typedef enum
     kPlayFirst = 3,
     kPlayLast = 4,
     kPlayDirty = 8
-} PLAY_BLEND;
+} PLAY_BLEND_FLAGS;
 
-// PLAY_TIME_FLAGS
-// Time units/alignment, if any, for this clip
+typedef enum
+{
+    // kPlayNoDefault = 0,
+    kPlayNoLoop = 16,
+    kPlayLoop = 32,
+    kPlayGraphLoop = 48,
+    kPlayNodeLoop = 64,
+} PLAY_LOOP_FLAGS;
+
 typedef enum
 {
     kPlayBeatTime = 0,
@@ -78,31 +86,85 @@ typedef enum
     kPlayBeatAlign2 = 8192,
     kPlayBeatAlign4 = 16384,
     kPlayBeatAlign8 = 32768
-} PLAY_TIME;
+} PLAY_TIME_FLAGS;
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version;
+    int version; // 12 (TBRB)
     read_metadata(info, super);
 
-    float start_frame;
-    float end_frame;
+    float start_beat;
+    float end_beat;
 
-    float unknown_float_1;
-
-    PLAY_BLEND default_blend; // PLAY_BLEND_FLAGS
-    PLAY_TIME beat_align; // PLAY_TIME_FLAGS
-
-    float unknown_float_2;
-
+    float beats_per_sec;
     
-    int always_0;
-    Bool usually_false;
+    // PLAY_BLEND_FLAGS | PLAY_LOOP_FLAGS | PLAY_TIME_FLAGS
+    uint flags;
+    uint play_flags;
 
-    ClipEvents clip_events;
+    float blend_width;
+
+    if (version > 3)
+    {
+        float range;
+    }
+
+    if (version == 5)
+    {
+        Bool unknown_bool_1;
+    }
+    else if (version > 5)
+    {
+        NumString relative; // 0x2c Not sure
+    }
+
+    if ((version - 9) < 2)
+    {
+        Bool unknown_bool_2;
+    }
+
+    if (version > 9)
+    {
+        int usually_neg_1; // 0x48 -1, 2
+    }
+
+    if (version > 11)
+    {
+        Bool do_not_decompress;
+    }
+
+    if (version < 8)
+    {
+        // TODO
+    }
+    else
+    {
+        uint nodes_size; // Computed
+        uint some_size;
+
+        // TODO
+    }
+    
+    if (version < 3)
+    {
+        int some_string_count;
+        NumString some_strings[some_string_count]<optimize=false>;
+    }
+
+    if (version < 7)
+    {
+        // TODO
+    }
+    else
+    {
+        FrameEvents events;
+    }
+    
+    
+    /*ClipEvents clip_events;
 
     byte bytes_always_0[8];
-    FrameEvents events;
+    FrameEvents events;*/
 } CharClip;
 
 #ifdef STANDALONE_FILE

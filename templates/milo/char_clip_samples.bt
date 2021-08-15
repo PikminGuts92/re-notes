@@ -1,5 +1,7 @@
 // This is the simple but inefficient format that just stores samples and interpolates. Data is grouped by time, not channel, for better storage, interpolation, etc.
 // Super: CharClip
+// Ext: (None)
+// C++ Class: CharClipSamples
 
 #ifndef IN_MILO_FILE
     #ifndef STANDALONE_FILE
@@ -23,12 +25,37 @@ typedef struct
     }
 } TransInfo;
 
+typedef struct
+{
+    NumString symbol;
+    float weight;
+} CharBone4Bone;
+
+// TODO: Maybe move to separate file
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version;
+    int version; // 16 (TBRB)
+
+    int bone_count;
+    CharBone4Bone bones[bone_count]<optimize=false>;
+
+    uint some_sizes[7];
+    uint compression_enum; // 2
+    uint num_samples;
+
+    float frames[num_samples];
+
+} CharBonesSamples;
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 15 (TBRB), 16 (GDRB)
     CharClip char_clip(info, False);
 
-    TransInfo trans_info;
+    CharBonesSamples full(info, False);
+    CharBonesSamples one(info, False);
+
+    //TransInfo trans_info;
 } CharClipSamples;
 
 #ifdef STANDALONE_FILE
