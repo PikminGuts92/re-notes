@@ -96,6 +96,26 @@ typedef struct (uint sample_size)
     byte data[sample_size];
 } CharBoneSample;
 
+typedef struct
+{
+    ushort x;
+    ushort y;
+    ushort z;
+} PosSample;
+
+typedef struct
+{
+    ushort x;
+} RotSample;
+
+typedef struct
+{
+    ushort x;
+    ushort y;
+    ushort z;
+    ushort w;
+} QuatSample;
+
 // TODO: Maybe move to separate file
 typedef struct (SystemInfo& info, Bool super)
 {
@@ -107,22 +127,57 @@ typedef struct (SystemInfo& info, Bool super)
     uint counts[7];
     uint compression; // 0-4 (2 observed)
     uint num_samples;
-
-    local uint computed_sizes[7];
-    local uint sample_size; // Packed size
-
-    recompute_sizes(this);
     
+    // Compute these values
+    local uint computed_sizes[7];
+    local uint sample_size;
+    recompute_sizes(this);
+
+    uint unknown_size;
+
     if (sample_size > 0)
     {
+        local uint buffer_idx;
+        local uint buffer_read_limit_idx;
+        local uint buffer_size = sample_size * num_samples;
+        // local byte buffer[buffer_size];
+    
         local int i;
         for (i = 0; i < num_samples; i++)
         {
-            CharBoneSample samples(sample_size);
+            //CharBoneSample samples(sample_size);
+            
+            struct Sample
+            {
+                // Read pos
+                buffer_idx = sample_size * i;
+                buffer_read_limit_idx = buffer_idx + computed_sizes[2];
+                while (buffer_idx < buffer_read_limit_idx)
+                {
+                    PosSample pos_sample;
+                    buffer_idx += 6;
+                }
+
+                // Read quat
+                buffer_idx = computed_sizes[2];
+                buffer_read_limit_idx = /*buffer_idx +*/ computed_sizes[3];
+                while (buffer_idx < buffer_read_limit_idx)
+                {
+                    QuatSample quat_sample;
+                    buffer_idx += 8;
+                }
+
+                // Read rot
+                buffer_idx = computed_sizes[3];
+                buffer_read_limit_idx = /*buffer_idx +*/ computed_sizes[6];
+                while (buffer_idx < buffer_read_limit_idx)
+                {
+                    RotSample rot_sample;
+                    buffer_idx += 2;
+                }
+            } sample;
         }
     }
-    
-    uint unknown_flag;
 } CharBonesSamples;
 
 typedef struct (SystemInfo& info, Bool super)
