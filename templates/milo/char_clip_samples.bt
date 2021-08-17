@@ -133,7 +133,12 @@ typedef struct (SystemInfo& info, Bool super)
     local uint sample_size;
     recompute_sizes(this);
 
-    uint unknown_size;
+    // Not sure if frame data
+    uint num_frames;
+    if (num_frames > 0)
+    {
+        float frames[frame_count];
+    }
 
     if (sample_size > 0)
     {
@@ -145,9 +150,11 @@ typedef struct (SystemInfo& info, Bool super)
         local int i;
         for (i = 0; i < num_samples; i++)
         {
-            //CharBoneSample samples(sample_size);
+            CharBoneSample samples(sample_size);
             
-            struct Sample
+            // TODO: Refactor code
+
+            /*struct Sample
             {
                 // Read pos
                 buffer_idx = sample_size * i;
@@ -160,7 +167,7 @@ typedef struct (SystemInfo& info, Bool super)
 
                 // Read quat
                 buffer_idx = computed_sizes[2];
-                buffer_read_limit_idx = /*buffer_idx +*/ computed_sizes[3];
+                buffer_read_limit_idx = buffer_idx + computed_sizes[3];
                 while (buffer_idx < buffer_read_limit_idx)
                 {
                     QuatSample quat_sample;
@@ -169,13 +176,13 @@ typedef struct (SystemInfo& info, Bool super)
 
                 // Read rot
                 buffer_idx = computed_sizes[3];
-                buffer_read_limit_idx = /*buffer_idx +*/ computed_sizes[6];
+                buffer_read_limit_idx = buffer_idx + computed_sizes[6];
                 while (buffer_idx < buffer_read_limit_idx)
                 {
                     RotSample rot_sample;
                     buffer_idx += 2;
                 }
-            } sample;
+            } sample;*/
         }
     }
 } CharBonesSamples;
