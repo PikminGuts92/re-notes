@@ -16,6 +16,38 @@
 
 typedef struct
 {
+    // Guessing fields
+    float frame;
+    float weight;
+} ClipNodeFloats<read=read_clip_node_floats_string>;
+
+string read_clip_node_floats_string(ClipNodeFloats& floats)
+{
+    local string s;
+    SPrintf(s, "Start: %.2f, Value: %.3f", floats.frame, floats.weight);
+    return s;
+}
+
+typedef struct
+{
+    NumString name;
+    uint float_count;
+    
+    if (float_count > 0)
+    {
+        ClipNodeFloats floats[float_count];
+    }
+} ClipNode<read=read_clip_node_string>;
+
+string read_clip_node_string(ClipNode& node)
+{
+    local string s;
+    SPrintf(s, "%s (%d frames)", node.name.text, node.float_count);
+    return s;
+}
+
+typedef struct
+{
     NumString name;
     int vec_count; // Usually 1
         
@@ -137,17 +169,16 @@ typedef struct (SystemInfo& info, Bool super)
     if (version < 8)
     {
         // TODO
-        Printf("TODO: Support 9+ CharClip versions\n");
+        Printf("TODO: Support <8 CharClip versions\n");
     }
     else
     {
         uint nodes_size; // Computed
         uint some_size;
 
-        // TODO
         if (nodes_size > 0 || some_size > 0)
         {
-            Printf("TODO: CharClip nodes\n");
+            ClipNode nodes[some_size]<optimize=false>;
         }
     }
     

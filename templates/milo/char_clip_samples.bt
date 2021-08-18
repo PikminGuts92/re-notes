@@ -137,7 +137,7 @@ typedef struct (SystemInfo& info, Bool super)
     uint num_frames;
     if (num_frames > 0)
     {
-        float frames[frame_count];
+        float frames[num_frames];
     }
 
     if (sample_size > 0)
@@ -196,7 +196,10 @@ typedef struct (SystemInfo& info, Bool super)
     CharBonesSamples one(info, False);
 
     int bone_count;
-    CharBone4Bone bones[bone_count]<optimize=false>;
+    if (bone_count > 0)
+    {
+        CharBone4Bone bones[bone_count]<optimize=false>;
+    }
 
     //TransInfo trans_info;
 } CharClipSamples;
