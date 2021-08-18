@@ -1,0 +1,215 @@
+// N/A
+// Super: (None)
+// Ext: (None)
+// C++ Class: CharBonesSamples
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "CharBonesSamples"
+    #endif
+#endif
+
+#ifndef OBJECT_CHAR_BONES_SAMPLES
+#define OBJECT_CHAR_BONES_SAMPLES
+
+
+typedef struct
+{
+    int count;
+
+    if (count > 0)
+    {
+        NumString trans_names[count]<optimize=false>;
+    }
+} TransInfo;
+
+typedef struct
+{
+    NumString symbol;
+    float weight;
+} CharBone4Bone<read=read_char_bone>;
+
+string read_char_bone(CharBone4Bone& bone)
+{
+    local string s;
+    SPrintf(s, "%1.2f %s", bone.weight, bone.symbol.text);
+    return s;
+}
+
+typedef struct (uint sample_size)
+{
+    byte data[sample_size];
+} CharBoneSample;
+
+typedef struct
+{
+    ushort x;
+    ushort y;
+    ushort z;
+} PosSample;
+
+typedef struct
+{
+    ushort x;
+} RotSample;
+
+typedef struct
+{
+    ushort x;
+    ushort y;
+    ushort z;
+    ushort w;
+} QuatSample;
+
+struct CharBonesSamples;
+
+uint get_type_size(CharBonesSamples& char_bones, uint idx)
+{
+    if (idx < 2)
+    {
+        return (char_bones.compression < 2) ? 16 : 6;
+    }
+
+    if (idx != 2)
+    {
+        return (char_bones.compression == 0) ? 4 : 2;
+    }
+
+    if (char_bones.compression > 2)
+    {
+        return 4;
+    }
+
+    if (char_bones.compression == 0)
+    {
+        return 16;
+    }
+
+    return 8;
+}
+
+void recompute_sizes(CharBonesSamples& char_bones)
+{
+    char_bones.computed_sizes[0] = 0;
+
+    local int i = 0;
+    local uint curr_count;
+    local uint next_count;
+    local uint type_size;
+
+    while (i < 6)
+    {
+        curr_count = char_bones.counts[i];
+        next_count = char_bones.counts[i + 1];
+
+        type_size = get_type_size(char_bones, i);
+
+        char_bones.computed_sizes[i + 1] = char_bones.computed_sizes[i] + (next_count - curr_count) * type_size;
+        i++;
+    }
+
+    char_bones.sample_size = (char_bones.computed_sizes[6] + 0xF) & 0xFFFFFFF0;
+
+    Printf("Last computed number is %d\n", char_bones.computed_sizes[6]);
+    Printf("Computed sample_size is %d\n", char_bones.sample_size);
+}
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 16 (TBRB)
+
+    int bone_count;
+    CharBone4Bone bones[bone_count]<optimize=false>;
+
+    uint counts[7];
+    uint compression; // 0-4 (2 observed)
+    uint num_samples;
+
+    // Compute these values
+    local uint computed_sizes[7];
+    local uint sample_size;
+    recompute_sizes(this);
+
+    // Not sure if frame data
+    uint num_frames;
+    if (num_frames > 0)
+    {
+        float frames[num_frames];
+    }
+
+    if (sample_size > 0)
+    {
+        local uint buffer_idx;
+        local uint buffer_read_limit_idx;
+        local uint buffer_size = sample_size * num_samples;
+        // local byte buffer[buffer_size];
+    
+        local int i;
+        for (i = 0; i < num_samples; i++)
+        {
+            CharBoneSample samples(sample_size);
+            
+            // TODO: Refactor code
+
+            /*struct Sample
+            {
+                // Read pos
+                buffer_idx = sample_size * i;
+                buffer_read_limit_idx = buffer_idx + computed_sizes[2];
+                while (buffer_idx < buffer_read_limit_idx)
+                {
+                    PosSample pos_sample;
+                    buffer_idx += 6;
+                }
+
+                // Read quat
+                buffer_idx = computed_sizes[2];
+                buffer_read_limit_idx = buffer_idx + computed_sizes[3];
+                while (buffer_idx < buffer_read_limit_idx)
+                {
+                    QuatSample quat_sample;
+                    buffer_idx += 8;
+                }
+
+                // Read rot
+                buffer_idx = computed_sizes[3];
+                buffer_read_limit_idx = buffer_idx + computed_sizes[6];
+                while (buffer_idx < buffer_read_limit_idx)
+                {
+                    RotSample rot_sample;
+                    buffer_idx += 2;
+                }
+            } sample;*/
+        }
+    }
+} CharBonesSamples;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "CharBonesSamples")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    /*else if (IsLittleEndian() && obj_version == 11)
+    {
+        info.platform = X360;
+        info.version = 25;
+    }*/
+    else
+    {
+        info.platform = PS2;
+        info.version = 24;
+    }
+
+    CharBonesSamples char_bones_samples(info, False);
+}
+
+#endif
+
+#endif
