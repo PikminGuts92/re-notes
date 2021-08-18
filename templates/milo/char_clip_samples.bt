@@ -127,7 +127,7 @@ typedef struct (SystemInfo& info, Bool super)
     uint counts[7];
     uint compression; // 0-4 (2 observed)
     uint num_samples;
-    
+
     // Compute these values
     local uint computed_sizes[7];
     local uint sample_size;
@@ -191,6 +191,11 @@ typedef struct (SystemInfo& info, Bool super)
 {
     int version; // 15 (TBRB), 16 (GDRB)
     CharClip char_clip(info, False);
+
+    if (version >= 16)
+    {
+        Bool some_bool; // Usually true
+    }
 
     CharBonesSamples full(info, False);
     CharBonesSamples one(info, False);
