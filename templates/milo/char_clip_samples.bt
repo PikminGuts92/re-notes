@@ -189,13 +189,20 @@ typedef struct (SystemInfo& info, Bool super)
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 15 (TBRB), 16 (GDRB)
-    CharClip char_clip(info, False);
+    int version; // 11 (GH2), 15 (TBRB), 16 (GDRB)
+    CharClip char_clip(info, False); // Metadata is written for CharClip instead for some reason
 
     if (version >= 16)
     {
         Bool some_bool; // Usually true
     }
+
+    if (version < 13)
+    {
+        
+    }
+
+    return;
 
     CharBonesSamples full(info, False);
     CharBonesSamples one(info, False);
@@ -220,6 +227,11 @@ if (STANDALONE_FILE == "CharClipSamples")
     if (IsBigEndian())
     {
         info.platform = X360;
+    }
+    else if (IsLittleEndian() && obj_version == 11)
+    {
+        info.platform = X360;
+        info.version = 25;
     }
     else
     {

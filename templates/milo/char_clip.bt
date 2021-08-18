@@ -87,7 +87,6 @@ typedef struct
 
     if (count > 0)
     {
-        Printf("TODO: Support CharClip frames\n");
         FrameEvent events[count]<optimize=false>;
     }
 } FrameEvents;
@@ -123,7 +122,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 12 (TBRB)
+    int version; // 5 (GH2), 12 (TBRB)
     read_metadata(info, super);
 
     float start_beat;
@@ -166,21 +165,28 @@ typedef struct (SystemInfo& info, Bool super)
         Bool do_not_decompress;
     }
 
+    // ClearAllNode()
+
     if (version < 8)
     {
-        // TODO
-        Printf("TODO: Support <8 CharClip versions\n");
+        uint node_count;
+        if (node_count > 0)
+        {
+            ClipNode nodes[node_count]<optimize=false>;
+        }
     }
     else
     {
         uint nodes_size; // Computed
-        uint some_size;
+        uint node_count;
 
-        if (nodes_size > 0 || some_size > 0)
+        if (node_count > 0)
         {
-            ClipNode nodes[some_size]<optimize=false>;
+            ClipNode nodes[node_count]<optimize=false>;
         }
     }
+
+    // ResizeNode()
     
     if (version < 3)
     {
@@ -190,8 +196,14 @@ typedef struct (SystemInfo& info, Bool super)
 
     if (version < 7)
     {
-        // TODO
-        Printf("TODO: Support <7 CharClip versions\n");
+        NumString enter_event;
+        NumString exit_event;
+        
+        // Print same warnings as milo engine code
+        if (enter_event.count > 0) Printf("WARN: Has old enter event %s, must port\n", enter_event.text);
+        if (exit_event.count > 0) Printf("WARN: Has old exit event %s, must port\n", exit_event.text);
+
+        FrameEvents events;
     }
     else
     {
