@@ -28,18 +28,31 @@ typedef struct (SystemInfo& info, Bool super)
 
     if (version < 13)
     {
-        
+        CharBonesSamples full(info, False, version);
+        CharBonesSamples one(info, False, version);
+
+        if (version > 7)
+        {
+            // Probably milo bug
+            CharBonesSamples ignore(info, False, version);
+        }
+
+        CharBonesSamplesData full_data(full, info);
+        CharBonesSamplesData one_data(one, info);
+    }
+    else
+    {
+        CharBonesSamples full(info, False, -1);
+        CharBonesSamples one(info, False, -1);
     }
 
-    return;
-
-    CharBonesSamples full(info, False);
-    CharBonesSamples one(info, False);
-
-    int bone_count;
-    if (bone_count > 0)
+    if (version > 14)
     {
-        CharBone4Bone bones[bone_count]<optimize=false>;
+        int bone_count;
+        if (bone_count > 0)
+        {
+            CharBone4Bone bones[bone_count]<optimize=false>;
+        }
     }
 
     //TransInfo trans_info;

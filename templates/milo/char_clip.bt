@@ -131,8 +131,8 @@ typedef struct (SystemInfo& info, Bool super)
     float beats_per_sec;
     
     // PLAY_BLEND_FLAGS | PLAY_LOOP_FLAGS | PLAY_TIME_FLAGS
-    uint flags;
-    uint play_flags;
+    uint flags;      // default_blend? PLAY_BLEND_FLAGS
+    uint play_flags; // default_loop? PLAY_LOOP_FLAGS
 
     float blend_width;
 
@@ -157,6 +157,7 @@ typedef struct (SystemInfo& info, Bool super)
 
     if (version > 9)
     {
+        // beat_align? PLAY_TIME_FLAGS
         int usually_neg_1; // 0x48 -1, 2
     }
 

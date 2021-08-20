@@ -12,6 +12,7 @@
 #ifndef OBJECT_CHAR_BONES_SAMPLES
 #define OBJECT_CHAR_BONES_SAMPLES
 
+struct CharBonesSamples;
 
 typedef struct
 {
@@ -41,25 +42,57 @@ typedef struct (uint sample_size)
     byte data[sample_size];
 } CharBoneSample;
 
-typedef struct
+typedef struct (uint compression)
 {
-    ushort x;
-    ushort y;
-    ushort z;
+    if (compression < 2)
+    {
+        // 12 bytes
+        float x;
+        float y;
+        float z;
+    }
+    else
+    {
+        // 6 bytes
+        ushort x;
+        ushort y;
+        ushort z;
+    }
 } PosSample;
 
-typedef struct
+typedef struct (uint compression)
 {
-    ushort x;
-} RotSample;
-
-typedef struct
-{
-    ushort x;
-    ushort y;
-    ushort z;
-    ushort w;
+    if (compression == 0)
+    {
+        // 16 bytes
+        float x;
+        float y;
+        float z;
+        float w;
+    }
+    else if (compression < 3)
+    {
+        // 8 bytes
+        hfloat x;
+        hfloat y;
+        hfloat z;
+        hfloat w;
+    }
+    else
+    {
+        // 4 bytes
+        byte x;
+        byte y;
+        byte z;
+        byte w;
+    }
 } QuatSample;
+
+typedef struct (uint compression)
+{
+    if (compression == 0) float x;
+    else hfloat x;
+} RotSample;
 
 struct CharBonesSamples;
 
@@ -75,6 +108,8 @@ uint get_type_size(CharBonesSamples& char_bones, uint idx)
         return (char_bones.compression == 0) ? 4 : 2;
     }
 
+    if (char_bones.compression == 1) return 3;
+    
     if (char_bones.compression > 2)
     {
         return 4;
@@ -88,7 +123,7 @@ uint get_type_size(CharBonesSamples& char_bones, uint idx)
     return 8;
 }
 
-void recompute_sizes(CharBonesSamples& char_bones)
+void recompute_sizes(CharBonesSamples& char_bones, uint count_size)
 {
     char_bones.computed_sizes[0] = 0;
 
@@ -97,7 +132,7 @@ void recompute_sizes(CharBonesSamples& char_bones)
     local uint next_count;
     local uint type_size;
 
-    while (i < 6)
+    while (i < (count_size - 1))
     {
         curr_count = char_bones.counts[i];
         next_count = char_bones.counts[i + 1];
@@ -108,79 +143,166 @@ void recompute_sizes(CharBonesSamples& char_bones)
         i++;
     }
 
-    char_bones.sample_size = (char_bones.computed_sizes[6] + 0xF) & 0xFFFFFFF0;
+    char_bones.sample_size = (char_bones.computed_sizes[count_size - 1] + 0xF) & 0xFFFFFFF0;
 
-    Printf("Last computed number is %d\n", char_bones.computed_sizes[6]);
+    Printf("Last computed number is %d\n", char_bones.computed_sizes[count_size - 1]);
     Printf("Computed sample_size is %d\n", char_bones.sample_size);
 }
 
-typedef struct (SystemInfo& info, Bool super)
+int calculate_sample_size(CharBonesSamples& char_bones)
 {
-    int version; // 16 (TBRB)
+    local int sum = 0;
+
+    // Pos
+    if (char_bones.compression < 2)
+    {
+        sum += 12 * char_bones.counts[1];
+    }
+    else
+    {
+        sum += 6 * char_bones.counts[1];
+    }
+
+    // Quat
+    if (char_bones.compression == 0)
+    {
+        sum += 16 * (char_bones.counts[3] - char_bones.counts[1]);
+    }
+    else if (char_bones.compression < 3)
+    {
+        sum += 8 * (char_bones.counts[3] - char_bones.counts[1]);
+    }
+    else
+    {
+        sum += 4 * (char_bones.counts[3] - char_bones.counts[1]);
+    }
+
+    // Rot
+    if (char_bones.compression == 0)
+    {
+        sum += 4 * (char_bones.counts[6] - char_bones.counts[3]);
+    }
+    else
+    {
+        sum += 2 * (char_bones.counts[6] - char_bones.counts[3]);
+    }
+
+    return sum;
+}
+
+typedef struct (CharBonesSamples& char_bones)
+{
+    local uint buffer_idx;
+    local uint buffer_read_limit_idx;
+
+    // Read pos
+    buffer_idx = char_bones.sample_size * i;
+    buffer_read_limit_idx = buffer_idx + char_bones.computed_sizes[2];
+    while (buffer_idx < buffer_read_limit_idx)
+    {
+        PosSample pos_sample(char_bones.compression);
+        
+        if (char_bones.compression < 2) buffer_idx += 12;
+        else buffer_idx += 6;
+    }
+
+    // Read quat
+    buffer_idx = char_bones.computed_sizes[2];
+    buffer_read_limit_idx = buffer_idx + char_bones.computed_sizes[3];
+    while (buffer_idx < buffer_read_limit_idx)
+    {
+        QuatSample quat_sample(char_bones.compression);
+
+        if (char_bones.compression == 0) buffer_idx += 16;
+        else if (char_bones.compression < 3) buffer_idx += 8;
+        else buffer_idx += 4;
+    }
+
+    // Read rot
+    buffer_idx = computed_sizes[3];
+    buffer_read_limit_idx = buffer_idx + char_bones.computed_sizes[6];
+    while (buffer_idx < buffer_read_limit_idx)
+    {
+        RotSample rot_sample(char_bones.compression);
+        buffer_idx += 2;
+
+        if (char_bones.compression == 0) buffer_idx += 4;
+        else buffer_idx += 2;
+    }
+} Sample;
+
+typedef struct (CharBonesSamples& char_bones, SystemInfo& info)
+{
+    if (char_bones.version == 14)
+    {
+        Bool some_bool;
+    }
+
+    if (char_bones.sample_size > 0)
+    {
+        local uint buffer_size = char_bones.sample_size * char_bones.num_samples;
+        // local byte buffer[buffer_size];
+        
+        local uint sample_size = char_bones.sample_size;
+        
+        // Hacky way to fix sample size issue
+        if (char_bones.compression < 2)
+        {
+            sample_size = calculate_sample_size(char_bones);
+            Printf("Real sample size is %d\n", sample_size);
+        }
+    
+        local int i;
+        for (i = 0; i < char_bones.num_samples; i++)
+        {
+            CharBoneSample samples(sample_size);
+
+            // TODO: Refactor code
+            //Sample samples(char_bones);
+        }
+    }
+} CharBonesSamplesData;
+
+typedef struct (SystemInfo& info, Bool super, int fake_version)
+{
+    local uint count_size = 10;
+
+    if (fake_version == -1)
+    {
+        int version; // 16 (TBRB)
+    }
+    else
+    {
+        local int version = fake_version; // 11 = GH2?
+    }
+
+    if (version > 15)
+    {
+        count_size = 7;
+    }
 
     int bone_count;
     CharBone4Bone bones[bone_count]<optimize=false>;
 
-    uint counts[7];
-    uint compression; // 0-4 (2 observed)
+    uint counts[count_size];
+    uint compression; // 0-4 1 = GH2, 2 = TBRB
     uint num_samples;
 
     // Compute these values
-    local uint computed_sizes[7];
+    local uint computed_sizes[count_size];
     local uint sample_size;
-    recompute_sizes(this);
+    recompute_sizes(this, 7); // Still treat as only 7 counts
 
-    // Not sure if frame data
-    uint num_frames;
-    if (num_frames > 0)
+    if (version > 11)
     {
-        float frames[num_frames];
-    }
-
-    if (sample_size > 0)
-    {
-        local uint buffer_idx;
-        local uint buffer_read_limit_idx;
-        local uint buffer_size = sample_size * num_samples;
-        // local byte buffer[buffer_size];
-    
-        local int i;
-        for (i = 0; i < num_samples; i++)
+        // Not sure if frame data
+        uint num_frames;
+        if (num_frames > 0)
         {
-            CharBoneSample samples(sample_size);
-            
-            // TODO: Refactor code
-
-            /*struct Sample
-            {
-                // Read pos
-                buffer_idx = sample_size * i;
-                buffer_read_limit_idx = buffer_idx + computed_sizes[2];
-                while (buffer_idx < buffer_read_limit_idx)
-                {
-                    PosSample pos_sample;
-                    buffer_idx += 6;
-                }
-
-                // Read quat
-                buffer_idx = computed_sizes[2];
-                buffer_read_limit_idx = buffer_idx + computed_sizes[3];
-                while (buffer_idx < buffer_read_limit_idx)
-                {
-                    QuatSample quat_sample;
-                    buffer_idx += 8;
-                }
-
-                // Read rot
-                buffer_idx = computed_sizes[3];
-                buffer_read_limit_idx = buffer_idx + computed_sizes[6];
-                while (buffer_idx < buffer_read_limit_idx)
-                {
-                    RotSample rot_sample;
-                    buffer_idx += 2;
-                }
-            } sample;*/
+            float frames[num_frames];
         }
+
+        CharBonesSamplesData data(this, info);
     }
 } CharBonesSamples;
 
