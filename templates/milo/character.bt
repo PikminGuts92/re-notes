@@ -62,7 +62,8 @@ typedef struct (SystemInfo& info, Bool super)
         int always_15;
     }
 
-    byte empty_bytes_1[20];
+    NumString unknown; // main.drv
+    byte empty_bytes_1[16];
     NumString str_1; // none
 
     int always_0;
@@ -79,7 +80,7 @@ typedef struct (SystemInfo& info, Bool super)
     NumString str_2; // none
 
     short always_0;
-    int always_120;
+    int always_120; // 120, 127
 
     Vector3 unk_vec;
 } Character;
