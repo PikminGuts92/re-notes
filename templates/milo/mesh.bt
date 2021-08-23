@@ -25,13 +25,13 @@ string mesh_to_string(Mesh& mesh)
     return s;
 }
 
-typedef struct (int mesh_version)
+typedef struct (int mesh_version, Bool is_ng)
 {
     // Coordinates
     float x;
     float y;
     float z;
-    if (mesh_version == 34) float w;
+    if (mesh_version == 34) float w; // Always 0?
 
     if (mesh_version < 35)
     {
@@ -39,13 +39,13 @@ typedef struct (int mesh_version)
         float nx;
         float ny;
         float nz;
-        if (mesh_version == 34) float nw;
+        if (mesh_version == 34) float nw; // Always 0?
         
-        // Colors
-        float colorR;
-        float colorG;
-        float colorB;
-        float colorA;
+        // Weights
+        float weight_0;
+        float weight_1;
+        float weight_2;
+        float weight_3;
         
         // UVs
         float u;
@@ -55,28 +55,88 @@ typedef struct (int mesh_version)
     }
     else
     {
-        // UVs
-        hfloat u;
-        hfloat v;
-        
-        // Normals
-        hfloat nx;
-        hfloat ny;
-        hfloat nz;
-        hfloat nw; // Not 100% sure
-        
-        // Colors
-        ubyte colorR;
-        ubyte colorG;
-        ubyte colorB;
-        ubyte colorA;
+        // Wii verts are encoded differently
+        if (is_ng == False)
+        {            
+            // Normals
+            float nx;
+            float ny;
+            float nz;
 
-        // Unknown 2
-        int neg1_or_zero;
-        byte num_3;
-        byte num_2;
-        byte num_1;
-        byte num_0;
+            // Weights
+            float weight_0;
+            float weight_1;
+            float weight_2;
+            float weight_3;
+
+            // UVs
+            float u;
+            float v;
+
+            // Bone indices
+            ushort bone_0;
+            ushort bone_1;
+            ushort bone_2;
+            ushort bone_3;
+
+            // Unknown weights (range: -1 to 1?)
+            float un_weight_0;
+            float un_weight_1;
+            float un_weight_2;
+            float un_weight_3;
+            return;
+        }
+
+        local int uv_check = ReadInt();
+        
+        // Used for ui meshes?
+        if (uv_check == -1)
+        {
+            uint always_ff_1<format=hex>;
+
+            // UVs
+            hfloat u;
+            hfloat v;
+
+            // Normals
+            hfloat nx;
+            hfloat ny;
+            hfloat nz;
+
+            ushort always_511;
+            uint always_ff_2<format=hex>;
+
+            // Bone indices
+            ubyte bone_0; // Usually: [3, 2, 1, 0]
+            ubyte bone_1;
+            ubyte bone_2;
+            ubyte bone_3;
+        }
+        else
+        {
+            // UVs
+            hfloat u;
+            hfloat v;
+
+            // Normals
+            hfloat nx;
+            hfloat ny;
+            hfloat nz;
+            hfloat nw; // Not 100% sure, maybe some scaler for weight?
+
+            // Weights
+            ubyte weight_0; // Default: [FF, FF, FF, FF]
+            ubyte weight_1;
+            ubyte weight_2;
+            ubyte weight_3;
+
+            // Bone indices
+            // Can all match like [5, 5, 5, 5]
+            ushort bone_0; // Default: [0, 1, 2, 3]
+            ushort bone_1;
+            ushort bone_2;
+            ushort bone_3;
+        }
     }
 } Vertex;
 
@@ -98,18 +158,25 @@ typedef struct
 typedef struct (int mesh_version)
 {
     int count;
+    local Bool use_ng_verts = False; // Is next gen?
 
     if (mesh_version >= 36)
     {
-        byte always1;   //  1
-        int vert_size;  // 36
-        int always1;    //  1
+        Bool is_ng; //  0 = wii, 1 = ps3/xbox
+
+        if (is_ng == True)
+        {
+            int vert_size;  // 36
+            int always1;    //  1
+
+            use_ng_verts = True;
+        }
     }
 
     local int i = 0;
     while (i < count)
     {
-        Vertex verts(mesh_version);
+        Vertex verts(mesh_version, use_ng_verts);
         i++;
     }
 } Vertices;
@@ -134,6 +201,14 @@ typedef struct
 
 typedef enum
 {
+    kMutableNone = 0,
+    kMutableVerts = 31,
+    kMutableFaces = 32,
+    kMutableAll = 63
+} MUTABLE_ENUM;
+
+typedef enum
+{
     kVolumeEmpty,
     kVolumeTriangles,
     kVolumeBSP,
@@ -151,7 +226,7 @@ typedef struct (SystemInfo& info, Bool super)
     NumString mat;        // Material used for rendering the Mesh (Mat)
     NumString geom_owner; // Geometry owner for the mesh (Mesh)
     
-    int mutable; // Bitfield? 0, 31, 33, 37, 63
+    MUTABLE_ENUM mutable; // Bitfield? 0, 31, 33, 37, 63
     VOLUME_ENUM volume; // Volume of the Mesh (usually kVolumeTriangles)
     byte bsp; // Never observed, always 0
 
