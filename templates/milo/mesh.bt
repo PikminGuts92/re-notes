@@ -79,11 +79,11 @@ typedef struct (int mesh_version, Bool is_ng)
             ushort bone_2;
             ushort bone_3;
 
-            // Unknown weights (range: -1 to 1?)
-            float un_weight_0;
-            float un_weight_1;
-            float un_weight_2;
-            float un_weight_3;
+            // Tangent? (range: -1 to 1)
+            float tangent_0;
+            float tangent_1;
+            float tangent_2;
+            float tangent_3;
             return;
         }
 
