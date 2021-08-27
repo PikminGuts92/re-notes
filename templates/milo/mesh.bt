@@ -217,7 +217,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 29, 36 (TBRB)
+    int version; // 29, 36 (TBRB), 37 (GDRB)
     read_metadata(info, super);
 
     Trans trans(info, True);
@@ -261,14 +261,14 @@ typedef struct (SystemInfo& info, Bool super)
         int noBones; // Always 0
     }
 
-    if (version == 36)
+    if (version >= 36)
     {
         Bool keep_mesh_data; // Whether or not to keep mesh vertices and faces.  Mutable meshes will always keep this data.
     }
-    else if (version >= 37)
+
+    if (version >= 37)
     {
-        Bool unknown_b1;
-        Bool unknown_b2;
+        Bool exclude_from_self_shadow; // Whether to include this mesh in a parent Character's self-shadow generation or not.
     }
     
     if (groupSizesCount > 0 && groupSizes[0] > 0 && !FEof())

@@ -14,9 +14,16 @@
 
 #include "common.bt"
 
+typedef enum
+{
+    kOverrideIncludeInDepthOnlyPass_None,
+    kOverrideIncludeInDepthOnlyPass_Include,
+    kOverrideIncludeInDepthOnlyPass_DontInclude
+} OVERRIDEINCLUDEINDEPTHONLYPASS_ENUM;
+
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 3 (TBRB)
+    int version; // 3 (TBRB), 4 (GDRB)
     read_metadata(info, super);
 
     Bool showing; // Whether the object and its Draw children are drawn or collided with. - Always 1?
@@ -37,13 +44,14 @@ typedef struct (SystemInfo& info, Bool super)
     Sphere sphere;
 
     // Skip 0'd data
-    if (version == 3)
+    if (version >= 3)
     {
         float draw_order;
     }
-    else if (version >= 4)
+
+    if (version >= 4)
     {
-        byte data_0[8];
+        OVERRIDEINCLUDEINDEPTHONLYPASS_ENUM override_include_in_depth_only_pass;
     }
 } Draw;
 
