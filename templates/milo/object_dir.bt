@@ -1,4 +1,4 @@
-// An ObjectDir keeps track of a set of Objects.
+// An ObjectDir keeps track of a set of Objects. It can subdir or proxy in other ObjectDirs.
 // Super: (None)
 // Ext: (None)
 

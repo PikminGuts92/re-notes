@@ -37,12 +37,12 @@ typedef struct (int milo_version)
 {
     if (milo_version > 10)
     {
-        NumString dir_type;
+        NumString dir_type; // class_name
         NumString dir_name;
 
-        // Not sure, related to entry names
-        int count1;
-        int count2;
+        // String table info for names/classes
+        uint string_table_string_count;
+        uint string_table_used_size;
     }
 
     int entry_count;

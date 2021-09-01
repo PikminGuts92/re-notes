@@ -19,7 +19,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version;
+    int version; // 14 (TBRB)
     read_metadata(info, super);
 
     Anim anim(info, True);
@@ -30,12 +30,12 @@ typedef struct (SystemInfo& info, Bool super)
     {
         // Basically drawables again
         int objects_count;
-        NumString objects[objects_count]<optimize=false>;
+        NumString objects[objects_count]<optimize=false>; // Draw
     }
 
     // Read environment/view?
-    NumString environ;
-    
+    NumString environ; // Environ
+
     // Ratio is usually 4:3
     float lod_width;
     float lod_height;

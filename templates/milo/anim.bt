@@ -32,13 +32,13 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version;
+    int version; // 14 (TBRB)
     read_metadata(info, super);
     
     if (version >= 4)
     {
         float frame;
-        RATE_ENUM anim_rate;
+        RATE_ENUM rate;
 
         return;
     }
