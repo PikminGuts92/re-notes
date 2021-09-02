@@ -51,7 +51,20 @@ typedef struct (int mesh_version, Bool is_ng)
         float u;
         float v;
 
-        if (mesh_version == 34) byte unknown_vert_data[24];
+        if (mesh_version == 34)
+        {
+            // Bone indices
+            ushort bone_0;
+            ushort bone_1;
+            ushort bone_2;
+            ushort bone_3;
+
+            // Tangent? (range: -1 to 1)
+            float tangent_0;
+            float tangent_1;
+            float tangent_2;
+            float tangent_3;
+        }
     }
     else
     {
@@ -217,8 +230,13 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 29, 36 (TBRB), 37 (GDRB)
-    read_metadata(info, super);
+    int version; // 25 (GH1), 28 (GH2), 29, 34 (RB1, RB2), 36 (TBRB), 37 (GDRB)
+    
+    // Read meta if newer than GH1
+    if (version > 25)
+    {
+        read_metadata(info, super);
+    }
 
     Trans trans(info, True);
     Draw draw(info, True);
