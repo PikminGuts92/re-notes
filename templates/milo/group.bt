@@ -30,23 +30,27 @@ typedef struct (SystemInfo& info, Bool super)
     {
         // Basically drawables again
         int objects_count;
-        NumString objects[objects_count]<optimize=false>; // Draw
+        NumString objects[objects_count]<optimize=false>; // Object
     }
 
     // Read environment/view?
     NumString environ; // Environ
 
-    // Ratio is usually 4:3
-    float lod_width;
-    float lod_height;
-
-    if (version == 13)
+    if (version <= 12)
     {
-        byte unknown[4];
+        // Ratio is usually 4:3
+        float lod_width;
+        float lod_height;
+        return;
     }
-    else if (version >= 14)
+
+    NumString draw_only;   // Draw - if set, only draws this member of the group
+    NumString lod;         // Draw - Object to draw instead below lod_screen_size
+    float lod_screen_size; // Ratio of screen height for lod
+
+    if (version >= 14)
     {
-        byte unknown[5];
+        Bool sort_in_world; // Sort by distance to current camera per frame.\nThis has a CPU cost if there are many objects
     }
 } Group;
 
