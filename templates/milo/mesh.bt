@@ -33,7 +33,7 @@ typedef struct (int mesh_version, Bool is_ng)
     float z;
     if (mesh_version == 34) float w; // Always 0?
 
-    if (mesh_version < 35)
+    if (mesh_version < 35 || is_ng == False)
     {
         // Normals
         float nx;
@@ -51,7 +51,7 @@ typedef struct (int mesh_version, Bool is_ng)
         float u;
         float v;
 
-        if (mesh_version == 34)
+        if (mesh_version >= 34)
         {
             // Bone indices
             ushort bone_0;
@@ -68,38 +68,6 @@ typedef struct (int mesh_version, Bool is_ng)
     }
     else
     {
-        // Wii verts are encoded differently
-        if (is_ng == False)
-        {            
-            // Normals
-            float nx;
-            float ny;
-            float nz;
-
-            // Weights
-            float weight_0;
-            float weight_1;
-            float weight_2;
-            float weight_3;
-
-            // UVs
-            float u;
-            float v;
-
-            // Bone indices
-            ushort bone_0;
-            ushort bone_1;
-            ushort bone_2;
-            ushort bone_3;
-
-            // Tangent? (range: -1 to 1)
-            float tangent_0;
-            float tangent_1;
-            float tangent_2;
-            float tangent_3;
-            return;
-        }
-
         local int uv_check = ReadInt();
         
         // Used for ui meshes?
@@ -230,7 +198,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 25 (GH1), 28 (GH2), 29, 34 (RB1, RB2), 36 (TBRB), 37 (GDRB)
+    int version; // 25 (GH1), 28 (GH2), 29, 34 (RB1/RB2), 36 (TBRB), 37 (GDRB)
     
     // Read meta if newer than GH1
     if (version > 25)
