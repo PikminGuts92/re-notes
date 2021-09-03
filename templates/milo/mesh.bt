@@ -227,7 +227,7 @@ typedef struct (SystemInfo& info, Bool super)
     
     if (charCount > 0)
     {
-        if (version >= 36)
+        if (version >= 34) // Starting w/ RB1
         {
             // Array of bone transform objects for n-bones
             int bone_count;
@@ -235,10 +235,8 @@ typedef struct (SystemInfo& info, Bool super)
         }
         else
         {
-            // Either 3 or none (Last one is always empty?)
+            // Always 4 bones (some can be empty)
             NumString bones[4]<optimize=false>;
-        
-            // Always 4?
             Matrix boneTransforms[4];
         }
     }
@@ -257,6 +255,8 @@ typedef struct (SystemInfo& info, Bool super)
         Bool exclude_from_self_shadow; // Whether to include this mesh in a parent Character's self-shadow generation or not.
     }
     
+    // This seems to be a last gen or lower version thing...
+    // Present when groupSize count is at least one and at least one bone?
     if (groupSizesCount > 0 && groupSizes[0] > 0 && !FEof())
     {
         // If eof, then groups should be divided equally? Empty only for light meshes?
