@@ -92,14 +92,17 @@ typedef struct
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 55 (TBRB), 56 (GDRB)
-    read_metadata(info, super);
+    int version; // 21 (GH1), 27 (GH2), 28 (GH2 360), 41 (RB1), 47 (RB2), 55 (TBRB), 56 (GDRB)
 
     if (version <= 21)
     {
         // GH1 mats can linked to many textures
         int tex_count;
         TextureEntry textures[tex_count]<optimize=false>;
+    }
+    else
+    {
+        read_metadata(info, super);
     }
 
     BLEND_ENUM blend; // How to blend poly into screen
@@ -121,24 +124,20 @@ typedef struct (SystemInfo& info, Bool super)
         return;
     }
 
-    // Not sure
     Bool prelit;      // Use vertex color and alpha for base or ambient - Usually true
     Bool use_environ; // Modulate with environment ambient and lights - Usually false
 
     ZMODE_ENUM z_mode;   // How to read and write z-buffer
     Bool alpha_cut;      // Cut zero alpha pixels from z-buffer
-    int alpha_threshold; // Alpha level below which gets cut (0-255)
-    Bool alpha_write;    // Write pixel alpha to screen
 
-    if (version >= 28)
+    if (version > 37)
     {
-        TEXGEN_ENUM tex_gen;   // How to generate texture coordinates
-        TEXWRAP_ENUM tex_wrap; // Texture mapping mode
+        int alpha_threshold; // Alpha level below which gets cut (0-255)
     }
-    else
-    {
-        int always_1;
-    }
+    Bool alpha_write;    // Write pixel alpha to screen
+    
+    TEXGEN_ENUM tex_gen;   // How to generate texture coordinates
+    TEXWRAP_ENUM tex_wrap; // Texture mapping mode
 
     Matrix tex_xfm;        // Transform for coordinate generation
     NumString diffuse_tex; // Base texture map, modulated with color and alpha
@@ -154,59 +153,199 @@ typedef struct (SystemInfo& info, Bool super)
     NumString normal_map;   // Texture map to define lighting normals. Requires per-pixel lighting
     NumString emissive_map; // Map for self illumination
     NumString specular_map; // Texture map for specular color and power. Requires per-pixel lighting
-    NumString environ_map;  // Cube texture for reflections
 
-    if (version <= 55)
-        Bool per_pixel_lit;          // Use per-pixel lighting
+    if (version < 51)
+    {
+        // Do something w/ RndTex?
+        NumString some_string;
+    }
+
+    NumString environ_map;  // CubeTex - Cube texture for reflections
+
+    if (version < 37 /* && 0x110 != 0 */)
+    {
+        // Set in Load() code
+        // specular_rgb = (1.0, 1.0, 1.0);
+    }
+    
+    if (version > 25)
+    {
+        if (version <= 55)
+            Bool per_pixel_lit;          // Use per-pixel lighting
+        else
+            PERPIXEL_ENUM per_pixel_lit; // Per-pixel lighting mode for this material
+    }
+    
+    if ((int)version - 27 < 23)
+    {
+        // Not mapped to any field
+        Bool ignored_bool;
+    }
+
+    if (version > 27)
+    {
+        STENCILMODE_ENUM stencil_mode;   // How to read and write the stencil buffer
+    }
+
+    if ((int)version - 29 < 12)
+    {
+        // Not mapped to any field
+        NumString ignore_string;
+    }
+
+    if (version < 33)
+    {
+        if (version > 29)
+        {
+            // Load fur from "{mat_base_name}.fur" file
+            // Call RndFur::LoadOld if found
+        }
+    }
     else
-        PERPIXEL_ENUM per_pixel_lit; // Per-pixel lighting mode for this material
-    STENCILMODE_ENUM stencil_mode;   // How to read and write the stencil buffer
-
-    if (version <= 27)
     {
-        // GH2 PS2 has less data
-        Bool always_false;
-        return;
-    }
-    else if (version == 28)
-    {
-        // GH2 360
-        byte data_always_0_3[5];
-        return;
+        NumString fur;    // Use fur shader
     }
 
-    NumString fur;    // Use fur shader
-    float de_normal;  // Amount to diminish normal map bumpiness, 0 is neutral, 1 is no bumps, -1 exaggerates (range: -3 to -1)
-    float anisotropy; // Specular power in downward (strand) direction, 0 to disable (range: 0.0 to 100.0)
+    if ((int)version - 34 < 15)
+    {
+        Bool ignored_bool_2;
+        Color ignored_color;
+        float ignored_alpha;
 
-    float norm_detail_tiling;   // Texture tiling scale for the detail map
-    float norm_detail_strength; // Strength of the detail map bumpiness
-    NumString norm_detail_map;  // Detail map texture
+        if (version > 34)
+        {
+            // Do something w/ RndTex?
+            NumString some_string_2;
+        }
+    }
+    
+    if (version > 35)
+    {
+        float de_normal;  // Amount to diminish normal map bumpiness, 0 is neutral, 1 is no bumps, -1 exaggerates (range: -3 to -1)
+        float anisotropy; // Specular power in downward (strand) direction, 0 to disable (range: 0.0 to 100.0)
+    }
 
-    Bool point_lights; // Is the Mat lit with point lights?
-    Bool proj_lights;  // Is the Mat lit with projected lights?
-    Bool fog;          // Is the Mat affected by fog?
-    Bool fade_out;     // Is the Mat affected its Environment's fade_out?
-    Bool color_adjust; // Is the Mat affected its Environment's color adjust?
+    if (version > 38)
+    {
+        if (version < 42)
+        {
+            Bool ignored_bool_3;
+        }
 
-    Color rim_rgb;        // Rim lighting color; multiplied by the rim texture RGB if present
-    float rim_power;      // Rim lighting power; multiplied by the rim texture Alpha if present (range: 0.0 to 64.0)
-    NumString rim_map;    // Texture map that defines the rim lighting color (in the RGB channels) and power (in the Alpha channel). Requires per-pixel lighting.
-    Bool rim_always_show; // When enabled, this causes the rim effect to be visible regardless of the lighting direction. This is useful when simulating materials such as cloth
+        float norm_detail_tiling;   // Texture tiling scale for the detail map
+        float norm_detail_strength; // Strength of the detail map bumpiness
 
-    Bool screen_aligned;                   // Projected material from camera's POV
-    SHADERVARIATION_ENUM shader_variation; // Select a variation on the shader to enable a new range of rendering features
+        if (version < 42)
+        {
+            // (0.25, 1.0, 1.0, 1.0, 1.0)
+            float ignored_floats[5];
+        }
 
-    Color specular2_rgb;   // Secondary specular color. Only valid for certain shader variations
-    float specular2_power; // Secondary specular power. Only valid for certain shader variations
+        NumString norm_detail_map;  // Detail map texture
 
-    // Not mapped to SyncProperty()
-    // Values are usually 0.0 or 1.0
-    // Default: (1.0, 1.0, 1.0, 1.0, 0.0)
-    float unknown_floats[5];
+        if (version < 42)
+        {
+            // Do another thing w/ RndTex?
+            NumString some_string_3;
+        }
 
-    NumString alpha_mask;     // Alpha mask coordinates (in widescreen) and texture (ScreenMask)
-    Bool ps3_force_trilinear; // Force trilinear filtering of diffuse map (PS3 only)
+        if (version < 40)
+        {
+            // norm_detail_strength = 0.0?
+        }
+    }
+
+    if (version > 42)
+    {
+        if (version < 45)
+        {
+            // Seems to be more work to calculate
+            // Probably 2nd bit?
+            // point_lights = (b ^ 1 >> 1) - ((b ^ 1) & b) >> 0x1f
+            uint some_bitfield;
+        }
+        else
+        {
+            Bool point_lights; // Is the Mat lit with point lights?
+        }
+
+        Bool proj_lights;  // Is the Mat lit with projected lights?
+        Bool fog;          // Is the Mat affected by fog?
+        Bool fade_out;     // Is the Mat affected its Environment's fade_out?
+        
+        // TODO: Figure out this condition
+        /*if (&DAT_ffffffd4 + version < &DAT_00000002)
+        {
+            Bool ignored_bool_4;
+        }*/
+
+        if (version > 46)
+        {
+            Bool color_adjust; // Is the Mat affected its Environment's color adjust?
+        }
+    }
+
+    if (version > 47)
+    {
+        Color rim_rgb;        // Rim lighting color; multiplied by the rim texture RGB if present
+        float rim_power;      // Rim lighting power; multiplied by the rim texture Alpha if present (range: 0.0 to 64.0)
+        NumString rim_map;    // Texture map that defines the rim lighting color (in the RGB channels) and power (in the Alpha channel). Requires per-pixel lighting.
+        Bool rim_always_show; // When enabled, this causes the rim effect to be visible regardless of the lighting direction. This is useful when simulating materials such as cloth
+    }
+
+    if (version > 48)
+    {
+        Bool screen_aligned; // Projected material from camera's POV
+    }
+
+    if (version == 50)
+    {
+        // if val != 0, set shader_variation to kShaderVariationSkin (1)
+        ubyte legacy_shader_variation;
+    }
+    else if (version > 50)
+    {
+        SHADERVARIATION_ENUM shader_variation; // Select a variation on the shader to enable a new range of rendering features
+        Color specular2_rgb;   // Secondary specular color. Only valid for certain shader variations
+        float specular2_power; // Secondary specular power. Only valid for certain shader variations
+    }
+
+    if (version > 51)
+    {
+        if (version < 53)
+        {
+            Bool ignored_bool_4;
+        }
+        else
+        {
+            // Not mapped to SyncProperty()
+            // Value is usually 0.0 or 1.0
+            // Default: 1.0
+            float val_0x160;
+        }
+
+        if (version > 54)
+        {
+            // Not mapped to SyncProperty()
+            // Values are usually 0.0 or 1.0
+            // Default: (1.0, 1.0, 1.0, 0.0)
+            float val_0x170;
+            float val_0x174;
+            float val_0x178;
+            float val_0x17c;
+        }
+    }
+
+    if (version > 53)
+    {
+        NumString alpha_mask; // Alpha mask coordinates (in widescreen) and texture (ScreenMask)
+        // RndMat::AlphaMaskPostSync()
+    }
+
+    if (version > 54)
+    {
+        Bool ps3_force_trilinear; // Force trilinear filtering of diffuse map (PS3 only)
+    }
 } Mat;
 
 
