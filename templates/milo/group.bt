@@ -19,7 +19,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 14 (TBRB)
+    int version; // 12 (GH2/GH2 360), 14 (TBRB)
     read_metadata(info, super);
 
     Anim anim(info, True);

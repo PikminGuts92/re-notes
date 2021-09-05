@@ -157,6 +157,7 @@ typedef struct (SystemInfo& info, Bool super)
     if (version < 51)
     {
         // Do something w/ RndTex?
+        // Seems to match diffuse_tex
         NumString some_string;
     }
 
