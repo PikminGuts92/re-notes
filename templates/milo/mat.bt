@@ -176,7 +176,7 @@ typedef struct (SystemInfo& info, Bool super)
             PERPIXEL_ENUM per_pixel_lit; // Per-pixel lighting mode for this material
     }
     
-    if ((int)version - 27 < 23)
+    if (version >= 27 && version < 50)
     {
         // Not mapped to any field
         Bool ignored_bool;
@@ -187,7 +187,7 @@ typedef struct (SystemInfo& info, Bool super)
         STENCILMODE_ENUM stencil_mode;   // How to read and write the stencil buffer
     }
 
-    if ((int)version - 29 < 12)
+    if (version >= 29 && version < 41)
     {
         // Not mapped to any field
         NumString ignore_string;
@@ -206,7 +206,7 @@ typedef struct (SystemInfo& info, Bool super)
         NumString fur;    // Use fur shader
     }
 
-    if ((int)version - 34 < 15)
+    if (version >= 34 && version < 49)
     {
         Bool ignored_bool_2;
         Color ignored_color;
