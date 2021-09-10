@@ -19,8 +19,12 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 14 (TBRB)
-    read_metadata(info, super);
+    int version; // 7 (GH1), 12 (GH2), 14 (TBRB)
+
+    if (version > 7)
+    {
+        read_metadata(info, super);
+    }
 
     Anim anim(info, True);
     Trans trans(info, True);

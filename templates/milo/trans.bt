@@ -30,7 +30,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 9 (TBRB/GDRB)
+    int version; // 8 (GH1), 9 (TBRB/GDRB)
     read_metadata(info, super);
 
     Matrix localXfm;
@@ -39,8 +39,8 @@ typedef struct (SystemInfo& info, Bool super)
     if (version <= 8)
     {
         // GH1 and before
-        int transformable_count;
-        NumString transformables[transformable_count]<optimize=false>; // Trans types? 
+        int trans_count;
+        NumString trans_objects[trans_count]<optimize=false>; // Trans types? 
     }
 
     CONSTRAINT_ENUM constraint; // Trans constraint for the object (Constraint + target are used together)

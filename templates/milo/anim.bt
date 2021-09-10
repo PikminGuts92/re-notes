@@ -32,7 +32,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 14 (TBRB)
+    int version; // 0 (GH1), 4 (GH2/TBRB)
     read_metadata(info, super);
     
     if (version >= 4)
@@ -44,12 +44,12 @@ typedef struct (SystemInfo& info, Bool super)
     }
 
     // Anim entries
-    int entry_count;
-    AnimEntry entries[entry_count]<optimize=false>;
+    int anim_entry_Count;
+    AnimEntry anim_entries[anim_entry_Count]<optimize=false>;
 
-    // Animatables
-    int anims_count;
-    NumString entries[entry_count]<optimize=false>;
+    // .tnm
+    int anim_count;
+    NumString anim_objects[anim_count]<optimize=false>;
 } Anim;
 
 

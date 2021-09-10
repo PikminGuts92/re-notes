@@ -83,11 +83,18 @@ typedef struct
     // 3-0: Idk - eyes
     // 2-2: Shiny - torsoenv
     // 3-2: Shiny - enviro, shinplates
-    int unknown1; // 1-4
-    TEXGEN_ENUM texGen; // 0,1,2,5
-    Matrix mat; // "Transform for coordinate generation" ?
-    TEXWRAP_ENUM texWrap; // 0-1
-    NumString texName; // Diffuse texture
+    int unknown; // 1-4
+    //TEXGEN_ENUM texGen; // 0,1,2,5
+
+    enum TEXMAP_ENUM
+    {
+        kDiffuse,
+        kEnviron = 2,
+    } map_type;
+
+    Matrix tex_xfm; // "Transform for coordinate generation" ?
+    TEXWRAP_ENUM tex_wrap; // 0-1
+    NumString name; // Diffuse texture
 } TextureEntry;
 
 typedef struct (SystemInfo& info, Bool super)

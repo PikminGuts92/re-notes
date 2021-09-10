@@ -23,7 +23,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 3 (TBRB), 4 (GDRB)
+    int version; // 1 (GH1), 3 (GH2/TBRB), 4 (GDRB)
     read_metadata(info, super);
 
     Bool showing; // Whether the object and its Draw children are drawn or collided with. - Always 1?
@@ -31,8 +31,8 @@ typedef struct (SystemInfo& info, Bool super)
     // Drawables seemingly moved to Group in later games
     if (version < 3)
     {
-        int drawableCount; // Drawables (mesh, env, view)
-        NumString drawables[drawableCount]<optimize=false>;
+        int draw_count; // Drawables (mesh, env, view)
+        NumString draw_objects[draw_count]<optimize=false>;
     }
 
     // Represents a bounding sphere around this object and its
