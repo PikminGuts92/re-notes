@@ -32,7 +32,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 0 (GH1), 4 (GH2/TBRB)
+    int version; // 0 (GH1), 4 (GH2/RB1/TBRB)
     read_metadata(info, super);
     
     if (version >= 4)

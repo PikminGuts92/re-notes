@@ -23,7 +23,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 1 (GH1), 3 (GH2/TBRB), 4 (GDRB)
+    int version; // 1 (GH1), 3 (GH2/RB1/TBRB), 4 (GDRB)
     read_metadata(info, super);
 
     Bool showing; // Whether the object and its Draw children are drawn or collided with. - Always 1?
