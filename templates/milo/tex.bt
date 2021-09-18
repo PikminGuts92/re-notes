@@ -1,0 +1,62 @@
+// Tex objects represent bitmaps used by materials. These can be created automatically with 'import tex' on the file menu.
+// Super: (None)
+// Ext: .tex
+// C++ Class: RndTex
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "Tex"
+    #endif
+#endif
+
+#ifndef OBJECT_TEX
+#define OBJECT_TEX
+
+#include "bitmap.bt"
+#include "common.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 8 (GH1), 10 (GH2/RB1/TBRB/GDRB)
+
+    if (version > 8) read_metadata(info, super);
+
+    uint width;
+    uint height;
+    uint bpp;
+    
+    NumString ext_path;
+    float index_f;
+    uint index;
+
+    Bool use_ext_path;
+
+    if (use_ext_path == True || FEof()) return;
+
+    // Read bitmap
+    Bitmap bitmap;
+} Tex;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "Tex")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 24;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    Tex tex(info, False);
+}
+
+#endif
+
+#endif
