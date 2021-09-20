@@ -2,10 +2,17 @@
 // Super: (None)
 // Ext: (None)
 
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "ObjectDir"
+    #endif
+#endif
+
 #ifndef OBJECT_DIR
 #define OBJECT_DIR
 
 #include "common.bt"
+//#include "milo_file.bt"
 
 typedef enum <byte>
 {
@@ -15,67 +22,130 @@ typedef enum <byte>
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 17 (GH2), 22 (TBRB), 27 (DC1)
+    int version; // 16 (GH2), 17 (GH2 360), 22 (TBRB), 27 (DC1)
 
-    if (version >= 22)
+    if (version < 22)
     {
+        if (version >= 2 && version < 17)
+        {
+            // Object::Load
+            read_metadata(info, super);
+        }
+    }
+    else
+    {
+        // Object::LoadType
         int revision; // Usually 1 or 2
         NumString type;
     }
 
-    if (version >= 27)
+    if (version > 1)
     {
-        // Zero'd data
-        FSkip(8);
+        int viewport_count; // Usually 7
+        local int i;
+        for (i = 0; i < viewport_count; i++)
+        {
+            Matrix viewports;
+
+            // Old games have extra padding
+            if (version <= 17)
+            {
+                FSkip(4);
+            }
+        }
+        int curr_viewport_index; // 0, 6, 7
     }
 
-    int viewport_count; // Usually 7
-    local int i;
-    for (i = 0; i < viewport_count; i++)
+    if (version > 12)
     {
-        Matrix viewports;
-
-        // Old games have extra padding
-        if (version <= 17)
+        if (version > 19)
         {
-            FSkip(4);
+            // When true, sub directories?
+            Bool inline_proxy;
+        }
+
+        NumString proxy_file; // Used for sub dir as regular entry
+    }
+
+    if (version >= 2 && version < 11)
+    {
+        NumString some_object_1;
+    }
+
+    if (version >= 4 && version < 11)
+    {
+        NumString some_object_2;
+
+        // If some_object_2 is empty and curr_viewport_index is 7
+        //   then set curr_viewport_index to 0
+    }
+
+    if (version == 5)
+    {
+        NumString ignore_string;
+    }
+
+    if (version > 2)
+    {
+        int sub_dir_count;
+        if (sub_dir_count > 0) NumString sub_dirs[sub_dir_count]<optimize=false>;
+
+        if (version >= 21)
+        {
+            Bool inline_subdir; // Seems to be true when sub directory
+            int inline_subdir_count;
+
+            if (inline_subdir_count > 0)
+            {
+                NumString inline_subdirs[inline_subdir_count]<optimize=false>; // Appears in reverse order?
+
+
+                if (version >= 27)
+                {
+                    // In new version, sub directories + imports are combined
+                    // This array defines reference types
+                    // 1 = Import, 3 = Sub dir
+                    MiloReferenceType reference_types[inline_subdir_count];
+
+                    // Usually zero'd
+                    byte reference_types_alt[inline_subdir_count];
+                }
+
+                // Iterate over inline sub directories
+                for (i = 0; i < inline_subdir_count; i++)
+                {
+                    //MiloFile sub_dirs(info);
+                }
+            }
         }
     }
 
-    int usually0; // 0, 6, 7
-    Bool always_true; // When true, sub directories?
-    NumString sub_path; // Used for sub dir as regular entry
-
-    int imported_milo_count;
-    if (imported_milo_count > 0)
+    if (version < 19)
     {
-        NumString imported_milos[imported_milo_count]<optimize=false>;
-    }
-
-    Bool always_false; // Seems to be true when sub directory
-
-    int sub_dir_count;
-    if (sub_dir_count > 0)
-    {
-        NumString sub_dir_names[sub_dir_count]<optimize=false>; // Appears in reverse order?
-
-        if (version >= 27)
+        if (version < 16)
         {
-            // In new version, sub directories + imports are combined
-            // This array defines reference types
-            // 1 = Import, 3 = Sub dir
-            MiloReferenceType reference_types[sub_dir_count];
-
-            // Usually zero'd
-            byte reference_types_alt[sub_dir_count];
+            if (version > 14)
+            {
+                NumString ignore_string_2;
+            }
         }
-
-        // Iterate over sub directories
-        for (i = 0; i < sub_dir_count; i++)
+        else
         {
-            MiloFile sub_dirs(info);
+            NumString ignore_string_3;
         }
     }
+
+    if (version > 20)
+    {
+        // Load inlined files?
+    }
+
+    if (version > 10)
+    {
+        
+    }
+
+    return;
 
     if (version <= 22)
     {
@@ -88,7 +158,7 @@ typedef struct (SystemInfo& info, Bool super)
         if (ReadInt() == info.version)
         {
             // Ends abruptly if milo object entry
-            MiloFile sub_dirs(info);
+            //MiloFile sub_dirs(info);
             byte unk_0;
         }
 
@@ -108,5 +178,32 @@ typedef struct (SystemInfo& info, Bool super)
         NumString note;
     }
 } ObjectDir;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "ObjectDir")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        if (obj_version == 16)
+        {
+            info.version = 24;
+        }
+    }
+
+    ObjectDir object_dir(info, False);
+}
+
+#endif
+
 
 #endif
