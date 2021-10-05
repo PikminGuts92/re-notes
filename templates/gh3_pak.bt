@@ -5,20 +5,26 @@ const uint QBKEY_DOT_LAST = 0x2CB3EF3B; // ".last"
 
 const uint PAK_HEADER_ENTRY_SIZE = 32;
 
+/*
+.img  0xDAD5E950
+.tex  0x8BFA5E8E
+.skin 0x64112E85
+*/
+
 typedef struct
 {
     // 32 bytes
-    uint qbkey_file_type; // qb key
+    uint qbkey_file_type<format=hex>; // qb key
     uint file_offset;
     uint file_size;
 
-    uint qbkey_pak_full_file_name;
-    uint qbkey_full_file_name;
+    uint qbkey_pak_full_file_name<format=hex>;
+    uint qbkey_full_file_name<format=hex>; // c:/gh3/data/models/real_crowd/crowd_ped_04.skin.xen
     
-    uint crc_name_only; // (no extension)
-    uint unknown;
+    uint crc_name_only<format=hex>; // (no extension)
+    uint qbkey_full_file_name_resource<format=hex>; // c:/gh3/data/models/real_crowd/crowd_ped_04.tex.xen
 
-    uint pak_header_flags; // File name = 0x00000020 (that's it)
+    uint pak_header_flags<format=hex>; // File name = 0x00000020 (that's it)
     
     if ((pak_header_flags & 0x00000020) != 0x00000020)
     {
