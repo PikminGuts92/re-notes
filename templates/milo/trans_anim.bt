@@ -21,6 +21,12 @@ typedef struct
     float pos;
 } KeyQuart;
 
+typedef struct
+{
+    Vector3 vec3;
+    float pos;
+} KeyVec3;
+
 typedef struct (SystemInfo& info, Bool super)
 {
     int version; // 6 (GH2/GH2 360), 7 (TBRB)
@@ -35,18 +41,57 @@ typedef struct (SystemInfo& info, Bool super)
 
     if (version != 2)
     {
-        // 0x20 - Maybe used for interpolation?
-        uint key_quart_count;
-        KeyQuart key_quarts[key_quart_count];        
+        uint rot_keys_count;
+        KeyQuart rot_keys[rot_keys_count];        
 
-        // 0x2c
-        uint quat_count;
-        Vector4 quats[quat_count];
+        uint trans_keys_count;
+        KeyVec3 trans_keys[trans_keys_count];
     }
 
     NumString trans_anim_owner; // RndTransAnim
 
-    byte unknown[9];
+    if (version < 4)
+    {
+        // Inside bitfield?
+        uint trans_spline;
+    }
+    else
+    {
+        Bool trans_spline;
+    }
+
+    Bool repeat_trans;
+
+    if (version < 4)
+    {
+        // TODO
+    }
+    else
+    {
+        uint scale_keys_count;
+        KeyVec3 scale_keys[scale_keys_count];
+
+        Bool scale_spline;
+    }
+
+    if (version < 2)
+    {
+        // Determine by keys_owner? (0x4c)
+    }
+    else
+    {
+        Bool follow_path;
+    }
+
+    if (version > 3)
+    {
+        Bool rot_slerp;
+    }
+    
+    if (version > 6)
+    {
+        Bool rot_spline;
+    }
 } TransAnim;
 
 #ifdef STANDALONE_FILE
