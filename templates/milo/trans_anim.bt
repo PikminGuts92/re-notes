@@ -15,21 +15,36 @@
 #include "anim.bt"
 #include "common.bt"
 
+typedef struct
+{
+    Vector4 quat;
+    float pos;
+} KeyQuart;
+
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version;
-    read_metadata(info, super);
+    int version; // 6 (GH2/GH2 360), 7 (TBRB)
+
+    if (version >= 4) read_metadata(info, super);
 
     Anim anim(info, True);
 
+    // if (version < 6) // RndDrawable::DumpLoad()
+
     NumString trans_object;
 
-    uint always0;
+    if (version != 2)
+    {
+        // 0x20 - Maybe used for interpolation?
+        uint key_quart_count;
+        KeyQuart key_quarts[key_quart_count];        
 
-    uint quat_count;
-    Vector4 quats[quat_count];
+        // 0x2c
+        uint quat_count;
+        Vector4 quats[quat_count];
+    }
 
-    NumString trans_anim_owner;
+    NumString trans_anim_owner; // RndTransAnim
 
     byte unknown[9];
 } TransAnim;
