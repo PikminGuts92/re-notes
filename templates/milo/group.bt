@@ -19,7 +19,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 7 (GH1), 12 (GH2/GH2 360), 13 (RB1), 14 (TBRB)
+    int version; // 7 (GH1), 12 (GH2/GH2 360), 13 (RB1), 14 (TBRB/GDRB/RB3)
 
     if (version > 7)
     {

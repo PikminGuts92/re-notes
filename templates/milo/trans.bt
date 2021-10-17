@@ -30,7 +30,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 8 (GH1), 9 (RB1/TBRB/GDRB)
+    int version; // 8 (GH1), 9 (RB1/TBRB/GDRB/RB3)
     read_metadata(info, super);
 
     Matrix localXfm;
