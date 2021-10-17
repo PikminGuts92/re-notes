@@ -25,7 +25,7 @@ string mesh_to_string(Mesh& mesh)
     return s;
 }
 
-typedef struct (int mesh_version, Bool is_ng)
+typedef struct (int mesh_version, Bool is_ng, int vert_size)
 {
     // Coordinates
     float x;
@@ -35,21 +35,45 @@ typedef struct (int mesh_version, Bool is_ng)
 
     if (mesh_version < 35 || is_ng == False)
     {
+        if (mesh_version >= 38)
+        {
+            uint packed_1<format=hex>;
+            float unknown_1;
+
+            uint packed_2<format=hex>;
+            float unknown_2;
+        }
+
         // Normals
         float nx;
         float ny;
         float nz;
         if (mesh_version == 34) float nw; // Always 0?
         
-        // Weights
-        float weight_0;
-        float weight_1;
-        float weight_2;
-        float weight_3;
-        
-        // UVs
-        float u;
-        float v;
+        if (mesh_version >= 38)
+        {
+            // UVs
+            float u;
+            float v;
+
+            // Weights
+            float weight_0;
+            float weight_1;
+            float weight_2;
+            float weight_3;
+        }
+        else
+        {
+            // Weights
+            float weight_0;
+            float weight_1;
+            float weight_2;
+            float weight_3;
+
+            // UVs
+            float u;
+            float v;
+        }
 
         if (mesh_version >= 34)
         {
@@ -59,17 +83,27 @@ typedef struct (int mesh_version, Bool is_ng)
             ushort bone_2;
             ushort bone_3;
 
-            // Tangent? (range: -1 to 1)
-            float tangent_0;
-            float tangent_1;
-            float tangent_2;
-            float tangent_3;
+            if (mesh_version >= 38)
+            {
+                uint packed_3<format=hex>;
+                uint packed_4<format=hex>;
+                float neg_1;
+                float pos_1;
+            }
+            else
+            {
+                // Tangent? (range: -1 to 1)
+                float tangent_0;
+                float tangent_1;
+                float tangent_2;
+                float tangent_3;
+            }
         }
     }
     else
     {
         local int uv_check = ReadInt();
-        
+
         // Used for ui meshes?
         if (uv_check == -1)
         {
@@ -118,6 +152,9 @@ typedef struct (int mesh_version, Bool is_ng)
             ushort bone_2;
             ushort bone_3;
         }
+
+        // TODO: Remove this hacky workaround
+        if (mesh_version == 38) FSkip(4);
     }
 } Vertex<read=vertex_to_string>;
 
@@ -127,6 +164,22 @@ NG Bone weights?
 0x17 0.1999999
 0xF8 0.8000001
 0xFF 1.0
+
+99 47 198
+130 56 191
+203 148
+
+01100011
+00101111
+11000110
+
+10000010
+00111000
+10111111
+
+11001011
+10010100
+
 */
 
 string vertex_to_string(Vertex& v)
@@ -155,6 +208,7 @@ typedef struct (int mesh_version)
 {
     int count;
     local Bool use_ng_verts = False; // Is next gen?
+    local int vert_size_loc = 0;
 
     if (mesh_version >= 36)
     {
@@ -162,17 +216,20 @@ typedef struct (int mesh_version)
 
         if (is_ng == True)
         {
-            int vert_size;  // 36
-            int always1;    //  1
+            // TBRB/GDRB (36, 1)
+            // RB3 (40, 2)
+            int vert_size;
+            int some_type;
 
             use_ng_verts = True;
+            vert_size_loc = vert_size;
         }
     }
 
     local int i = 0;
     while (i < count)
     {
-        Vertex verts(mesh_version, use_ng_verts);
+        Vertex verts(mesh_version, use_ng_verts, vert_size_loc);
         i++;
     }
 } Vertices;
@@ -213,7 +270,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 25 (GH1), 28 (GH2), 29, 34 (GH2 360/RB1/RB2), 36 (TBRB), 37 (GDRB)
+    int version; // 25 (GH1), 28 (GH2), 29, 34 (GH2 360/RB1/RB2), 36 (TBRB), 37 (GDRB), 38 (RB3)
     
     // Read meta if newer than GH1
     if (version > 25)
@@ -265,9 +322,13 @@ typedef struct (SystemInfo& info, Bool super)
         Bool keep_mesh_data; // Whether or not to keep mesh vertices and faces.  Mutable meshes will always keep this data.
     }
 
-    if (version >= 37)
+    if (version == 37)
     {
         Bool exclude_from_self_shadow; // Whether to include this mesh in a parent Character's self-shadow generation or not.
+    }
+    else if (version >= 38)
+    {
+        Bool has_ao_calculation; // Whether or not this mesh has had ambient occlusion calculated on it.
     }
     
     // This seems to be a last gen or lower version thing...
