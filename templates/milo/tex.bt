@@ -17,9 +17,17 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 8 (GH1), 10 (GH2/RB1/TBRB/GDRB)
+    int version; // 8 (GH1), 10 (GH2/RB1/TBRB), 11 (GDRB/RB3)
+    local Bool use_gdrb_enc = False;
 
     if (version > 8) read_metadata(info, super);
+
+    if (info.version == 25 && ReadUInt() > 0 && ReadUInt() < 16)
+    {
+        use_gdrb_enc = True;
+
+        Bool some_bool;
+    }
 
     uint width;
     uint height;
@@ -29,6 +37,7 @@ typedef struct (SystemInfo& info, Bool super)
     float index_f;
     uint index;
 
+    if (version >= 11 && use_gdrb_enc == False) Bool some_bool;
     Bool use_ext_path;
 
     if (use_ext_path == True || FEof()) return;
@@ -48,6 +57,7 @@ if (STANDALONE_FILE == "Tex")
     if (IsBigEndian())
     {
         info.platform = X360;
+        info.version = 25;
     }
     else
     {
