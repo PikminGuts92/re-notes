@@ -99,7 +99,7 @@ typedef struct
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 21 (GH1), 27 (GH2), 28 (GH2 360), 41 (RB1), 47 (RB2), 55 (TBRB), 56 (GDRB)
+    int version; // 21 (GH1), 27 (GH2), 28 (GH2 360), 41 (RB1), 47 (RB2), 55 (TBRB), 56 (GDRB), 68 (RB3)
 
     if (version <= 21)
     {
@@ -178,10 +178,17 @@ typedef struct (SystemInfo& info, Bool super)
     
     if (version > 25)
     {
-        if (version <= 55)
+        if (version <= 55 || version > 56)
             Bool per_pixel_lit;          // Use per-pixel lighting
         else
+            // Only GDRB uses this as enum...
             PERPIXEL_ENUM per_pixel_lit; // Per-pixel lighting mode for this material
+    }
+
+    // TODO: Reverse RB3 mat    
+    if (version >= 68)
+    {
+        return;
     }
     
     if (version >= 27 && version < 50)
