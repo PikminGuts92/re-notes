@@ -15,15 +15,18 @@
 #define OBJECT_GROUP
 
 #include "common.bt"
+#include "draw.bt"
 #include "trans.bt"
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 9 (GH1), 12 (TBRB)
+    int version; // 9 (GH1), 12 (GH2/TBRB)
 
-    if (version > 9) read_metadata(info, super);
+    if (version > 10) read_metadata(info, super);
 
     Trans trans(info, True);
+
+    if (version < 10) Draw draw(info, True);
 
     // The distance in world coordinates to the far clipping
     // plane. The near/far ratio is limited to 1:1000 to preserve
@@ -32,7 +35,9 @@ typedef struct (SystemInfo& info, Bool super)
     float near_plane;
     float far_plane;
     float y_fov;
-    
+
+    // if (version < 12) RndCam::ConvertFov(y_fov)
+
     // The area of the screen in normalized coordinates
     // (0 to 1) to draw into.
     Rect screen_rect;
