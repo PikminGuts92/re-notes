@@ -1,7 +1,7 @@
 // A Camera object is drawable and transformable. When drawn
 // it sets up projection and clipping parameters for
 // subsequent draw siblings.
-// Super: Trans
+// Super: Draw Trans
 // Ext: .cam
 // C++ Class: RndCam
 
@@ -11,8 +11,8 @@
     #endif
 #endif
 
-#ifndef OBJECT_GROUP
-#define OBJECT_GROUP
+#ifndef OBJECT_CAM
+#define OBJECT_CAM
 
 #include "common.bt"
 #include "draw.bt"
