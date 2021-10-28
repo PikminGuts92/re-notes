@@ -120,6 +120,8 @@ typedef struct (SystemInfo& info, Bool super)
         }
     }
 
+    // Another version check here but decompiled subroutine unclear...
+
     if (version < 19)
     {
         if (version < 16)
@@ -135,47 +137,41 @@ typedef struct (SystemInfo& info, Bool super)
         }
     }
 
+    // Load proxy + inlined here? idk...
+
     if (version > 20)
     {
         // Load inlined files?
     }
 
+    // Seems that TBRB milos are always inlined
+    if (FEof() || (exists(this.inline_proxy) && this.inline_proxy == True)) return;
+
+    // --- ObjectDir::PostLoad ---
+
     if (version > 10)
     {
-        
+        // Objects
+        NumString some_string_1;
+        NumString song_string_2;
     }
 
-    return;
-
-    if (version <= 22)
+    if (version < 22)
     {
-        byte unk_count;
-        if (unk_count > 0)
+        if (version > 16)
         {
-            byte unk_bytes<format=hex>;
+            // Object::Load
+            read_metadata(info, super);
         }
-
-        if (ReadInt() == info.version)
-        {
-            // Ends abruptly if milo object entry
-            //MiloFile sub_dirs(info);
-            byte unk_0;
-        }
-
-        byte zeros[3]<format=hex>;
     }
     else
     {
-        // Not sure
-        NumString empty_or_name_again;
-    }
-
-    NumString empty_or_cam;
-
-    DTB props; // Usually empty
-    if (info.version >= 25)
-    {
-        NumString note;
+        // Object::LoadRest
+        DTB props; // Usually empty
+        if (info.version >= 25)
+        {
+            NumString note;
+        }
     }
 } ObjectDir;
 
