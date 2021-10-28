@@ -1,6 +1,13 @@
 // A CharClip container.
 // Super: ObjectDir
 // Ext: (None)
+// C++ Class: CharClipSet
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "CharClipSet"
+    #endif
+#endif
 
 #ifndef CHAR_CLIP_SET
 #define CHAR_CLIP_SET
@@ -28,5 +35,28 @@ typedef struct (SystemInfo& info, Bool super)
         NumString unk;
     }
 } CharClipSet;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "CharClipSet")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        info.version = 24;
+    }
+
+    CharClipSet char_clip_set(info, False);
+}
+
+#endif
 
 #endif
