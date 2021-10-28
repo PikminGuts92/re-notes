@@ -87,7 +87,7 @@ typedef struct (SystemInfo& info, Bool super)
     NumString str_2; // none
 
     short always_0;
-    int always_120; // 120, 127
+    int always_120; // 120, 127, 134
 
     Vector3 unk_vec;
 } Character;
