@@ -1,6 +1,13 @@
 // A WorldDir contains world objects.
 // Super: PanelDir
 // Ext: (None)
+// C++ Class: WorldDir
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "WorldDir"
+    #endif
+#endif
 
 #ifndef WORLD_DIR
 #define WORLD_DIR
@@ -23,5 +30,28 @@ typedef struct (SystemInfo& info, Bool super)
     int always_empty[7];
     NumString spotlight; // SpotlightDrawer.sd
 } WorldDir;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "WorldDir")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        info.version = 24;
+    }
+
+    WorldDir world_dir(info, False);
+}
+
+#endif
 
 #endif

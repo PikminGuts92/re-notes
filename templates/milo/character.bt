@@ -1,6 +1,13 @@
 // Base class for Character objects. Contains Geometry, Outfit Loaders, and LOD + Sphere concepts.
-// Super: Character
+// Super: RndDir
 // Ext: (None)
+// C++ Class: Character
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "Character"
+    #endif
+#endif
 
 #ifndef CHARACTER
 #define CHARACTER
@@ -84,5 +91,28 @@ typedef struct (SystemInfo& info, Bool super)
 
     Vector3 unk_vec;
 } Character;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "Character")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        info.version = 24;
+    }
+
+    Character character(info, False);
+}
+
+#endif
 
 #endif
