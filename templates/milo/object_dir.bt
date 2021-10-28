@@ -1,6 +1,7 @@
 // An ObjectDir keeps track of a set of Objects. It can subdir or proxy in other ObjectDirs.
 // Super: (None)
 // Ext: (None)
+// C++ Class: ObjectDir
 
 #ifndef IN_MILO_FILE
     #ifndef STANDALONE_FILE
@@ -145,7 +146,7 @@ typedef struct (SystemInfo& info, Bool super)
     }
 
     // Seems that TBRB milos are always inlined
-    if (FEof() || (exists(this.inline_proxy) && this.inline_proxy == True)) return;
+    //if (FEof() || (exists(this.inline_proxy) && this.inline_proxy == True)) return;
 
     // --- ObjectDir::PostLoad ---
 

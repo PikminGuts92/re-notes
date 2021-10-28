@@ -1,6 +1,13 @@
 // Top-level UI Object, contains UI components and an optional camera
 // Super: PanelDir
 // Ext: (None)
+// C++ Class: PanelDir
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "PanelDir"
+    #endif
+#endif
 
 #ifndef PANEL_DIR
 #define PANEL_DIR
@@ -10,17 +17,22 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 7 (TBRB), 8 (DC1)
+    int version; // 2 (GH2/GH2 360), 7 (TBRB), 8 (DC1)
     RndDir rnd_dir(info, True);
 
     NumString cam;
 
-    if (version <= 7)
+    if (version <= 2)
+    {
+        NumString test_event; // or "fire_event"?
+        return;
+    }
+    else if (version <= 7)
     {
         // Whether or not this panel triggers a WorldEnd
         Bool can_end_world; // Usually false
     }
-    else
+    else // (version > 7)
     {
         // Forces the usage of the 'cam' property to render in milo. This is a milo only feature.
         Bool use_specified_cam; // Usually false
@@ -46,5 +58,31 @@ typedef struct (SystemInfo& info, Bool super)
 
     Bool show_view_only_panels; // Usually false
 } PanelDir;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "PanelDir")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        if (obj_version == 2)
+        {
+            info.version = 24;
+        }
+    }
+
+    PanelDir panel_dir(info, False);
+}
+
+#endif
 
 #endif

@@ -1,6 +1,13 @@
 // A RndDir specially tracks drawable and animatable objects.
-// Super: ObjectDir Anim Draw Trans Poll MsgSource
+// Super: ObjectDir Anim Draw Trans Poll MsgSource?
 // Ext: (None)
+// C++ Class: RndDir
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "RndDir"
+    #endif
+#endif
 
 #ifndef RND_DIR
 #define RND_DIR
@@ -14,8 +21,8 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 9 (GH2), 10 (TBRB)
-    ObjectDir obj_dir(info, True);
+    int version; // 8 (GH2), 9 (GH2 360), 10 (TBRB)
+    ObjectDir obj_dir(info, False);
 
     if (ReadInt() == info.version)
     {
@@ -27,7 +34,45 @@ typedef struct (SystemInfo& info, Bool super)
     Anim anim(info, True);
     Draw draw(info, True);
     Trans trans(info, True);
-    Poll poll(info, True);
+
+    // Not sure why different on next gen...
+    if (version < 9)
+    {
+        Poll poll(info, True);
+        NumString some_string_1;
+        NumString some_string_2;
+    }
+    else
+    {
+        NumString environ; // Environ
+        if (version >= 10) NumString test_event; // Symbol
+    }
 } RndDir;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "RndDir")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        if (obj_version == 8)
+        {
+            info.version = 24;
+        }
+    }
+
+    RndDir rnd_dir(info, False);
+}
+
+#endif
 
 #endif
