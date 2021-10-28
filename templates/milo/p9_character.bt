@@ -1,0 +1,59 @@
+// Character with animation group and song tempo support
+// Super: Character
+// Ext: (None)
+// C++ Class: P9Character
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "P9Character"
+    #endif
+#endif
+
+#ifndef P9_CHARACTER
+#define P9_CHARACTER
+
+#include "character.bt"
+#include "common.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 8 (TBRB)
+    Character character(info, True);
+
+    float head_lookat_weight; // What fraction to drive the head lookat
+
+    NumString tempo; // Song tempo
+    NumString era;   // Era of animation
+    NumString song;  // Song for sync moves (P9_SONG_CLIPS)
+    NumString venue; // Venue for directed cuts
+
+    int instrument_index; // Which instrument is shown
+
+    NumString waypoint; // Waypoint for the head to use (Waypoint)
+    NumString mic_ik;   // The mic ik (CharIKHead)
+} P9Character;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "P9Character")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        info.version = 24;
+    }
+
+    P9Character p9_character(info, False);
+}
+
+#endif
+
+#endif
