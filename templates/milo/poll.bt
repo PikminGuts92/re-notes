@@ -1,6 +1,7 @@
 // Abstract base class for pollable RND objects
 // Super: (None)
 // Ext: (None)
+// C++ Class: RndPollable
 
 #ifndef OBJECT_POLL
 #define OBJECT_POLL
