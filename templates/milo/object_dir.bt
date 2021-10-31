@@ -155,9 +155,15 @@ typedef struct (SystemInfo& info, Bool super)
 
     if (version > 10)
     {
+        // This doesn't seem to match disassembly?
+        if (ReadByte() == 1)
+        {
+            Bool no_idea_bool;
+        }
+
         // Objects
         NumString some_string_1;
-        NumString song_string_2;
+        NumString song_string_2; // Cam.cam
     }
 
     if (version < 22)
