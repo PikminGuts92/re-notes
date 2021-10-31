@@ -124,13 +124,13 @@ void read_milo_files(MiloFile& milo)
                 RndDir dir_entry(info, False);
                 uint padding<format=hex>;
 
-                //MiloFile sub_dirs(info);
+                MiloFile sub_dir(info);
                 break;
             case "WorldInstance":
                 WorldInstance dir_entry(info, False);
 
                 uint padding<format=hex>;
-                //MiloFile sub_dirs(info);
+                MiloFile sub_dir(info);
                 break;
             default:
                 file_size = findNextFile(adde);
