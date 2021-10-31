@@ -13,7 +13,10 @@
 #define OBJECT_DIR
 
 #include "common.bt"
-//#include "milo_file.bt"
+
+#ifndef MILO_FILE
+    #include "milo_file.bt"
+#endif
 
 typedef enum <byte>
 {
@@ -115,7 +118,7 @@ typedef struct (SystemInfo& info, Bool super)
                 // Iterate over inline sub directories
                 for (i = 0; i < inline_subdir_count; i++)
                 {
-                    //MiloFile sub_dirs(info);
+                    MiloFile sub_dirs(info);
                 }
             }
         }
