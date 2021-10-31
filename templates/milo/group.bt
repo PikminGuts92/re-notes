@@ -34,7 +34,7 @@ typedef struct (SystemInfo& info, Bool super)
     {
         // Basically drawables again
         int objects_count;
-        NumString objects[objects_count]<optimize=false>; // Object
+        if (objects_count > 0) NumString objects[objects_count]<optimize=false>; // Object
     }
 
     // Read environment/view?
