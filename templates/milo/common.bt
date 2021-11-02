@@ -269,19 +269,14 @@ local uint adde = 0xADDEADDE;
 // Returns current file size
 uint findNextFile(uint magic)
 {
+    if (FEof()) return -1;
+
     local uint startPos = FTell();
-    local uint currentPos = startPos;
-    local uint currentMagic = 0;
-    
-    while(magic != currentMagic)
-    {
-        if (FEof()) return -1;
 
-        currentMagic = (currentMagic << 8) | ReadUByte(currentPos);
-        currentPos++;
-    }
+    local int64 result = FindFirst(magic, true, false, 0, 0.0, 1, startPos, 0, 24);
+    if (result == -1) return -1;
 
-    return currentPos - (startPos + 4);
+    return result - startPos;
 }
 
 struct SystemInfo;
