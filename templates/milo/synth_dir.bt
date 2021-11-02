@@ -1,0 +1,48 @@
+// Container for Synth objects, registers itself as a bank
+// Super: ObjectDir
+// Ext: (None)
+// C++ Class: SynthDir
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "SynthDir"
+    #endif
+#endif
+
+#ifndef SYNTH_DIR
+#define SYNTH_DIR
+
+#include "common.bt"
+#include "object_dir.bt"
+
+typedef struct (SystemInfo& info, Bool super, Bool inlined)
+{
+    // There's really nothing much to this file other than they're usually name "xxx_bank"
+    int version; // 1 (TBRB)
+    ObjectDir obj_dir(info, False, inlined);
+} SynthDir;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "SynthDir")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        info.version = 24;
+    }
+
+    SynthDir synth_dir(info, False, False);
+}
+
+#endif
+
+#endif

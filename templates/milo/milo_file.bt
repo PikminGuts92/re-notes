@@ -14,6 +14,7 @@ struct MiloFile;
 #include "objects.bt"
 #include "panel_dir.bt"
 #include "rnd_dir.bt"
+#include "synth_dir.bt"
 #include "world_dir.bt"
 #include "world_instance.bt"
 
@@ -135,6 +136,12 @@ void read_milo_files(SystemInfo& info, MiloFile& milo)
                 // Doesn't always seem to be present...
                 if (ReadInt() == info.version) MiloFile sub_dir(info);
                 break;
+            case "SynthDir":
+                SynthDir dir_entry(info, False, False);
+                uint padding<format=hex>;
+
+                MiloFile sub_dir(info);
+                break;
             case "WorldInstance":
                 // Inlined so DirLoader::SaveObjects not needed
                 WorldInstance dir_entry(info, False, True);
@@ -198,6 +205,10 @@ typedef struct (SystemInfo& info)
                 break;
             case "RndDir":
                 RndDir dir_entry(info, False, False);
+                uint padding<format=hex>;
+                break;
+            case "SynthDir":
+                SynthDir dir_entry(info, False, False);
                 uint padding<format=hex>;
                 break;
             case "WorldDir":
