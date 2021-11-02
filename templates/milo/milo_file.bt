@@ -102,7 +102,7 @@ string read_blob(Blob& blob)
 }
 
 // DirLoader::SaveObjects
-void read_milo_files(MiloFile& milo)
+void read_milo_files(SystemInfo& info, MiloFile& milo)
 {
     local uint i;
     local uint file_size;
@@ -111,6 +111,13 @@ void read_milo_files(MiloFile& milo)
     {
         switch (milo.meta.entries[i].type.text)
         {
+            case "Character":
+                Character dir_entry(info, False, False);
+                uint padding<format=hex>;
+
+                // Doesn't always seem to be present...
+                if (ReadInt() == info.version) MiloFile sub_dir(info);
+                break;
             case "CharClipSet":
                 CharClipSet dir_entry(info, False, False);
                 uint padding<format=hex>;
@@ -125,7 +132,8 @@ void read_milo_files(MiloFile& milo)
                 RndDir dir_entry(info, False, False);
                 uint padding<format=hex>;
 
-                MiloFile sub_dir(info);
+                // Doesn't always seem to be present...
+                if (ReadInt() == info.version) MiloFile sub_dir(info);
                 break;
             case "WorldInstance":
                 // Inlined so DirLoader::SaveObjects not needed
@@ -153,7 +161,7 @@ void read_milo_files(MiloFile& milo)
 
 typedef struct (SystemInfo& info, MiloFile& milo)
 {
-    read_milo_files(milo);
+    read_milo_files(info, milo);
 } MiloFileEntries;
 
 typedef struct (SystemInfo& info)

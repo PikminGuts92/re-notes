@@ -47,6 +47,10 @@ typedef struct (SystemInfo& info, Bool super, Bool inlined)
     int version; // 15 (TBRB), 17 (DC1)
     RndDir rnd_dir(info, True, inlined);
 
+    // Only written when this.data_dir == this
+    // Not usually the case when Character is a sub directory as entry
+    if (ReadUInt() == 0xADDEADDE) return;
+
     int lod_count;
     LODTarget lods[lod_count]<optimize=false>;
 
