@@ -15,7 +15,7 @@
 #include "common.bt"
 #include "panel_dir.bt"
 
-typedef struct (SystemInfo& info, Bool super)
+typedef struct (SystemInfo& info, Bool super, Bool inlined)
 {
     int version; // 18 (TBRB)
 
@@ -23,7 +23,7 @@ typedef struct (SystemInfo& info, Bool super)
     float always_1;
     NumString usually_empty_or_milo_path;
 
-    PanelDir panel_dir(info, True);
+    PanelDir panel_dir(info, True, inlined);
 
     Matrix some_trans;
 
@@ -49,7 +49,7 @@ if (STANDALONE_FILE == "WorldDir")
         info.version = 24;
     }
 
-    WorldDir world_dir(info, False);
+    WorldDir world_dir(info, False, False);
 }
 
 #endif

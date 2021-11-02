@@ -101,6 +101,7 @@ string read_blob(Blob& blob)
     return s;
 }
 
+// DirLoader::SaveObjects
 void read_milo_files(MiloFile& milo)
 {
     local uint i;
@@ -111,7 +112,7 @@ void read_milo_files(MiloFile& milo)
         switch (milo.meta.entries[i].type.text)
         {
             case "CharClipSet":
-                CharClipSet dir_entry(info, False);
+                CharClipSet dir_entry(info, False, False);
                 uint padding<format=hex>;
 
                 MiloFile sub_dirs(info);
@@ -121,16 +122,16 @@ void read_milo_files(MiloFile& milo)
                 uint padding<format=hex>;
                 break;
             case "RndDir":
-                RndDir dir_entry(info, False);
+                RndDir dir_entry(info, False, False);
                 uint padding<format=hex>;
 
                 MiloFile sub_dir(info);
                 break;
             case "WorldInstance":
-                WorldInstance dir_entry(info, False);
+                // Inlined so DirLoader::SaveObjects not needed
+                WorldInstance dir_entry(info, False, True);
 
                 uint padding<format=hex>;
-                MiloFile sub_dir(info);
                 break;
             default:
                 file_size = findNextFile(adde);
@@ -172,31 +173,31 @@ typedef struct (SystemInfo& info)
         switch (meta.dir_type.text)
         {
             case "Character":
-                Character dir_entry(info, False);
+                Character dir_entry(info, False, False);
                 uint padding<format=hex>;
                 break;
             case "CharClipSet":
-                CharClipSet dir_entry(info, False);
+                CharClipSet dir_entry(info, False, False);
                 uint padding<format=hex>;
                 break;
             case "ObjectDir":
-                ObjectDir dir_entry(info, False);
+                ObjectDir dir_entry(info, False, False);
                 uint padding<format=hex>;
                 break;
             case "PanelDir":
-                PanelDir dir_entry(info, False);
+                PanelDir dir_entry(info, False, False);
                 uint padding<format=hex>;
                 break;
             case "RndDir":
-                RndDir dir_entry(info, False);
+                RndDir dir_entry(info, False, False);
                 uint padding<format=hex>;
                 break;
             case "WorldDir":
-                WorldDir dir_entry(info, False);
+                WorldDir dir_entry(info, False, False);
                 uint padding<format=hex>;
                 break;
             case "WorldInstance":
-                WorldInstance dir_entry(info, False);
+                WorldInstance dir_entry(info, False, True); // Inlined for some reason...
                 uint padding<format=hex>;
                 break;
             default:

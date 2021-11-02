@@ -19,10 +19,10 @@
 #include "poll.bt"
 #include "trans.bt"
 
-typedef struct (SystemInfo& info, Bool super)
+typedef struct (SystemInfo& info, Bool super, Bool inlined)
 {
     int version; // 8 (GH2), 9 (GH2 360), 10 (TBRB)
-    ObjectDir obj_dir(info, False);
+    ObjectDir obj_dir(info, False, inlined);
 
     if (ReadInt() == info.version)
     {
@@ -70,7 +70,7 @@ if (STANDALONE_FILE == "RndDir")
         }
     }
 
-    RndDir rnd_dir(info, False);
+    RndDir rnd_dir(info, False, False);
 }
 
 #endif

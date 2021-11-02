@@ -42,10 +42,10 @@ string lod_to_string(LODTarget& lod)
     return s;
 }
 
-typedef struct (SystemInfo& info, Bool super)
+typedef struct (SystemInfo& info, Bool super, Bool inlined)
 {
     int version; // 15 (TBRB), 17 (DC1)
-    RndDir rnd_dir(info, True);
+    RndDir rnd_dir(info, True, inlined);
 
     int lod_count;
     LODTarget lods[lod_count]<optimize=false>;
@@ -110,7 +110,7 @@ if (STANDALONE_FILE == "Character")
         info.version = 24;
     }
 
-    Character character(info, False);
+    Character character(info, False, False);
 }
 
 #endif

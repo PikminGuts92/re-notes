@@ -15,10 +15,10 @@
 #include "common.bt"
 #include "object_dir.bt"
 
-typedef struct (SystemInfo& info, Bool super)
+typedef struct (SystemInfo& info, Bool super, Bool inlined)
 {
     int version; // 16 (GH2), 24 (TBRB), 25 (GDRB)
-    ObjectDir obj_dir(info, True);
+    ObjectDir obj_dir(info, True, inlined);
 
     // Ends abruptly if milo object entry
     if (ReadUInt() == 0xADDEADDE)
@@ -54,7 +54,7 @@ if (STANDALONE_FILE == "CharClipSet")
         info.version = 24;
     }
 
-    CharClipSet char_clip_set(info, False);
+    CharClipSet char_clip_set(info, False, False);
 }
 
 #endif

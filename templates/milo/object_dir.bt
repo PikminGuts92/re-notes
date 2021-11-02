@@ -24,7 +24,7 @@ typedef enum <byte>
     SubDir = 0x03
 } MiloReferenceType;
 
-typedef struct (SystemInfo& info, Bool super)
+typedef struct (SystemInfo& info, Bool super, Bool inlined)
 {
     int version; // 16 (GH2), 17 (GH2 360), 22 (TBRB), 27 (DC1)
 
@@ -156,9 +156,15 @@ typedef struct (SystemInfo& info, Bool super)
     if (version > 10)
     {
         // This doesn't seem to match disassembly?
-        if (ReadByte() == 1)
+        if (inlined == True) // (ReadByte() == 1)
         {
             Bool no_idea_bool;
+
+            // Read inlined milo file...
+            if (no_idea_bool == False)
+            {
+                MiloFile inline(info);
+            }
         }
 
         // Objects
@@ -206,7 +212,7 @@ if (STANDALONE_FILE == "ObjectDir")
         }
     }
 
-    ObjectDir object_dir(info, False);
+    ObjectDir object_dir(info, False, False);
 }
 
 #endif
