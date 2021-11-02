@@ -52,7 +52,7 @@ typedef struct (SystemInfo& info, Bool super, Bool inlined)
     if (ReadUInt() == 0xADDEADDE) return;
 
     int lod_count;
-    LODTarget lods[lod_count]<optimize=false>;
+    if (lod_count > 0) LODTarget lods[lod_count]<optimize=false>;
 
     NumString shadow_group;
     Bool usually_false_1;
