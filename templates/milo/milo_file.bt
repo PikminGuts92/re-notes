@@ -129,6 +129,12 @@ void read_milo_files(SystemInfo& info, MiloFile& milo)
                 Group group(info, False);
                 uint padding<format=hex>;
                 break;
+            case "ObjectDir":
+                ObjectDir dir_entry(info, False, False);
+                uint padding<format=hex>;
+
+                MiloFile sub_dirs(info);
+                break;
             case "RndDir":
                 RndDir dir_entry(info, False, False);
                 uint padding<format=hex>;
