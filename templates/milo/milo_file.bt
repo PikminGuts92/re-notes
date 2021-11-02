@@ -155,7 +155,7 @@ void read_milo_files(SystemInfo& info, MiloFile& milo)
                 uint padding<format=hex>;
                 break;
             default:
-                file_size = findNextFile(adde);
+                file_size = findNextFile();
                 if (file_size == -1) break;
 
                 milo.meta.entries[i].offset = FTell();
@@ -227,7 +227,7 @@ typedef struct (SystemInfo& info)
                 break;
             default:
                 // Read directory entry
-                local uint size = findNextFile(adde);
+                local uint size = findNextFile();
                 Blob dir_entry(this, meta.dir_type, meta.dir_name, FTell(), size);
                 break;
         }

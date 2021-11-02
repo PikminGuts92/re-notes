@@ -264,12 +264,16 @@ typedef struct
     }
 } DTB;
 
-local uint adde = 0xADDEADDE;
-
 // Returns current file size
-uint findNextFile(uint magic)
+uint findNextFile()
 {
     if (FEof()) return -1;
+
+    local uint magic = 0xADDEADDE;
+    if (IsLittleEndian())
+    {
+        magic = 0xDEADDEAD;
+    }
 
     local uint startPos = FTell();
 
