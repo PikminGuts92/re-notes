@@ -243,6 +243,7 @@ if (STANDALONE_FILE == "MiloFile")
 
     local SystemInfo info;
     info.version = milo_version;
+    info.platform = X360; // TODO: Get platform from file extension
 
     MiloFile milo(info);
 

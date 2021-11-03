@@ -25,13 +25,13 @@ string mesh_to_string(Mesh& mesh)
     return s;
 }
 
-typedef struct (int mesh_version, Bool is_ng, int vert_size)
+typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
 {
     // Coordinates
     float x;
     float y;
     float z;
-    if (mesh_version == 34) float w; // Always 0?
+    if (mesh_version == 34 || (mesh_version == 36 && is_ng == False && (info.platform == X360 || info.platform == PS3))) float w; // Always 0?
 
     if (mesh_version < 35 || is_ng == False)
     {
@@ -48,7 +48,7 @@ typedef struct (int mesh_version, Bool is_ng, int vert_size)
         float nx;
         float ny;
         float nz;
-        if (mesh_version == 34) float nw; // Always 0?
+        if (mesh_version == 34 || (mesh_version == 36 && (info.platform == X360 || info.platform == PS3))) float nw; // Always 0?
         
         if (mesh_version >= 38)
         {
@@ -204,7 +204,7 @@ typedef struct
     ushort vertOffsets[vertCount];
 } GroupSection;
 
-typedef struct (int mesh_version)
+typedef struct (SystemInfo& info, int mesh_version)
 {
     int count;
     local Bool use_ng_verts = False; // Is next gen?
@@ -229,7 +229,7 @@ typedef struct (int mesh_version)
     local int i = 0;
     while (i < count)
     {
-        Vertex verts(mesh_version, use_ng_verts, vert_size_loc);
+        Vertex verts(info, mesh_version, use_ng_verts, vert_size_loc);
         i++;
     }
 } Vertices;
@@ -288,7 +288,7 @@ typedef struct (SystemInfo& info, Bool super)
     VOLUME_ENUM volume; // Volume of the Mesh (usually kVolumeTriangles)
     byte bsp; // Never observed, always 0
 
-    Vertices vertices(version);
+    Vertices vertices(info, version);
     Faces faces;
     
     // Weight groups?
