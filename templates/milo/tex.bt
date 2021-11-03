@@ -40,7 +40,7 @@ typedef struct (SystemInfo& info, Bool super)
     if (version >= 11 && use_gdrb_enc == False) Bool some_bool;
     Bool use_ext_path;
 
-    if (use_ext_path == True || FEof()) return;
+    if (FEof() || (ReadUInt() == 0xADDEADDE) || (ReadUInt() == 0xDEADDEAD)) return;
 
     // Read bitmap
     Bitmap bitmap;
