@@ -12,11 +12,10 @@
 #ifndef OBJECT_DIR
 #define OBJECT_DIR
 
-#include "common.bt"
+struct ObjectDir;
 
-#ifndef MILO_FILE
-    #include "milo_file.bt"
-#endif
+#include "common.bt"
+#include "milo_file.bt"
 
 typedef enum <byte>
 {

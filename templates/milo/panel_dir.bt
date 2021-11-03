@@ -12,6 +12,8 @@
 #ifndef PANEL_DIR
 #define PANEL_DIR
 
+struct PanelDir;
+
 #include "common.bt"
 #include "rnd_dir.bt"
 

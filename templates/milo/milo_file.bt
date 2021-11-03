@@ -1,11 +1,15 @@
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "MiloFile"
+    #endif
+
+    #define IN_MILO_FILE 1
+#endif
+
 #ifndef MILO_FILE
 #define MILO_FILE
 
 struct MiloFile;
-
-#ifndef IN_MILO_FILE
-    #define IN_MILO_FILE 1
-#endif
 
 #include "char_clip_set.bt"
 #include "character.bt"
@@ -239,23 +243,30 @@ typedef struct (SystemInfo& info)
     }
 } MiloFile;
 
-local int milo_version = guess_version();
+#ifdef STANDALONE_FILE
 
-if (milo_version == -1)
+if (STANDALONE_FILE == "MiloFile")
 {
-    // TODO: Read magic and read block offset
-    FSkip(2064);
-    milo_version = guess_version();
+    local int milo_version = guess_version();
+
+    if (milo_version == -1)
+    {
+        // TODO: Read magic and read block offset
+        FSkip(2064);
+        milo_version = guess_version();
+    }
+
+    local SystemInfo info;
+    info.version = milo_version;
+
+    MiloFile milo(info);
+
+    if (!FEof())
+    {
+        Printf("WARNING: End of file not reached. Milo may not have been properly parsed.");
+    }
 }
 
-local SystemInfo info;
-info.version = milo_version;
-
-MiloFile milo(info);
-
-if (!FEof())
-{
-    Printf("WARNING: End of file not reached. Milo may not have been properly parsed.");
-}
+#endif
 
 #endif

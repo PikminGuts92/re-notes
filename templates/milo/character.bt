@@ -12,6 +12,8 @@
 #ifndef CHARACTER
 #define CHARACTER
 
+struct Character;
+
 #include "common.bt"
 #include "rnd_dir.bt"
 
