@@ -29,7 +29,7 @@ typedef struct
     float angle;    // Angle in degrees of starting flip
 
     int points_count;
-    CharHairPoint points[points_count]<optimize=false>;
+    if (points_count > 0) CharHairPoint points[points_count]<optimize=false>;
     
     /*
         Defaults:
@@ -75,7 +75,7 @@ typedef struct (SystemInfo& info, Bool super)
     float max_slack; // If using sides, determines how far out it could go
 
     int strand_count;
-    CharHairStrand strands[strand_count]<optimize=false>;
+    if (strand_count > 0) CharHairStrand strands[strand_count]<optimize=false>;
 
     Bool simulate;  // Simulate physics or not
     NumString wind; // wind object to use
