@@ -40,7 +40,7 @@ typedef struct (SystemInfo& info, Bool super)
     {
         // GH1 and before
         int trans_count;
-        NumString trans_objects[trans_count]<optimize=false>; // Trans types? 
+        if (trans_count > 0) NumString trans_objects[trans_count]<optimize=false>; // Trans types? 
     }
 
     CONSTRAINT_ENUM constraint; // Trans constraint for the object (Constraint + target are used together)

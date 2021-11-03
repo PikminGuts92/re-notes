@@ -293,7 +293,7 @@ typedef struct (SystemInfo& info, Bool super)
     
     // Weight groups?
     int groupSizesCount;
-    ubyte groupSizes[groupSizesCount]; // Sum should equal count of faces
+    if (groupSizesCount > 0) ubyte groupSizes[groupSizesCount]; // Sum should equal count of faces
     
     local int charCount = ReadInt();
     
@@ -333,7 +333,7 @@ typedef struct (SystemInfo& info, Bool super)
     
     // This seems to be a last gen or lower version thing...
     // Present when groupSize count is at least one and at least one bone?
-    if (groupSizesCount > 0 && groupSizes[0] > 0 && !FEof())
+    if (groupSizesCount > 0 && groupSizes[0] > 0 && info.version < 25)
     {
         // If eof, then groups should be divided equally? Empty only for light meshes?
         GroupSection groups[groupSizesCount]<optimize=false>;

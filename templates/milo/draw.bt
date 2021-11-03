@@ -32,7 +32,7 @@ typedef struct (SystemInfo& info, Bool super)
     if (version < 3)
     {
         int draw_count; // Drawables (mesh, env, view)
-        NumString draw_objects[draw_count]<optimize=false>;
+        if (draw_count > 0) NumString draw_objects[draw_count]<optimize=false>;
     }
 
     // Represents a bounding sphere around this object and its
