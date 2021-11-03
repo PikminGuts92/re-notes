@@ -87,92 +87,84 @@ string read_ext_resources(ExternalResources& er)
     return s;
 }
 
-typedef struct (MiloFile& milo, NumString& entry_type, NumString& entry_name, uint entry_offset, uint entry_size)
+typedef struct (SystemInfo& info, string class_name, string name, Bool is_sub_dir)
 {
-    local string type = entry_type.text;
-    local string name = entry_name.text;
+    local string class_name = class_name;
+    local string name = name;
+    local byte should_read_milo = 0;
 
-    local uint offset = entry_offset;
-    local uint size = entry_size;
+    switch (class_name)
+    {
+        case "Character":
+            Character object(info, False, False);
+            break;
+        case "CharClipSet":
+            CharClipSet object(info, False, False);
+            should_read_milo = 1;
+            break;
+        case "Group":
+            Group object(info, False);
+            break;
+        case "ObjectDir":
+            ObjectDir object(info, False, False);
+            should_read_milo = 1;
+            break;
+        case "PanelDir":
+            PanelDir object(info, False, False);
+            break;
+        case "RndDir":
+            // Doesn't seem to ever write dir for gh2 milos
+            RndDir object(info, False, False);
+            break;
+        case "SynthDir":
+            SynthDir object(info, False, False);
+            should_read_milo = 1;
+            break;
+        case "WorldDir":
+            WorldDir object(info, False, False);
+            break;
+        case "WorldInstance":
+            // Inlined so DirLoader::SaveObjects not needed
+            WorldInstance object(info, False, True);
+            break;
+        default:
+            local uint file_size = findNextFile();
+            if (file_size == -1) return;
 
-    byte data[size];
+            byte data[file_size];
+            break;
+    }
+
     uint padding<format=hex>;
-} Blob<read=read_blob>;
 
-string read_blob(Blob& blob)
+    if (!FEof() && is_sub_dir == True && (should_read_milo == 1 || (ReadInt() == info.version)))
+    {
+        MiloFile dir(info);
+    }
+} Object<read=read_object>;
+
+string read_object(Object& obj)
 {
     local string s;
-    SPrintf(s, "%s: %s (%d bytes)", blob.type, blob.name, blob.size);    
+    SPrintf(s, "%s: %s", obj.class_name, obj.name);
     return s;
 }
+
 
 // DirLoader::SaveObjects
 void read_milo_files(SystemInfo& info, MiloFile& milo)
 {
     local uint i;
-    local uint file_size;
+
+    local string type;
+    local string name;
 
     for (i = 0; i < milo.meta.entry_count; i++)
     {
-        switch (milo.meta.entries[i].type.text)
-        {
-            case "Character":
-                Character dir_entry(info, False, False);
-                uint padding<format=hex>;
+        type = milo.meta.entries[i].type.text;
+        name = milo.meta.entries[i].name.text;
 
-                // Doesn't always seem to be present...
-                if (ReadInt() == info.version) MiloFile sub_dir(info);
-                break;
-            case "CharClipSet":
-                CharClipSet dir_entry(info, False, False);
-                uint padding<format=hex>;
-
-                MiloFile sub_dirs(info);
-                break;
-            case "Group":
-                Group group(info, False);
-                uint padding<format=hex>;
-                break;
-            case "ObjectDir":
-                ObjectDir dir_entry(info, False, False);
-                uint padding<format=hex>;
-
-                MiloFile sub_dirs(info);
-                break;
-            case "RndDir":
-                RndDir dir_entry(info, False, False);
-                uint padding<format=hex>;
-
-                // Doesn't always seem to be present...
-                if (ReadInt() == info.version) MiloFile sub_dir(info);
-                break;
-            case "SynthDir":
-                SynthDir dir_entry(info, False, False);
-                uint padding<format=hex>;
-
-                MiloFile sub_dir(info);
-                break;
-            case "WorldInstance":
-                // Inlined so DirLoader::SaveObjects not needed
-                WorldInstance dir_entry(info, False, True);
-
-                uint padding<format=hex>;
-                break;
-            default:
-                file_size = findNextFile();
-                if (file_size == -1) break;
-
-                milo.meta.entries[i].offset = FTell();
-                milo.meta.entries[i].size = file_size;
-
-                Blob files(
-                    milo,
-                    milo.meta.entries[i].type,
-                    milo.meta.entries[i].name,
-                    milo.meta.entries[i].offset,
-                    milo.meta.entries[i].size);
-                break;
-        }
+        Object objects(info, type, name, True);
     }
 }
 
@@ -195,46 +187,10 @@ typedef struct (SystemInfo& info)
     }
     else
     {
-        switch (meta.dir_type.text)
-        {
-            case "Character":
-                Character dir_entry(info, False, False);
-                uint padding<format=hex>;
-                break;
-            case "CharClipSet":
-                CharClipSet dir_entry(info, False, False);
-                uint padding<format=hex>;
-                break;
-            case "ObjectDir":
-                ObjectDir dir_entry(info, False, False);
-                uint padding<format=hex>;
-                break;
-            case "PanelDir":
-                PanelDir dir_entry(info, False, False);
-                uint padding<format=hex>;
-                break;
-            case "RndDir":
-                RndDir dir_entry(info, False, False);
-                uint padding<format=hex>;
-                break;
-            case "SynthDir":
-                SynthDir dir_entry(info, False, False);
-                uint padding<format=hex>;
-                break;
-            case "WorldDir":
-                WorldDir dir_entry(info, False, False);
-                uint padding<format=hex>;
-                break;
-            case "WorldInstance":
-                WorldInstance dir_entry(info, False, True); // Inlined for some reason...
-                uint padding<format=hex>;
-                break;
-            default:
-                // Read directory entry
-                local uint size = findNextFile();
-                Blob dir_entry(this, meta.dir_type, meta.dir_name, FTell(), size);
-                break;
-        }
+        local string type = meta.dir_type.text;
+        local string name = meta.dir_name.text;
+
+        Object dir_entry(info, type, name, False);
     }
 
     if (meta.entry_count > 0)
