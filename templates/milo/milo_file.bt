@@ -88,10 +88,12 @@ string read_ext_resources(ExternalResources& er)
     return s;
 }
 
-typedef struct (SystemInfo& info, string class_name, string name, Bool is_sub_dir)
+typedef struct (SystemInfo& info, string class_name, string name, Bool is_entry)
 {
     local string class_name = class_name;
     local string name = name;
+
+    local byte is_dir = 0;
     local byte should_read_milo = 0;
 
     switch (class_name)
@@ -101,9 +103,11 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_sub_di
             break;
         case "Character":
             Character object(info, False, False);
+            is_dir = 1;
             break;
         case "CharClipSet":
             CharClipSet object(info, False, False);
+            is_dir = 1;
             should_read_milo = 1;
             break;
         case "Group":
@@ -111,6 +115,7 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_sub_di
             break;
         case "ObjectDir":
             ObjectDir object(info, False, False);
+            is_dir = 1;
             should_read_milo = 1;
             break;
         case "Mat":
@@ -121,16 +126,20 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_sub_di
             break;
         case "P9Character":
             P9Character object(info, False, False);
+            is_dir = 1;
             break;
         case "PanelDir":
             PanelDir object(info, False, False);
+            is_dir = 1;
             break;
         case "RndDir":
             // Doesn't seem to ever write dir for gh2 milos
             RndDir object(info, False, False);
+            is_dir = 1;
             break;
         case "SynthDir":
             SynthDir object(info, False, False);
+            is_dir = 1;
             should_read_milo = 1;
             break;
         case "Tex":
@@ -141,6 +150,7 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_sub_di
             break;
         case "WorldDir":
             WorldDir object(info, False, False);
+            is_dir = 1;
             break;
         case "WorldInstance":
             // Inlined so DirLoader::SaveObjects not needed
@@ -156,7 +166,7 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_sub_di
 
     uint padding<format=hex>;
 
-    if (!FEof() && is_sub_dir == True && (should_read_milo == 1 || (ReadInt() == info.version)))
+    if (!FEof() && is_dir == 1 && is_entry == True && (should_read_milo == 1 || (ReadInt() == info.version)))
     {
         MiloFile dir(info);
     }
