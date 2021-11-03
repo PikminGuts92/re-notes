@@ -2,11 +2,14 @@
 #define OBJECTS
 
 #include "common.bt"
+#include "cam.bt"
 #include "draw.bt"
 #include "group.bt"
+#include "mat.bt"
 #include "mesh.bt"
 #include "poll.bt"
 #include "prop_anim.bt"
+#include "tex.bt"
 #include "trans.bt"
 
 #endif

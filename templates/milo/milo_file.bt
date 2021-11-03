@@ -16,6 +16,7 @@ struct MiloFile;
 #include "common.bt"
 #include "object_dir.bt"
 #include "objects.bt"
+#include "p9_character.bt"
 #include "panel_dir.bt"
 #include "rnd_dir.bt"
 #include "synth_dir.bt"
@@ -95,6 +96,9 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_sub_di
 
     switch (class_name)
     {
+        case "Cam":
+            Cam object(info, False);
+            break;
         case "Character":
             Character object(info, False, False);
             break;
@@ -109,6 +113,15 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_sub_di
             ObjectDir object(info, False, False);
             should_read_milo = 1;
             break;
+        case "Mat":
+            Mat object(info, False);
+            break;
+        case "Mesh":
+            Mesh object(info, False);
+            break;
+        case "P9Character":
+            P9Character object(info, False, False);
+            break;
         case "PanelDir":
             PanelDir object(info, False, False);
             break;
@@ -119,6 +132,12 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_sub_di
         case "SynthDir":
             SynthDir object(info, False, False);
             should_read_milo = 1;
+            break;
+        case "Tex":
+            Tex object(info, False);
+            break;
+        case "Trans":
+            Trans object(info, False);
             break;
         case "WorldDir":
             WorldDir object(info, False, False);
