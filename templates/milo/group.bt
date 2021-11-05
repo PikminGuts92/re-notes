@@ -19,7 +19,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 7 (GH1), 12 (GH2/GH2 360), 13 (RB1), 14 (TBRB/GDRB/RB3)
+    int version; // 7 (GH1), 11 (GH2 4-song), 12 (GH2/GH2 360), 13 (RB1), 14 (TBRB/GDRB/RB3)
 
     if (version > 7)
     {
@@ -39,6 +39,8 @@ typedef struct (SystemInfo& info, Bool super)
 
     // Read environment/view?
     NumString environ; // Environ
+
+    if (version == 11) return; // Not sure why demo doesn't have lod values...
 
     if (version <= 12)
     {
@@ -74,7 +76,7 @@ if (STANDALONE_FILE == "Group")
     else
     {
         info.platform = PS2;
-        if (obj_version == 12)
+        if (obj_version <= 12)
         {
             info.version = 24;
         }

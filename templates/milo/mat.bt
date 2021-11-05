@@ -99,7 +99,7 @@ typedef struct
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 21 (GH1), 27 (GH2), 28 (GH2 360), 41 (RB1), 47 (RB2), 55 (TBRB), 56 (GDRB), 68 (RB3)
+    int version; // 21 (GH1), 25 (GH2 4-song) 27 (GH2), 28 (GH2 360), 41 (RB1), 47 (RB2), 55 (TBRB), 56 (GDRB), 68 (RB3)
 
     if (version <= 21)
     {
@@ -379,7 +379,7 @@ if (STANDALONE_FILE == "Mat")
     else
     {
         info.platform = PS2;
-        if (obj_version == 27)
+        if (obj_version <= 27)
         {
             info.version = 24;
         }
