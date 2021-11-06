@@ -23,7 +23,7 @@ struct RndDir;
 
 typedef struct (SystemInfo& info, Bool super, Bool inlined)
 {
-    int version; // 8 (GH2), 9 (GH2 360), 10 (TBRB)
+    int version; // 6 (GH2 4-song), 8 (GH2), 9 (GH2 360), 10 (TBRB)
     ObjectDir obj_dir(info, False, inlined);
 
     if (ReadInt() == info.version)
@@ -49,6 +49,10 @@ typedef struct (SystemInfo& info, Bool super, Bool inlined)
         NumString environ; // Environ
         if (version >= 10) NumString test_event; // Symbol
     }
+
+    // No idea on this one... what the heck 4-song demo?
+    // 100 100 100 100 1 0 10 0
+    if (version == 6) float some_floats[8];
 } RndDir;
 
 #ifdef STANDALONE_FILE
@@ -66,7 +70,7 @@ if (STANDALONE_FILE == "RndDir")
     else
     {
         info.platform = PS2;
-        if (obj_version == 8)
+        if (obj_version <= 8)
         {
             info.version = 24;
         }

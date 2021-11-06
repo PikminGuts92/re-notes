@@ -19,12 +19,17 @@ struct PanelDir;
 
 typedef struct (SystemInfo& info, Bool super, Bool inlined)
 {
-    int version; // 2 (GH2/GH2 360), 7 (TBRB), 8 (DC1)
+    int version; // 1 (GH2 4-song), 2 (GH2/GH2 360), 7 (TBRB), 8 (DC1)
     RndDir rnd_dir(info, True, inlined);
 
     NumString cam;
 
-    if (version <= 2)
+    if (version <= 1)
+    {
+        // Nothing else here...
+        return;
+    }
+    if (version == 2)
     {
         NumString test_event; // or "fire_event"?
         return;
@@ -76,7 +81,7 @@ if (STANDALONE_FILE == "PanelDir")
     else
     {
         info.platform = PS2;
-        if (obj_version == 2)
+        if (obj_version <= 2)
         {
             info.version = 24;
         }
