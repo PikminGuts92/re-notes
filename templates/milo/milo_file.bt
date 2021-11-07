@@ -157,7 +157,7 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_entry)
             WorldInstance object(info, False, True);
             break;
         default:
-            local uint file_size = findNextFile();
+            local int file_size = findNextFile();
             if (file_size == -1) return;
 
             byte data[file_size];
