@@ -1,0 +1,55 @@
+// C++ Class: SampleData
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "SampleData"
+    #endif
+#endif
+
+#ifndef OBJECT_SAMPLE_DATA
+#define OBJECT_SAMPLE_DATA
+
+#include "common.bt"
+
+typedef struct (SystemInfo& info)
+{
+    int version; // 13 (TBRB/GDRB)
+
+    // 1 = Uncompressed 16-bit PCM
+    // 3 = Unknown...
+    int encoding;
+
+    int sample_count; // Will be half of samples_size if encoding is 1
+    int sample_rate;
+    int samples_size;
+
+    Bool some_bool;
+
+    if (samples_size > 0) byte samples[samples_size];
+} SampleData;
+
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "SampleData")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    SampleData sample_data(info);
+}
+
+#endif
+
+
+#endif

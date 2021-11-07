@@ -1,0 +1,56 @@
+// A single mono waveform residing in a bank.
+// Super: (None)
+// Ext: .wav
+// C++ Class: SynthSample
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "SynthSample"
+    #endif
+#endif
+
+#ifndef OBJECT_SYNTH_SAMPLE
+#define OBJECT_SYNTH_SAMPLE
+
+#include "common.bt"
+#include "sample_data.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 5 (TBRB/GDRB)
+    read_metadata(info, super);
+
+    NumString file; // Mono, 16-bit sample file
+    Bool looped;    // Loop this sample
+
+    int loop_start_sample; // Start of the loop, in samples. Ignored if "looped" is unchecked
+    int loop_end_sample;   // End of the loop, in samples. Use -1 for the end of the sample
+
+    SampleData sample_data(info);
+} SynthSample;
+
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "SynthSample")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    SynthSample synth_sample(info, False);
+}
+
+#endif
+
+
+#endif
