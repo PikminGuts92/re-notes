@@ -13,6 +13,7 @@
 #define OBJECT_MOGG_CLIP
 
 #include "common.bt"
+#include "mogg_file.bt"
 
 typedef struct (SystemInfo& info, Bool super)
 {
@@ -26,7 +27,17 @@ typedef struct (SystemInfo& info, Bool super)
     // Read encoded audio data
     if (version > 0)
     {
-        
+        ushort channels; // 2, 4
+        ushort sample_rate; // Not really sure...
+
+        // Remember endianess
+        local byte is_big_endian = IsBigEndian();
+
+        // Mogg is still written in little endian
+        LittleEndian();
+        MoggFile mogg;
+
+        if (is_big_endian) BigEndian();
     }
 } MoggClip;
 
