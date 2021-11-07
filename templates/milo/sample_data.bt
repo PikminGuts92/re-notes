@@ -13,14 +13,17 @@
 
 typedef struct (SystemInfo& info)
 {
-    int version; // 13 (TBRB/GDRB)
+    int version; // 11 (GH2 4-song/GH2/GH2 360), 13 (TBRB/GDRB)
 
     // 1 = Uncompressed 16-bit PCM
-    // 3 = Unknown...
+    // 2 =  ??? (PS2)
+    // 3 =  ??? (360)
+    // 5 = MSFC (PS3)
+    // 6 =  ??? (Wii)
     int encoding;
 
     int sample_count; // Will be half of samples_size if encoding is 1
-    int sample_rate;
+    int sample_rate;  // PS2 usually 16kHz (Also observed: 22.05kHz), 360 usually 44.1kHz
     int samples_size;
 
     Bool some_bool;

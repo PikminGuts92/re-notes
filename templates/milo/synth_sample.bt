@@ -17,14 +17,14 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 5 (TBRB/GDRB)
-    read_metadata(info, super);
+    int version; // 5 (GH2 4-song/GH2/GH2 360/TBRB/GDRB)
+    if (version > 1) read_metadata(info, super);
 
     NumString file; // Mono, 16-bit sample file
     Bool looped;    // Loop this sample
 
-    int loop_start_sample; // Start of the loop, in samples. Ignored if "looped" is unchecked
-    int loop_end_sample;   // End of the loop, in samples. Use -1 for the end of the sample
+    int loop_start_sample;                  // Start of the loop, in samples. Ignored if "looped" is unchecked
+    if (version > 2) int loop_end_sample;   // End of the loop, in samples. Use -1 for the end of the sample
 
     SampleData sample_data(info);
 } SynthSample;
@@ -44,6 +44,13 @@ if (STANDALONE_FILE == "SynthSample")
     }
     else
     {
+        if (obj_version > 1)
+        {
+            // Set milo version based on object revision
+            local int revision = ReadInt(FTell() + 4);
+            if (revision == 0) info.version = 24;
+        }
+
         info.platform = PS2;
     }
 
