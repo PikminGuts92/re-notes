@@ -25,7 +25,7 @@ typedef enum <byte>
 
 typedef struct (SystemInfo& info, Bool super, Bool inlined)
 {
-    int version; // 14 (GH2 4-song), 16 (GH2), 17 (GH2 360), 22 (TBRB), 27 (DC1)
+    int version; // 14 (GH2 4-song), 16 (GH2), 17 (GH2 360), 22 (TBRB/GDRB), 27 (DC1)
 
     if (version < 22)
     {

@@ -46,7 +46,7 @@ string lod_to_string(LODTarget& lod)
 
 typedef struct (SystemInfo& info, Bool super, Bool inlined)
 {
-    int version; // 15 (TBRB), 17 (DC1)
+    int version; // 15 (TBRB/GDRB), 17 (DC1)
     RndDir rnd_dir(info, True, inlined);
 
     // Only written when this.data_dir == this

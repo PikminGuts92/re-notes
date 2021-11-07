@@ -10,7 +10,7 @@
 
 typedef struct (SystemInfo& info, Bool super, Bool inlined)
 {
-    int version; // 1 (TBRB), 2 (DC1)
+    int version; // 1 (TBRB/GDRB), 2 (DC1)
     NumString instance_file;
 
     // ObjectDir::SaveInlined

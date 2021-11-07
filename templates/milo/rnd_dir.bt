@@ -23,7 +23,7 @@ struct RndDir;
 
 typedef struct (SystemInfo& info, Bool super, Bool inlined)
 {
-    int version; // 6 (GH2 4-song), 8 (GH2), 9 (GH2 360), 10 (TBRB)
+    int version; // 6 (GH2 4-song), 8 (GH2), 9 (GH2 360), 10 (TBRB/GDRB)
     ObjectDir obj_dir(info, False, inlined);
 
     if (ReadInt() == info.version)

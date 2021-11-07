@@ -17,7 +17,7 @@
 
 typedef struct (SystemInfo& info, Bool super, Bool inlined)
 {
-    int version; // 18 (TBRB)
+    int version; // 18 (TBRB/GDRB)
 
     float always_0;
     float always_1;

@@ -18,7 +18,7 @@
 typedef struct (SystemInfo& info, Bool super, Bool inlined)
 {
     // There's really nothing much to this file other than they're usually name "xxx_bank"
-    int version; // 1 (TBRB)
+    int version; // 1 (TBRB/GDRB)
     ObjectDir obj_dir(info, False, inlined);
 } SynthDir;
 
