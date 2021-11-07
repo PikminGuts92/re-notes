@@ -1,0 +1,84 @@
+LittleEndian();
+
+const uint MAX_CHANNELS = 15;
+const uint VAG_BYTES_PER_BLOCK = 16;
+const uint VAG_SAMPLES_PER_BLOCK = 28; 
+
+struct VgsFile;
+
+float calculate_position_vag(uint sample_rate, uint i)
+{
+    return (float)(i * VAG_SAMPLES_PER_BLOCK) / (float)sample_rate;
+}
+
+typedef struct
+{
+    byte data[VAG_BYTES_PER_BLOCK];
+} Block;
+
+typedef struct (uint channel_count, uint i, uint sample_rate)
+{
+    local float pos = calculate_position_vag(sample_rate, i);
+
+    Block blocks[channel_count];
+} InterleavedBlock<read=read_inter_block>;
+
+string read_inter_block(InterleavedBlock& block)
+{
+    local string s;
+    SPrintf(s, "Pos: %.3f", block.pos);
+    return s;
+}
+
+typedef struct (VgsFile& vgs)
+{
+    // Calculate number of channels + blocks
+    local uint channel_count = 0;
+    local uint block_count = 0;
+    while (channel_count < MAX_CHANNELS)
+    {
+        if (vgs.channel_info[channel_count].block_count == 0)
+            break;
+
+        block_count = vgs.channel_info[channel_count].block_count;
+        channel_count++;
+    }
+
+    if (block_count > 0)
+    {
+        local uint sample_rate = vgs.channel_info[0].sample_rate;
+
+        local uint i;
+        for (i = 0; i < block_count; i++)
+        {
+            InterleavedBlock inter_blocks(channel_count, i, sample_rate);
+        }
+    }
+} VAGStream;
+
+typedef struct
+{
+    uint sample_rate;
+    uint block_count;
+} StreamInfo;
+
+typedef struct
+{
+    char magic[4]; // VgS!
+    int version; // 2 (GH1/GH2), 4 (RB1)
+    
+    StreamInfo channel_info[MAX_CHANNELS];
+
+    if (version != 2)
+    {
+        local uint stream_size = FileSize() - FTell();
+        byte stream[stream_size];
+    }
+    else
+    {
+        // Read unencrypted VAG stream
+        VAGStream stream(this);
+    }
+} VgsFile;
+
+VgsFile vgs;
