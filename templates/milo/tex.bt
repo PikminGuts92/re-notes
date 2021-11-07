@@ -22,7 +22,7 @@ typedef struct (SystemInfo& info, Bool super)
 
     if (version > 8) read_metadata(info, super);
 
-    if (info.version == 25 && ReadUInt() > 0 && ReadUInt() < 16)
+    if (version >= 11 && info.version == 25)
     {
         use_gdrb_enc = True;
 
