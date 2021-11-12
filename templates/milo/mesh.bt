@@ -355,7 +355,7 @@ if (STANDALONE_FILE == "Mesh")
     else
     {
         info.platform = PS2;
-        if (obj_version == 28)
+        if (obj_version <= 28)
         {
             info.version = 24;
         }
