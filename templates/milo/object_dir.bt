@@ -90,8 +90,9 @@ typedef struct (SystemInfo& info, Bool super, Bool inlined)
 
     if (version > 2)
     {
-        int sub_dir_count;
-        if (sub_dir_count > 0) NumString sub_dirs[sub_dir_count]<optimize=false>;
+        // Subdirectories of objects
+        int subdir_count;
+        if (subdir_count > 0) NumString subdirs[subdir_count]<optimize=false>;
 
         if (version >= 21)
         {
@@ -100,7 +101,7 @@ typedef struct (SystemInfo& info, Bool super, Bool inlined)
 
             if (inline_subdir_count > 0)
             {
-                NumString inline_subdirs[inline_subdir_count]<optimize=false>; // Appears in reverse order?
+                NumString inline_subdir_names[inline_subdir_count]<optimize=false>; // Appears in reverse order?
 
 
                 if (version >= 27)
@@ -117,7 +118,7 @@ typedef struct (SystemInfo& info, Bool super, Bool inlined)
                 // Iterate over inline sub directories
                 for (i = 0; i < inline_subdir_count; i++)
                 {
-                    MiloFile sub_dirs(info);
+                    MiloFile inline_subdirs(info);
                 }
             }
         }
