@@ -19,9 +19,9 @@ struct Character;
 
 typedef struct
 {
-    float some_cutoff; // For loading lods?
-    NumString lod_group;
-    NumString lod_trans_group;
+    float screen_size;     // When the unit sphere centered on the bounding sphere is smaller than this screen height fraction, it will draw the next lod
+    NumString group;       // Group - Group to show at this LOD.  Drawables not in any lod group will be drawn at every LOD
+    NumString trans_group; // Group - Translucency group to show at this LOD.  Drawables in it are guaranteed to be drawn last.
 } LODTarget<read=lod_to_string>;
 
 string lod_to_string(LODTarget& lod)
@@ -30,40 +30,84 @@ string lod_to_string(LODTarget& lod)
     local string grp_text = "";
     local string trans_text = "";
 
-    if (exists(lod.lod_group.text))
+    if (exists(lod.group.text))
     {
-        grp_text = lod.lod_group.text;
+        grp_text = lod.group.text;
     }
 
-    if (exists(lod.lod_trans_group.text))
+    if (exists(lod.trans_group.text))
     {
-        trans_text = lod.lod_trans_group.text;
+        trans_text = lod.trans_group.text;
     }
 
-    SPrintf(s, "%.3f %s %s", lod.some_cutoff, grp_text, trans_text);
+    SPrintf(s, "%.3f %s %s", lod.screen_size, grp_text, trans_text);
     return s;
 }
 
-typedef struct (SystemInfo& info, Bool super, Bool inlined)
+typedef struct (SystemInfo& info)
+{
+    int version; // 10 (TBRB/GDRB)
+
+    NumString driver; // CharDriver - The driver to animate
+    NumString clip1;  // CharClip - Clip to play
+    NumString clip2;  // CharClip - Clip to transition to, if any
+
+    NumString teleport_to;   // Waypoint - Teleport to this Waypoint
+    NumString teleport_from; // Waypoint - ???
+
+    NumString dist_map; // Symbol (none nodes raw) - Displays the transition distance map between clip1 and clip2, raw means the raw graph, no nodes
+
+    int value_0x7c;
+    Bool value_0x80;
+    int value_0x90;
+
+    Bool value_0x81;
+    Bool value_0x82;
+    Bool value_0x83;
+
+    NumString value_0x84; // Symbol
+
+    Bool value_0x88;
+    Bool value_0x89;
+
+    int bpm;
+
+    NumString value_0x98; // Symbol
+
+    float value_0x9c;
+
+    NumString value_0x54; // RndTransformable
+} CharacterTest;
+
+typedef struct (SystemInfo& info, Bool super, Bool inlined, Bool is_entry)
 {
     int version; // 15 (TBRB/GDRB), 17 (DC1)
     RndDir rnd_dir(info, True, inlined);
 
     // Only written when this.data_dir == this
     // Not usually the case when Character is a sub directory as entry
-    if (ReadUInt() == 0xADDEADDE) return;
+    // Note: Second check probable not needed anymore
+    if (is_entry == True || ReadUInt() == 0xADDEADDE) return;
 
     int lod_count;
     if (lod_count > 0) LODTarget lods[lod_count]<optimize=false>;
 
-    NumString shadow_group;
-    Bool usually_false_1;
+    NumString shadow; // Gruop - Group containing shadow geometry
+    Bool self_shadow; // Whether this character should be self-shadowed
 
-    NumString some_object_target; // Matches directory name?
-    Vector4 some_vector;
+    NumString sphere_base; // RndTransformable - Base for bounding sphere, such as bone_pelvis.mesh
+    Sphere bounding;       // Bounding sphere for the character, fixed
 
-    Bool usually_false_2;
-    uint always_ff<format=hex>;
+    Bool frozen;   // If true, is frozen in place, no polling happens
+    int force_lod; // Forces the lod if greater or equal to zero
+
+    if (version <= 15)
+    {
+        CharacterTest char_test(info);
+        return;
+    }
+
+    // TODO: Update for DC1
 
     if (version < 17)
     {
@@ -116,7 +160,7 @@ if (STANDALONE_FILE == "Character")
         info.version = 24;
     }
 
-    Character character(info, False, False);
+    Character character(info, False, False, False);
 }
 
 #endif

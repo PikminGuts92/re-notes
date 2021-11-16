@@ -15,10 +15,10 @@
 #include "character.bt"
 #include "common.bt"
 
-typedef struct (SystemInfo& info, Bool super, Bool inlined)
+typedef struct (SystemInfo& info, Bool super, Bool inlined, Bool is_entry)
 {
     int version; // 8 (TBRB)
-    Character character(info, True, inlined);
+    Character character(info, True, inlined, is_entry);
 
     float head_lookat_weight; // What fraction to drive the head lookat
 
@@ -51,7 +51,7 @@ if (STANDALONE_FILE == "P9Character")
         info.version = 24;
     }
 
-    P9Character p9_character(info, False, False);
+    P9Character p9_character(info, False, False, False);
 }
 
 #endif

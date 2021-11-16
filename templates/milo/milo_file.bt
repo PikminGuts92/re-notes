@@ -102,7 +102,7 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_entry)
             Cam object(info, False);
             break;
         case "Character":
-            Character object(info, False, False);
+            Character object(info, False, False, is_entry);
             is_dir = 1;
             break;
         case "CharClipSet":
@@ -128,7 +128,7 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_entry)
             MoggClip object(info, False);
             break;
         case "P9Character":
-            P9Character object(info, False, False);
+            P9Character object(info, False, False, is_entry);
             is_dir = 1;
             break;
         case "PanelDir":
