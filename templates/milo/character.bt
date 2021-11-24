@@ -86,7 +86,7 @@ typedef struct (SystemInfo& info, Bool super, Bool inlined, Bool is_entry)
 
     // Only written when this.data_dir == this
     // Not usually the case when Character is a sub directory as entry
-    // Note: Second check probable not needed anymore
+    // Note: Second check probably not needed anymore
     if (is_entry == True || ReadUInt() == 0xADDEADDE) return;
 
     int lod_count;

@@ -15,19 +15,23 @@
 #include "common.bt"
 #include "object_dir.bt"
 
-typedef struct (SystemInfo& info, Bool super, Bool inlined)
+typedef struct (SystemInfo& info, Bool super, Bool inlined, Bool is_entry)
 {
     int version; // 16 (GH2), 24 (TBRB), 25 (GDRB)
     ObjectDir obj_dir(info, True, inlined);
 
-    // Ends abruptly if milo object entry
-    if (ReadUInt() == 0xADDEADDE)
-    {
-        return;
-    }
+    // Only written when this.data_dir == this
+    // Not usually the case when CharClipSet is a sub directory as entry
+    // Note: Second check probably not needed anymore
+    if (is_entry == True || ReadUInt() == 0xADDEADDE) return;
 
-    int nums[5];
-    byte always_0;
+    NumString char_file_path; // Preview base character to use- for example, char/male/male_guitar.milo for male guitarist
+    NumString preview_clip;   // CharClip - Pick a clip to play
+    uint filter_flags;        // Flags for filtering preview clip
+
+    int bpm;              // bpm for clip playing
+    Bool preview_walk;    // Allow preview character to move around and walk?
+    NumString still_clip; // CharClip - Set this to view drummer play anims
 
     if (version >= 25)
     {
@@ -54,7 +58,7 @@ if (STANDALONE_FILE == "CharClipSet")
         info.version = 24;
     }
 
-    CharClipSet char_clip_set(info, False, False);
+    CharClipSet char_clip_set(info, False, False, False);
 }
 
 #endif
