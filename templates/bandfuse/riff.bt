@@ -3,6 +3,7 @@
 
 #include "common.bt"
 #include "constants.bt"
+#include "crc64.bt"
 #include "string_table.bt"
 #include "zobject.bt"
 

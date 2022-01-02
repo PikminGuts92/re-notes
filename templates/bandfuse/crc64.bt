@@ -1,0 +1,76 @@
+#ifndef BANDFUSE_CRC64
+#define BANDFUSE_CRC64
+
+const uint64 POLYNOMIAL = 0x42F0E1EBA9EA3693; // ECMA Standard
+const uint64 INITIAL = 0xFFFFFFFFFFFFFFFF;
+const uint64 FINAL = 0xFFFFFFFFFFFFFFFF;
+
+local uint64 TABLE[0x100]<format=hex>;
+
+uint64 cm_table_value(uint ti, uint64 poly)
+{
+    local uint64 retval = ti;
+    local uint64 topbit = (uint64)1 << (64 - 1);
+    local uint64 mask = 0xFFFFFFFFFFFFFFFF;
+
+    retval <<= (64 - 8);
+
+    local uint i;
+    for (i = 0; i < 8; i++)
+    {
+        if ((retval & topbit) != 0)
+            retval = (retval << 1) ^ poly;
+        else
+            retval <<= 1;
+    }
+
+    return retval & mask;
+}
+
+void init_table(uint64 poly)
+{
+    local uint i;
+    for (i = 0; i < 0x100; i++)
+    {
+        TABLE[i] = cm_table_value(i, poly);
+    }
+}
+
+uint64 table_value(byte b, uint64 crc)
+{
+    return TABLE[((crc >> 56) ^ b) & 0xFF] ^ (crc << 8);
+}
+
+uint64 compute_crc64_from_string(string str_value, byte ignore_case)
+{
+    local uint64 current = INITIAL;
+    local uint str_size = sizeof(str_value) - 1;
+
+    local uint i = 0;
+    local byte c;
+
+    for (i = 0; i < str_size; i++)
+    {
+        c = str_value[i];
+
+        if (ignore_case)
+        {
+            if (c >= 'A' && c <= 'Z')
+            {
+                // Force lowercase
+                c = c | 0x20;
+            } else if ((c == '\\') || (c == '/'))
+            {
+                c = '.';
+            }
+        }
+
+        current = table_value(c, current);
+    }
+
+    return current ^ FINAL;
+}
+
+init_table(POLYNOMIAL);
+
+#endif
