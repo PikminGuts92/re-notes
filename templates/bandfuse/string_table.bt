@@ -1,0 +1,13 @@
+#ifndef BANDFUSE_STRING_TABLE
+#define BANDFUSE_STRING_TABLE
+
+#include "common.bt"
+#include "constants.bt"
+
+typedef struct
+{
+    ChunkInfo chunk_info;
+    ZObjectHeader header;
+} StringTable;
+
+#endif

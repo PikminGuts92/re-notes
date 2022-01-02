@@ -1,9 +1,46 @@
 #ifndef BANDFUSE_COMMON
 #define BANDFUSE_COMMON
 
+#include "constants.bt"
+
 typedef struct
 {
     uint64 value;
 } HKey<read=Str("%X", this.value)>;
+
+typedef struct
+{
+    char magic[4];
+    uint size;
+
+    local string formatted_magic;
+    switch (magic)
+    {
+        case MAGIC_INDX:
+            formatted_magic = "INDX";
+            break;
+        case MAGIC_RIFF:
+            formatted_magic = "RIFF";
+            break;
+        case MAGIC_STBL:
+            formatted_magic = "STbl";
+            break;
+        case MAGIC_ZOBJ:
+            formatted_magic = "ZOBJ";
+            break;
+        default:
+            formatted_magic = "UNKN";
+            break;
+    }
+} ChunkInfo<read=Str("%s (Size: %d)", this.formatted_magic, this.size)>;
+
+typedef struct
+{
+    HKey file_path;
+    HKey dir_path;
+    HKey file_ext;
+
+    uint64 always_0<hidden=true>;
+} ZObjectHeader;
 
 #endif

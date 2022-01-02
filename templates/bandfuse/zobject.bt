@@ -1,0 +1,13 @@
+#ifndef BANDFUSE_ZOBJECT
+#define BANDFUSE_ZOBJECT
+
+#include "common.bt"
+#include "constants.bt"
+
+typedef struct
+{
+    ChunkInfo chunk_info;
+    ZObjectHeader header;
+} ZObject;
+
+#endif
