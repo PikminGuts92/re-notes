@@ -1,0 +1,9 @@
+#ifndef BANDFUSE_COMMON
+#define BANDFUSE_COMMON
+
+typedef struct
+{
+    uint64 value;
+} HKey<read=Str("%X", this.value)>;
+
+#endif

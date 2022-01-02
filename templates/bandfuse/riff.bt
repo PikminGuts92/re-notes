@@ -1,0 +1,61 @@
+#ifndef BANDFUSE_RIFF
+#define BANDFUSE_RIFF
+
+#include "common.bt"
+#include "constants.bt"
+
+BigEndian();
+
+typedef struct
+{
+    HKey path;
+    uint offset;
+    uint always_0<hidden=true>;
+} IndxEntry;
+
+typedef struct
+{
+    char magic[4];
+    uint size;
+
+    uint entries_count;
+    uint entries_offset; // Always 4
+
+    if (entries_count <= 0) return;
+
+    IndxEntry entries[entries_count];
+} Indx;
+
+typedef struct
+{
+    char magic[4];
+    uint size;
+    
+    Indx index;
+
+    if (!exists(index.entries)) return;
+    
+    struct ChunckEntries
+    {
+        local uint i;
+        local string chunk_magic;
+
+        for (i = 0; i < index.entries_count; i++)
+        {
+            FSeek(index.entries[i].offset);
+            chunk_magic = ReadString(FTell(), 4);
+
+            switch (chunk_magic)
+            {
+                case MAGIC_STBL:
+                    break;
+                case MAGIC_ZOBJ:
+                    break;
+            }
+        }
+    } chunk_entries;
+} RiffFile;
+
+RiffFile file;
+
+#endif

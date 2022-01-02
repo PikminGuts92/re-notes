@@ -1,0 +1,9 @@
+#ifndef BANDFUSE_CONSTANTS
+#define BANDFUSE_CONSTANTS
+
+const string MAGIC_INDX = "XDNI";
+const string MAGIC_RIFF = "FFIR";
+const string MAGIC_STBL = "lbTS";
+const string MAGIC_ZOBJ = "JBOZ";
+
+#endif
