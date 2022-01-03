@@ -14,7 +14,7 @@ typedef struct
 typedef struct
 {
     uint64 value;
-} HKey<read=Str("%X", this.value)>;
+} HKey<read=Str("%LX", this.value)>;
 
 typedef struct
 {
