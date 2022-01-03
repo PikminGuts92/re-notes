@@ -5,6 +5,12 @@
 
 typedef struct
 {
+    uint value;
+    local uint actual_value = value - 4;
+} Offset<read=Str("%X", this.actual_value)>;
+
+typedef struct
+{
     uint64 value;
 } HKey<read=Str("%X", this.value)>;
 

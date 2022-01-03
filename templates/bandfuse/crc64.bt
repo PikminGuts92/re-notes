@@ -44,7 +44,7 @@ uint64 table_value(byte b, uint64 crc)
 uint64 compute_crc64_from_string(string str_value, byte ignore_case)
 {
     local uint64 current = INITIAL;
-    local uint str_size = sizeof(str_value) - 1;
+    local uint str_size = Strlen(str_value);
 
     local uint i = 0;
     local byte c;
