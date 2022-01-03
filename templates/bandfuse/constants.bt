@@ -10,5 +10,6 @@ const string MAGIC_ZOBJ = "JBOZ";
 
 // TODO: Use HKey instead
 local uint64 ZOBJ_Index2 = compute_crc64_from_string("Index2", true);
+local uint64 ZOBJ_PackageDef = compute_crc64_from_string("PackageDef", true);
 
 #endif

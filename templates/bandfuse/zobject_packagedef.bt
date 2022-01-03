@@ -1,0 +1,22 @@
+#ifndef BANDFUSE_ZOBJECT_PACKAGEDEF
+#define BANDFUSE_ZOBJECT_PACKAGEDEF
+
+#include "common.bt"
+
+typedef struct
+{
+    char name[256];
+} PackageDefEntry<read=Str("%s", this.name)>;
+
+typedef struct
+{
+    uint version;
+    char name[256];
+    
+    uint entries_count;
+    Offset entries_offset; // Always 4
+
+    PackageDefEntry entries[entries_count];
+} PackageDef<read=Str("%s (Version: %d)", this.name, this.version)>;
+
+#endif
