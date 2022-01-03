@@ -25,7 +25,7 @@ typedef struct
     uint blob_size;
     Offset blob_offset;
 
-    StringTableEntry entries[entries_count]<optimize=true>;
+    StringTableEntry entries[entries_count]<optimize=false>;
     byte blob[blob_size];
 } StringTable;
 
