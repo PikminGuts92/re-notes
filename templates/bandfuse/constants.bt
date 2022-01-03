@@ -1,9 +1,14 @@
 #ifndef BANDFUSE_CONSTANTS
 #define BANDFUSE_CONSTANTS
 
+#include "crc64.bt"
+
 const string MAGIC_INDX = "XDNI";
 const string MAGIC_RIFF = "FFIR";
 const string MAGIC_STBL = "lbTS";
 const string MAGIC_ZOBJ = "JBOZ";
+
+// TODO: Use HKey instead
+local uint64 ZOBJ_Index2 = compute_crc64_from_string("Index2", true);
 
 #endif

@@ -46,7 +46,7 @@ typedef struct
 {
     HKey file_path;
     HKey dir_path;
-    HKey file_ext;
+    HKey file_type;
 
     uint64 always_0<hidden=true>;
 } ZObjectHeader;

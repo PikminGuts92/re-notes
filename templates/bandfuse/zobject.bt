@@ -3,11 +3,19 @@
 
 #include "common.bt"
 #include "constants.bt"
+#include "zobject_index2.bt"
 
 typedef struct
 {
     ChunkInfo chunk_info;
     ZObjectHeader header;
+
+    switch (header.file_type.value)
+    {
+        case ZOBJ_Index2:
+            Index2 obj;
+            break;
+    }
 } ZObject;
 
 #endif
