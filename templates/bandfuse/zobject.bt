@@ -3,6 +3,7 @@
 
 #include "common.bt"
 #include "constants.bt"
+#include "zobject_catalog2.bt"
 #include "zobject_index2.bt"
 #include "zobject_packagedef.bt"
 
@@ -13,6 +14,9 @@ typedef struct
 
     switch (header.file_type.value)
     {
+        case ZOBJ_Catalog2:
+            Catalog2 obj;
+            break;
         case ZOBJ_Index2:
             Index2 obj;
             break;

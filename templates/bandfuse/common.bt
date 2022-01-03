@@ -42,6 +42,29 @@ typedef struct
     }
 } ChunkInfo<read=Str("%s (Size: %d)", this.formatted_magic, this.size)>;
 
+// 40 bytes
+typedef struct
+{
+    typedef struct
+    {
+        byte a;
+        byte b;
+        byte c; // Actual?
+        byte d; // Alt
+    } String<read=Str("%d | %d | %d | %d", this.a, this.b, this.c, this.d)>;
+
+    HKey tuning_name;
+
+    String string_1;
+    String string_2;
+    String string_3;
+    String string_4;
+    String string_5;
+    String string_6;
+    String string_7;
+    String string_8;
+} InstrumentTuning;
+
 typedef struct
 {
     HKey file_path;

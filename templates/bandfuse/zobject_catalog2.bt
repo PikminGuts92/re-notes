@@ -1,0 +1,83 @@
+#ifndef BANDFUSE_ZOBJECT_CATALOG2
+#define BANDFUSE_ZOBJECT_CATALOG2
+
+#include "common.bt"
+
+typedef struct
+{
+    int keys_count;
+    Offset keys_offset;
+
+    if (keys_count > 0)
+    {
+        local uint start_pos = FTell();
+        FSeek(keys_offset.abs_pos);
+
+        HKey keys[keys_count];
+        FSeek(start_pos);
+    }
+} HKeyCollection;
+
+typedef enum
+{
+    Type1 = 1,
+    Type2,
+    Type3,
+    Type4,
+    Type5
+} SongType;
+
+// 280 bytes
+typedef struct
+{
+    HKey indentifier;
+    SongType song_type;
+    int always_0;
+
+    HKey title;
+    HKey artist;
+    HKey album;
+    HKey description;
+    HKey legend;
+
+    // Intensity is -1 if no part
+    float song_length;
+    float guitar_intensity;
+    float bass_intensity;
+    float vocals_intensity;
+
+    HKey era;
+    int year;
+    int always_0;
+
+    InstrumentTuning lead_tuning;
+    InstrumentTuning rhythm_tuning;
+    InstrumentTuning bass_tuning;
+
+    HKeyCollection labels;
+
+    HKey song_path;
+    HKey texture_path;
+    HKey audio_preview_path;
+
+    HKeyCollection metadata_tags;
+    HKeyCollection genre_tags;
+
+    int flags; // 1 1 0 0
+
+    int unknown_1; // 8, 10
+    int unknown_2;
+    int unknown_3;
+
+    int64 always_0; // Probably empty HKey...
+} Catalog2Entry<optimize=false>;
+
+typedef struct
+{    
+    uint entries_count;
+    Offset entries_offset; // Always 4
+
+    Catalog2Entry entries[entries_count];
+} Catalog2;
+
+#endif
