@@ -6,8 +6,27 @@
 
 typedef struct
 {
+    HKey path;
+    uint offset;
+    uint always_0<hidden=true>;
+
+    local uint str_offset = parentof(this).blob_offset.abs_pos + offset;
+    local string str_value = ReadString(str_offset);
+} StringTableEntry<read=Str("%s", this.str_value)>;
+
+typedef struct
+{
     ChunkInfo chunk_info;
     ZObjectHeader header;
+
+    uint entries_count;
+    Offset entries_offset; // Always 12
+
+    uint blob_size;
+    Offset blob_offset;
+
+    StringTableEntry entries[entries_count]<optimize=true>;
+    byte blob[blob_size];
 } StringTable;
 
 #endif

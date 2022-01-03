@@ -5,9 +5,11 @@
 
 typedef struct
 {
+    local uint pos = FTell();
     uint value;
-    local uint actual_value = value - 4;
-} Offset<read=Str("%X", this.actual_value)>;
+
+    local uint abs_pos = pos + value;
+} Offset<read=Str("%d", this.abs_pos)>;
 
 typedef struct
 {
