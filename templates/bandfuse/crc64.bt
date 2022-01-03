@@ -59,7 +59,8 @@ uint64 compute_crc64_from_string(string str_value, byte ignore_case)
             {
                 // Force lowercase
                 c = c | 0x20;
-            } else if ((c == '\\') || (c == '/'))
+            }
+            else if ((c == '\\') || (c == '/'))
             {
                 c = '.';
             }
