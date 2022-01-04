@@ -16,6 +16,8 @@ typedef struct
 
 typedef struct
 {
+    // File name: object_path + . + string_table_type (ex: catalog2.stringTable@enUS)
+    // Localizations: enUS, jaJP, deDE, itIT, esES, frFR
     ChunkInfo chunk_info;
     ZObjectHeader header;
 

@@ -42,16 +42,70 @@ typedef struct
     }
 } ChunkInfo<read=Str("%s (Size: %d)", this.formatted_magic, this.size)>;
 
+// 1 byte
+typedef struct
+{
+    byte v;
+
+    local string note;
+    local int octave = (v / 12) - 1;
+    
+    switch (v % 12)
+    {
+        case 0:
+            note = "C";
+            break;
+        case 1:
+            note = "Db";
+            break;
+        case 2:
+            note = "D";
+            break;
+        case 3:
+            note = "Eb";
+            break;
+        case 4:
+            note = "E";
+            break;
+        case 5:
+            note = "F";
+            break;
+        case 6:
+            note = "Gb";
+            break;
+        case 7:
+            note = "G";
+            break;
+        case 8:
+            note = "Ab";
+            break;
+        case 9:
+            note = "A";
+            break;
+        case 10:
+            note = "Bb";
+            break;
+        case 11:
+            note = "B";
+            break;
+    }
+} Pitch<read=read_pitch>;
+
+string read_pitch(Pitch& pitch)
+{
+    return Str("%s%d", pitch.note, pitch.octave);
+}
+
 // 40 bytes
 typedef struct
 {
     typedef struct
     {
-        byte a;
-        byte b;
-        byte c; // Actual?
-        byte d; // Alt
-    } String<read=Str("%d | %d | %d | %d", this.a, this.b, this.c, this.d)>;
+        Pitch a;
+        Pitch b;
+        Pitch c; // Actual?
+        Pitch d; // Alt
+    } String<read=Str("%s | %s | %s | %s", read_pitch(this.a), read_pitch(this.b), read_pitch(this.c), read_pitch(this.d))>;
 
     HKey tuning_name;
 
