@@ -1,0 +1,123 @@
+#ifndef BANDFUSE_CELT
+#define BANDFUSE_CELT
+
+typedef enum <ushort>
+{
+    Decrypted,
+    Encrypted
+} Crypt;
+
+typedef struct
+{
+    // 40 bytes
+    struct Header
+    {
+        char magic[4];
+
+        if (magic == "BFAD") LittleEndian();
+        else if (magic == "DAFB") BigEndian(); // Would only be big endian if dumped from 360 ram
+        // TODO: Probably throw error otherwise
+
+        ushort version;
+        Crypt crypt;
+        uint total_samples;
+        uint bitrate; // Always 96000?
+
+        ushort frame_size;
+        ushort look_ahead;
+        ushort sample_rate;
+        ushort unknown;
+
+        // Note: Offset values will be pointer values to memory if dumped from ram
+        uint map_start_offset;
+        uint map_size;
+        uint packet_start_offset;
+        uint packet_size;
+    } header;
+
+    // Don't parse if encrypted
+    if (header.crypt == Encrypted)
+    {
+        byte encrypted_map_data[header.map_size];
+        byte encrypted_packet_data[header.packet_size];
+        return;
+    }
+
+    struct MapData
+    {
+        local uint end_offset = FTell() + header.map_size;
+        local uint packet_count;
+        local uint packet_count_size;
+
+        local byte silence = 1;
+        local byte silence_packet_count = 0;
+        local uint total_packets = 0;
+        local uint packet_group_count = 0;
+
+        while (FTell() < end_offset)
+        {
+            // Read packet count as either 1 or 2 bytes
+            packet_count = ReadUByte();
+            packet_count_size = 1;
+
+            if ((packet_count & 0x80) != 0)
+            {
+                packet_count = ((packet_count ^ 0x80) << 8) | ReadUByte(FTell() + 1);
+                packet_count_size += 1;
+            }
+
+            struct PacketCount
+            {
+                local uint count = packet_count;
+                byte data[packet_count_size];
+            } packet_counts<read=Str("%d", this.count)>;
+
+            if (silence) silence_packet_count += packet_count;
+
+            silence ^= 1;
+            total_packets += packet_count;
+            packet_group_count += 1;
+        }
+    } map_data<read=Str("%d packets (%d silence)", this.total_packets, this.silence_packet_count)>;
+
+    struct PacketData
+    {
+        local byte silence = 1;
+
+        local uint i;
+        for (i = 0; i < map_data.packet_group_count; i++)
+        {
+            if (silence)
+            {
+                silence ^= 1;
+                continue;
+            }
+
+            struct PacketGroup
+            {
+                local uint packet_count = map_data.packet_counts[i].count;
+
+                local uint j;
+                for (j = 0; j < packet_count; j++)
+                {
+                    struct Packet
+                    {
+                        // Read as 12-bits
+                        local uint packet_size = ReadUShort() & 0xFFF;
+
+                        byte header[2];
+                        byte data[packet_size];
+                    } packets<read=Str("%d bytes", this.packet_size)>;
+                }
+            } packet_groups<read=Str("%d packets", this.packet_count)>;
+
+            silence ^= 1;
+        }
+    } packet_data;
+
+    if (!FEof()) byte padding[FileSize() - FTell()];
+} CeltFile;
+
+CeltFile celt;
+
+#endif
