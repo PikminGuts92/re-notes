@@ -6,6 +6,7 @@
 #include "zobject_catalog2.bt"
 #include "zobject_index2.bt"
 #include "zobject_packagedef.bt"
+#include "zobject_tuning.bt"
 
 typedef struct
 {
@@ -22,6 +23,9 @@ typedef struct
             break;
         case ZOBJ_PackageDef:
             PackageDef obj;
+            break;
+        case ZOBJ_Tuning:
+            Tuning obj;
             break;
     }
 } ZObject;

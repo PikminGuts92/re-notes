@@ -1,0 +1,12 @@
+#ifndef BANDFUSE_ZOBJECT_TUNING
+#define BANDFUSE_ZOBJECT_TUNING
+
+#include "common.bt"
+
+typedef struct
+{
+    uint64 always_0; // Probably empty hkey
+    InstrumentTuning instrument_tuning;
+} Tuning;
+
+#endif
