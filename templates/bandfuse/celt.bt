@@ -31,15 +31,15 @@ typedef struct
         // Note: Offset values will be pointer values to memory if dumped from ram
         uint map_start_offset;
         uint map_size;
-        uint packet_start_offset;
-        uint packet_size;
+        uint packets_start_offset;
+        uint packets_size;
     } header;
 
     // Don't parse if encrypted
     if (header.crypt == Encrypted)
     {
         byte encrypted_map_data[header.map_size];
-        byte encrypted_packet_data[header.packet_size];
+        byte encrypted_packets_data[header.packets_size];
         return;
     }
 
@@ -102,8 +102,8 @@ typedef struct
                 {
                     struct Packet
                     {
-                        // Read as 12-bits
-                        local uint packet_size = ReadUShort() & 0xFFF;
+                        // Read as 12-bits (big endian)
+                        local uint packet_size = ((ReadUByte() & 0x0F) << 8) | ReadUByte(FTell() + 1);
 
                         byte header[2];
                         byte data[packet_size];
