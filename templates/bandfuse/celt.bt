@@ -38,11 +38,15 @@ typedef struct
     // Don't parse if encrypted
     if (header.crypt == Encrypted)
     {
+        FSeek(header.map_start_offset);
         byte encrypted_map_data[header.map_size];
+
+        FSeek(header.packets_start_offset);
         byte encrypted_packets_data[header.packets_size];
         return;
     }
 
+    FSeek(header.map_start_offset);
     struct MapData
     {
         local uint end_offset = FTell() + header.map_size;
@@ -50,7 +54,7 @@ typedef struct
         local uint packet_count_size;
 
         local byte silence = 1;
-        local byte silence_packet_count = 0;
+        local uint silence_packet_count = 0;
         local uint total_packets = 0;
         local uint packet_group_count = 0;
 
@@ -80,6 +84,7 @@ typedef struct
         }
     } map_data<read=Str("%d packets (%d silence)", this.total_packets, this.silence_packet_count)>;
 
+    FSeek(header.packets_start_offset);
     struct PacketData
     {
         local byte silence = 1;
