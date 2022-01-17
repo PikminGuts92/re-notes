@@ -1,0 +1,52 @@
+// Just a color, used by UI components
+// Super: (None)
+// Ext: .color
+// C++ Class: UIColor
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "UIColor"
+    #endif
+#endif
+
+#ifndef OBJECT_UI_COLOR
+#define OBJECT_UI_COLOR
+
+#include "common.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // this is such a simple asset that no other versions but 0 seem to exist, but I have not checked anything beyond RB3
+
+    read_metadata(info, super);
+
+    float red;
+    float green;
+    float blue;
+	float alpha;
+} UIColor;
+
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "UIColor")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    UIColor ui_color(info, False);
+}
+
+#endif
+
+#endif
