@@ -6,12 +6,11 @@ FF 50 FF FF - Parent element
    uint - id
    uint - child count
 
-FF 56 FF FF - String element
+FF 56 FF FF - Value element
  string - name
  ushort - type index
  string - type
- ushort - value index
- string - value
+     ?? - value
 
 FF 41 FF FF - Array element
  string - name
@@ -42,10 +41,31 @@ String - 6 bytes
 typedef struct
 {
     local string value = "";
-} IdxString<read=Str("%s", this.value)>;
+} DefinedString<read=Str("%s", this.value)>;
+
+typedef struct
+{
+    local string name = "";
+    local string type = "";
+    local int is_parent = 0;
+} NameTypeString<read=Str("%s | %s", this.name, this.type)>;
 
 local int Z_STRING_INDEX = 0;
-local IdxString STRINGS[2000];
+local DefinedString STRINGS[2000];
+
+local int NAME_TYPE_INDEX = 1;
+local NameTypeString NAME_TYPES[256];
+
+void update_name_types(string name, string type, int is_parent)
+{
+    if (NAME_TYPE_INDEX >= 256) return;
+
+    NAME_TYPES[NAME_TYPE_INDEX].name = name;
+    NAME_TYPES[NAME_TYPE_INDEX].type = type;
+    NAME_TYPES[NAME_TYPE_INDEX].is_parent = is_parent;
+
+    NAME_TYPE_INDEX++;
+}
 
 typedef struct
 {
@@ -91,6 +111,11 @@ string get_string(IndexedString& str)
     }
 }
 
+string get_zstring(ZString& str)
+{
+    return str.value;
+}
+
 struct XElement;
 
 // 0x41
@@ -102,15 +127,25 @@ typedef struct
     IndexedString element_type;
     ubyte num_elements;
 
+    update_name_types(get_zstring(name), get_string(element_type), false);
+
     // Value
     if (num_elements < 0) return;
     float elements[num_elements];
 } ArrayElement;
 
 // 0x50
-typedef struct
+typedef struct (int packed, string parent_name)
 {
-    ZString name;
+    if (!packed)
+    {
+        ZString name;
+        update_name_types(get_zstring(name), "", true);
+    }
+    else
+    {
+        local string name = parent_name;
+    }
 
     // Attributes
     uint id;
@@ -128,7 +163,13 @@ typedef struct
         XElement children[child_count]<optimize=false>;
     }
 
-    // Third digit might be node index
+    if (packed)
+    {
+        ubyte unknown;
+        return;
+    }
+
+    // Last two digits are node type index (allocated string)
     //
     // FF 70 01 00
     // FF 70 1A 00
@@ -138,24 +179,9 @@ typedef struct
     char end[4];
 } ParentElement;
 
-// 0x56
-typedef struct
+void read_value(string type)
 {
-    ZString name;
-
-    // Attribute
-    IndexedString type;
-
-    /*
-      types:
-        cDeltaString (5)
-        sFloat32 (8)
-        sUInt32 (14)
-        sInt32
-    */
-
-    // Value
-    switch (get_string(type))
+    switch (type)
     {
         case "cDeltaString":
             IndexedString value;
@@ -170,20 +196,66 @@ typedef struct
             uint value;
             break;
     }
+}
+
+// 0x56
+typedef struct
+{
+    ZString name;
+
+    // Attribute
+    IndexedString type;
+    update_name_types(get_zstring(name), get_string(type), false);
+
+    /*
+      types:
+        cDeltaString (5)
+        sFloat32 (8)
+        sUInt32 (14)
+        sInt32
+    */
+
+    // Value
+    read_value(get_string(type));
 } ValueElement;
 
 typedef struct
 {
-    char identifer[4];
+    ubyte id1;
+
+    if (id1 != 0xFF)
+    {
+        // Treat id1 as index to previously defined name/types
+        local string name = NAME_TYPES[id1].name;
+        local string type = NAME_TYPES[id1].type;
+        local int is_parent = NAME_TYPES[id1].is_parent;
+
+        //ubyte id2;
+        //ubyte id3;
+
+        //  7 Name
+        // 15 Name
+        // 16
+
+        // 07 FF FF
+        if (is_parent) ParentElement node(true, name);
+        else read_value(type);
+
+        return;
+    }
+
+    ubyte id2;
+    ubyte id3;
+    ubyte id4;
 
     // FF ?? FF FF
-    switch (identifer[1])
+    switch (id2)
     {
         case 0x41:
             ArrayElement node;
             break;
         case 0x50:
-            ParentElement node;
+            ParentElement node(false, "");
             break;
         case 0x56:
             ValueElement node;
