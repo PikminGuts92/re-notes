@@ -1,0 +1,203 @@
+LittleEndian();
+
+/*
+FF 50 FF FF - Parent element
+ string - name
+   uint - id
+   uint - child count
+
+FF 56 FF FF - String element
+ string - name
+ ushort - type index
+ string - type
+ ushort - value index
+ string - value
+
+FF 41 FF FF - Array element
+ string - name
+ ushort - type index
+ string - type (elementType)
+  ubyte - value length (numElements)
+  ???[] - value
+FF 70 01 00 - End of node?
+
+Note: If type index != 0xFF_FF then next bytes will either be 0xFF_FF or 0x00_00_00_00
+
+id = 4 bytes
+
+type
+
+FF 56 FF FF - GeometryType -> type, value
+
+FF 41 FF FF - Matrix -> elementType, numElements, values
+
+String - 6 bytes
+ 2 bytes - index
+ 4 bytes - string length
+
+ If first 2 bytes != 0xFF_FF, interpret as index to previously defined string
+   Then next 4 bytes should be 0
+*/
+
+typedef struct
+{
+    local string value = "";
+} IdxString<read=Str("%s", this.value)>;
+
+local int Z_STRING_INDEX = 0;
+local IdxString STRINGS[2000];
+
+typedef struct
+{
+    int size;
+    local int index = -1;
+
+    if (size > 0)
+    {
+        char value[size];
+        index = Z_STRING_INDEX++;
+
+        STRINGS[index].value = value;
+    }
+    else
+    {
+        local string value = "(n/a)";
+    }
+} ZString<read=this.value>;
+
+typedef struct
+{
+    ushort index;
+    if (index != 0xFFFF)
+    {
+        // Fetch value from previously defined strings
+        local string value = STRINGS[index].value;
+    }
+    else
+    {
+        ZString value;
+    }
+} IndexedString;
+
+string get_string(IndexedString& str)
+{
+    if (str.index != 0xFFFF)
+    {
+        return str.value;
+    }
+    else
+    {
+        return str.value.value;
+    }
+}
+
+struct XElement;
+
+// 0x41
+typedef struct
+{
+    ZString name;
+
+    // Attributes
+    IndexedString element_type;
+    ubyte num_elements;
+
+    // Value
+    if (num_elements < 0) return;
+    float elements[num_elements];
+} ArrayElement;
+
+// 0x50
+typedef struct
+{
+    ZString name;
+
+    // Attributes
+    uint id;
+
+    // Child elements
+    uint child_count;
+    if (child_count > 0)
+    {
+        /*local int i;
+        for (i = 0; i < child_count; i++)
+        {
+            XElement children;
+        }*/
+
+        XElement children[child_count]<optimize=false>;
+    }
+
+    // Third digit might be node index
+    //
+    // FF 70 01 00
+    // FF 70 1A 00
+    // FF 70 13 00
+    // FF 70 14 00
+    // FF 70 00 00
+    char end[4];
+} ParentElement;
+
+// 0x56
+typedef struct
+{
+    ZString name;
+
+    // Attribute
+    IndexedString type;
+
+    /*
+      types:
+        cDeltaString (5)
+        sFloat32 (8)
+        sUInt32 (14)
+        sInt32
+    */
+
+    // Value
+    switch (get_string(type))
+    {
+        case "cDeltaString":
+            IndexedString value;
+            break;
+        case "sFloat32":
+            float value;
+            break;
+        case "sInt32":
+            int value;
+            break;
+        case "sUInt32":
+            uint value;
+            break;
+    }
+} ValueElement;
+
+typedef struct
+{
+    char identifer[4];
+
+    // FF ?? FF FF
+    switch (identifer[1])
+    {
+        case 0x41:
+            ArrayElement node;
+            break;
+        case 0x50:
+            ParentElement node;
+            break;
+        case 0x56:
+            ValueElement node;
+            break;
+    }
+} XElement;
+
+typedef struct
+{
+    char magic[4]; // SERZ
+    ushort always_0;
+    ushort always_1;
+
+    XElement root;
+} SERZFile;
+
+SERZFile serz_file;
