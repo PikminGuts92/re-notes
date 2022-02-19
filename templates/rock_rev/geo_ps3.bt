@@ -97,7 +97,7 @@ typedef struct
     {
         ZString value;
     }
-} IndexedString;
+} IndexedString<read=get_string>;
 
 string get_string(IndexedString& str)
 {
@@ -118,6 +118,20 @@ string get_zstring(ZString& str)
 
 struct XElement;
 
+typedef struct
+{
+    // Last two digits are node type index (allocated string)
+    //
+    // FF 70 01 00
+    // FF 70 1A 00
+    // FF 70 13 00
+    // FF 70 14 00
+    // FF 70 00 00
+
+    char ff_70[2];
+    IndexedString closing;
+} Terminate<read=Str("/%s", get_string(this.closing))>;
+
 // 0x41
 typedef struct
 {
@@ -130,13 +144,15 @@ typedef struct
     update_name_types(get_zstring(name), get_string(element_type), false);
 
     // Value
-    if (num_elements < 0) return;
+    if (num_elements == 0) return;
     float elements[num_elements];
 } ArrayElement;
 
 // 0x50
 typedef struct (int packed, string parent_name)
 {
+    local int is_packed = packed;
+
     if (!packed)
     {
         ZString name;
@@ -169,21 +185,41 @@ typedef struct (int packed, string parent_name)
         return;
     }
 
-    // Last two digits are node type index (allocated string)
-    //
-    // FF 70 01 00
-    // FF 70 1A 00
-    // FF 70 13 00
-    // FF 70 14 00
-    // FF 70 00 00
-    char end[4];
-} ParentElement;
+    Terminate terminator;
+} ParentElement<read=read_parent>;
+
+string get_parent_name(ParentElement& element)
+{
+    if (element.is_packed) return element.name;
+    else return get_zstring(element.name);
+}
+
+string read_parent(ParentElement& element)
+{
+    return Str("%s (id: %d, children: %d)", get_parent_name(element), element.id, element.child_count);
+}
+
+// 0x43
+typedef struct
+{
+    // Child elements
+    uint child_count;
+    if (child_count == 0) return;
+
+    XElement children[child_count]<optimize=false>;
+} UnnamedCollection;
 
 void read_value(string type)
 {
     switch (type)
     {
         case "cDeltaString":
+            IndexedString value;
+            break;
+        case "Material":
+            float value;
+            break;
+        case "Flat":
             IndexedString value;
             break;
         case "sFloat32":
@@ -195,8 +231,20 @@ void read_value(string type)
         case "sUInt32":
             uint value;
             break;
+        default:
+            Printf("WARNING: \"%s\" type unknown\n", type);
+            break;
     }
 }
+
+// 0x52
+typedef struct
+{
+    ZString name;
+
+    // Value
+    read_value("sUInt32");
+} EnumElement<read=Str("%s: %d", get_zstring(this.name), this.value)>;
 
 // 0x56
 typedef struct
@@ -221,9 +269,17 @@ typedef struct
 
 typedef struct
 {
+    local ubyte init = ReadUByte();
+
+    if (init != 0xFF)
+    {
+        ubyte some_num;
+        IndexedString some_string;
+    }
+
     ubyte id1;
 
-    if (id1 != 0xFF)
+    /*if (id1 != 0xFF)
     {
         // Treat id1 as index to previously defined name/types
         local string name = NAME_TYPES[id1].name;
@@ -242,24 +298,47 @@ typedef struct
         else read_value(type);
 
         return;
-    }
+    }*/
 
     ubyte id2;
+    /*if (id2 == 0xFF)
+    {
+        // Not sure?
+        IndexedString value;
+        return;
+    }*/
+
     ubyte id3;
-    ubyte id4;
+    if (id3 == 0xFF) ubyte id4;
 
     // FF ?? FF FF
+    // Only three elements for 0x43
     switch (id2)
     {
         case 0x41:
             ArrayElement node;
             break;
+        case 0x43:
+            UnnamedCollection node;
+            return;
         case 0x50:
             ParentElement node(false, "");
+            break;
+        case 0x52:
+            EnumElement node;
             break;
         case 0x56:
             ValueElement node;
             break;
+        default:
+            Printf("WARNING: 0x%02x id unknown\n", id2);
+            break;
+    }
+
+    if (init != 0xFF)
+    {
+        // Matches some_string
+        Terminate terminator;
     }
 } XElement;
 
