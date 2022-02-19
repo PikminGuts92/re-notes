@@ -228,6 +228,9 @@ void read_value(string type)
         case "sInt32":
             int value;
             break;
+        case "SkFlat":
+            IndexedString value;
+            break;
         case "sUInt32":
             uint value;
             break;
