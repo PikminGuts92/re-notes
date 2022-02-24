@@ -2,6 +2,8 @@
 
 LittleEndian();
 
+struct ArkFile;
+
 typedef struct
 {
     uint fileCount;
@@ -37,19 +39,28 @@ typedef struct
     Hash hashes[hashCount];
 } HashCollection;
 
-typedef struct (int version)
+typedef struct (ArkFile& ark)
 {
     uint partCount; // Both should match
     uint sizeCount;
 
-    if (version == 4)
-        uint64 sizes[sizeCount];
+    if (ark.version == 4)
+    {
+        // Hacky way to check if v4 is v3/v5 hybrid
+        ark.brokenV4 = ReadUInt64(FTell() + ((partCount - 1) * 8)) > (uint)0xFFFFFFFF;
+
+        if (!ark.brokenV4) uint64 sizes[sizeCount];
+        else uint sizes[sizeCount];
+    }
     else
+    {
         uint sizes[sizeCount];
+    }
     
     local int i;
     local uint64 totalSize = 0;
-    
+
+    // Compute total size
     for (i = 0; i < sizeCount; i++)
         totalSize += sizes[i];
 } PartSizeCollection<read=getPartSizeCollectionText>;
@@ -185,6 +196,7 @@ typedef struct (ArkEntryCollection& entryCollection)
 struct ArkFile
 {
     int version;
+    local ubyte brokenV4 = false;
 
     if (version < 3)
     {
@@ -208,9 +220,9 @@ struct ArkFile
     if (version >= 6)
         HashCollection hashCollection;
     
-    PartSizeCollection partSizeCollection(version);
+    PartSizeCollection partSizeCollection(this);
     
-    if (version >= 5)
+    if (version >= 5 || brokenV4)
         ArkPathCollection arkPathCollection;
     
     if (version >= 6 && version <= 9)
@@ -233,9 +245,11 @@ struct ArkFile
         // String blob, string indices, ark entries
         local uint startOffset = FTell() + 4;
         StringBlob stringBlob;
+
+        local int entryVersion = (brokenV4) ? 3 : version;
         
         StringOffsetCollection stringOffsetCollection(startOffset);
-        ArkEntryCollection arkEntryCollection(version, stringOffsetCollection);
+        ArkEntryCollection arkEntryCollection(entryVersion, stringOffsetCollection);
     }
     else
     {
