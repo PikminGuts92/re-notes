@@ -1,0 +1,52 @@
+LittleEndian();
+
+typedef struct
+{
+    uint entry_offset;
+    uint offset;
+    uint size;
+
+    uint unknown; // Always 0?
+    
+    uint name_size;
+    string name; // Null-terminated
+} FileEntry<read=this.name>;
+
+typedef struct (FileEntry& entry)
+{
+    local string name = entry.name;
+    local uint size = entry.size;
+
+    byte data[entry.size];
+} File<read=this.name>;
+
+typedef struct
+{
+    struct FileEntries
+    {
+        uint entry_data_size;
+
+        local uint end_entries = FTell() + entry_data_size;
+        local uint entry_count = 0;
+
+        while (FTell() < end_entries)
+        {
+            FileEntry file_entries;
+            entry_count += 1;
+        }
+    } entries<read=Str("%d entries", this.entry_count)>;
+
+    // Makes the assumption entries are in offset order.
+    // In code it's recommended to offset seek according to entry data
+    struct Files
+    {
+        local uint i;
+
+        for (i = 0; i < entries.entry_count; i++)
+        {
+            File file(entries.file_entries[i]);
+        }
+    } files;
+} PopData;
+
+PopData pop_data;
