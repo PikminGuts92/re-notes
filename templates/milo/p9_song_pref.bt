@@ -1,0 +1,139 @@
+// P9 Song Specific dreamscape and venue preferences
+// Super: (None)
+// Ext: (None)
+// C++ Class: P9SongPref
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "P9SongPref"
+    #endif
+#endif
+
+#ifndef P9_SONG_PREF
+#define P9_SONG_PREF
+
+#include "common.bt"
+
+// P9_DREAM_CONFIGS
+typedef enum <int>
+{
+    None, // Seen in twistandshout
+    kP9DreamSlow = 1 << 16,
+    kP9DreamFast = 1 << 17,
+    kP9DreamPsych = 1 << 18
+} DreamConfig;
+
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 20 (TBRB), 25 (GDRB)
+    read_metadata(info, super);
+
+    NumString venue;
+
+    int minivenues_count;
+    if (minivenues_count > 0) NumString miniVenues[minivenues_count]<optimize=false>;
+
+    int scene_count;
+    if (scene_count > 0) NumString scenes[scene_count]<optimize=false>;
+
+    int scene_group_count; // Never observed, just assumed
+
+    NumString dreamscape_outfit; // P9_OUTFITS
+    NumString studio_outfit;
+
+    // TBRB
+    if (version <= 20)
+    {
+        // Actually array of 4 items in game
+        int george_instrument_count;
+        if (george_instrument_count > 0) NumString george_instrument[george_instrument_count]<optimize=false>;
+
+        int john_instrument_count;
+        if (john_instrument_count > 0) NumString john_instrument[john_instrument_count]<optimize=false>;
+
+        int paul_instrument_count;
+        if (paul_instrument_count > 0) NumString paul_instrument[paul_instrument_count]<optimize=false>;
+
+        int ringo_instrument_count;
+        if (ringo_instrument_count > 0) NumString ringo_instrument[ringo_instrument_count]<optimize=false>;
+    }
+    else // GDRB
+    {
+        int mike_instrument_count;
+        if (mike_instrument_count > 0) NumString mike_instrument[mike_instrument_count]<optimize=false>;
+
+        int billie_instrument_count;
+        if (billie_instrument_count > 0) NumString billie_instrument[billie_instrument_count]<optimize=false>;
+
+        int ignored_instrument_count; // Should be zero. Reserved for Jason? :)
+        if (ignored_instrument_count > 0) NumString ignored_instrument[ignored_instrument_count]<optimize=false>;
+
+        int tre_instrument_count;
+        if (tre_instrument_count > 0) NumString tre_instrument[tre_instrument_count]<optimize=false>;
+    }
+
+    NumString tempo; // (slow medium fast)
+
+    NumString song_clips;      // P9_SONG_CLIPS - Usually same as song name or 'none'
+    NumString dreamscape_font; // P9_VENUE_FONTS
+
+    // TBRB
+    if (version <= 20)
+    {
+        // Configs for studio
+        NumString george_amp; // P9_GEORGE_AMPS
+        NumString john_amp;   // P9_JOHN_AMPS
+        NumString paul_amp;   // P9_PAUL_AMPS
+        NumString mixer;      // P9_MIXERS
+
+        DreamConfig dreamscape_camera; // P9_DREAM_CONFIGS
+    }
+    else // GDRB
+    {
+        int always_0;
+    }
+
+    NumString lyric_part; // ('PART HARM1' 'PART HARM2' 'PART HARM3')
+
+    // GDRB
+    if (version >= 25)
+    {
+        NumString normal_outfit; // P9_OUTFITS (americanidiot 21st dookie)
+        NumString bonus_outfit;  // P9_OUTFITS (americanidiot 21st dookie)
+        NumString drum_set;      // RKP_DRUM_SETS (drum_ludwig drum_dw drum_leedy)
+
+        NumString era; // early, dream
+
+        NumString cam_directory;   // "Milo file containing song-specific cameras for this song"
+        NumString media_directory; // "Milo file containing song-specific media (for a media wall, etc.)"
+
+        NumString song_intro_cam; // wh_song_intro_1.shot
+        NumString win_cam;        // wh_win_2.shot
+    }
+} P9SongPref;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "P9SongPref")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        info.version = 24;
+    }
+
+    P9SongPref p9_song_pref(info, False);
+}
+
+#endif
+
+#endif

@@ -8,6 +8,7 @@
 #include "mat.bt"
 #include "mesh.bt"
 #include "mogg_clip.bt"
+#include "p9_song_pref.bt"
 #include "poll.bt"
 #include "prop_anim.bt"
 #include "synth_sample.bt"

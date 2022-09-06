@@ -131,6 +131,9 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_entry)
             P9Character object(info, False, False, is_entry);
             is_dir = 1;
             break;
+        case "P9SongPref":
+            P9SongPref object(info, False);
+            break;
         case "PanelDir":
             PanelDir object(info, False, False);
             is_dir = 1;
