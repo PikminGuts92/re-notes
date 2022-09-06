@@ -3,7 +3,7 @@
 #ifndef TBRB_P9SONGPREF
 #define TBRB_P9SONGPREF
 
-// Note: Contstants are found in ../../system/run/band/band_macros.dta
+// Note: Constants are found in ../../system/run/band/band_macros.dta
 
 // P9_DREAM_CONFIGS
 typedef enum <int>
@@ -18,7 +18,7 @@ struct P9SongPref
 {
     // Version is always 20
     MiloMeta meta; // 25 = GDRB
-    
+
     // Note: Uses outfit for venue when not dreamscape
     NumString venue; // (budokan cavern dreamscape rooftop shea sullivan)
 
@@ -29,7 +29,7 @@ struct P9SongPref
     NumString scenes[sceneCount]<optimize=false>;
 
     int always0; // scene groups?
-    
+
     NumString dreamscapeOutfit; // P9_OUTFITS
     NumString studioOutfit; // P9_OUTFITS
 
@@ -49,7 +49,7 @@ struct P9SongPref
 
     NumString songClips; // P9_SONG_CLIPS - Usually same as song name or 'none'
     NumString dreamscapeFont; // P9_VENUE_FONTS
-    
+
     // TBRB
     if (meta.version <= 20)
     {
@@ -67,19 +67,19 @@ struct P9SongPref
     }
 
     NumString lyricPart; // ('PART HARM1' 'PART HARM2' 'PART HARM3')
-    
+
     // GDRB
     if (meta.version >= 25)
     {
         NumString normal_outfit; // 21st, dookie
         NumString bonus_outfit; // 21st, dookie
         NumString drum_set; // drum_dw, drum_leedy
-        
+
         NumString era; // early, dream
-        
+
         NumString cam_directory; // "Milo file containing song-specific cameras for this song"
         NumString media_directory; // "Milo file containing song-specific cameras for this song"
-        
+
         NumString song_intro_cam; // wh_song_intro_1.shot
         NumString win_cam; // wh_win_2.shot
     }
