@@ -28,8 +28,51 @@ typedef enum <int>
 
 typedef struct
 {
+    float value;
+    float pos;
+} AnimEventFloat<read=Str("Pos: %.2f, Value: %.2f", this.pos, this.value)>;
+
+typedef struct
+{
+    Color4 value;
+    float pos;
+} AnimEventColor<read=Str("Start: %.2f, Value: %s", this.pos, readColor4(this.value))>;
+
+typedef struct
+{
+    NumString text1;
+    NumString text2;
+    float pos;
+} AnimEventObject<read=Str("Start: %.2f, Value: %s (%s)", this.pos, read_num_string(this.text1), read_num_string(this.text2))>;
+
+typedef struct
+{
+    Bool value;
+    float pos;
+} AnimEventBool<read=Str("Pos: %.2f, Value: %s", this.pos, readBoolString(this.value))>;
+
+typedef struct
+{
+    Quat value;
+    float pos;
+} AnimEventQuat<read=Str("Start: %.2f, Value: %s", this.pos, read_quat(this.value))>;
+
+typedef struct
+{
+    Vector3 value;
+    float pos;
+} AnimEventVector3<read=Str("Start: %.2f, Value: %s", this.pos, readVector3(this.value))>;
+
+typedef struct
+{
+    NumString text;
+    float pos;
+} AnimEventSymbol<read=Str("Start: %.2f, Value: %s", this.pos, read_num_string(this.text))>;
+
+typedef struct
+{
     PropType type1;
-    PropType type2; // Should match num1
+    PropType type2; // Should match type1
 
     NumString target;
 
@@ -40,43 +83,58 @@ typedef struct
 
     int unknown_enum; // 0, 1, 2, 3, 5, 6
 
-    int keys_count;
-    /*switch (num1)
+    // "keys"
+    int event_count;
+    switch (type1)
     {
         case 0:
-            TimeEvent0 events[eventCount];
+            AnimEventFloat events[event_count];
             break;
         case 1:
-            TimeEvent1 events[eventCount];
+            AnimEventColor events[event_count];
             break;
         case 2:
-            TimeEvent2 events[eventCount]<optimize=false>;
+            AnimEventObject events[event_count]<optimize=false>;
             break;
         case 3:
-            TimeEvent3 events[eventCount];
+            AnimEventBool events[event_count];
             break;
         case 4:
-            TimeEvent4 events[eventCount];
+            AnimEventQuat events[event_count];
             break;
         case 5:
-            TimeEvent5 events[eventCount];
+            AnimEventVector3 events[event_count];
             break;
         case 6:
-            TimeEvent6 events[eventCount]<optimize=false>;
+            AnimEventSymbol events[event_count]<optimize=false>;
             break;
-    }*/
-} PropKeys;
+    }
+} PropKeys<read=read_prop_keys>;
+
+string read_prop_keys(PropKeys& prop_keys)
+{
+    local string property = "";
+    if (exists(prop_keys.property.root.children[0].value))
+    {
+        // Hacky way to get symbol value. Probably won't work all the time.
+        // Better solution would be true dtb -> dta conversion
+        property = read_num_string(prop_keys.property.root.children[0].value);
+    }
+
+    return Str("%s | %s | %s (%d events)", read_num_string(prop_keys.target), property, EnumToString(prop_keys.type1), prop_keys.event_count);
+}
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version;
+    int version; // 11 (TBRB), 12 (GDRB)
     read_metadata(info, super);
 
     Anim anim(info, True);
 
     if (version >= 12)
     {
-        Bool always_false;
+        // True for peacemaker media...
+        Bool usually_false;
     }
 
     int prop_keys_count;

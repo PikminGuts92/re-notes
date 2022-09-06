@@ -143,6 +143,19 @@ typedef struct
 {
     float x;
     float y;
+    float z;
+    float w;
+} Quat<read=read_quat>;
+
+string read_quat(Quat& quat)
+{
+    return Str("(%f, %f, %f, %f)", quat.x, quat.y, quat.z, quat.w);
+}
+
+typedef struct
+{
+    float x;
+    float y;
     float w;
     float h;
 } Rect<read=readRect>;
