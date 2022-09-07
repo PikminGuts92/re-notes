@@ -1,0 +1,117 @@
+// A camera shot. This is an animated camera path with keyframed settings.
+// Super: Anim
+// Ext: .shot
+// C++ Class: CamShot
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "CamShot"
+    #endif
+#endif
+
+#ifndef OBJECT_CAM_SHOT
+#define OBJECT_CAM_SHOT
+
+#include "anim.bt"
+#include "common.bt"
+
+typedef struct
+{
+    // 0, 4, 8, 0xc
+
+    // Transformable?
+
+    int version; // 42
+    NumString transformable_target; // Possibly RndTransformable + ObjectDir
+    NumString some_symbol;
+} ShotTarget;
+
+typedef struct
+{
+    float floats[22];
+
+    int target_count;
+    if (target_count > 0) ShotTarget targets[target_count]<optimize=false>;
+
+    ShotTarget target_1;
+    ShotTarget target_2;
+
+    Bool some_bool_1;
+
+    float more_floats[5];
+    Bool some_bool_2;
+} CamShotFrame;
+
+typedef struct // Inherit from WorldCrowd?
+{
+    // TODO
+} CamShotCrowd;
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 42 (TBRB), 49 (GDRB)
+    read_metadata(info, super);
+
+    Anim anim(info, True);
+
+    int frame_count;
+    CamShotFrame frames[frame_count]<optimize=false>;
+
+    Bool some_bool_1;
+    float floats_1[3]; // [0, 1, 100]
+
+    Bool some_bool_2;
+    float floats_2[2]; // [0.9, -1]
+
+    NumString trans_anim; // RndTransAnim symbol
+
+    float unknown_value_1;
+    NumString some_symbol;
+    float unknown_value_2;
+
+    int drawable_count_1; // RndDrawable
+    if (drawable_count_1 > 0) NumString drawable_symbols_1[drawable_count_1]<optimize=false>;
+
+    int drawable_count_2;
+    if (drawable_count_2 > 0) NumString drawable_symbols_2[drawable_count_2]<optimize=false>;
+
+    NumString spotlight_symbol; // Spotlight
+
+    int drawable_count_3;
+    if (drawable_count_3 > 0) NumString drawable_symbols_3[drawable_count_3]<optimize=false>;
+
+    int drawable_count_4;
+    if (drawable_count_4 > 0) NumString drawable_symbols_4[drawable_count_4]<optimize=false>;
+
+    Bool some_bool_3;
+    int some_integer; // 1
+
+    NumString anim_symbol;
+
+    int cam_shot_crowd_count;
+    if (cam_shot_crowd_count > 0) CamShotCrowd cam_shot_crowd[cam_shot_crowd_count]<optimize=false>;
+} CamShot;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "CamShot")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    CamShot cam_shot(info, False);
+}
+
+#endif
+
+#endif
