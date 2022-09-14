@@ -1,0 +1,73 @@
+// TexRender renders a draw and cam into a texture
+// Super: Anim Draw
+// Ext: .rndtex
+// C++ Class: RndTexRenderer
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "TexRenderer"
+    #endif
+#endif
+
+#ifndef OBJECT_TEX_RENDERER
+#define OBJECT_TEX_RENDERER
+
+#include "anim.bt"
+#include "draw.bt"
+#include "common.bt"
+#include "object.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 9 (TBRB), 11 (GDRB)
+    read_metadata(info, super);
+
+    // Super...
+    Anim anim_obj(info, True);
+    Draw draw_obj(info, True);
+
+    NumString draw; // RndDrawable
+    NumString cam;  // Cam
+
+    if (version >= 11)
+    {
+        NumString cam_shot;     // CamShot
+        Bool enable_post_procs; // Whether or not this tex renderer allows post procs - this quadruples texture memory so only enable it if you really have to
+    }
+
+    NumString output_texture; // Tex
+
+    Bool force;
+    float imposter_height;
+
+    Bool draw_responsible;
+    Bool draw_pre_clear;
+    Bool draw_world_only;
+    Bool prime_draw;
+    Bool force_mips;
+} TexRenderer;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "TexRenderer")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        info.version = 24;
+    }
+
+    TexRenderer tex_renderer(info, False);
+}
+
+#endif
+
+#endif
