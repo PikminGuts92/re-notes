@@ -1,6 +1,6 @@
 // Draws full screen quad with movie
 // Super: Draw Poll
-// Ext: .trig
+// Ext: .tmov
 // C++ Class: TexMovie
 
 #ifndef IN_MILO_FILE
