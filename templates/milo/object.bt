@@ -1,0 +1,45 @@
+// The Object class is the root of the class hierarchy. Every class has Object as a superclass.
+// Super: (None)
+// Ext: 
+// C++ Class: Object
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "Object"
+    #endif
+#endif
+
+#ifndef OBJECT_OBJECT
+#define OBJECT_OBJECT
+
+#include "common.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    read_metadata(info, super);
+} Object;
+
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "Object")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    Object obj(info, False);
+}
+
+#endif
+
+#endif
