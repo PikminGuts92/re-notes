@@ -74,7 +74,6 @@ typedef struct (SystemInfo& info, Bool super)
     }
 
     NumString tempo; // (slow medium fast)
-
     NumString song_clips;      // P9_SONG_CLIPS - Usually same as song name or 'none'
     NumString dreamscape_font; // P9_VENUE_FONTS
 
@@ -86,14 +85,9 @@ typedef struct (SystemInfo& info, Bool super)
         NumString john_amp;   // P9_JOHN_AMPS
         NumString paul_amp;   // P9_PAUL_AMPS
         NumString mixer;      // P9_MIXERS
-
-        DreamConfig dreamscape_camera; // P9_DREAM_CONFIGS
-    }
-    else // GDRB
-    {
-        int always_0;
     }
 
+    DreamConfig dreamscape_camera; // P9_DREAM_CONFIGS (Empty for GDRB)
     NumString lyric_part; // ('PART HARM1' 'PART HARM2' 'PART HARM3')
 
     // GDRB
