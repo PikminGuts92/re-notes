@@ -44,8 +44,8 @@ typedef struct (SystemInfo& info, Bool super)
     }
 
     // Anim entries
-    int anim_entry_Count;
-    if (anim_entry_Count > 0) AnimEntry anim_entries[anim_entry_Count]<optimize=false>;
+    int anim_entry_count;
+    if (anim_entry_count > 0) AnimEntry anim_entries[anim_entry_count]<optimize=false>;
 
     // .tnm
     int anim_count;
