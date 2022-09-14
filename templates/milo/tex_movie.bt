@@ -1,0 +1,59 @@
+// Draws full screen quad with movie
+// Super: Draw Poll
+// Ext: .trig
+// C++ Class: TexMovie
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "TexMovie"
+    #endif
+#endif
+
+#ifndef OBJECT_TEX_MOVIE
+#define OBJECT_TEX_MOVIE
+
+#include "draw.bt"
+#include "common.bt"
+#include "object.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 2 (TBRB/GDRB)
+    read_metadata(info, super);
+
+    Draw draw(info, True);
+    Object obj(info, False); // What?
+
+    NumString output_texture; // Tex
+
+    Bool loop;
+    Bool preload;
+
+    NumString movie_file; // .bik
+    Bool draw_pre_clear;
+} TexMovie;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "TexMovie")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        info.version = 24;
+    }
+
+    TexMovie tex_movie(info, False);
+}
+
+#endif
+
+#endif
