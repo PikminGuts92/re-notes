@@ -15,36 +15,53 @@
 #include "anim.bt"
 #include "common.bt"
 
+typedef enum
+{
+    kCrowdRotateNone,
+    kCrowdRotateFace,
+    kCrowdRotateAway
+} CROWD_ROTATE;
+
 typedef struct
 {
-    // 0, 4, 8, 0xc
+    int version; // 42 (TBRB)
 
-    // Transformable?
-
-    int version; // 42
-    NumString transformable_target; // Possibly RndTransformable + ObjectDir
-    NumString some_symbol;
+    // Both RndTransformable
+    NumString entity;  // The entity to attach to
+    NumString subpart; // Subpart of the parent to attach to
 } ShotTarget;
 
 typedef struct
 {
     float floats[22];
 
-    int target_count;
-    if (target_count > 0) ShotTarget targets[target_count]<optimize=false>;
+    int targets_count;
+    if (targets_count > 0) ShotTarget targets[targets_count]<optimize=false>;
 
-    ShotTarget target_1;
-    ShotTarget target_2;
+    ShotTarget parent;       // Whether to take the parent object's rotation into account
+    ShotTarget focal_target; // The focal point when calculated depth of field
 
-    Bool some_bool_1;
+    Bool use_parent_rotation;
 
     float more_floats[5];
-    Bool some_bool_2;
+    Bool parent_first_frame;
 } CamShotFrame;
+
+typedef struct
+{
+    int value_1;
+    int value_2;
+} CamShotCrowdEntry;
 
 typedef struct // Inherit from WorldCrowd?
 {
-    // TODO
+    NumString crowd; // WorldCrowd
+    CROWD_ROTATE crowd_rotate;
+
+    int entries_count;
+    if (entries_count > 0) CamShotCrowdEntry entries[entries_count]<optimize=false>;
+
+    int unknown; // 5 (Default: -1?)
 } CamShotCrowd;
 
 typedef struct (SystemInfo& info, Bool super)
@@ -54,42 +71,45 @@ typedef struct (SystemInfo& info, Bool super)
 
     Anim anim(info, True);
 
-    int frame_count;
-    CamShotFrame frames[frame_count]<optimize=false>;
+    int keyframes_count;
+    if (keyframes_count > 0) CamShotFrame keyframes[keyframes_count]<optimize=false>;
 
-    Bool some_bool_1;
-    float floats_1[3]; // [0, 1, 100]
+    Bool looping;
+    int loop_keyframe;
+    float near_plane;
+    float far_plane; // 100, 3000
 
-    Bool some_bool_2;
-    float floats_2[2]; // [0.9, -1]
+    Bool use_depth_of_field;
+    float filter;
+    float clamp_height;
 
-    NumString trans_anim; // RndTransAnim symbol
+    NumString path; // RndTransAnim symbol
 
-    float unknown_value_1;
-    NumString some_symbol;
-    float unknown_value_2;
+    float fade_time;
+    NumString category; // Symbol
+    int platform_only; // Enum
 
-    int drawable_count_1; // RndDrawable
-    if (drawable_count_1 > 0) NumString drawable_symbols_1[drawable_count_1]<optimize=false>;
+    int hide_list_count; // RndDrawable
+    if (hide_list_count > 0) NumString hide_list[hide_list_count]<optimize=false>;
 
-    int drawable_count_2;
-    if (drawable_count_2 > 0) NumString drawable_symbols_2[drawable_count_2]<optimize=false>;
+    int show_list_count; // RndDrawable
+    if (show_list_count > 0) NumString show_list[show_list_count]<optimize=false>;
 
-    NumString spotlight_symbol; // Spotlight
+    NumString glow_spot; // Spotlight
 
-    int drawable_count_3;
-    if (drawable_count_3 > 0) NumString drawable_symbols_3[drawable_count_3]<optimize=false>;
+    int draw_overrides_count; // RndDrawable
+    if (draw_overrides_count > 0) NumString draw_overrides[draw_overrides_count]<optimize=false>;
 
-    int drawable_count_4;
-    if (drawable_count_4 > 0) NumString drawable_symbols_4[drawable_count_4]<optimize=false>;
+    int postproc_overrides_count; // PostProc
+    if (postproc_overrides_count > 0) NumString postproc_overrides[postproc_overrides_count]<optimize=false>;
 
-    Bool some_bool_3;
-    int some_integer; // 1
+    Bool ps3_per_pixel;
+    int flags; // 0, 1, 493119, 463393
 
-    NumString anim_symbol;
+    NumString sync_anim; // Anim
 
-    int cam_shot_crowd_count;
-    if (cam_shot_crowd_count > 0) CamShotCrowd cam_shot_crowd[cam_shot_crowd_count]<optimize=false>;
+    int crowds_count;
+    if (crowds_count > 0) CamShotCrowd crowds[crowds_count]<optimize=false>;
 } CamShot;
 
 #ifdef STANDALONE_FILE
