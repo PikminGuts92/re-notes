@@ -84,10 +84,23 @@ typedef struct (SystemInfo& info, Bool super)
     float clamp_height;
 
     NumString path; // RndTransAnim symbol
+    
+    if (version >= 49)
+    {
+        NumString unk_1;
+        NumString unk_2;
+        NumString relative_to; // Trans
+    }
 
     float fade_time;
     NumString category; // Symbol
     int platform_only; // Enum
+
+    if (version >= 49)
+    {
+        Bool unk_bool_1;
+        NumString unk_3;
+    }
 
     int hide_list_count; // RndDrawable
     if (hide_list_count > 0) NumString hide_list[hide_list_count]<optimize=false>;
@@ -104,12 +117,17 @@ typedef struct (SystemInfo& info, Bool super)
     if (postproc_overrides_count > 0) NumString postproc_overrides[postproc_overrides_count]<optimize=false>;
 
     Bool ps3_per_pixel;
-    int flags; // 0, 1, 493119, 463393
+    int flags; // 0, 1, 493119, 463393, 476159
 
     NumString sync_anim; // Anim
 
     int crowds_count;
     if (crowds_count > 0) CamShotCrowd crowds[crowds_count]<optimize=false>;
+
+    if (version >= 49)
+    {
+        Bool unk_bool_2; // Always 0?
+    }
 } CamShot;
 
 #ifdef STANDALONE_FILE

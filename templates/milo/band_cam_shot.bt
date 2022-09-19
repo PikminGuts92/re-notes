@@ -46,10 +46,15 @@ typedef struct
     float float_4; // 15
 } BandCamShotTarget; // Target
 
-typedef struct
+typedef struct (int version)
 {
     float frame;
     NumString trigger; // EventTrigger
+
+    if (version != 0x2001b && version >= 28)
+    {
+        NumString trigger_group; // TriggerGroup
+    }
 } TimedTrigger;
 
 typedef struct (SystemInfo& info, Bool super)
@@ -65,7 +70,14 @@ typedef struct (SystemInfo& info, Bool super)
     float zero_time;
 
     int triggers_count;
-    if (triggers_count > 0) TimedTrigger triggers[triggers_count]<optimize=false>;
+    if (triggers_count > 0)
+    {
+        local int i;
+        for (i = 0; i < triggers_count; i++)
+        {
+            TimedTrigger triggers(version);
+        }
+    }
 
     NumString event_at_start; // EventTrigger
     NumString event_at_end;   // EventTrigger
