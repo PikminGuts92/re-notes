@@ -46,7 +46,6 @@ typedef struct
 
 typedef struct
 {
-    // Not observed yet...
     NumString proxy; // ObjectDir
     NumString call;  // Symbol
     NumString event; // EventTrigger
