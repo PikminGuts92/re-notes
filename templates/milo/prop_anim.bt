@@ -69,7 +69,7 @@ typedef struct
     float pos;
 } AnimEventSymbol<read=Str("Start: %.2f, Value: %s", this.pos, read_num_string(this.text))>;
 
-typedef struct
+typedef struct (int version)
 {
     PropType type1;
     PropType type2; // Should match type1
@@ -82,6 +82,11 @@ typedef struct
     NumString interp_handler; // Usually empty
 
     int unknown_enum; // 0, 1, 2, 3, 5, 6
+
+    if (version >= 13)
+    {
+        Bool unknown_bool; // Always false?
+    }
 
     // "keys"
     int event_count;
@@ -126,19 +131,31 @@ string read_prop_keys(PropKeys& prop_keys)
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 11 (TBRB), 12 (GDRB)
+    int version; // 11 (TBRB), 12 (GDRB), 13 (DC1)
     read_metadata(info, super);
 
     Anim anim(info, True);
 
-    if (version >= 12)
+    if (version == 12)
     {
         // True for peacemaker media...
         Bool usually_false;
     }
 
     int prop_keys_count;
-    PropKeys keys[prop_keys_count]<optimize=false>;
+    if (prop_keys_count > 0)
+    {
+        local int i;
+        for (i = 0; i < prop_keys_count; i++)
+        {
+            PropKeys keys(version);
+        }
+    }
+
+    if (version >= 13)
+    {
+        Bool unknown; // Always false?
+    }
 } PropAnim;
 
 #ifdef STANDALONE_FILE
