@@ -108,7 +108,13 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_entry)
         case "CharClipSet":
             CharClipSet object(info, False, False, is_entry);
             is_dir = 1;
-            should_read_milo = 1;
+
+            // proxy_file can still be specified even when inlined
+            // TODO: Use same check for other types?
+            if (object.obj_dir.inline_proxy == True)
+            {
+                should_read_milo = 1;
+            }
             break;
         case "Group":
             Group object(info, False);
@@ -175,7 +181,7 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_entry)
 
     uint padding<format=hex>;
 
-    if (!FEof() && is_dir == 1 && is_entry == True && (should_read_milo == 1 || (ReadInt() == info.version)))
+    if (!FEof() && is_dir == 1 && is_entry == True && (should_read_milo == 1 /*|| (ReadInt() == info.version)*/))
     {
         MiloFile dir(info);
     }
