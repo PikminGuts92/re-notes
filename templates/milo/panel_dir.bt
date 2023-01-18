@@ -17,12 +17,13 @@ struct PanelDir;
 #include "common.bt"
 #include "rnd_dir.bt"
 
-typedef struct (SystemInfo& info, Bool super, Bool inlined)
+typedef struct (SystemInfo& info, Bool super, Bool inlined, Bool isEntry)
 {
-    int version; // 1 (GH2 4-song), 2 (GH2/GH2 360), 7 (TBRB), 8 (DC1)
+    int version; // 1 (GH2 4-song), 2 (GH2/GH2 360), 7 (TBRB/GDRB), 8 (DC1)
     RndDir rnd_dir(info, True, inlined);
 
-    NumString cam;
+    // Only written as ObjectDir directory, not entry
+    if (isEntry == False) NumString cam;
 
     if (version <= 1)
     {
@@ -87,7 +88,7 @@ if (STANDALONE_FILE == "PanelDir")
         }
     }
 
-    PanelDir panel_dir(info, False, False);
+    PanelDir panel_dir(info, False, False, False);
 }
 
 #endif

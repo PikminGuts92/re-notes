@@ -141,13 +141,18 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_entry)
             P9SongPref object(info, False);
             break;
         case "PanelDir":
-            PanelDir object(info, False, False);
+            PanelDir object(info, False, False, is_entry);
             is_dir = 1;
             break;
         case "RndDir":
             // Doesn't seem to ever write dir for gh2 milos
             RndDir object(info, False, False);
             is_dir = 1;
+
+            if (object.obj_dir.inline_proxy == True)
+            {
+                should_read_milo = 1;
+            }
             break;
         case "SynthDir":
             SynthDir object(info, False, False);
