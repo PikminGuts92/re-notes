@@ -9,8 +9,8 @@
     #endif
 #endif
 
-#ifndef OBJECT_TRANS_ANIM
-#define OBJECT_TRANS_ANIM
+#ifndef OBJECT_MESH_ANIM
+#define OBJECT_MESH_ANIM
 
 #include "anim.bt"
 #include "common.bt"
