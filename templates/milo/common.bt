@@ -172,12 +172,27 @@ typedef struct
     float r;
     float g;
     float b;
-} Color<read=readColor>;
+} Color<read=readColor, bgcolor=get_bgcolor_color>;
+
+int get_bgcolor_color(Color& c)
+{
+    local int r = (int)(c.r * 255.0);
+    local int g = (int)(c.g * 255.0);
+    local int b = (int)(c.b * 255.0);
+
+    // BGR order
+    return (b << 16) | (g << 8) | r;
+}
 
 string readColor(Color& c)
 {
     local string s;
-    SPrintf(s, "(%f, %f, %f)", c.r, c.g, c.b);
+
+    local int r = (int)(c.r * 255.0);
+    local int g = (int)(c.g * 255.0);
+    local int b = (int)(c.b * 255.0);
+
+    SPrintf(s, "#%02X%02X%02X", r, g, b);
     return s;
 }
 
