@@ -23,7 +23,7 @@ typedef struct (SystemInfo& info, Bool super, Bool inlined)
     float always_1;
     NumString usually_empty_or_milo_path;
 
-    PanelDir panel_dir(info, True, inlined);
+    PanelDir panel_dir(info, True, inlined, False); // Pass from args
 
     Matrix some_trans;
 
