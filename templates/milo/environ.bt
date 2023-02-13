@@ -17,7 +17,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 1 (GH1), 5 (GH2), 9 (TBRB)
+    int version; // 1 (GH1), 5 (GH2), 9 (TBRB/GDRB)
 
     if (version > 1) read_metadata(info, super);
     if (version < 3) Draw draw(info, True);
