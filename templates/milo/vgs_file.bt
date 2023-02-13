@@ -32,6 +32,9 @@ string read_inter_block(InterleavedBlock& block)
 
 typedef struct (VgsFile& vgs)
 {
+    local uint sample_rate = 48000;
+    local float length = 0;
+
     // Calculate number of channels + blocks
     local uint channel_count = 0;
     local uint block_count = 0;
@@ -46,7 +49,9 @@ typedef struct (VgsFile& vgs)
 
     if (block_count > 0)
     {
-        local uint sample_rate = vgs.channel_info[0].sample_rate;
+        // Calculate length
+        sample_rate = vgs.channel_info[0].sample_rate;
+        length = (block_count * VAG_SAMPLES_PER_BLOCK) / (float)sample_rate;
 
         local uint i;
         for (i = 0; i < block_count; i++)
@@ -54,7 +59,7 @@ typedef struct (VgsFile& vgs)
             InterleavedBlock inter_blocks(channel_count, i, sample_rate);
         }
     }
-} VAGStream;
+} VAGStream<read=Str("Channels: %d, Sample Rate: %d, Length: %.2fs", this.channel_count, this.sample_rate, this.length)>;
 
 typedef struct
 {
