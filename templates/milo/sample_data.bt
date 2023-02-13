@@ -11,13 +11,19 @@
 
 #include "common.bt"
 
+/*
+XMA Info:
+https://github.com/hrydgard/minidx9/blob/master/Include/xma2defs.h
+https://github.com/FFmpeg/FFmpeg/blob/master/libavcodec/wmaprodec.c
+*/
+
 typedef struct (SystemInfo& info)
 {
     int version; // 11 (GH2 4-song/GH2/GH2 360), 13 (TBRB/GDRB)
 
     // 1 = Uncompressed 16-bit PCM
     // 2 =  ??? (PS2)
-    // 3 =  ??? (360)
+    // 3 =  ??? (360) Probably XMA... padded in 2048-sized blocks
     // 5 = MSFC (PS3)
     // 6 =  ??? (Wii)
     int encoding;
