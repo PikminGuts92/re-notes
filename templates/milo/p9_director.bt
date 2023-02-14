@@ -1,0 +1,43 @@
+// P9 Director, sits in each song file and manages camera + scene changes
+// Super: Poll
+// Ext: N/A
+// C++ Class: P9Director
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "P9Director"
+    #endif
+#endif
+
+#ifndef OBJECT_P9_DIRECTOR
+#define OBJECT_P9_DIRECTOR
+
+#include "common.bt"
+#include "draw.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 5 (TBRB/GDRB)
+
+    read_metadata(info, super); // Why is this written twice??
+    read_metadata(info, super);
+
+    Draw draw(info, True);
+    NumString venue; // none
+} P9Director;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "P9Director")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+    info.platform = X360;
+
+    P9Director p9_director(info, False);
+}
+
+#endif
+
+#endif
