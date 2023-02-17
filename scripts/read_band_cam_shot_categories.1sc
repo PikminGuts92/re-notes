@@ -1,0 +1,39 @@
+local int entry_count = 0;
+local int cam_count = 0;
+
+
+if (exists(milo))
+{
+    entry_count = milo.meta.entry_count;
+
+    local int i;
+    local string cat;
+
+    for (i = 0; i < entry_count; i++)
+    {
+        if (milo.meta.entries[i].type.text != "BandCamShot") continue;
+
+        cam_count += 1;
+        cat = milo.children.objects[i].object.cam_shot.category.text;
+
+        switch (cat)
+        {
+            case "intro_song":
+            case "intro_over":
+            case "intro_venue":
+            case "outro_finale":
+            case "outro_multi":
+            case "outro_venue":
+            case "lose":
+            case "win":
+            case "normal":
+                break;
+            default:
+                Printf("%s\n", cat);
+                break;
+        }
+    }
+}
+
+Printf("Found %d entries\n", entry_count);
+Printf("Found %d cams\n", cam_count);
