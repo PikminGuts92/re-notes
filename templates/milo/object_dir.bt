@@ -44,6 +44,12 @@ typedef struct (SystemInfo& info, Bool super, Bool inlined)
 
     if (version > 1)
     {
+        if (version >= 27)
+        {
+            // Zero'd data
+            FSkip(8);
+        }
+
         int viewport_count; // Usually 7
         local int i;
         for (i = 0; i < viewport_count; i++)
