@@ -1,0 +1,82 @@
+// A Morph object animates between multiple Mesh poses using
+//   weight keyframes. This is an expensive technique, equivalent to a
+//   MeshAnim for each active pose, so use only when skinning or a
+//   single MeshAnim isn't enough. For example, we use it for
+//   viseme-driven facial animation.
+// Super: Anim
+// Ext: .morph .mrf
+// C++ Class: RndMorph
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "Morph"
+    #endif
+#endif
+
+#ifndef OBJECT_MORPH
+#define OBJECT_MORPH
+
+#include "anim.bt"
+#include "common.bt"
+
+typedef struct
+{
+    float pos; // In milliseconds
+    float weight;
+} Frame<read=Str("(%f, %f)", this.pos, this.weight)>;
+
+typedef struct
+{
+    uint count;
+    uint unknown;
+
+    if (count > 0) Frame frames[count];
+} FrameCollection<read=Str("%d frames", this.count)>;
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 3 (KR)
+    //read_metadata(info, super);
+
+    Anim anim(info, True);
+
+    uint collection_count; // 2 = lid + brow, 16 = mouth
+
+    float unknown; // Always 0.0
+
+    FrameCollection frame_collections[collection_count]<optimize=false>;
+
+    Bool unk_bool_1;
+    Bool unk_bool_2;
+
+    float always_1;
+} Morph;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "Morph")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else if (obj_version <= 3)
+    {
+        info.platform = PS2;
+        info.version = 10;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    Morph morph(info, False);
+}
+
+#endif
+
+#endif
