@@ -1,6 +1,6 @@
 All bytes are in little endian order.
 
-Extensions: .rnd_ps2
+Extensions: .rnd
 
 Part 1: Tex Header
 ==================
@@ -12,7 +12,13 @@ INT32 - Char Count.
 String - Texture Path
 BYTES(5) - Zero'd
 
+
+If there are only (25 + string length) bytes, it points to an external .bmp.gz.
+
+
 **NOTE: The following parts may not always be present.**
+
+Extensions: .bmp.gz
 
 Part 2: BMP_PS2 Header (16 bytes)
 ======================
@@ -22,3 +28,12 @@ INT16 - Image Format (Always 3)
 INT16 - Width
 INT16 - Height
 INT16 - Bytes Per Line
+
+
+Part 3a: BMP_PS2 Palette Table (4bpp/64 byte ver.)
+=============================
+INT32(16) - RGBA Hex Code
+
+Part 3b: BMP_PS2 Palette Table (8bpp/1024 byte ver.)
+=============================
+INT32(256) - RGBA Hex Code
