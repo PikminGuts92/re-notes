@@ -1,0 +1,116 @@
+// Archive format for Karaoke Revolution on 360 (American Idol Encore)
+
+BigEndian();
+
+struct XenFile;
+
+typedef struct (uint str_table_start) // TODO: Pass in XenFile& instead
+{
+    uint num_0; // Block offset
+    uint num_1;
+    uint num_2; // File size 1
+    uint num_3; // File name string index
+
+    uint num_4; // 0, 1
+    uint num_5; // 0, 4
+    uint num_6; // File size 2
+    uint num_7<format=hex>; // Sometimes 0?
+
+    local string file_name = ReadString(str_table_start + num_3);
+} FileEntry<read=Str("%s", this.file_name)>;
+
+typedef struct XenFile
+{
+    uint unknown<format=hex>; // Checksum maybe?
+    uint chunk_size; // Always 4096
+
+    uint counts[13];
+
+    //  1 - File entry count 
+    //  2 - File entry chunk index
+    //  * Each entry is 32 bytes in file entry chunk *
+
+    
+    //  3 - Unknown chunk index
+
+    // TagTable.pak.sys
+    //  4 - Unknown chunk index
+
+    //  6 - Chunk index to last piece, not always preset
+    //  7 - Always 1 (Chunk index to first piece?)
+
+    // FilenameTable.pak.sys
+    //  8 - String table chunk index
+    //  9 - String table size
+    // 10 - Size of data in next chunk. Definitely not chunk index...
+
+    // 12 - Size of chunk? (2933 index)
+
+    // Index order: 5 or 11, 7, 4, 3, 8 (str table), 2, 6
+
+    // String table
+    local uint str_table_start = counts[8] * 4096;
+    FSeek(str_table_start);
+    byte string_table[counts[9]];
+
+    local uint file_count = counts[1];
+
+    local uint indices[5] = { 7, 4, 3, 2, 6 };
+    local uint i;
+
+    for (i = 0; i < 5; i++)
+    {
+        FSeek(counts[indices[i]] * 4096);
+
+        if (i == 3)
+        {
+            // Read file entries
+            struct FileEntries
+            {
+                local uint j;
+
+                for (j = 0; j < file_count; j++)
+                {
+                    FileEntry entries(str_table_start);
+                }
+            } file_entries;
+            continue;
+        }
+
+        struct Chunk
+        {
+            byte data[4096];
+        } chunk;
+    }
+
+    // Read files
+
+    FSeek(4096);
+    struct Files
+    {
+        local uint file_offset;
+        local uint file_size;
+
+        for (i = 0; i < file_count; i++)
+        {
+            file_offset = file_entries.entries[i].num_0 * 4096;
+            file_size = file_entries.entries[i].num_2;
+
+            FSeek(file_offset);
+
+            struct File
+            {
+                local uint index = i;
+                local uint offset = file_offset;
+                local uint size = file_size;
+                local string name = file_entries.entries[i].file_name;
+
+                byte data[size];
+            } file<read=Str("%s", this.name)>;
+        }
+    } files;
+
+} XenFile;
+
+
+XenFile file;

@@ -1,0 +1,57 @@
+// Lipsync format for Karaoke Revolution on 360 (American Idol Encore)
+
+BigEndian();
+
+// 12 bytes
+typedef struct
+{
+    uint hash<format=hex>; // Checksum for data or pose name?
+    uint count;
+    uint offset;
+} PoseHeader<read=Str("count: %d, offset: %d, hash: %08X", this.count, this.offset, this.hash)>;
+
+// 8 bytes
+typedef struct
+{
+    float pos;
+    float weight;
+} WeightEvent<read=Str("(%f, %f)", this.pos, this.weight)>;
+
+typedef struct (uint index, uint count)
+{
+    local uint index = index;
+    local uint count = count;
+
+    WeightEvent events[count];
+} PoseEvents<read=Str("Pose %d (%d events)", this.index, this.count)>;
+
+typedef struct
+{
+    char magic[4]; // "PLF "
+
+    uint always_0;
+    uint pose_count;
+    
+    uint always_16; // Probably start of entries (redundant)
+
+    PoseHeader entries[pose_count];
+
+    struct Poses
+    {
+        local uint i;
+        local uint local_pose_count = pose_count;
+        local uint events_count = 0;
+
+        for (i = 0; i < pose_count; i++)
+        {
+            if (entries[i].count == 0) continue;
+
+            FSeek(entries[i].offset);
+            PoseEvents poses(i, entries[i].count);
+
+            events_count++;
+        }
+    } poses<read=Str("%d poses (%d w/ events)", this.local_pose_count, this.events_count)>;
+} XLFLipsync;
+
+XLFLipsync file;
