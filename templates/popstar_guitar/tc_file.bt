@@ -1,0 +1,130 @@
+LittleEndian();
+
+typedef enum <ushort>
+{
+    Green,
+    Red,
+    Yellow,
+    Blue,
+    Orange
+} Fret;
+
+typedef enum <ushort>
+{
+    None,
+    StarPower = 512,
+} Special<read=read_special>;
+
+string read_special(Special& spec)
+{
+    local string str = EnumToString(spec);
+
+    if (str != "")
+    {
+        return Str("%s (%d)", str, spec);
+    }
+    else
+    {
+        return Str("Unknown (%d)", spec);
+    }
+}
+
+// 12 bytes
+typedef struct
+{
+    Special special;
+
+    float pos;
+    float length;
+
+    Fret fret;
+} Event<read=Str("pos: %.02f, len: %.02f (%s %s)", this.pos, this.length, read_special(this.special), EnumToString(this.fret))>;
+
+typedef struct
+{
+    char magic[4]; // SMUS
+    ushort collection_count;
+
+    typedef struct
+    {
+        ushort unk_1; // 0, 3, 4, 5
+        ushort unk_2; // 0, 1, 2, 3, 4
+
+        ushort count;
+        if (count > 0) Event events[count];
+
+        ushort unk_3; // 0, 1, 2048
+    } EventCollection<read=Str("%d events (%d %d %d)", this.count, this.unk_1, this.unk_2, this.unk_3)>;
+
+    EventCollection collection[collection_count]<optimize=false>;
+} SmusFile;
+
+typedef struct
+{
+    uint count;
+
+    // 24 bytes
+    typedef struct
+    {
+        uint unk_1;
+        uint unk_2;
+        uint unk_3;
+
+        uint unk_4;
+        uint unk_5;
+        uint unk_6;
+    } UnknownEntry<read=Str("%d %d %d %d %d %d", this.unk_1, this.unk_2, this.unk_3, this.unk_4, this.unk_5, this.unk_6)>;
+
+    UnknownEntry entries[count];
+} UnknownEntries<read=Str("%d entries", this.count)>;
+
+typedef struct
+{
+    struct Header
+    {
+        // E3 FF 9D B8 5E 22 51 0E 31 59 4A 35 19 5D 4D 1B
+        // 3F 5E 09 09 4B 41 21 47 24 A2 E8 FF 50 A2 85 9F
+        // FF A9 97 FE 91 96 FD 8D F7 AE EB A9 97 FB 91 B8
+        // EB FB F7 A4 F4 84 FD FE AA F8 86 F8 A3 92 F9 E8
+        // 89 BC F4 EA 60 5E 37 6B 6C 3D 35 49
+        byte unknown_bytes[76]<format=hex>;
+        uint unknown<format=hex>;
+    } header;
+
+    FSeek(2048);
+
+    local string magic;
+
+    while (!FEof())
+    {
+        // Read magic
+        magic = ReadString(FTell(), 4);
+    
+        switch (magic)
+        {
+            case "SMUS":
+                local uint start = FTell();
+
+                // Some midi-like file?
+                SmusFile file;
+
+                local uint rem = FTell() % 2048;
+
+                if (rem > 0) FSkip(2048 - rem);
+
+                magic = ReadString(FTell(), 4);
+                if (magic == "SVIS") break; // Hacky
+
+                UnknownEntries unk_entries;
+                break;
+            default:
+                break;
+        }
+
+        break;
+    }
+
+    
+} TcFile;
+
+TcFile file;
