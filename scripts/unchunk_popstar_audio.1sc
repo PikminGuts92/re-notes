@@ -1,0 +1,56 @@
+//if (!exists(file)) return;
+
+//const uint CHUNK_SIZE = 0x30000;
+//const uint CHUNK_SIZE_BACKING = 0x20000;
+//const uint CHUNK_SIZE_GUITAR = 0x10000;
+
+const uint CHUNK_SIZE = 0x48000;
+const uint CHUNK_SIZE_BACKING = 0x30000;
+const uint CHUNK_SIZE_GUITAR = 0x18000;
+
+FSeek(4);
+
+local byte buffer[CHUNK_SIZE];
+local byte buffer_backing[CHUNK_SIZE_BACKING];
+local byte buffer_guitar[CHUNK_SIZE_GUITAR];
+
+local uint count = 1;
+local uint start_pos;
+local uint i;
+
+while ((FileSize() - FTell()) >= CHUNK_SIZE)
+{
+    start_pos = FTell();
+    Printf("Processing at 0x%x\n", start_pos);
+    //break;
+
+    // Read backing track data
+    ReadBytes(buffer_backing, FTell(), CHUNK_SIZE_BACKING);
+    FSkip(CHUNK_SIZE_BACKING);
+
+    // Read guitar track data
+    ReadBytes(buffer_guitar, FTell(), CHUNK_SIZE_GUITAR);
+    FSkip(CHUNK_SIZE_GUITAR);
+
+    for (i = 0; i < CHUNK_SIZE_BACKING; i += 4)
+    {
+        buffer[ (i / 4) * 6     ] = buffer_backing[i    ];
+        buffer[((i / 4) * 6) + 1] = buffer_backing[i + 1];
+        buffer[((i / 4) * 6) + 2] = buffer_backing[i + 2];
+        buffer[((i / 4) * 6) + 3] = buffer_backing[i + 3];
+    }
+
+    for (i = 0; i < CHUNK_SIZE_GUITAR; i += 2)
+    {
+        buffer[((i / 2) * 6) + 4] = buffer_guitar[i    ];
+        buffer[((i / 2) * 6) + 5] = buffer_guitar[i + 1];
+    }
+
+    // OverwriteBytes
+    //OverwriteBytes();
+    //DeleteBytes(start_pos, CHUNK_SIZE);
+    WriteBytes(buffer, start_pos, CHUNK_SIZE);
+
+    //if (count >= 4) break;
+    //count += 1;
+}
