@@ -1,0 +1,36 @@
+#ifndef FORGE_COMMON
+#define FORGE_COMMON
+
+typedef struct
+{
+    uint size;
+    local string text = "";
+
+    if (size > 0)
+    {
+        char value[size];
+        text = value;
+    }
+} FString<read=Str("%s", this.text)>;
+
+typedef struct
+{
+    local uint size = ReadStringLength(FTell());
+    local string text = "";
+    
+    if (size > 1)
+    {
+        char value[size - 1];
+        text = value;
+    }
+    
+    byte terminator;
+} TerminatedString<read=Str("%s", this.text)>;
+
+typedef enum <byte>
+{
+    False = 0,
+    True = 1
+} Bool;
+
+#endif

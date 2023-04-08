@@ -1,0 +1,137 @@
+LittleEndian();
+
+#include "common.bt"
+#include "objects.bt"
+
+// Layout -> EntityResource -> Entity
+
+#define kEntityResourceRev 15
+#define kEntityRev 0x1E // TODO: Need to verify against RB4
+
+struct EntityResourceScene;
+
+typedef struct
+{
+    uint revision;
+
+    if (revision > kEntityRev)
+    {
+        // LoadCached
+        struct
+        {
+            int unknown; // 384
+            int component_count;
+
+            struct {
+                FString name;
+                uint memory_layout;
+                int cached;
+            } components[component_count]<optimize=false, read=Str("%s (%d)", this.name.text, this.cached)>;
+
+            // Only for RB4?
+            if (parentof(parentof(this)).revision <= 15)
+            {
+                int symbol_count;
+                if (symbol_count > 0) FString symbols[symbol_count]<optimize=false>;
+            }
+
+            struct
+            {
+                int size;
+                //byte data[size];
+
+                local uint start_pos = FTell();
+
+                uint size_1;
+                uint size_2; // Strings + fields size
+
+                // Null-terminated strings
+                struct
+                {
+                    uint count;
+                    local uint start_pos = FTell();
+
+                    if (count > 0) TerminatedString strings[count]<optimize=false>;
+
+                    local uint rem = (FTell() - start_pos) % 4;
+                    if (rem > 0) byte padding[4 - rem]<hidden=true>;
+                } strings<read=Str("(%d strings)", this.count)>;
+
+                //int nums[56];
+
+                //uint count_1;
+                //uint nums_1[count_1];
+
+                // Fields
+                struct
+                {
+                    uint count;
+
+                    struct
+                    {
+                        uint index;
+                        local string text = parentof(parentof(this)).strings.strings[index].text;
+                    } fields[count]<optimize=false, read=Str("%s (%d)", this.text, this.index)>;
+                } fields<read=Str("(%d fields)", this.count)>;
+
+                local uint rem_size = size - (FTell() - start_pos);
+                byte data[rem_size];
+            } data<read=Str("(%d bytes)", this.size)>;
+        } cached_entity;
+
+        int inline_resource_count;
+        if (inline_resource_count > 0)
+        {
+            int resource_count;
+
+            if (resource_count > 0)
+            {
+                struct
+                {
+                    FString type;
+                    FString name;
+
+                    switch (type.text)
+                    {
+                        case "RndMeshResource":
+                            #include "mesh.bt"
+                            break;
+                        case "WaveformResource<kFloat>":
+                            WaveformResourceFloat resource;
+                            break;
+                        default:
+                            EntityResourceScene resource;
+                            break;
+                    }
+                } resources[resource_count]<optimize=false, read=Str("%s (%s)", this.name.text, this.type.text)>;
+            }
+        }
+    }
+    else
+    {
+        // TODO
+    }
+} EntityScene;
+
+typedef struct
+{
+    int revision; // 15 (RB4), 17 (RBVR)
+
+    int resource_layer_count;
+    if (resource_layer_count > 0) FString resource_layer_names[resource_layer_count]<optimize=false>;
+
+    if (revision >= 17) int unknown_0;
+    int unknown; // 4, 329
+
+    EntityScene ent;
+} EntityResourceScene;
+
+typedef struct
+{
+    int revision; // 13 (RB4), 14 (RBVR)
+    if (revision <= 13) int sub_revision; // 0
+
+    EntityResourceScene entity_resource;
+} ForgeScene;
+
+ForgeScene file;

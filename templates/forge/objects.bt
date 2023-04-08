@@ -1,0 +1,56 @@
+#ifndef FORGE_OBJECTS
+#define FORGE_OBJECTS
+
+#include "common.bt"
+
+typedef struct TKey_ValueTangent_Float
+{
+    int unk1;
+    Assert(unk1 != 0, "Unknown TKey header");
+    int count;
+    struct
+    {
+        int unk;
+        int unk;
+        int unk;
+        int unk;
+        char unk;
+    } values[count];
+} TKey_ValueTangent_Float;
+
+typedef struct TKeyTrack_ValueTangent_Float
+{
+    int count;
+    struct
+    {
+        int unk;
+        int unk;
+        TKey_ValueTangent_Float key;
+    } keys[count] <optimize=false>;
+} TKeyTrack_ValueTangent_Float;
+
+typedef struct WaveformResourceFloat
+{
+    int unk;
+    int unk;
+    int unk;
+    TKeyTrack_ValueTangent_Float keytrack; // <ValueTangent<float>>
+    int unkCount;
+    struct
+    {
+        int unkCount2;
+        int unk2[unkCount2];
+    } unkValues[unkCount];
+    byte unk;
+    int unk;
+    int unk;
+    float unkFloats[4];
+    int valueCount;
+    byte unknown[17];
+    float values[valueCount];
+    byte unk;
+    float min;
+    float max;
+} WaveformResourceFloat;
+
+#endif
