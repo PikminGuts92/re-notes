@@ -37,3 +37,7 @@ INT32(16) - RGBA Hex Code
 Part 3b: BMP_PS2 Palette Table (8bpp/1024 byte ver.)
 =============================
 INT32(256) - RGBA Hex Code
+
+Part 4: Image Data
+=============================
+BYTES(height*width*(bits-per-pixel)) - Pixels stored as indexes into the palette table
