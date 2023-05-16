@@ -270,7 +270,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 25 (KRPAI/GH1), 28 (GH2/GH2 4-song), 29, 34 (GH2 360/RB1/RB2), 36 (TBRB), 37 (GDRB), 38 (RB3)
+    int version; // 14 (Amplitude 2003), 25 (KRPAI/GH1), 28 (GH2/GH2 4-song), 29, 34 (GH2 360/RB1/RB2), 36 (TBRB), 37 (GDRB), 38 (RB3)
 
     // Read meta if newer than GH1
     if (version > 25)
@@ -279,7 +279,12 @@ typedef struct (SystemInfo& info, Bool super)
     }
 
     Trans trans(info, True);
-    Draw draw(info, True);
+
+    // Amp just doesn't have it, for some reason
+    if (version > 14) 
+    {
+        Draw draw(info, True);
+    }
 
     NumString mat;        // Material used for rendering the Mesh (Mat)
     NumString geom_owner; // Geometry owner for the mesh (Mesh)
