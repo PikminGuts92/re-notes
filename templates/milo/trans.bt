@@ -30,7 +30,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 8 (GH1), 9 (GH2 4-song/GH2/GH2 360/RB1/TBRB/GDRB/RB3)
+    int version; // 4 (Amp 2003), 8 (GH1), 9 (GH2 4-song/GH2/GH2 360/RB1/TBRB/GDRB/RB3)
     read_metadata(info, super);
 
     Matrix localXfm;
@@ -42,12 +42,14 @@ typedef struct (SystemInfo& info, Bool super)
         int trans_count;
         if (trans_count > 0) NumString trans_objects[trans_count]<optimize=false>; // Trans types? 
     }
+    if (version > 4)
+    {
+        CONSTRAINT_ENUM constraint; // Trans constraint for the object (Constraint + target are used together)
+        NumString target;           // Target according to the constraint
 
-    CONSTRAINT_ENUM constraint; // Trans constraint for the object (Constraint + target are used together)
-    NumString target;           // Target according to the constraint
-
-    Bool preserve_scale;        // Preserve scale if applying dynamic constraint (usually false)
-    NumString parent;    // Object this is linked to
+        Bool preserve_scale;        // Preserve scale if applying dynamic constraint (usually false)
+        NumString parent;    // Object this is linked to
+    }
 } Trans;
 
 
