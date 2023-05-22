@@ -25,13 +25,49 @@ string mesh_to_string(Mesh& mesh)
     return s;
 }
 
+struct QTangent;
+
+void x_axis(QTangent& q_quat, float data[3])
+{
+    local float fTy = 2.0 * q_quat.y.f_value;
+    local float fTz = 2.0 * q_quat.z.f_value;
+    local float fTwy = fTy * q_quat.w.f_value;
+    local float fTwz = fTz * q_quat.w.f_value;
+    local float fTxy = fTy * q_quat.x.f_value;
+    local float fTxz = fTz * q_quat.x.f_value;
+    local float fTyy = fTy * q_quat.y.f_value;
+    local float fTzz = fTz * q_quat.z.f_value;
+
+    data[0] = 1.0 - (fTyy + fTzz);
+    data[1] = fTxy + fTwz;
+    data[2] = fTxz - fTwy;
+}
+
+void y_axis(QTangent& q_quat, float data[3])
+{
+    local float fTx  = 2.0 * q_quat.x.f_value;
+    local float fTy  = 2.0 * q_quat.y.f_value;
+    local float fTz  = 2.0 * q_quat.z.f_value;
+    local float fTwx = fTx * q_quat.w.f_value;
+    local float fTwz = fTz * q_quat.w.f_value;
+    local float fTxx = fTx * q_quat.x.f_value;
+    local float fTxy = fTy * q_quat.x.f_value;
+    local float fTyz = fTz * q_quat.y.f_value;
+    local float fTzz = fTz * q_quat.z.f_value;
+
+    data[0] = fTxy - fTwz;
+    data[1] = 1.0 - (fTxx + fTzz);
+    data[2] = fTyz + fTwx;
+}
+
 typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
 {
     // Coordinates
     float x;
     float y;
     float z;
-    if (mesh_version == 34 || (mesh_version == 36 && is_ng == False && (info.platform == X360 || info.platform == PS3))) float w; // Always 0?
+    if (mesh_version == 34) float w;
+    //if (mesh_version == 34 || (mesh_version == 36 && is_ng == False && (info.platform == X360 || info.platform == PS3))) float w; // Always 0?
 
     if (mesh_version < 35 || is_ng == False)
     {
@@ -48,7 +84,8 @@ typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
         float nx;
         float ny;
         float nz;
-        if (mesh_version == 34 || (mesh_version == 36 && (info.platform == X360 || info.platform == PS3))) float nw; // Always 0?
+        if (mesh_version == 34) float nw;
+        //if (mesh_version == 34 || (mesh_version == 36 && (info.platform == X360 || info.platform == PS3))) float nw; // Always 0?
         
         if (mesh_version >= 38)
         {
@@ -134,10 +171,32 @@ typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
             hfloat v;
 
             // Normals
-            hfloat nx;
+            /*hfloat nx;
             hfloat ny;
             hfloat nz;
-            hfloat nw; // Not 100% sure, maybe some scaler for weight?
+            hfloat nw; // Not 100% sure, maybe some scaler for weight?*/
+
+            struct QTangent
+            {
+                typedef struct
+                {
+                    short value;
+                    local float f_value = Max((float)value / 32767.0, -1.0);
+                } SNorm<read=Str("%.3f", this.f_value)>;
+
+                SNorm x;
+                SNorm y;
+                SNorm z;
+                SNorm w;
+
+                // Calculate normals + tangents
+                local float normals[3]<read=Str("(%.3f, %.3f, %.3f)", this[0], this[1], this[2])>;
+                x_axis(this, normals);
+
+                local float tangents[3]<read=Str("(%.3f, %.3f, %.3f)", this[0], this[1], this[2])>;
+                y_axis(this, tangents);
+
+            } q_tangent;
 
             // Weights
             ubyte weight_0; // Default: [FF, FF, FF, FF]
@@ -185,7 +244,24 @@ NG Bone weights?
 string vertex_to_string(Vertex& v)
 {
     local string s;
-    SPrintf(s, "(%.3f, %.3f, %.3f)", v.x, v.y, v.z);
+
+    // Check mesh version and if next-gen packed vert data
+    if (parentof(parentof(v)).version < 36 || parentof(v).is_ng == False)
+    {
+        SPrintf(s, "v = (%.3f, %.3f, %.3f), n = (%.3f, %.3f, %.3f), w = (%.3f, %.3f, %.3f, %.3f), uv = (%.3f, %.3f), b = (%d, %d, %d, %d), t = (%.3f, %.3f, %.3f, %.3f)",
+            v.x, v.y, v.z,
+            v.nx, v.ny, v.nz,
+            v.weight_0, v.weight_1, v.weight_2, v.weight_3,
+            v.u, v.v,
+            v.bone_0, v.bone_1, v.bone_2, v.bone_3,
+            v.tangent_0, v.tangent_1, v.tangent_2, v.tangent_3
+        );
+    }
+    else
+    {
+        SPrintf(s, "v = (%.3f, %.3f, %.3f)", v.x, v.y, v.z);
+    }
+    
     return s;
 }
 
