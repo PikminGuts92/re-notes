@@ -26,6 +26,7 @@ typedef struct XenFile
 
     uint counts[13];
 
+    //  0 - 0, 22
     //  1 - File entry count 
     //  2 - File entry chunk index
     //  * Each entry is 32 bytes in file entry chunk *

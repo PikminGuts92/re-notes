@@ -1,0 +1,39 @@
+// Audio format for Karaoke Revolution on 360 (American Idol Encore)
+
+BigEndian();
+
+typedef struct
+{
+    uint always_0;
+    uint packet_size; // Always 2048
+
+    uint hash<format=hex>;
+    uint file_size; // Matches size of KrWav data
+
+    //  0 - Always 2
+    //  1 - Always 136
+    //  2 - Always 140
+    //  3 - 65538, 65539
+    //  4 - Buffer size for .wav? Usually larger
+    // 13 - Num channels
+    // 16 - Sample index table size
+    // 17 - Sample index table start offset
+
+    uint nums[10];
+
+    uint sample_rate; // 48kHz
+
+    uint nums2[19];
+
+    local uint nums3_count = (nums2[17] - FTell()) / 4;
+    uint num3[nums3_count];
+
+    FSeek(nums2[17]);
+    local uint sample_index_count = nums2[16] / 4;
+    if (sample_index_count > 0)
+    {
+        uint sample_map[sample_index_count];
+    }
+} KrWav;
+
+KrWav file;

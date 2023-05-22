@@ -1,0 +1,105 @@
+// Mesh format for Karaoke Revolution on 360 (American Idol Encore)
+
+BigEndian();
+
+// 64 bytes
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+
+    float u;
+    float v;
+
+    float always_0; // 0.0, 0.181, 0.002, 0.005
+
+    ubyte bone_0;
+    ubyte bone_1;
+    ubyte bone_2;
+    ubyte bone_3;
+
+    float nx;
+    float ny;
+    float nz;
+
+    uint unknown<format=hex>;
+
+    float nums[5];
+} KrVertex;
+
+typedef struct
+{
+    uint always_0;
+    uint always_256;
+
+    uint hash<format=hex>;
+    uint file_size;
+
+    uint zerod_data[4];
+
+    uint vert_count; // 0, 470, 2180
+    local uint vert_offset;
+
+    // Can be encoded as uint32 or 4-char digits :O
+    if (ReadUInt() > FileSize())
+    {
+        char vert_offset_chars[4];
+        vert_offset = Atoi(vert_offset_chars);
+    }
+    else
+    {
+        uint vert_offset_uint;
+        vert_offset = vert_offset_uint;
+    }    
+
+    uint unknown_count; // 0, 1, 4
+
+    uint offset_x;
+    uint offset_y;
+    uint number; // 0, 1, 4
+
+    uint more_zerod_data[2];
+    uint ffs_or_zeros[4];
+    uint number_2; // 0, 2, 3
+
+    uint even_more_zerod_data[12];
+    uint face_count; // Multiply by 2 for size
+    uint face_offset;
+
+    uint zerod_continued[5];
+    uint unk_count_offset_1;
+    uint unk_count_offset_2;
+    uint always_2048; // 1024, 2048
+    uint two_zeros[2];
+
+    uint some_offset;
+    uint always_0;
+    
+    float vector_1[4];
+    float vector_2[4];
+
+    uint offset_1;
+    uint offset_2; // Mesh/object name (matches xen file name)
+    uint offset_3; // String table?
+
+    uint offset_4; // Always 0
+    uint offset_5; // Hashes or tags?
+
+    ushort unk_count; // 1, 63, 64
+
+    // Zero'd data between this
+
+    FSeek(some_offset);
+    uint another_offset;
+
+    // Go to vert data
+    FSeek(vert_offset);
+    KrVertex verts[vert_count];
+
+    // Go to face data
+    FSeek(face_offset);
+    ushort faces[face_count];
+} KrMesh;
+
+KrMesh file;
