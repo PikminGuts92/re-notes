@@ -29,7 +29,7 @@ typedef struct
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 6 (GH2/GH2 360), 7 (TBRB/GDRB)
+    int version; // 4 (GH1), 6 (GH2/GH2 360), 7 (TBRB/GDRB)
 
     if (version >= 4) read_metadata(info, super);
 
