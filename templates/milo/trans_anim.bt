@@ -29,23 +29,52 @@ typedef struct
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 6 (GH2/GH2 360), 7 (TBRB/GDRB)
+    int version; // 4 (KRPAI/GH1), 6 (GH2/GH2 360), 7 (TBRB/GDRB)
 
-    if (version >= 4) read_metadata(info, super);
+    if (version > 4) read_metadata(info, super);
 
     Anim anim(info, True);
 
-    // if (version < 6) // RndDrawable::DumpLoad()
+    if (version < 6)
+    {
+        // RndDrawable::DumpLoad()
+        int version_min; // 1
+        Bool unkown; // Always true?
+
+        if (version_min < 2)
+        {
+            uint str_count;
+            if (str_count > 0) NumString strings[str_count]<optimize=false>;
+        }
+
+        if (version_min > 0)
+        {
+            int num_1;
+            int num_2;
+            int num_3;
+            int num_4;
+        }
+
+        if (version_min > 2)
+        {
+            int num_5;
+        }
+
+        if (version_min > 3)
+        {
+            NumString drawable; // RndDrawable
+        }
+    }
 
     NumString trans_object;
 
     if (version != 2)
     {
         uint rot_keys_count;
-        KeyQuart rot_keys[rot_keys_count];        
+        if (rot_keys_count > 0) KeyQuart rot_keys[rot_keys_count];        
 
         uint trans_keys_count;
-        KeyVec3 trans_keys[trans_keys_count];
+        if (trans_keys_count> 0) KeyVec3 trans_keys[trans_keys_count];
     }
 
     NumString trans_anim_owner; // RndTransAnim
@@ -69,7 +98,7 @@ typedef struct (SystemInfo& info, Bool super)
     else
     {
         uint scale_keys_count;
-        KeyVec3 scale_keys[scale_keys_count];
+        if (scale_keys_count) KeyVec3 scale_keys[scale_keys_count];
 
         Bool scale_spline;
     }
