@@ -1,4 +1,7 @@
 // A clip of animation that you can play. We expect subclasses for stuff like compression
+// (DC1)
+//  This is the simple form that stores samples and linearly interpolates between them.
+//  Data is grouped by keyframe, for better RAM coherency better storage, interpolation, etc.
 // Super: (None)
 // Ext: (None)
 // C++ Class: CharClip
@@ -13,6 +16,7 @@
 #define OBJECT_CHAR_CLIP
 
 #include "common.bt"
+#include "char_bones_samples.bt"
 
 typedef struct
 {
@@ -120,21 +124,59 @@ typedef enum
     kPlayBeatAlign8 = 32768
 } PLAY_TIME_FLAGS;
 
+typedef struct
+{
+    float cur_beat;
+    float next_beat;
+} TransitionNode<read=Str("%f -> %f", this.cur_beat, this.next_beat)>;
+
+typedef struct
+{
+    NumString clip; // CharClip: "clip it's transitioning to"
+
+    uint node_count;
+    if (node_count > 0) TransitionNode nodes;
+} Transition<read=Str("%s (%d nodes)", this.clip.text, this.node_count)>;
+
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 5 (GH2), 12 (TBRB)
+    int version; // 5 (GH2/GH2 360), 12 (TBRB/GDRB), 19 (DC1)
     read_metadata(info, super);
+
+    // Note: Seems that DC1 switched to using beat time
+    /*
+      Rem:
+        sync_to_song_time: bool
+        blend_width?: float
+    */
 
     float start_beat;
     float end_beat;
 
     float beats_per_sec;
-    
+
+    if (version >= 19)
+    {
+        FSkip(17);
+
+        struct Transitions
+        {
+            uint transitions_count;
+            if (transitions_count > 0) Transition transitions[transitions_count]<optimize=false>;
+        } transitions<read=Str("(%d transitions)", this.transitions_count)>;
+
+        FSkip(4);
+        CharBonesSamples full(info, False, -1);
+        CharBonesSamples one(info, False, -1);
+
+        return;
+    }
+
     // PLAY_BLEND_FLAGS | PLAY_LOOP_FLAGS | PLAY_TIME_FLAGS
     uint flags;      // default_blend? PLAY_BLEND_FLAGS
     uint play_flags; // default_loop? PLAY_LOOP_FLAGS
 
-    float blend_width;
+    float blend_width; // Usually 2?
 
     if (version > 3)
     {

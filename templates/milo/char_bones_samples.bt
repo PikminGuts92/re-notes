@@ -14,6 +14,14 @@
 
 struct CharBonesSamples;
 
+typedef enum <uint>
+{
+    kCompressNone = 0,
+    kCompressRots = 1,
+    kCompressVects = 2,
+    kCompressQuats = 3
+} CLIP_COMPRESSION; // CompressionType
+
 typedef struct
 {
     int count;
@@ -24,16 +32,38 @@ typedef struct
     }
 } TransInfo;
 
-typedef struct
+typedef struct (int version)
 {
     NumString symbol;
+    if (version != -1 && version <= 10) return; // No weights
+
     float weight;
 } CharBone4Bone<read=read_char_bone>;
+
+typedef struct (int version)
+{
+    int bone_count;
+    if (bone_count <= 0) return;
+
+    local int i;
+
+    for (i = 0; i < bone_count; i++)
+    {
+        CharBone4Bone bones(version);
+    }
+} CharBones;
 
 string read_char_bone(CharBone4Bone& bone)
 {
     local string s;
-    SPrintf(s, "%1.2f %s", bone.weight, bone.symbol.text);
+    local float w = 1.0;
+
+    if (exists(bone.weight))
+    {
+        w = bone.weight;
+    }
+
+    SPrintf(s, "%1.2f %s", w, bone.symbol.text);
     return s;
 }
 
@@ -42,26 +72,57 @@ typedef struct (uint sample_size)
     byte data[sample_size];
 } CharBoneSample;
 
-typedef struct (uint compression)
+typedef struct (CharBone4Bone& bone, uint compression)
 {
+    local string bone_name = "";
+    local float xx = 0.0;
+    local float yy = 0.0;
+    local float zz = 0.0;
+
+    if (exists(bone.symbol) && exists(bone.symbol.text))
+    {
+        bone_name = bone.symbol.text;
+    }
+
     if (compression < 2)
     {
         // 12 bytes
         float x;
         float y;
         float z;
+        //float w;
+
+        xx = x;
+        yy = y;
+        zz = z;
     }
     else
     {
         // 6 bytes
-        ushort x;
-        ushort y;
-        ushort z;
-    }
-} PosSample;
+        short x;
+        short y;
+        short z;
 
-typedef struct (uint compression)
+        // Convert to floats
+        xx = Max((float)x / 32767.0, -1);
+        yy = Max((float)y / 32767.0, -1);
+        zz = Max((float)z / 32767.0, -1);
+    }
+} PosSample<read=Str("%s (%f, %f, %f)", this.bone_name, this.xx, this.yy, this.zz)>;
+
+typedef struct (CharBone4Bone& bone, uint compression)
 {
+    local string bone_name = "";
+    local float xx = 0.0;
+    local float yy = 0.0;
+    local float zz = 0.0;
+    local float ww = 0.0;
+
+    if (exists(bone.symbol) && exists(bone.symbol.text))
+    {
+        bone_name = bone.symbol.text;
+    }
+
     if (compression == 0)
     {
         // 16 bytes
@@ -69,14 +130,26 @@ typedef struct (uint compression)
         float y;
         float z;
         float w;
+
+        xx = x;
+        yy = y;
+        zz = z;
+        ww = w;
     }
     else if (compression < 3)
     {
         // 8 bytes
-        hfloat x;
-        hfloat y;
-        hfloat z;
-        hfloat w;
+        // Packed as signed shorts
+        short x;
+        short y;
+        short z;
+        short w;
+
+        // Convert to floats
+        xx = Max((float)x / 32767.0, -1);
+        yy = Max((float)y / 32767.0, -1);
+        zz = Max((float)z / 32767.0, -1);
+        ww = Max((float)w / 32767.0, -1);
     }
     else
     {
@@ -86,13 +159,87 @@ typedef struct (uint compression)
         byte z;
         byte w;
     }
-} QuatSample;
+} QuatSample<read=Str("%s (%f, %f, %f, %f)", this.bone_name, this.xx, this.yy, this.zz, this.ww)>;
 
-typedef struct (uint compression)
+/*float unpack_float(ushort num)
 {
-    if (compression == 0) float x;
-    else hfloat x;
-} RotSample;
+    local int uStack20 = (int)num ^ 0x80000000;
+    local uint64 concat44 = (uint64)((uint64)0x43300000 << sizeof(int)) | (uint64)((uint)num ^ 0x80000000);
+
+    // Interpret int64 as double (no casting)
+    local byte data[8];
+    ConvertDataToBytes(concat44, data);
+    local double doubleValue = ConvertBytesToDouble(data);
+
+    // return 0.0006103516 * (float)(doubleValue - 4503601774854144.0);
+    return 1300.0 * 0.00003051851 * (float)(doubleValue - 4503601774854144.0);
+}*/
+
+float unpack_float(short num)
+{
+    /*
+    typedef struct
+                {
+                    short value;
+                    local float f_value = Max((float)value / 32767.0, -1.0);
+                } SNorm<read=Str("%.3f", this.f_value)>;*/
+
+
+    return Max((float)num / 32767.0, -1.0);
+
+    local double comp1 = 0.5 + ((float)num / 0.00003051851);
+    local double comp2 = 32767.0;
+
+    // Clamp number
+    if (comp1 <= comp2)
+    {
+        comp2 = comp1;
+
+        if (comp2 < -32767.0)
+        {
+            comp2 = -32767.0;
+        }
+    }
+
+    comp2 = Floor(comp2);
+    return comp2;
+    
+    /*if ((result <= compare) && result < -32767.0)
+    {
+        // Use lower value?
+        result = -32767.0;
+    }
+
+    result = Floor(result);
+    return result;*/
+}
+
+local float test = unpack_float(64008);
+
+typedef struct (CharBone4Bone& bone, uint compression)
+{
+    local string bone_name = "";
+    local float xx;
+
+    if (exists(bone.symbol) && exists(bone.symbol.text))
+    {
+        bone_name = bone.symbol.text;
+    }
+
+    if (compression == 0)
+    {
+        float x;
+        xx = x;
+    }
+    else
+    {
+        short x;
+        xx = Max((float)x / 32767.0, -1);
+    }
+
+    //ushort num;
+    //local float num_unpacked = unpack_float(num);
+} RotSample<read=Str("%s (%f)", this.bone_name, this.xx)>;
 
 struct CharBonesSamples;
 
@@ -107,8 +254,6 @@ uint get_type_size(CharBonesSamples& char_bones, uint idx)
     {
         return (char_bones.compression == 0) ? 4 : 2;
     }
-
-    if (char_bones.compression == 1) return 3;
     
     if (char_bones.compression > 2)
     {
@@ -190,7 +335,7 @@ int calculate_sample_size(CharBonesSamples& char_bones)
     return sum;
 }
 
-typedef struct (CharBonesSamples& char_bones)
+/*typedef struct (CharBonesSamples& char_bones)
 {
     local uint buffer_idx;
     local uint buffer_read_limit_idx;
@@ -229,6 +374,84 @@ typedef struct (CharBonesSamples& char_bones)
         if (char_bones.compression == 0) buffer_idx += 4;
         else buffer_idx += 2;
     }
+} Sample;*/
+
+uint calc_bone_count_with_ext(CharBones& char_bones, string ext)
+{
+    // Safe guard if no bones
+    if (!exists(char_bones.bone_count)) return 0;
+
+    local int i;
+    local int ext_idx;
+    local uint count = 0;
+
+    for (i = 0; i < char_bones.bone_count; i++)
+    {
+        // Protect against null...
+        if (char_bones.bones[i].symbol.count == 0) continue;
+
+        //local int str_size = Strlen(char_bones.bones[i].symbol.text);
+        ext_idx = Strstr(char_bones.bones[i].symbol.text, ext);
+
+        // Note: Only checks if path contains ext, not that it ends with it
+        if (ext_idx > -1) count += 1;
+    }
+
+    return count;
+}
+
+typedef struct (CharBonesSamples& char_bones, uint sample_size)
+{
+    //local uint pos_count = char_bones.counts[1];
+    //local uint quat_count = (char_bones.counts[3] - char_bones.counts[1]);
+    //local uint rotz_count = (char_bones.counts[6] - char_bones.counts[3]);
+
+    local uint pos_count = calc_bone_count_with_ext(char_bones.char_bones, ".pos");
+    local uint quat_count = calc_bone_count_with_ext(char_bones.char_bones, ".quat");
+    local uint rotz_count = calc_bone_count_with_ext(char_bones.char_bones, ".rotz");
+
+    local uint i;
+    local uint bone_idx = 0;
+
+    local uint start = FTell();
+
+    // Read pos
+    for (i = 0; i < pos_count; i++)
+    {
+        PosSample pos_sample(char_bones.char_bones.bones[bone_idx], char_bones.compression);
+        bone_idx += 1;
+    }
+
+    // Read quat
+    for (i = 0; i < quat_count; i++)
+    {
+        QuatSample quat_sample(char_bones.char_bones.bones[bone_idx], char_bones.compression);
+        bone_idx += 1;
+    }
+
+    // Read rot
+    for (i = 0; i < rotz_count; i++)
+    {
+        RotSample rot_sample(char_bones.char_bones.bones[bone_idx], char_bones.compression);
+        bone_idx += 1;
+    }
+
+    // Only aligned in RB samples?
+    /*if (char_bones.version == -1)
+    {
+        // Align to multiples of 4...
+        local uint end = FTell();
+
+        local uint diff = end - start;
+        local uint rem = diff % 4;
+
+        if (rem != 0) FSkip(4 - rem);
+    }*/
+
+    local uint end = FTell();
+    local uint diff = sample_size - (end - start);
+
+    if (diff > 0) byte padding[diff];
 } Sample;
 
 typedef struct (CharBonesSamples& char_bones, SystemInfo& info)
@@ -248,17 +471,17 @@ typedef struct (CharBonesSamples& char_bones, SystemInfo& info)
         // Hacky way to fix sample size issue
         if (char_bones.compression < 2)
         {
-            sample_size = calculate_sample_size(char_bones);
+            //sample_size = calculate_sample_size(char_bones);
             Printf("Real sample size is %d\n", sample_size);
         }
     
         local int i;
         for (i = 0; i < char_bones.num_samples; i++)
         {
-            CharBoneSample samples(sample_size);
+            //CharBoneSample samples(sample_size);
 
             // TODO: Refactor code
-            //Sample samples(char_bones);
+            Sample samples(char_bones, sample_size);
         }
     }
 } CharBonesSamplesData;
@@ -269,11 +492,12 @@ typedef struct (SystemInfo& info, Bool super, int fake_version)
 
     if (fake_version == -1)
     {
-        int version; // 16 (TBRB)
+        // Always same version of parent char clip samples?
+        int version; // 16 (TBRB/GDRB)
     }
     else
     {
-        local int version = fake_version; // 11 = GH2?
+        local int version = fake_version; // 10 (GH2), 11 (GH2 360)
     }
 
     if (version > 15)
@@ -281,11 +505,10 @@ typedef struct (SystemInfo& info, Bool super, int fake_version)
         count_size = 7;
     }
 
-    int bone_count;
-    CharBone4Bone bones[bone_count]<optimize=false>;
+    CharBones char_bones(version);
 
     uint counts[count_size];
-    uint compression; // 0-4 1 = GH2, 2 = TBRB
+    CLIP_COMPRESSION compression; // 0-4 1 = GH2, 2 = TBRB
     uint num_samples;
 
     // Compute these values

@@ -18,7 +18,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 11 (GH2), 13 (RB1), 15 (TBRB), 16 (GDRB)
+    int version; // 10 (GH2), 11 (GH2 X60), 13 (RB1), 15 (TBRB), 16 (GDRB)
     CharClip char_clip(info, False); // Metadata is written for CharClip instead for some reason
 
     if (version >= 16)
@@ -48,11 +48,7 @@ typedef struct (SystemInfo& info, Bool super)
 
     if (version > 14)
     {
-        int bone_count;
-        if (bone_count > 0)
-        {
-            CharBone4Bone bones[bone_count]<optimize=false>;
-        }
+        CharBones bones(version);
     }
 
     //TransInfo trans_info;
