@@ -228,6 +228,9 @@ void read_value(string type)
         case "sInt32":
             int value;
             break;
+        case "SkBlinn_d0_ao0_s1_n2_sp":
+            IndexedString value;
+            break;
         case "SkFlat":
             IndexedString value;
             break;
@@ -312,7 +315,14 @@ typedef struct
     }*/
 
     ubyte id3;
-    if (id3 == 0xFF) ubyte id4;
+    if (id3 == 0xFF)
+    {
+        ubyte id4;
+    }
+    else
+    {
+        local int test = 0;
+    }
 
     // FF ?? FF FF
     // Only three elements for 0x43
