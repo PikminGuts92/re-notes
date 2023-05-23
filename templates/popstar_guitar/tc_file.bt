@@ -61,22 +61,143 @@ typedef struct
 
 typedef struct
 {
+    local uint start = FTell();
+
+    local uint min_string_offset = 0xFFFFFFFF;
+    local uint min_events_offset = 0xFFFFFFFF;
+    local uint max_string_offset = 0;
+    local uint max_events_offset = 0;
+
     uint count;
 
-    // 24 bytes
-    typedef struct
+    struct UnknownEntriesListing
     {
-        uint unk_1;
-        uint unk_2;
-        uint unk_3;
+        // 24 bytes
+        typedef struct
+        {
+            uint unk_1; // 0
+            uint unk_2; // 0
 
-        uint unk_4;
-        uint unk_5;
-        uint unk_6;
-    } UnknownEntry<read=Str("%d %d %d %d %d %d", this.unk_1, this.unk_2, this.unk_3, this.unk_4, this.unk_5, this.unk_6)>;
+            uint string_offset;
+            uint events_count;
+            uint events_offset;
 
-    UnknownEntry entries[count];
+            uint unk_3; // 0
+
+            local string string_value = ReadString(start + string_offset);
+            local uint abs_string_offset = start + string_offset;
+            local uint abs_events_offset = start + events_offset;
+
+            min_string_offset = Min(min_string_offset, start + string_offset);
+            min_events_offset = Min(min_events_offset, start + events_offset);
+            max_string_offset = Max(max_string_offset, start + string_offset + Strlen(string_value) + 1);
+            max_events_offset = Max(max_events_offset, start + events_offset + (8 * events_count));
+        } UnknownEntry<read=Str("%s", this.string_value)>;
+
+        UnknownEntry entries[count]<optimize=false>;
+    } unknown_entries;
+
+    // 8 zero'd bytes here...
+
+    FSeek(min_events_offset);
+    struct FloatEntries
+    {
+        // 8 bytes
+        typedef struct
+        {
+            float pos;
+            float value;
+        } PosValue<read=Str("pos: %.02f, value: %.02f", this.pos, this.value)>;
+
+        typedef struct (UnknownEntry& entry)
+        {
+            local string string_value = entry.string_value;
+            local uint events_count = entry.events_count;
+
+            PosValue values[events_count];
+        } PosValueCollection<read=Str("%s (%d events)", this.string_value, this.events_count)>;
+
+        local uint i;
+
+        for (i = 0; i < count; i++)
+        {
+            PosValueCollection entries(unknown_entries.entries[i]);
+        }
+    } float_entries;
+
+    //byte data_1[max_events_offset - min_events_offset];
+
+    FSeek(min_string_offset);
+    byte string_blob[max_string_offset - min_string_offset];
 } UnknownEntries<read=Str("%d entries", this.count)>;
+
+typedef struct
+{
+    local uint start = FTell();
+
+    char magic[4]; // SVIS
+
+    ushort entry_count; // Matches count of unk_entries
+    ushort string_blob_size;
+    ushort unk_count;
+
+    local uint start_strings = FTell() + (entry_count * 4);
+
+    struct StringEntries
+    {
+        // 4 bytes
+        typedef struct
+        {
+            ushort unk_1;
+            ushort unk_2; // Always 0?
+
+            local string string_value = ReadString(start_strings + unk_1);
+        } UnknownEntrySvis<read=Str("%s (%d) %d", this.string_value, this.unk_1, this.unk_2)>;
+
+        UnknownEntrySvis entries[entry_count]<optimize=false>;
+    } string_entries<read=Str("%d entries", parentof(this).entry_count)>;
+
+    // Note: Blob seems to contain extra string values
+    FSeek(start_strings);
+    byte string_blob[string_blob_size];
+
+    //uint some_count;
+    //byte data[unk_count * 16];
+
+    /*struct Unknown
+    {
+        ushort unk_1;
+        ushort unk_2;
+
+        float unk_3;
+        float unk_4;
+
+        ushort unk_5;
+        ushort unk_6;
+
+        float unk_7;
+        float unk_8;
+    } unk_data[4];*/
+
+    //return;
+
+    struct UnknownEntries2
+    {
+        //uint entry_count;
+        ushort entry_count;
+        ushort idk_count;
+
+        if (idk_count > 0) float idk[idk_count];
+
+        struct Unknown
+        {
+            ushort unk_1;
+            ushort count;
+
+            if (count > 0) float values[count];
+        } unk_data[entry_count]<optimize=false>;
+    } unk_entries[1]<optimize=false>;
+} SvisFile;
 
 typedef struct
 {
@@ -117,11 +238,18 @@ typedef struct
 
                 UnknownEntries unk_entries;
                 break;
+            case "SVIS":
+                SvisFile svis_file;
+                return;
             default:
-                break;
+                Printf("Unknown magic: \"%s\"", magic);
+                return;
         }
 
-        break;
+        local uint rem2 = FTell() % 2048;
+        if (rem2 > 0) FSkip(2048 - rem2);
+
+        //break;
     }
 
     

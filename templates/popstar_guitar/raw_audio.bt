@@ -21,6 +21,18 @@ typedef struct (uint sample_size)
     local uint sample_count = sample_size / 2;
 
     short samples[sample_count];
+
+    // Calculate average...
+    /*local uint i;
+    local double running_avg = 0.0;
+    local double weight = 1.0 / (double)sample_count;
+
+    while (i < sample_count)
+    {
+        running_avg += weight * (double)samples[i];
+        i++;
+    }*/
+
     return;
 
     local uint i = 0;
@@ -28,7 +40,7 @@ typedef struct (uint sample_size)
     {
         Sample samples;
     }
-} ChunkSamples;
+} ChunkSamples;//<read=Str("Avg: %.02f", running_avg)>;
 
 typedef struct (uint i, uint chunk_size)
 {
@@ -69,11 +81,12 @@ typedef struct
     }
     
 
-    local uint seconds = (uint)Ceil((double)sample_count / (double)sample_rate);
-    Printf("Length: %d seconds", seconds);
+    local uint total_samples = sample_count / 2; // Split between two tracks
+    local double seconds = (double)total_samples / (double)sample_rate;
+    //Printf("Length: %.02f seconds", seconds);
 
     //short samples[sample_rate * 2];
     //short samples2[sample_rate];
-} RawAudio;
+} RawAudio<read=Str("length: %.02fs (%d samples)", this.seconds, this.total_samples)>;
 
 RawAudio file;
