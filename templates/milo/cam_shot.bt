@@ -24,7 +24,7 @@ typedef enum
 
 typedef struct
 {
-    int version; // 42 (TBRB)
+    int version; // 42 (TBRB), 49 (GDRB)
 
     // Both RndTransformable
     NumString entity;  // The entity to attach to
