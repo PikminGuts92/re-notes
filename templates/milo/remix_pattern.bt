@@ -1,0 +1,21 @@
+typedef struct
+{
+    uint pos; // Midi ticks
+    ubyte index;
+} RemixEntry<read=Str("(%d, %d)", this.pos, this.index)>;
+
+struct RemixPatternFile
+{
+    local uint remix_count = 0;
+
+    while (!FEof())
+    {
+        struct Remixes
+        {
+            uint count;
+            RemixEntry entries[count];
+        } remixes<read=Str("%d entries", this.count)>;
+
+        remix_count += 1;
+    }
+} file<read=Str("%d tracks", this.remix_count)>;

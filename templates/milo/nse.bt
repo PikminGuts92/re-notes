@@ -1,0 +1,33 @@
+struct NseFile
+{
+    const uint VAG_BYTES_PER_BLOCK = 16;
+    const uint VAG_SAMPLES_PER_BLOCK = 28;
+
+    local uint sample_count = 0;
+
+    while (!FEof())
+    {
+        struct VAGSamples
+        {
+            local uint block_count = 0;
+            local uint total_samples;
+
+            // Read until flag = 7
+            while (ReadUByte(FTell() + 1) != 7)
+            {
+                struct VAGBlock
+                {
+                    byte data[VAG_BYTES_PER_BLOCK];
+                } blocks;
+
+                block_count += 1;
+            }
+
+            total_samples = block_count * VAG_SAMPLES_PER_BLOCK;
+
+            FSkip(VAG_BYTES_PER_BLOCK); // Terminating block, ignored
+        } samples<read=Str("%d blocks (%d samples)", this.block_count, this.total_samples)>;
+
+        sample_count += 1;
+    }
+} file<read=Str("%d samples", this.sample_count)>;
