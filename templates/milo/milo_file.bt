@@ -98,12 +98,20 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_entry)
 
     switch (class_name)
     {
+        case "BandCamShot":
+            BandCamShot object(info, False);
+            break;
         case "Cam":
             Cam object(info, False);
             break;
         case "Character":
             Character object(info, False, False, is_entry);
             is_dir = 1;
+
+            if (object.rnd_dir.obj_dir.inline_proxy == True)
+            {
+                should_read_milo = 1;
+            }
             break;
         case "CharClipSet":
             CharClipSet object(info, False, False, is_entry);
@@ -224,7 +232,7 @@ typedef struct (SystemInfo& info, MiloFile& milo)
 
 typedef struct (SystemInfo& info)
 {
-    int version;
+    int version; // 10 (GH1), 24 (GH2), 25 (GDRB), 28 (DC1), 32 (DC2/DC3)
     MiloEntries meta(version);
 
     if (version <= 10)
@@ -256,8 +264,19 @@ if (STANDALONE_FILE == "MiloFile")
 
     if (milo_version == -1)
     {
-        // TODO: Read magic and read block offset
-        FSkip(2064);
+        // Read magic
+        LittleEndian();
+        local uint magic = ReadUInt(FTell());
+
+        if (magic != 0xCABEDEAF)
+        {
+            Printf("FATAL: Milo is compressed. Can't read.");
+            return;
+        }
+
+        // Skip to first block offset
+        local uint block_start = ReadUInt(FTell() + 4);
+        FSeek(FTell() + block_start);
         milo_version = guess_version();
     }
 

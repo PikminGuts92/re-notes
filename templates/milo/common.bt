@@ -323,7 +323,7 @@ typedef struct (SystemInfo& info)
     DTB props; // Usually empty
 
     // Note field added in gh2 360
-    if (info.version >= 25 || revision > 0)
+    if (revision > 0)
     {
         NumString note;
     }
