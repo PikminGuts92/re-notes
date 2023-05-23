@@ -1,0 +1,65 @@
+#ifndef BANDFUSE_STRING_MANAGER
+#define BANDFUSE_STRING_MANAGER
+
+const int TABLE_SIZE = 1 << 30;
+struct NullableString;
+
+typedef struct (int is_null, uint64 key, string value)
+{
+    local int is_null = is_null;
+
+    if (!is_null)
+    {
+        local uint64 key = key;
+        local string value = value;
+
+        local NullableString next(true, 0, "");
+    }
+    else
+    {
+        local uint64 key = key;
+        local string value = value;
+    }
+} NullableString;
+
+typedef struct
+{
+    local int i;
+
+    for (i = 0; i < TABLE_SIZE; i++)
+    {
+        local NullableString strings(true, 0, "");
+    }
+} StringManager;
+
+local StringManager STRING_MANAGER;
+
+void add_or_update_string_to_nullstring(NullableString& str, uint64 key, string value)
+{
+    if (str.is_null)
+    {
+        // Add key
+
+        return;
+    }
+
+    if (str.key == key)
+    {
+        // Update key
+        str.value = value;
+    }
+    else
+    {
+        // Continue recursive search
+        add_or_update_string_to_nullstring(str.next, key, value);
+    }
+}
+
+void add_or_update_string(uint64 key, string value)
+{
+    local int index = key % TABLE_SIZE;
+
+    add_or_update_string_to_nullstring(STRING_MANAGER.strings[index], key, value);
+}
+
+#endif

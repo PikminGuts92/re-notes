@@ -4,6 +4,7 @@
 #include "common.bt"
 #include "constants.bt"
 #include "crc64.bt"
+//#include "string_manager.bt"
 #include "string_table.bt"
 #include "zobject.bt"
 
@@ -59,5 +60,7 @@ typedef struct
 } RiffFile;
 
 RiffFile file;
+
+//add_or_update_string(0, "");
 
 #endif
