@@ -82,12 +82,13 @@ struct AnimClipSamples
     NumString animName;
     int version; // Always 18
 
-    float f1;
+    float f1; // Maybe vector3?
     float f2;
     float f3;
-    float f4;
 
-    int unknown;
+    float f4; // Not sure float...
+
+    int unknown; // 2, 16 (Maybe flags?)
     float max1; // range = 0.0-1.0?
 
     AnimClip animClip;

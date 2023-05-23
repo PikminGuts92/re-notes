@@ -5,8 +5,8 @@ LittleEndian();
 typedef struct
 {
     int unknown; // Frame count? - Matches acpentry index when entry count2 = 1
-    float f1;
-    float f2;
+    float f1; // Full?
+    float f2; // One?
 } AcgEntry2;
 
 typedef struct
