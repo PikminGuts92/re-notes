@@ -31,7 +31,27 @@ typedef struct
     uint unknown;
 
     if (count > 0) Frame frames[count];
-} FrameCollection<read=Str("%d frames", this.count)>;
+
+    local float max_pos = 0.0;
+    local uint i;
+    for (i = 0; i < count; i++)
+    {
+        if (frames[i].pos > max_pos)
+        {
+            max_pos = frames[i].pos;
+        }
+    }
+
+    local float min_pos = max_pos;
+    for (i = 0; i < count; i++)
+    {
+        if (frames[i].pos < min_pos)
+        {
+            min_pos = frames[i].pos;
+        }
+    }
+
+} FrameCollection<read=Str("%d frames (start: %.02f, end: %.02f)", this.count, this.min_pos, this.max_pos)>;
 
 typedef struct (SystemInfo& info, Bool super)
 {
@@ -46,10 +66,10 @@ typedef struct (SystemInfo& info, Bool super)
 
     FrameCollection frame_collections[collection_count]<optimize=false>;
 
-    Bool unk_bool_1;
-    Bool unk_bool_2;
+    Bool normals;
+    Bool spline;
 
-    float always_1;
+    float intensity;
 } Morph;
 
 #ifdef STANDALONE_FILE
