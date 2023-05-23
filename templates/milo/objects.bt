@@ -2,6 +2,7 @@
 #define OBJECTS
 
 #include "common.bt"
+#include "band_cam_shot.bt"
 #include "cam.bt"
 #include "draw.bt"
 #include "group.bt"
