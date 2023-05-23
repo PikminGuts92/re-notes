@@ -1,0 +1,74 @@
+#ifndef FORGE_BITMAP
+#define FORGE_BITMAP
+
+LittleEndian();
+
+typedef enum <uint>
+{
+    RGBA = 3,
+    DXT1_BC1 = 8,
+    DXT5_BC3 = 24,
+    ATI2_BC5 = 32,
+    TPL_CMP = 72,
+    TPL_CMP_ALPHA = 328
+} BITMAP_ENCODING;
+
+typedef struct (ubyte mip, ushort w, ushort h, uint size)
+{
+    local ubyte mip_level = mip;
+    local ushort width = w;
+    local ushort height = h;
+
+    byte data[size];
+} Texture<read=read_texture>;
+
+string read_texture(Texture& tex)
+{
+    local string s;
+    SPrintf(s, "mip #%d: %dx%d", tex.mip_level, tex.width, tex.height);
+    return s;
+}
+
+typedef struct
+{
+    int version;
+    int sub_version;
+
+
+    return;
+    
+    ubyte bpp;
+    BITMAP_ENCODING encoding;
+    ubyte mip_maps;
+
+    ushort width;
+    ushort height;
+    ushort bpl;
+
+    // Skip empty bytes
+    FSkip(19);
+
+    if (encoding == 3 && (bpp == 4 || bpp == 8))
+    {
+        byte color_palette[1 << (bpp + 2)];
+    }
+
+    local ubyte i = 0;
+    local ushort w = width;
+    local ushort h = height;
+
+    local uint data_size;
+    while (i <= mip_maps)
+    {
+        data_size = ((uint)w * (uint)h * (uint)bpp) / 8;
+        Texture textures(i, w, h, data_size);
+
+        w >>= 1;
+        h >>= 1;
+        i++;
+    }
+} ForgeBitmap;
+
+ForgeBitmap file;
+
+#endif
