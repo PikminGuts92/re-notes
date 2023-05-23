@@ -1,0 +1,18 @@
+BigEndian();
+
+typedef struct
+{
+    // 26 bytes
+    struct Header
+    {
+        uint magic<format=hex>; // 0x00_00_01_BA
+        ushort num_1; // 0x4400
+        ushort num_2; // 0x0400
+        ushort num_3; // 0x0401
+        ushort num_4; // 0x166c
+
+    } header;
+
+} PSSFile;
+
+PSSFile pss;
