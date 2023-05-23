@@ -1,0 +1,23 @@
+typedef struct (uint i)
+{
+    ubyte v;
+    local float vf = (float)v / 255.0;
+    local float pos = (float)i / 60.0;
+} Sample<read=Str("%.2f (%.2f)", this.pos, this.vf), bgcolor=read_color>;
+
+int read_color(Sample& sample)
+{
+    return ((255 - sample.v) << 8) | sample.v;
+}
+
+struct WeightsBin
+{
+    local uint start = FTell();
+    local uint sample_size = 0;
+
+    while (!FEof())
+    {
+        Sample sample(sample_size);
+        sample_size += 1;
+    }
+} weights<read=Str("%d samples", this.sample_size)>;
