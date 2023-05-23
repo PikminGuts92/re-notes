@@ -1,0 +1,32 @@
+BigEndian();
+
+typedef struct
+{
+    double x;
+    double y;
+    double z;
+} LandMarkPoint<read=Str("(%f, %f, %f)", x, y, z)>;
+
+typedef struct
+{
+    uint index;
+    LandMarkPoint points[478];
+} LandMarkFrame<read=Str("Frame: %d", index)>;
+
+struct LandMarkVideo
+{
+    char magic[8]; // "FACESCAN"
+    uint version;  // 1
+
+    uint fps;
+    uint frame_count;
+    uint width;
+    uint height;
+    uint landmark_count; // Should be 478
+
+    struct LandMarkFrames
+    {
+        uint count;
+        LandMarkFrame frames[count];
+    } frames;
+} file;
