@@ -41,7 +41,7 @@ typedef struct
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 1 (GDRB)
+    int version; // 1 (GH2/GDRB)
 
     if (version >= 1) read_metadata(info, super);
 
