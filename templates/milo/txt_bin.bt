@@ -1,0 +1,68 @@
+// Reference: https://github.com/mtolly/onyxite-customs/blob/master/haskell/packages/onyx-lib/src/Onyx/Amplitude/PS2/TxtBin.hs
+
+LittleEndian();
+
+#include "common.bt"
+
+struct AmpNode;
+
+typedef struct
+{
+    ushort child_count;
+    uint id_1;
+    uint id_2;
+
+    // Types are packed in 2-bits, so 16 types per 32-bit word
+    local uint type_count = child_count / 16;
+    if ((child_count % 16) > 0) type_count += 1;
+
+    local uint type_idx = 0;
+    uint types[type_count];
+
+    AmpNode children[child_count]<optimize=false>;
+} AmpParentNode;
+
+typedef struct
+{
+    // Interpret type
+    local uint div = parentof(this).type_idx / 16;
+    local uint rem = parentof(this).type_idx % 16;
+    local uint type = (parentof(this).types[div] >> (rem * 2)) & 0x03;
+
+    parentof(this).type_idx += 1;
+    
+    switch(type)
+    {
+        // Integer
+        case 0x00:
+            uint value;
+            break;
+        // String
+        case 0x01:
+            NumString value;
+            break;
+        // Float
+        case 0x02:
+            float value;
+            break;
+        // Node
+        case 0x03:
+            AmpParentNode value;
+            break;
+    }
+} AmpNode;
+
+struct TxtBin
+{
+    ubyte version; // Always 2
+
+    // Imports
+    struct Imports
+    {
+        uint import_count; // Seems always to reference itself too
+        if (import_count > 0) NumString imports[import_count]<optimize=false>;
+    } imports<read=Str("%d imports", this.import_count)>;
+
+    // Data
+    AmpParentNode data;
+} file;
