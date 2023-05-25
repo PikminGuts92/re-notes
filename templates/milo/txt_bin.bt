@@ -4,13 +4,16 @@ LittleEndian();
 
 #include "common.bt"
 
+const uint MAX_NODE_DISPLAY_COUNT = 4;
+const uint MAX_NODE_DISPLAY_STR_LENGTH = 200;
+
 struct AmpNode;
 
 typedef struct
 {
     ushort child_count;
-    uint id_1;
-    uint id_2;
+    uint id_1; // Line #
+    uint id_2; // Source index
 
     // Types are packed in 2-bits, so 16 types per 32-bit word
     local uint type_count = child_count / 16;
@@ -19,8 +22,49 @@ typedef struct
     local uint type_idx = 0;
     uint types[type_count];
 
-    AmpNode children[child_count]<optimize=false>;
-} AmpParentNode;
+    local string value_text;
+
+    if (child_count > 0)
+    {
+        AmpNode children[child_count]<optimize=false>;
+
+        local string child_values = "";
+        local uint i = 0;
+
+        while (i < child_count) // && i < MAX_NODE_DISPLAY_COUNT)
+        {
+            if (i > 0)
+            {
+                child_values += " ";
+            }
+
+            if ((Strlen(child_values) + Strlen(children[i].value_text)) > MAX_NODE_DISPLAY_STR_LENGTH)
+            {
+                child_values += "...";
+                break;
+            }
+            
+
+            child_values += children[i].value_text;
+            i += 1;
+        }
+
+        SPrintf(value_text, "(%s)", child_values);
+
+        /*if (children[0].type == 3 && exists(children[0].value.text))
+        {
+            SPrintf(value_text, "(%s ...) ; %d children", child_count);
+        }
+        else
+        {
+            SPrintf(value_text, "(...) ; %d children", child_count);
+        }*/
+    }
+    else
+    {
+        value_text = "()";
+    }
+} AmpParentNode<read=Str("%s", this.value_text)>;
 
 typedef struct
 {
@@ -30,33 +74,54 @@ typedef struct
     local uint type = (parentof(this).types[div] >> (rem * 2)) & 0x03;
 
     parentof(this).type_idx += 1;
+
+    local string value_text = "";
     
     switch(type)
     {
         // Integer
         case 0x00:
-            uint value;
+            int value;
+            SPrintf(value_text, "%d", value);
             break;
         // String
         case 0x01:
             NumString value;
+            if (exists(value.text))
+            {
+                // Wrap in quotes if space found
+                if (Strchr(value.text, ' ') >= 0 || Strchr(value.text, '\t') >= 0)
+                {
+                    SPrintf(value_text, "\"%s\"", value.text);
+                }
+                else
+                {
+                    SPrintf(value_text, "%s", value.text);
+                }
+            }
+            else
+            {
+                value_text = "\"\""; // Use when empty string
+            }
             break;
         // Float
         case 0x02:
             float value;
+            SPrintf(value_text, "%f", value);
             break;
         // Node
         case 0x03:
             AmpParentNode value;
+            SPrintf(value_text, "%s", value.value_text);
             break;
     }
-} AmpNode;
+} AmpNode<read=Str("%s", this.value_text)>;
 
 struct TxtBin
 {
     ubyte version; // Always 2
 
-    // Imports
+    // Import sources
     struct Imports
     {
         uint import_count; // Seems always to reference itself too
