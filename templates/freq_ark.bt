@@ -5,42 +5,77 @@ typedef struct
     // 40 bytes
     char magic[4];
     uint version; // Always 2
-    uint fileEntryOffset; // Always 256
-    uint fileEntryCount;
-    uint folderEntryOffset;
-    uint folderEntryCount;
-    uint stringTableOffset;
-    uint stringCount;
-    uint totalHdrSize; // Size of header + string offsets + string table
-    uint blockSize; // Used for padding
+    uint file_entry_offset; // Always 256
+    uint file_entry_count;
+    uint folder_entry_offset;
+    uint folder_entry_count;
+    uint string_table_offset;
+    uint string_count;
+    uint total_hdr_size; // Size of header + string offsets + string table
+    uint block_size; // Used for padding, always 2048?
 } Header;
 
 typedef struct
 {
     // 24 bytes
     uint unknown; // Path name hash?
-    uint fileNameOffset;
-    ushort folderNameOffset;
-    ushort blockOffset;
-    uint block; // Use block * blockSize + blockOffset to get file position
-    uint fileSize;
-    uint inflatedSize; // Same as file size if not compressed
-} FileEntry;
+    uint file_name_offset;
+    ushort folder_name_index;
+    ushort block_offset;
+    uint block; // Use block * block_size + block_offset to get file position
+    uint file_size;
+    uint inflated_size; // Same as file size if not compressed
+
+    local uint file_offset = (block * parentof(this).header.block_size) + block_offset;
+    local string file_name = ReadString(file_name_offset);
+
+    local uint folder_name_offset = ReadUInt(parentof(this).header.folder_entry_offset + (folder_name_index * 8) + 4);
+    local string folder_name = ReadString(folder_name_offset);
+} FileEntry<read=Str("%s/%s (%d)", this.folder_name, this.file_name, this.unknown)>;
 
 typedef struct
 {
     // 8 bytes
     uint unknown; // Name hash?
-    uint folderNameIndex;
-} FolderEntry;
+    uint folder_name_index;
 
-Header header;
+    local string folder_name = ReadString(folder_name_index);
+} FolderEntry<read=Str("%s (%d)", this.folder_name, this.unknown)>;
 
-FSeek(header.fileEntryOffset);
-FileEntry fileEntries[header.fileEntryCount];
+struct FreqArkFile
+{
+    Header header;
 
-FSeek(header.folderEntryOffset);
-FolderEntry folderEntries[header.folderEntryCount];
+    FSeek(header.file_entry_offset);
+    FileEntry file_entries[header.file_entry_count]<optimize=false>;
 
-FSeek(header.stringTableOffset);
-char stringTable[header.totalHdrSize - FTell()];
+    FSeek(header.folder_entry_offset);
+    FolderEntry folder_entries[header.folder_entry_count]<optimize=false>;
+
+    FSeek(header.string_table_offset);
+    char string_table[header.total_hdr_size - FTell()];
+
+    /*struct Files
+    {
+        
+    }*/
+
+    local uint max_file_unkown = 0;
+    local uint max_folder_unkown = 0;
+
+    local uint i;
+    for (i = 0; i < header.file_entry_count; i++)
+    {
+        if (max_file_unkown < file_entries[i].unknown)
+            max_file_unkown = file_entries[i].unknown;
+    }
+
+    for (i = 0; i < header.folder_entry_count; i++)
+    {
+        if (max_folder_unkown < folder_entries[i].unknown)
+            max_folder_unkown = folder_entries[i].unknown;
+    }
+
+    Printf("max file unknown: %d, max folder unknown: %d", max_file_unkown, max_folder_unkown);
+} file;
+
