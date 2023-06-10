@@ -32,15 +32,38 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 0 (GH1), 4 (GH2 4-song/GH2/GH2 360/RB1/TBRB/GDRB)
+    int version; // 0 (Amp/GH1), 4 (GH2 4-song/GH2/GH2 360/RB1/TBRB/GDRB)
     read_metadata(info, super);
-    
-    if (version >= 4)
+
+    if (version > 1)
+    {
+        float frame;
+    }
+
+    if (version < 4)
+    {
+        if (version > 2)
+        {
+            Bool unknown;
+        }
+    }
+    else
+    {
+        RATE_ENUM rate;
+        return;
+    }
+
+    /*if (version >= 4)
     {
         float frame;
         RATE_ENUM rate;
 
         return;
+    }*/
+
+    if (version < 1)
+    {
+        
     }
 
     // Anim entries
