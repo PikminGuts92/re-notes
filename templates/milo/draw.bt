@@ -23,13 +23,13 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 1 (GH1), 3 (GH2 4-song/GH2/GH2 360/RB1/TBRB/RB3), 4 (GDRB)
+    int version; // 0 (Amp Demo, Amp), 1 (GH1), 3 (GH2 4-song/GH2/GH2 360/RB1/TBRB/RB3), 4 (GDRB)
     read_metadata(info, super);
 
     Bool showing; // Whether the object and its Draw children are drawn or collided with. - Always 1?
 
     // Drawables seemingly moved to Group in later games
-    if (version < 3)
+    if (version < 2)
     {
         int draw_count; // Drawables (mesh, env, view)
         if (draw_count > 0) NumString draw_objects[draw_count]<optimize=false>;
@@ -41,10 +41,13 @@ typedef struct (SystemInfo& info, Bool super)
     // coordinates, R is the sphere radius in world coordinates.
     // Culling is not performed when the radius is zero. The world
     // transform of the object must be baked into the radius.
-    Sphere sphere;
+    if (version > 0)
+    {
+        Sphere sphere;
+    }
 
     // Skip 0'd data
-    if (version >= 3)
+    if (version > 2)
     {
         float draw_order;
     }

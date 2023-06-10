@@ -30,25 +30,83 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 4 (Amp 2003), 8 (GH1), 9 (GH2 4-song/GH2/GH2 360/RB1/TBRB/GDRB/RB3)
+    int version; // 5 (Amp), 8 (GH1), 9 (GH2 4-song/GH2/GH2 360/RB1/TBRB/GDRB/RB3)
     read_metadata(info, super);
 
     Matrix localXfm;
     Matrix worldXfm;
 
-    if (version <= 8)
+    if (version < 9)
     {
         // GH1 and before
         int trans_count;
         if (trans_count > 0) NumString trans_objects[trans_count]<optimize=false>; // Trans types? 
     }
-    if (version > 4)
-    {
-        CONSTRAINT_ENUM constraint; // Trans constraint for the object (Constraint + target are used together)
-        NumString target;           // Target according to the constraint
 
-        Bool preserve_scale;        // Preserve scale if applying dynamic constraint (usually false)
-        NumString parent;    // Object this is linked to
+    // Trans constraint for the object (Constraint + target are used together)
+    if (version > 6)
+    {
+        CONSTRAINT_ENUM constraint;
+    }
+    else if (version == 6)
+    {
+        uint constraint; // Parse as bitfield?
+    }
+    else if (version < 3)
+    {
+        if (version > 0)
+        {
+            uint some_number;
+        }
+    }
+    else // 3, 4, 5
+    {
+        // Also constraint?
+        uint some_flags;
+    }
+
+    // Load rest
+    if (version < 7)
+    {
+        uint unknown_1;
+        uint unknown_2;
+        uint unknown_3;
+    }
+
+    if (version < 5)
+    {
+        Bool unknown_bool;
+    }
+
+    if (version < 2)
+    {
+        // Related to drawable?
+        Vector4 unknown_floats;
+    }
+
+    if (version > 5)
+    {
+        NumString target; // Target according to the constraint
+    }
+
+    if (version > 6)
+    {
+        Bool preserve_scale; // Preserve scale if applying dynamic constraint (usually false)
+    }
+
+    if (version < 9)
+    {
+        // Set transparent to 0xb4?
+        //if (version == 6 && constraint == 4)
+
+        if (version >= 7)
+        {
+            NumString parent; // Object this is linked to
+        }
+    }
+    else
+    {
+        NumString parent; // Object this is linked to
     }
 } Trans;
 
