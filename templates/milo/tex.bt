@@ -17,7 +17,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 8 (KRPAI/GH1), 10 (GH2/GH2 4-song/GH2 360/RB1/TBRB), 11 (GDRB/RB3)
+    int version; // 5 (Amp), 8 (KRPAI/GH1), 10 (GH2/GH2 4-song/GH2 360/RB1/TBRB), 11 (GDRB/RB3)
     local Bool use_gdrb_enc = False;
 
     if (version > 8) read_metadata(info, super);
@@ -34,7 +34,7 @@ typedef struct (SystemInfo& info, Bool super)
     uint bpp;
     
     NumString ext_path;
-    float index_f;
+    if (version >= 8) float index_f;
     uint index;
 
     if (version >= 11 && use_gdrb_enc == False) Bool some_bool;
