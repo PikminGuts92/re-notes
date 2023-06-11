@@ -518,6 +518,8 @@ typedef struct (SystemInfo& info, Bool super)
         // Always empty?
         uint short_count;
         if (short_count > 0) ushort some_shorts[short_count];
+
+        if (version == 14) uint unknown;
         return;
     }
     
