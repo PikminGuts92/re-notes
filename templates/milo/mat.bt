@@ -79,7 +79,14 @@ typedef enum
 
 typedef struct
 {
-    byte data[65];
+    // 2 - Emissive?
+    // 4 - Diffuse
+    // 5 - Environ
+    int map_type;
+
+    Matrix tex_xfm;
+
+    byte data[13];
     NumString name; // Diffuse texture
 } TextureEntryAmp;
 
@@ -111,13 +118,12 @@ typedef struct (SystemInfo& info, Bool super)
     if (version <= 9)
     {
         int tex_count;
-        TextureEntryAmp textures[tex_count]<optimize=false>;
-        return;
+        if (tex_count > 0) TextureEntryAmp textures[tex_count]<optimize=false>;
     }
     else if (version <= 21)
     {
         int tex_count;
-        TextureEntry textures[tex_count]<optimize=false>;
+        if (tex_count > 0) TextureEntry textures[tex_count]<optimize=false>;
     }
     else
     {
@@ -128,7 +134,22 @@ typedef struct (SystemInfo& info, Bool super)
     Color color;      // Base material color
     float alpha;      // Base material alpha
 
-    if (version <= 21)
+    if (version <= 9)
+    {
+        Color color_2;
+        float alpha_2;
+
+        float some_float; // 0.9 10.0
+
+        float f1; // 0.9 1.0
+        float f2; // 0.9
+        float f3; // 0.9 1.0
+    
+        Bool some_bool;
+        byte zeros[14];
+        return;
+    }
+    else if (version <= 21)
     {
         // This part is a mess
         // These will all be 0 when material is used for shadow?

@@ -520,7 +520,7 @@ typedef struct (SystemInfo& info, Bool super)
         uint short_count;
         if (short_count > 0) ushort some_shorts[short_count * 2];
 
-        if (version == 14) uint unknown; // Always 0?
+        if (version >= 14) uint unknown; // Always 0?
         return;
     }
     

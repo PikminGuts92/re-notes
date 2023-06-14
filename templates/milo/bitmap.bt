@@ -41,18 +41,38 @@ string read_texture(Texture& tex)
 
 typedef struct
 {
+    // 0 = Amp, 1 = GH/RB
+    // Header is 16 bytes in amp, and 32 bytes for GH/RB
     byte version; // Usually 1 (might change in LEGO idk)
+
+    if (version == 0)
+    {
+        // (No mip maps)
+        ubyte bpp;
+        ushort encoding; // Always 3
+
+        ushort width;
+        ushort height;
+        ushort bpl;
+
+        local ubyte mip_maps = 0;
     
-    ubyte bpp;
-    BITMAP_ENCODING encoding;
-    ubyte mip_maps;
+        // Skip empty bytes
+        FSkip(6);
+    }
+    else
+    {
+        ubyte bpp;
+        BITMAP_ENCODING encoding;
+        ubyte mip_maps;
 
-    ushort width;
-    ushort height;
-    ushort bpl;
+        ushort width;
+        ushort height;
+        ushort bpl;
 
-    // Skip empty bytes
-    FSkip(19);
+        // Skip empty bytes
+        FSkip(19);
+    }
 
     if (encoding == 3 && (bpp == 4 || bpp == 8))
     {
