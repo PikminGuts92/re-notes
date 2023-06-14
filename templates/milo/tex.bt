@@ -17,7 +17,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 5 (Amp Demo/Amp), 8 (KRPAI/GH1), 10 (GH2/GH2 4-song/GH2 360/RB1/TBRB), 11 (GDRB/RB3)
+    int version; // 5 (Amp Demo/Amp), 7 (AntiGrav), 8 (KRPAI/GH1), 10 (GH2/GH2 4-song/GH2 360/RB1/TBRB), 11 (GDRB/RB3)
     local Bool use_gdrb_enc = False;
 
     if (version > 8) read_metadata(info, super);
@@ -38,7 +38,16 @@ typedef struct (SystemInfo& info, Bool super)
     uint index;
 
     if (version >= 11 && use_gdrb_enc == False) Bool some_bool;
-    Bool use_ext_path;
+
+    if (version != 7)
+    {
+        Bool use_ext_path;
+    }
+    else
+    {
+        // Idk why it's not a bool here...
+        uint use_ext_path;
+    }
 
     if (FEof() || (ReadUInt() == 0xADDEADDE) || (ReadUInt() == 0xDEADDEAD)) return;
 

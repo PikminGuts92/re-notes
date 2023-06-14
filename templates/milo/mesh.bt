@@ -69,7 +69,7 @@ typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
     if (mesh_version == 34) float w;
     //if (mesh_version == 34 || (mesh_version == 36 && is_ng == False && (info.platform == X360 || info.platform == PS3))) float w; // Always 0?
 
-    if (mesh_version <= 14) // Amp
+    if (mesh_version <= 22) // Amp/AntiGrav (56 bytes)
     {
         // Bone indices
         ushort bone_0;
@@ -374,7 +374,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 13 (Amp Demo), 14 (Amp), 25 (KRPAI/GH1), 28 (GH2/GH2 4-song), 29, 34 (GH2 360/RB1/RB2), 36 (TBRB), 37 (GDRB), 38 (RB3)
+    int version; // 13 (Amp Demo), 14 (Amp), 22 (AntiGrav), 25 (KRPAI/GH1), 28 (GH2/GH2 4-song), 29, 34 (GH2 360/RB1/RB2), 36 (TBRB), 37 (GDRB), 38 (RB3)
 
     // Read meta if newer than GH1
     if (version > 25)
@@ -519,6 +519,22 @@ typedef struct (SystemInfo& info, Bool super)
         // Matches face count?
         uint short_count;
         if (short_count > 0) ushort some_shorts[short_count * 2];
+
+        if (version >= 22)
+        {
+            uint group_count;
+
+            struct GroupSectionAG
+            {
+                uint some_number;
+
+                uint short_count;
+                ushort shorts[short_count];
+
+                uint int_count;
+                uint ints[int_count];
+            } groups[17]<optimize=false, read=Str("key: %d (%d shorts, %d ints)", this.some_number, this.short_count, this.int_count)>;
+        }
 
         if (version >= 14) uint unknown; // Always 0?
         return;
