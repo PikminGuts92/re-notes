@@ -19,7 +19,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 4 (Amp), 7 (KRPAI/GH1), 11 (GH2 4-song), 12 (GH2/GH2 360), 13 (RB1), 14 (TBRB/GDRB/RB3)
+    int version; // 4 (Amp), 7 (AntiGrav/KRPAI/GH1), 11 (GH2 4-song), 12 (GH2/GH2 360), 13 (RB1), 14 (TBRB/GDRB/RB3)
 
     if (version > 7)
     {
@@ -70,6 +70,14 @@ typedef struct (SystemInfo& info, Bool super)
         // Always 0
         uint some_number_2;
         uint some_number_3;
+    }
+    else if (version == 7)
+    {
+        NumString some_name; // Matches group name
+
+        // Ratio is usually 4:3 or both 0?
+        float lod_width;
+        float lod_height;
     }
 
     /*if (version <= 12)

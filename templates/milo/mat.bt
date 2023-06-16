@@ -112,7 +112,7 @@ typedef struct
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 8 (Amp Demo), 9 (Amp), 21 (KRPAI/GH1), 25 (GH2 4-song) 27 (GH2), 28 (GH2 360), 41 (RB1), 47 (RB2), 55 (TBRB), 56 (GDRB), 68 (RB3)
+    int version; // 8 (Amp Demo), 9 (Amp), 15 (AntiGrav), 21 (KRPAI/GH1), 25 (GH2 4-song) 27 (GH2), 28 (GH2 360), 41 (RB1), 47 (RB2), 55 (TBRB), 56 (GDRB), 68 (RB3)
 
     // Amp/GH1 mats can linked to many textures
     if (version <= 9)
@@ -134,7 +134,7 @@ typedef struct (SystemInfo& info, Bool super)
     Color color;      // Base material color
     float alpha;      // Base material alpha
 
-    if (version <= 9)
+    if (version <= 15)
     {
         Color color_2;
         float alpha_2;
@@ -147,6 +147,8 @@ typedef struct (SystemInfo& info, Bool super)
     
         Bool some_bool;
         byte zeros[14];
+
+        if (version > 9) uint unknown_num; // Always 0?
         return;
     }
     else if (version <= 21)
