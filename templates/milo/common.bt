@@ -284,6 +284,7 @@ typedef struct
                 Parent value;
                 break;
             case 0x14: // Glob <glob 00>
+                // Note: <file.txt> is old syntax for "#include file.dta" so <glob file.bin> *might* be dta syntax for glob
                 struct Glob
                 {
                     ushort size;
