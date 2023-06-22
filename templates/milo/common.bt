@@ -231,6 +231,7 @@ typedef struct
         Command,
         String,
         Property,
+        Glob,
         Define = 0x20,
         Include,
         Merge,
