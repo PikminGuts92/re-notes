@@ -262,9 +262,10 @@ typedef struct
                 break;
             // String
             case 0x02: // Variable
+            case 0x03: // Func
             case 0x04: // Object (gh2 milos)
             case 0x05: // Symbol, Keyword
-            case 0x06: // Unhandled "KDataUnhandled"
+            case 0x06: // Unhandled "KDataUnhandled" or "invalid"
             case 0x07: // IfDef
             case 0x08: // Else
             case 0x09: // EndIf
@@ -279,8 +280,15 @@ typedef struct
                 break;
             case 0x10: // Array
             case 0x11: // Command, Script
-            case 0x13: // Property
+            case 0x13: // Property (Object Prop Ref)
                 Parent value;
+                break;
+            case 0x14: // Glob <glob 00>
+                struct Glob
+                {
+                    ushort size;
+                    if (size > 0) byte data[size];
+                } value<read=Str("<glob %d>", this.size)>;
                 break;
         }
     } Node;
