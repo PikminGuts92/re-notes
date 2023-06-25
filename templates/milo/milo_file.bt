@@ -30,6 +30,9 @@ typedef struct
 
     local uint offset;
     local uint size;
+
+    local string type_text = type.text;
+    local string name_text = name.text;
 } MiloEntry<read=read_milo_entry>;
 
 string read_milo_entry(MiloEntry& me)
@@ -54,7 +57,25 @@ typedef struct (int milo_version)
     int entry_count;
     if (entry_count > 0)
     {
-        MiloEntry entries[entry_count]<optimize=false>;
+        if (version <= 6)
+        {
+            struct MiloEntryFreq
+            {
+                string type;
+                string name;
+                Bool unknown_bool; // Always 1?
+                
+                local uint offset;
+                local uint size;
+
+                local string type_text = type;
+                local string name_text = name;
+            } entries[entry_count]<read=Str("%s: %s", this.type, this.name), optimize=false>;
+        }
+        else
+        {
+            MiloEntry entries[entry_count]<optimize=false>;
+        }
     }
 } MiloEntries<read=read_milo_entries>;
 
@@ -218,8 +239,8 @@ void read_milo_files(SystemInfo& info, MiloFile& milo)
 
     for (i = 0; i < milo.meta.entry_count; i++)
     {
-        type = milo.meta.entries[i].type.text;
-        name = milo.meta.entries[i].name.text;
+        type = milo.meta.entries[i].type_text;
+        name = milo.meta.entries[i].name_text;
 
         Object objects(info, type, name, True);
     }
@@ -232,17 +253,17 @@ typedef struct (SystemInfo& info, MiloFile& milo)
 
 typedef struct (SystemInfo& info)
 {
-    int version; // 10 (GH1), 24 (GH2), 25 (GDRB), 28 (DC1), 32 (DC2/DC3)
+    int version; // 6 (Freq), 10 (GH1), 24 (GH2), 25 (GDRB), 28 (DC1), 32 (DC2/DC3)
     MiloEntries meta(version);
 
-    if (version <= 10)
+    if (version == 10)
     {
         // Used in GH1-era games
         // Paths usually reference external textures
         // Note: Can be collection of nulls
         ExternalResources ext_resources;
     }
-    else
+    else if (version > 10)
     {
         local string type = meta.dir_type.text;
         local string name = meta.dir_name.text;
