@@ -497,7 +497,25 @@ typedef struct (SystemInfo& info, Bool super)
 
     if (version > 18)
     {
-        byte bsp; // Never observed, always 0
+        //byte bsp; // Never observed, always 0
+        //if (bsp != 0) return;
+
+        struct BSPNode;
+
+        struct BSPNode
+        {
+            Bool has_value;
+
+            if (has_value == True)
+            {
+                Vector4 vec;
+
+                BSPNode left;
+                BSPNode right;
+            }
+        } bsp_node;
+
+        return;
     }
 
     if (version == 7)
