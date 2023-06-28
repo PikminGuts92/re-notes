@@ -40,7 +40,12 @@ typedef struct (SystemInfo& info, Bool super)
     {
         // GH1 and before
         int trans_count;
-        if (trans_count > 0) NumString trans_objects[trans_count]<optimize=false>; // Trans types? 
+        if (trans_count > 0)
+        {
+            // Trans types?
+            if (info.version <= 6) NullTerminatedString trans_objects[trans_count]<optimize=false>;
+            else NumString trans_objects[trans_count]<optimize=false>;
+        }
     }
 
     // Trans constraint for the object (Constraint + target are used together)
