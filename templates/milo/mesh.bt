@@ -413,19 +413,16 @@ typedef struct (SystemInfo& info, Bool super)
     Trans trans(info, True);
     Draw draw(info, True);
 
-    if (version <= 10)
+    if (version < 15)
     {
-        uint always_0;
-
-        uint str_count;
-        if (str_count > 0) NullTerminatedString strings[str_count]<optimize=false>;
-    }
-    else if (version < 15)
-    {
-        NumString some_name; // Usually empty
+        uint always_0; // Usually empty
 
         int bones_count;
-        if (bones_count > 0) NumString bones[bones_count]<optimize=false>;
+        if (bones_count > 0)
+        {
+            if (version <= 10) NullTerminatedString bones[bones_count]<optimize=false>;
+            else NumString bones[bones_count]<optimize=false>;
+        }
     }
 
     // Get from material in later games... (version > 20)
