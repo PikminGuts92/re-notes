@@ -69,7 +69,35 @@ typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
     if (mesh_version == 34) float w;
     //if (mesh_version == 34 || (mesh_version == 36 && is_ng == False && (info.platform == X360 || info.platform == PS3))) float w; // Always 0?
 
-    if (mesh_version <= 22) // Amp/AntiGrav (56 bytes)
+    if (mesh_version <= 10) // Freq (56 bytes)
+    {
+        // Normals
+        float nx;
+        float ny;
+        float nz;
+
+        // UVs
+        float u;
+        float v;
+
+        // Weights
+        float weight_0;
+        float weight_1;
+        float weight_2;
+        float weight_3;
+
+        // Bone indices
+        ushort bone_0;
+        ushort bone_1;
+        ushort bone_2;
+        ushort bone_3;
+
+        local float tangent_0 = 0.0;
+        local float tangent_1 = 0.0;
+        local float tangent_2 = 0.0;
+        local float tangent_3 = 0.0;
+    }
+    else if (mesh_version <= 22) // Amp/AntiGrav (56 bytes)
     {
         // Bone indices
         ushort bone_0;
@@ -90,7 +118,7 @@ typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
 
         // UVs
         float u;
-        float v;  
+        float v;
 
         local float tangent_0 = 0.0;
         local float tangent_1 = 0.0;
@@ -374,7 +402,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 13 (Amp Demo), 14 (Amp), 22 (AntiGrav), 25 (KRPAI/GH1), 28 (GH2/GH2 4-song), 29, 34 (GH2 360/RB1/RB2), 36 (TBRB), 37 (GDRB), 38 (RB3)
+    int version; // 10 (Freq), 13 (Amp Demo), 14 (Amp), 22 (AntiGrav), 25 (KRPAI/GH1), 28 (GH2/GH2 4-song), 29, 34 (GH2 360/RB1/RB2), 36 (TBRB), 37 (GDRB), 38 (RB3)
 
     // Read meta if newer than GH1
     if (version > 25)
@@ -385,7 +413,12 @@ typedef struct (SystemInfo& info, Bool super)
     Trans trans(info, True);
     Draw draw(info, True);
 
-    if (version < 15)
+    if (version <= 10)
+    {
+        uint always_0_1;
+        uint always_0_2;
+    }
+    else if (version < 15)
     {
         NumString some_name; // Usually empty
 
@@ -430,30 +463,41 @@ typedef struct (SystemInfo& info, Bool super)
         NumString some_value;
     }
 
-    NumString mat; // Material used for rendering the Mesh (Mat)
+    // Material used for rendering the Mesh (Mat)
+    if (version <= 10) string mat;
+    else NumString mat;
+
     if (version == 27)
     {
         NumString mat_2;
     }
 
-    NumString geom_owner; // Geometry owner for the mesh (Mesh)
+     // Geometry owner for the mesh (Mesh)
+    if (version <= 10) string geom_owner;
+    else NumString geom_owner;
 
     if (version < 13)
     {
-        NumString alt_geom_owner; // "Combining face and vert owner of %s" ??
+        // "Combining face and vert owner of %s" ??
+        if (version <= 10) string alt_geom_owner;
+        else NumString alt_geom_owner;
     }
 
     if (version < 15)
     {
-        // Usually same as geom_owner
-        NumString trans_parent; // RndTransformable
+        // Usually same as geom_owner (RndTransformable)
+        if (version <= 10) string trans_parent;
+        else NumString trans_parent;
     }
 
     if (version < 14)
     {
-        // Always empty?
-        NumString trans_1; // RndTransformable
-        NumString trans_2; // RndTransformable
+        // Always empty? (RndTransformable)
+        if (version <= 10) string trans_1;
+        else NumString trans_1;
+
+        if (version <= 10) string trans_2;
+        else NumString trans_2;
     }
 
     if (version < 3)
@@ -474,7 +518,10 @@ typedef struct (SystemInfo& info, Bool super)
 
     if (version < 15)
     {
-        NumString some_string; // Ignored
+        // Ignored
+        if (version <= 10) string some_string;
+        else NumString some_string;
+
         float some_float;
     }
 
