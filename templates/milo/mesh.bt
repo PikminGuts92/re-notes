@@ -415,8 +415,10 @@ typedef struct (SystemInfo& info, Bool super)
 
     if (version <= 10)
     {
-        uint always_0_1;
-        uint always_0_2;
+        uint always_0;
+
+        uint str_count;
+        if (str_count > 0) NullTerminatedString strings[str_count]<optimize=false>;
     }
     else if (version < 15)
     {
@@ -472,7 +474,7 @@ typedef struct (SystemInfo& info, Bool super)
         NumString mat_2;
     }
 
-     // Geometry owner for the mesh (Mesh)
+    // Geometry owner for the mesh (Mesh)
     if (version <= 10) string geom_owner;
     else NumString geom_owner;
 
@@ -669,7 +671,11 @@ if (STANDALONE_FILE == "Mesh")
     else
     {
         info.platform = PS2;
-        if (obj_version <= 28)
+        if (obj_version <= 10)
+        {
+            info.version = 6; // Freq
+        }
+        else if (obj_version <= 28)
         {
             info.version = 24;
         }
