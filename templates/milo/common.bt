@@ -354,6 +354,11 @@ typedef struct
     Platform platform;
 } SystemInfo;
 
+typedef struct
+{
+    string value;
+} NullTerminatedString<read=Str("%s", this.value)>;
+
 void read_metadata(SystemInfo& info, Bool super)
 {
     if (info.version <= 10 || super == True)
