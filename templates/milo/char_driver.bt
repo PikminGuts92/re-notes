@@ -1,0 +1,55 @@
+// Class to Drive, Schedule and Blend CharClips.  Basically a stack, new ones are pushed onto the bottom, start playing at some point, and then pop off the ones above it once they are fully blended in.
+// Super: CharWeightable, CharPollable
+// Ext: .drv
+// C++ Class: CharDriver
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "CharDriver"
+    #endif
+#endif
+
+#ifndef OBJECT_CHAR_DRIVER
+#define OBJECT_CHAR_DRIVER
+
+#include "common.bt"
+#include "char_weightable.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 3 (GH2)
+    read_metadata(info, super);
+
+    CharWeightable char_weightable(info, True);
+
+    NumString bones; // CharServoBone - Blend-in time in beats
+    NumString clips; // file - Clip Set milo file to load up
+
+    Bool realign;    // Realigns the clips to always be aligned with the beat in the measure
+} CharDriver;
+
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "CharDriver")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    CharDriver char_driver(info, False);
+}
+
+#endif
+
+
+#endif
