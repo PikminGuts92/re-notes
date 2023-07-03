@@ -20,7 +20,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 9 (GH1), 12 (GH2/TBRB)
+    int version; // 9 (GH1), 12 (GH2/GH2 360/TBRB)
 
     if (version > 10) read_metadata(info, super);
 
