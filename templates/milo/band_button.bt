@@ -1,4 +1,4 @@
-// N/A
+// Button with jitter, text fitting, alignment, and kerning options
 // Super: UIButton
 // Ext: .btn
 // C++ Class: BandButton
@@ -23,8 +23,8 @@ typedef struct (SystemInfo& info, Bool super)
     if (version < 12)
     {
         FIT_TEXT_ENUM fit_text; // Whether or not to force this label into specified width/height
-        float width;
-        float height;
+        float width;            // Maximum width this label should take up
+        float height;           // Maximum height this label should take up
     }
 
     // Note: leading/kerning might be switched. Not 100% sure yet.

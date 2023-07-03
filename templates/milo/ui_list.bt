@@ -2,7 +2,7 @@
 // horizontally or vertically, can scroll normally or circularly, and can have
 // any number of visible elements (even just one, a.k.a. a spin button).
 // Super: UIComponent
-// Ext: N/A
+// Ext: .lst
 // C++ Class: UIList
 
 #ifndef IN_MILO_FILE

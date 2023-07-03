@@ -1,4 +1,4 @@
-// N/A
+// Simple button, basically just a label that can be selected
 // Super: UILabel
 // Ext: .but
 // C++ Class: UIButton
