@@ -26,7 +26,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 3 (GH1), 6 (GH2), 14 (TBRB)
+    int version; // 3 (GH1), 6 (GH2), 9 (GH2 360), 14 (TBRB)
     if (version > 3) read_metadata(info, super);
 
     Trans trans(info, True);
@@ -65,7 +65,23 @@ typedef struct (SystemInfo& info, Bool super)
     }
 
     // Projected floor spot texture
-    if (version > 7) NumString texture; // Tex
+    if (version > 7)
+    {
+        NumString texture; // Tex
+
+        // Read RndDrawable...?
+        if (version == 9)
+        {
+            // v9 load updates different fields
+            uint string_count;
+            if (string_count > 0) NumString some_strings[string_count]<optimize=false>;
+        }
+        else if (version == 8)
+        {
+            uint string_count;
+            if (string_count > 0) NumString some_strings[string_count]<optimize=false>;
+        }
+    }
 
     // Master for light color and intensity
     if (version > 10) NumString color_owner; // Light
