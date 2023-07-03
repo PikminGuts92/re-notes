@@ -1,0 +1,47 @@
+// N/A
+// Super: UILabel
+// Ext: .but
+// C++ Class: UIButton
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "UIButton"
+    #endif
+#endif
+
+#ifndef OBJECT_UI_BUTTON
+#define OBJECT_UI_BUTTON
+
+#include "common.bt"
+#include "ui_label.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 0 (GH2/GH2 360/TBRB)
+    UILabel ui_label(info, False);
+} UIButton;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "UIButton")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        info.version = 24;
+    }
+
+    UIButton ui_button(info, False);
+}
+
+#endif
+
+#endif

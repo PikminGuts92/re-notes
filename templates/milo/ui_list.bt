@@ -56,10 +56,14 @@ if (STANDALONE_FILE == "UIList")
     }
     else
     {
-        info.platform = PS2;
-        if (obj_version == 2)
+        if (obj_version <= 2)
         {
+            info.platform = PS2;
             info.version = 24;
+        }
+        else
+        {
+            info.platform = X360;
         }
     }
 

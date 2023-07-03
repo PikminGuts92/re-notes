@@ -1,0 +1,50 @@
+// Simple label, provides localization of tokens and can have different fonts for each state
+// Super: UIComponent
+// Ext: .lbl
+// C++ Class: UILabel
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "UILabel"
+    #endif
+#endif
+
+#ifndef OBJECT_UI_LABEL
+#define OBJECT_UI_LABEL
+
+#include "common.bt"
+#include "ui_component.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 1 (GH2/GH2 360)
+    UIComponent ui_component(info, False);
+
+    Bool localize;        // Try to localize text_token
+    NumString text_token; // Localization token if localize is true
+} UILabel;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "UILabel")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        info.version = 24;
+    }
+
+    UILabel ui_label(info, False);
+}
+
+#endif
+
+#endif
