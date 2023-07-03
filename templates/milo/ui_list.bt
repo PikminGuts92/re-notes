@@ -19,14 +19,27 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version;
+    int version; // 2 (GH2), 3 (GH2 360)
     UIComponent ui_component(info, False);
 
+    // Note: Field order is complete guess
+    float spacing;      // Space between each row/column (range: 1-500)
+    float arrow_offset; // Space between arrows and elements (range: 1-500)
+    float scroll_time;  // Time (seconds) to scroll one step - 0 for instant scrolling (range: 0-5)
+
+    int display_num;    // Number of rows/columns (range: 1-100)
+    int fade_offset;    // Number of elements to fade from beginning/end of list (range: 1-10)
+    Bool circular;      // Does the list scrolling wrap?
+
+    if (version >= 3) Bool paginate; // Allow scrolling by pages?
+
+    /*
     float min_display; // "How far from top of list to start scrolling"
     float max_display; // "How far down can the highlight travel before scoll? Use -1 for no limit"
 
     float unknown1;
     float unknown2;
+    */
 } UIList;
 
 #ifdef STANDALONE_FILE

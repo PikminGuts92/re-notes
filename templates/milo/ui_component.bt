@@ -18,7 +18,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version;
+    int version; // 1 (GH2/GH2 360/TBRB)
     read_metadata(info, super);
 
     Trans trans(info, True);
@@ -26,8 +26,9 @@ typedef struct (SystemInfo& info, Bool super)
 
     // Not sure where Poll goes...
 
-    NumString object_dir1; // Usually empty
-    NumString object_dir2;
+    // Usually empty
+    NumString nav_right; // UIComponent
+    NumString nav_down;  // UIComponent
 } UIComponent;
 
 #ifdef STANDALONE_FILE
