@@ -21,7 +21,7 @@ typedef struct
     NumString bone; // hair bone we set the transform of
     float unknown_2[4];
     float unknown_3[3];
-} CharHairPoint;
+} CharHairPointTBRB;
 
 typedef struct
 {
@@ -29,7 +29,7 @@ typedef struct
     float angle;    // Angle in degrees of starting flip
 
     int points_count;
-    if (points_count > 0) CharHairPoint points[points_count]<optimize=false>;
+    if (points_count > 0) CharHairPointTBRB points[points_count]<optimize=false>;
     
     /*
         Defaults:
@@ -56,12 +56,50 @@ typedef struct
     */
     float unknown_3[18];
     int unknown_int; // 1, 65, 68, 76, 129, 141, 193
-} CharHairStrand;
+} CharHairStrandTBRB;
 
+typedef enum
+{
+    kCollidePlane,
+    kCollideSphere,
+    kCollideInsideSphere,
+    kCollideCylinder,
+    kCollideInsideCylinder
+} COLLIDE_TYPE_ENUM;
+
+typedef struct
+{
+    Vector3 unknown_floats; // Origin?
+    NumString bone; // Trans - Hair bone we set the transform of
+
+    float length;                   // The length of this strand bone
+    COLLIDE_TYPE_ENUM collide_type; // Type of collision
+    NumString collision;            // Trans - Collision sphere
+
+    float distance; // Collision radius (0.0, 5.0, 6.5)
+
+    // If positive, is the distance the bone should start aligning itself with the collision primitive,
+    //  so that once touching it, it will be totally flattened against it.
+    // Values: 0.0
+    float align_dist;
+
+    // No "show_collide" bool? Probably just not encoded in binary.
+} CharHairPoint;
+
+typedef struct 
+{
+    NumString root; // Trans - The root Trans for the hair strand
+    float angle;    // Angle in degrees of starting flip
+
+    int points_count;
+    if (points_count > 0) CharHairPoint points[points_count]<optimize=false>;
+
+    float unknown_floats[18];
+} CharHairStrand;
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 11 (TBRB)
+    int version; // 2 (GH2/GH2 360), 11 (TBRB)
     read_metadata(info, super);
 
     float stiffness; // stiffness of each strand
@@ -71,14 +109,32 @@ typedef struct (SystemInfo& info, Bool super)
 
     float weight;    // Gravity of the hair, one is normal (duplicate dev comment?)
     float friction;  // Hair friction against each other
-    float min_slack; // If using sides, determines how far in it could go
-    float max_slack; // If using sides, determines how far out it could go
+
+    if (version >= 11)
+    {
+        float min_slack; // If using sides, determines how far in it could go
+        float max_slack; // If using sides, determines how far out it could go
+    }
 
     int strand_count;
-    if (strand_count > 0) CharHairStrand strands[strand_count]<optimize=false>;
+    if (strand_count > 0)
+    {
+        if (version >= 11)
+        {
+            CharHairStrandTBRB strands[strand_count]<optimize=false>;
+        }
+        else
+        {
+             CharHairStrand strands[strand_count]<optimize=false>;
+        }
+    }
 
-    Bool simulate;  // Simulate physics or not
-    NumString wind; // wind object to use
+    Bool simulate; // Simulate physics or not
+
+    if (version >= 11)
+    {
+        NumString wind; // wind object to use
+    }
 
     //Poll poll(info, True);
 } CharHair;
