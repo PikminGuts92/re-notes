@@ -21,7 +21,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 1 (GH2)
+    int version; // 1 (GH2/GH2 360)
     read_metadata(info, super);
 
     float offset; // Usually -90 for right hand, 90 for left hand
