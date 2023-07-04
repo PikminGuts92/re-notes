@@ -9,8 +9,8 @@
     #endif
 #endif
 
-#ifndef OBJECT_UI_COMPONENT
-#define OBJECT_UI_COMPONENT
+#ifndef OBJECT_BAND_PLACER
+#define OBJECT_BAND_PLACER
 
 #include "common.bt"
 #include "draw.bt"
