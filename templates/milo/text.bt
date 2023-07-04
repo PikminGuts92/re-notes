@@ -1,0 +1,79 @@
+// A Text object draws a 3D character string
+// Super: Draw Trans
+// Ext: .txt
+// C++ Class: RndText
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "Text"
+    #endif
+#endif
+
+#ifndef OBJECT_TEXT
+#define OBJECT_TEXT
+
+#include "common.bt"
+#include "draw.bt"
+#include "trans.bt"
+
+typedef enum
+{
+    kCapsModeNone,
+    kForceLower,
+    kForceUpper
+} CAPS_MODE_ENUM;
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 17 (GH2/GH2 360)
+    read_metadata(info, super);
+
+    Draw draw(info, True);
+    Trans trans(info, True);
+
+    NumString font;       // RndFont - Font to use for this Text
+    ALIGNMENT_ENUM align; // Alignment option for the text
+
+    NumString text; // Text value
+    Color color;    // Color of the text object
+    float alpha;    // Alpha value of the text object
+
+    float wrap_width;  // Width of text until it wraps (range: [0, 10000])
+    float leading;     // Vertical distance between lines (range: [-5, 5])
+    uint fixed_length; // Number of character maximum for the text (range: [0, 500])
+
+    float italics;            // Defines the slant of the text (range: [-5, 5])
+    float size;               // Size of the text
+    Bool markup;              // This text uses markup
+    CAPS_MODE_ENUM caps_mode; // Defines the CAPS mode for the text
+
+    /*if (version < 21)
+    {
+        Bool unknown_bool;
+        float unknown_floats[3];
+    }*/
+} Text;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "Text")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    Text text(info, False);
+}
+
+#endif
+
+#endif
