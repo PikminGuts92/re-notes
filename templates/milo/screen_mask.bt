@@ -1,0 +1,55 @@
+// Draws full screen quad with material and color.
+// Super: Draw
+// Ext: .mask
+// C++ Class: RndScreenMask
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "ScreenMask"
+    #endif
+#endif
+
+#ifndef OBJECT_SCREEN_MASK
+#define OBJECT_SCREEN_MASK
+
+#include "common.bt"
+#include "draw.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 2 (GH2/GH2 360/TBRB)
+    read_metadata(info, super);
+
+    Draw draw(info, True);
+
+    NumString mat; // RndMat - Material to draw on full screen quad
+    Color color;   // Color of full screen quad
+    float alpha;   // Translucency of full screen quad
+
+    Rect screen_rect;  // The area of the screen in normalized coordinates (0 to 1) to draw into.
+    Bool use_cam_rect; // Use current camera screen_rect instead of the full screen
+} ScreenMask;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "ScreenMask")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    ScreenMask screen_mask(info, False);
+}
+
+#endif
+
+#endif
