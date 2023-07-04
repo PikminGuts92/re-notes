@@ -392,4 +392,54 @@ int guess_version()
     return -1;
 }
 
+typedef enum
+{
+    kNormal,
+    kStretched,
+    kJustFit
+} FIT_TEXT_ENUM;
+
+typedef enum
+{
+    kTopLeft = 17,
+    kTopCenter = 18,
+    kTopRight = 20,
+    kMiddleLeft = 33,
+    kMiddleCenter = 34,
+    kMiddleRight = 36,
+    kBottomLeft = 65,
+    kBottomCenter = 66,
+    kBottomRight = 68,
+} ALIGNMENT_ENUM;
+
+typedef struct
+{
+    Vector4 quat;
+    float pos;
+} KeyQuart;
+
+typedef struct
+{
+    float value;
+    float pos;
+} KeyFloat;
+
+typedef struct
+{
+    Vector3 vec3;
+    float pos;
+} KeyVec3;
+
+typedef struct
+{
+    Color4 color;
+    float pos;
+} KeyColor;
+
+typedef struct
+{
+    NumString value;
+    float pos;
+} KeyString;
+
 #endif

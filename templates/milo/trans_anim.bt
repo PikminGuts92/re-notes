@@ -15,18 +15,6 @@
 #include "anim.bt"
 #include "common.bt"
 
-typedef struct
-{
-    Vector4 quat;
-    float pos;
-} KeyQuart;
-
-typedef struct
-{
-    Vector3 vec3;
-    float pos;
-} KeyVec3;
-
 typedef struct (SystemInfo& info, Bool super)
 {
     int version; // 4 (KRPAI/GH1), 6 (GH2/GH2 360), 7 (TBRB/GDRB)
