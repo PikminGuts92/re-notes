@@ -20,8 +20,8 @@ typedef struct (SystemInfo& info, Bool super)
     int version; // 1 (GH2 360), 2 (TBRB)
     read_metadata(info, super);
 
-    uint some_num_1; // 64
-    uint some_num_2; // 4
+    uint width_height; // 64, 128
+    uint bpp; // 4
 
     NumString right_ext_path;
     NumString left_ext_path;
