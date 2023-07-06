@@ -1,0 +1,48 @@
+// Drop animatables and drawables into a WorldFx object,
+//  TransParent it to something, then start/stop it.
+//  Cleans up particles post animation.
+// Super: RndDir
+// Ext: N/A
+// C++ Class: Unknown
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "WorldFx"
+    #endif
+#endif
+
+#ifndef WORLD_FX
+#define WORLD_FX
+
+#include "common.bt"
+#include "rnd_dir.bt"
+
+typedef struct (SystemInfo& info, Bool super, Bool inlined)
+{
+    int version; // 1 (GH2)
+    RndDir rnd_dir(info, False, inlined);
+} WorldFx;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "WorldFx")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+    }
+
+    WorldFx world_fx(info, False, False);
+}
+
+#endif
+
+#endif
