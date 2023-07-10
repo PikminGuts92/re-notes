@@ -561,7 +561,7 @@ typedef struct (SystemInfo& info, Bool super)
             }
         } bsp_node;
 
-        return;
+        if (bsp_node.has_value == True) return;
     }
 
     if (version == 7)
