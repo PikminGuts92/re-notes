@@ -324,10 +324,10 @@ typedef struct (SystemInfo& info, Bool super)
         Bool fade_out;     // Is the Mat affected its Environment's fade_out?
         
         // TODO: Figure out this condition
-        /*if (&DAT_ffffffd4 + version < &DAT_00000002)
+        if (version < 46)
         {
             Bool ignored_bool_4;
-        }*/
+        }
 
         if (version > 46)
         {
@@ -364,7 +364,7 @@ typedef struct (SystemInfo& info, Bool super)
     {
         if (version < 53)
         {
-            Bool ignored_bool_4;
+            Bool ignored_bool_5;
         }
         else
         {
