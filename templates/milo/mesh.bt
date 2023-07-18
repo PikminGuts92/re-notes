@@ -166,6 +166,17 @@ typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
             // UVs
             float u;
             float v;
+
+            // Bone indices
+            local ushort bone_0;
+            local ushort bone_1;
+            local ushort bone_2;
+            local ushort bone_3;
+
+            local float tangent_0 = 0.0;
+            local float tangent_1 = 0.0;
+            local float tangent_2 = 0.0;
+            local float tangent_3 = 0.0;
         }
 
         if (mesh_version >= 34)
@@ -672,7 +683,7 @@ if (STANDALONE_FILE == "Mesh")
         {
             info.version = 6; // Freq
         }
-        else if (obj_version <= 28)
+        else if (obj_version < 28)
         {
             info.version = 24;
         }
