@@ -169,6 +169,16 @@ string readRect(Rect& r)
 
 typedef struct
 {
+    float min_x;
+    float max_x;
+    float min_y;
+    float max_y;
+    float min_z;
+    float max_z;
+} Box<read=Str("x = (%f, %f), y = (%f, %f), z = (%f, %f)", this.min_x, this.max_x, this.min_y, this.max_y, this.min_z, this.max_z)>;
+
+typedef struct
+{
     float r;
     float g;
     float b;
