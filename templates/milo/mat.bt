@@ -80,9 +80,11 @@ typedef enum
 typedef struct
 {
     // 2 - Emissive?
+    // 3 - Transparent (i.e. glass)?
     // 4 - Diffuse
     // 5 - Environ
-    int map_type;
+    // 6 - ???
+    int map_type; // Might actually be used for pass order
 
     Matrix tex_xfm;
 
