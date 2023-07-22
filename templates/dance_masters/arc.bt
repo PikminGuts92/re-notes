@@ -1,0 +1,52 @@
+BigEndian();
+
+// 16 bytes
+typedef struct
+{
+    // Note: Offsets are absolute
+    uint file_path_offset; // If 0, assume null
+    uint file_start_offset;
+    uint uncompressed_size;
+    uint compressed_size; // Zlib (assume compressed if number is smaller than uncompressed size)
+
+    local string file_path = "";
+} ArcFileEntry<read=Str("%s", this.file_path)>;
+
+typedef struct
+{
+    uint magic<format=hex>; // 0x19751120
+    uint always_1;
+
+    struct Entries
+    {
+        uint entry_count;
+        uint always_0;
+
+        if (entry_count > 0) ArcFileEntry entries[entry_count]<optimize=false>;
+    } entries_group<read=Str("%d entries", this.entry_count)>;
+
+    local uint i;
+
+    for (i = 0; i < entries_group.entry_count; i++)
+    {
+        // Update file path
+        if (entries_group.entries[i].file_path_offset > 0)
+        {
+            entries_group.entries[i].file_path = ReadString(entries_group.entries[i].file_path_offset);
+        }
+
+        FSeek(entries_group.entries[i].file_start_offset);
+
+        struct ArcFileEntryData
+        {
+            local uint size = entries_group.entries[i].compressed_size;
+            local string file_path = entries_group.entries[i].file_path;
+
+            byte data[size];
+        } file_data<read=Str("%s (%d bytes)", this.file_path, this.size)>;
+    }
+
+    // Rest of data appears to be padding
+} ArcFile;
+
+ArcFile file;
