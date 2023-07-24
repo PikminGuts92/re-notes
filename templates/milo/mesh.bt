@@ -393,7 +393,13 @@ typedef struct
 {
     NumString bone_name;
     Matrix mat;
-} BoneTrans;
+
+    local string bone_name_str = "";
+    if (exists(bone_name.text))
+    {
+        bone_name_str = bone_name.text;
+    }
+} BoneTrans<read=Str("%s", this.bone_name_str)>;
 
 typedef enum
 {
