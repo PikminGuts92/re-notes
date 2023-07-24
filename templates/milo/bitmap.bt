@@ -23,12 +23,18 @@ typedef enum <uint>
     TPL_CMP_ALPHA = 328
 } BITMAP_ENCODING;
 
+typedef struct
+{
+    ubyte value<bgcolor=get_bgcolor_pixel_8bpp>;
+} Pixel;
+
 typedef struct (ubyte mip, ushort w, ushort h, uint size)
 {
     local ubyte mip_level = mip;
     local ushort width = w;
     local ushort height = h;
 
+    //Pixel data[size]<optimize=false>;
     byte data[size];
 } Texture<read=Str("mip #%d: %dx%d", this.mip_level, this.width, this.height)>;
 
@@ -38,17 +44,51 @@ typedef struct (ubyte mip, ushort w, ushort h, uint size)
     local ushort width = w;
     local ushort height = h;
 
-    ubyte data[size];
+    //ubyte data[size];
+
+    struct PixelData
+    {
+        ubyte d1;
+        ubyte d2;
+    } data[size / 2]<read=Str("(%d | %d)", this.d1, this.d2)>;
 
     // Validation...
     local uint i;
     local uint pixel_count = 0;
+
+    return;
 
     for (i = 0; i < size; i += 2)
     {
         pixel_count += data[i];
     }
 } FreqTexture<read=Str("mip #%d: %dx%d (%d pixels)", this.mip_level, this.width, this.height, this.pixel_count)>;
+
+typedef struct
+{
+    ubyte r;
+    ubyte g;
+    ubyte b;
+    ubyte a;
+
+    local uint rgba_value = ((uint)r << 24) | ((uint)g << 16) | ((uint)b << 8) | (uint)a;
+} RGBAColor<read=Str("%08X", this.rgba_value), bgcolor=get_bgcolor_rgbacolor>;
+
+int get_bgcolor_rgbacolor(RGBAColor& c)
+{
+    // BGR order
+    return ((int)c.b << 16) | ((int)c.g << 8) | (int)c.r;
+}
+
+int get_bgcolor_pixel_8bpp(ubyte& p)
+{
+    local ubyte r = parentof(parentof(this)).color_palette.colors[p].r;
+    local ubyte g = parentof(parentof(this)).color_palette.colors[p].g;
+    local ubyte b = parentof(parentof(this)).color_palette.colors[p].b;
+
+    // BGR order
+    return ((int)b << 16) | ((int)g << 8) | (int)r;
+}
 
 typedef struct
 {
@@ -59,11 +99,11 @@ typedef struct
     local ubyte is_freq = 0;
 
     if (version == 0
-        && (ReadUShort(FTell() + 3) == 0xD000 || ReadUShort(FTell() + 3) == 0x1500))
+        && (ReadUShort(FTell() + 3) == 0xD000 || ReadUShort(FTell() + 3) == 0x1500 || ReadUShort(FTell() + 3) == 0x1100))
     {
         // 24-byte header (No mip maps)
         FSkip(3); // Zero'd data
-        ushort encoding<format=hex>; // 0xD000 = 4bpp, 0x1500 = 8bpp (variable)
+        ushort encoding<format=hex>; // 0xD000 = 4bpp, 0x1100 = 8bpp, 0x1500 = 8bpp (variable)
 
         ushort width;
         ushort height;
@@ -115,8 +155,12 @@ typedef struct
     {
         // Always has 256 colors
         byte color_palette[1024];
+        struct ColorPalette
+        {
+            RGBAColor colors[256]<optimize=false>;
+        } color_palette;
 
-        uint always_0;
+        uint always_0_3;
         uint color_count; // Count of actual colors in palette
 
         if (encoding == 0x1500)
