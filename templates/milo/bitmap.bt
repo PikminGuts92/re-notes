@@ -135,6 +135,8 @@ typedef struct
     else
     {
         // 32-byte header
+        if (version == 2) uint hash<format=hex>; // Assumed...
+
         ubyte bpp;
         BITMAP_ENCODING encoding;
         ubyte mip_maps;
@@ -144,7 +146,8 @@ typedef struct
         ushort bpl;
 
         // Skip empty bytes
-        FSkip(19);
+        if (version == 1) FSkip(19);
+        else FSkip(15);
     }
 
     if (encoding == 3 && (bpp == 4 || bpp == 8))

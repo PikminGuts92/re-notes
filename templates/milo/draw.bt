@@ -23,7 +23,7 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 0 (Freq/Amp Demo/Amp), 1 (AntiGrav/GH1), 3 (GH2 4-song/GH2/GH2 360/RB1/TBRB/RB3), 4 (GDRB)
+    int version; // 0 (Freq/Amp Demo/Amp), 1 (AntiGrav/GH1), 3 (GH2 4-song/GH2/GH2 360/RB1/TBRB/RB3/DC2), 4 (GDRB)
     read_metadata(info, super);
 
     Bool showing; // Whether the object and its Draw children are drawn or collided with. - Always 1?

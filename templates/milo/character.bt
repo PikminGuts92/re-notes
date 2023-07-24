@@ -83,7 +83,7 @@ typedef struct (SystemInfo& info)
 
 typedef struct (SystemInfo& info, Bool super, Bool inlined, Bool is_entry)
 {
-    int version; // 9 (GH2), 10 (GH2 360), 15 (TBRB/GDRB), 17 (DC1)
+    int version; // 9 (GH2), 10 (GH2 360), 15 (TBRB/GDRB), 18 (DC1/DC2)
     RndDir rnd_dir(info, True, inlined);
 
     // Only written when this.data_dir == this

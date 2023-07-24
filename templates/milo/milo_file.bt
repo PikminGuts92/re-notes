@@ -52,6 +52,8 @@ typedef struct (int milo_version)
         // String table info for names/classes
         uint string_table_string_count;
         uint string_table_used_size;
+
+        if (version >= 32) Bool unknown; // Always false?
     }
 
     int entry_count;
@@ -253,7 +255,7 @@ typedef struct (SystemInfo& info, MiloFile& milo)
 
 typedef struct (SystemInfo& info)
 {
-    int version; // 6 (Freq), 10 (GH1), 24 (GH2), 25 (GDRB), 28 (DC1), 32 (DC2/DC3)
+    int version; // 6 (Freq), 10 (GH1), 24 (GH2), 25 (GDRB), 28 (RB3/DC1), 32 (DC2/RBB/DC3)
     MiloEntries meta(version);
 
     if (version == 10)
