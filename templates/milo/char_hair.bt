@@ -94,7 +94,10 @@ typedef struct
     int points_count;
     if (points_count > 0) CharHairPoint points[points_count]<optimize=false>;
 
-    float unknown_floats[18];
+    // Contains rotation + scale data
+    //  Note: Both values are usually the same
+    Matrix3 mat_1; // ??? 0x20
+    Matrix3 mat_2; // root_mat 0x50
 } CharHairStrand;
 
 typedef struct (SystemInfo& info, Bool super)
