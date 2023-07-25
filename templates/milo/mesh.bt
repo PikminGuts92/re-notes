@@ -280,7 +280,7 @@ typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
         }
 
         // TODO: Remove this hacky workaround
-        if (mesh_version == 38) FSkip(4);
+        if (mesh_version == 38 && vert_size == 40) FSkip(4);
     }
 } Vertex<read=vertex_to_string>;
 
@@ -361,6 +361,7 @@ typedef struct (SystemInfo& info, int mesh_version)
         {
             // TBRB/GDRB (36, 1)
             // RB3 (40, 2)
+            // DC2 (36, 1)
             int vert_size;
             int some_type;
 
