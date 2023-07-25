@@ -15,6 +15,7 @@
 
 typedef enum <uint>
 {
+    ARGB = 1, // Presumably, 32bpp
     RGBA = 3,
     DXT1_BC1 = 8,
     DXT5_BC3 = 24,
@@ -176,6 +177,9 @@ typedef struct
     local ubyte i = 0;
     local ushort w = width;
     local ushort h = height;
+
+    // Early exit if no texture data
+    if (width == 0 || height == 0) return;
 
     local uint data_size;
     while (i <= mip_maps)
