@@ -60,6 +60,57 @@ void y_axis(QTangent& q_quat, float data[3])
     data[2] = fTyz + fTwx;
 }
 
+// 4 bytes (x 10-bit, y 10-bit, z 10-bit, w 2-bit)
+// Encoding order: wzyx
+typedef struct
+{
+    const int MAX_2_BIT_SIGNED  = (1 <<  1) - 1; //    1
+    const int MASK_2_BIT        = (1 <<  2) - 1; //    3
+    const int MAX_10_BIT_SIGNED = (1 <<  9) - 1; //  512
+    const int MASK_10_BIT       = (1 << 10) - 1; // 1023
+
+    uint value;
+
+    local int w_bits = (value >> 30) & MASK_2_BIT;
+    local int z_bits = (value >> 20) & MASK_10_BIT;
+    local int y_bits = (value >> 10) & MASK_10_BIT;
+    local int x_bits = value & MASK_10_BIT;
+
+    // Reverse two's complement and muliply by negative 1 (basically convert 10-bit signed to 32-bit signed)
+    // There's probably a more optimal way of doing this...
+    if (x_bits > MAX_10_BIT_SIGNED) x_bits = -1 * (~(x_bits - 1) & (MASK_10_BIT >> 1));
+    if (y_bits > MAX_10_BIT_SIGNED) y_bits = -1 * (~(y_bits - 1) & (MASK_10_BIT >> 1));
+    if (z_bits > MAX_10_BIT_SIGNED) z_bits = -1 * (~(z_bits - 1) & (MASK_10_BIT >> 1));
+    if (w_bits > MAX_2_BIT_SIGNED)  w_bits = -1 * (~(w_bits - 1) & ( MASK_2_BIT >> 1));
+
+    local float x = Max((float)x_bits / (float)MAX_10_BIT_SIGNED, -1.0);
+    local float y = Max((float)y_bits / (float)MAX_10_BIT_SIGNED, -1.0);
+    local float z = Max((float)z_bits / (float)MAX_10_BIT_SIGNED, -1.0);
+    local float w = Max((float)w_bits / (float)MAX_2_BIT_SIGNED, -1.0);
+} SignedCompressedVec4<read=Str("(%f, %f, %f, %f)", this.x, this.y, this.z, this.w)>;
+
+// 4 bytes (x 10-bit, y 10-bit, z 10-bit, w 2-bit)
+// Encoding order: wzyx
+typedef struct
+{
+    const int MAX_2_BIT_UNSIGNED  = (1 <<  2) - 1; //    3
+    const int MASK_2_BIT          = (1 <<  2) - 1; //    3
+    const int MAX_10_BIT_UNSIGNED = (1 << 10) - 1; // 1023
+    const int MASK_10_BIT         = (1 << 10) - 1; // 1023
+
+    uint value;
+
+    local uint w_bits = (value >> 30) & MASK_2_BIT;
+    local uint z_bits = (value >> 20) & MASK_10_BIT;
+    local uint y_bits = (value >> 10) & MASK_10_BIT;
+    local uint x_bits = value & MASK_10_BIT;
+
+    local float x = (float)x_bits / (float)MAX_10_BIT_UNSIGNED;
+    local float y = (float)y_bits / (float)MAX_10_BIT_UNSIGNED;
+    local float z = (float)z_bits / (float)MAX_10_BIT_UNSIGNED;
+    local float w = (float)w_bits / (float)MAX_2_BIT_UNSIGNED;
+} UnsignedCompressedVec4<read=Str("(%f, %f, %f, %f)", this.x, this.y, this.z, this.w)>;
+
 typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
 {
     // Coordinates
@@ -218,18 +269,23 @@ typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
             hfloat v;
 
             // Normals
-            hfloat nx;
-            hfloat ny;
-            hfloat nz;
+            //hfloat nx;
+            //hfloat ny;
+            SignedCompressedVec4 normals; // w value can be ignored
 
-            ushort always_511;
-            uint always_ff_2<format=hex>;
+            //hfloat nz;
 
-            // Bone indices
-            ubyte bone_0; // Usually: [3, 2, 1, 0]
-            ubyte bone_1;
-            ubyte bone_2;
-            ubyte bone_3;
+            //ushort always_511;
+            //uint always_ff_2<format=hex>;
+
+            SignedCompressedVec4 tangents;
+            UnsignedCompressedVec4 weights; // Note: Actual w value appears to be derived as (1.0 - (x + y + z))
+
+            // Bone indices (default: [3, 2, 1, 0])
+            ubyte bone_0; // w 
+            ubyte bone_1; // z
+            ubyte bone_2; // y
+            ubyte bone_3; // x
         }
         else
         {
@@ -326,7 +382,8 @@ string vertex_to_string(Vertex& v)
     }
     else
     {
-        SPrintf(s, "v = (%.3f, %.3f, %.3f)", v.x, v.y, v.z);
+        //SPrintf(s, "v = (%.3f, %.3f, %.3f)", v.x, v.y, v.z);
+        SPrintf(s, "v = (%.3f, %.3f, %.3f), b = (%d, %d, %d, %d)", v.x, v.y, v.z, v.bone_0, v.bone_1, v.bone_2, v.bone_3);
     }
     
     return s;
