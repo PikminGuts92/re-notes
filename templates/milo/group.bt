@@ -19,7 +19,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 4 (Amp), 7 (AntiGrav/KRPAI/GH1), 11 (GH2 4-song), 12 (GH2/GH2 360), 13 (RB1), 14 (TBRB/GDRB/RB3)
+    int version; // 4 (Amp), 7 (AntiGrav/KRPAI/GH1), 11 (GH2 4-song), 12 (GH2/GH2 360), 13 (RB1), 14 (TBRB/GDRB/RB3), 16 (DC2)
 
     if (version > 7)
     {
@@ -32,11 +32,12 @@ typedef struct (SystemInfo& info, Bool super)
     
     if (version > 10)
     {
-        // Basically drawables again
+        // (Basically drawables again)
+        // Objects in the group, in order of drawing and polling
         int objects_count;
         if (objects_count > 0) NumString objects[objects_count]<optimize=false>; // Object
 
-        NumString environ; // Environ
+        if (version < 16) NumString environ; // Environ
 
         if (version < 13)
         {
@@ -48,7 +49,7 @@ typedef struct (SystemInfo& info, Bool super)
         }
     }
 
-    if (version > 11)
+    if (version > 11 && version < 16)
     {
         // 108 objects
         // 11c environ

@@ -30,32 +30,13 @@ typedef struct
 
     int points_count;
     if (points_count > 0) CharHairPointTBRB points[points_count]<optimize=false>;
-    
-    /*
-        Defaults:
-          [ 0] = 1.0 
-          [ 1] =
-          [ 2] =
-          [ 3] =
-          [ 4] = 1.0
-          [ 5] =
-          [ 6] =
-          [ 7] =
-          [ 8] = 1.0
-          [ 9] = 1.0 RootMat?
-          [10] =
-          [11] =
-          [12] =
-          [13] = 1.0
-          [14] =
-          [15] =
-          [16] =
-          [17] = 1.0
-        
-        * The rest are zeros
-    */
-    float unknown_3[18];
-    int unknown_int; // 1, 65, 68, 76, 129, 141, 193
+
+    // Contains rotation + scale data
+    // Note: Default value is just identity matrix
+    Matrix3 mat_1; // ??? 0x20
+    Matrix3 mat_2; // root_mat 0x50
+
+    int unknown_int; // 0, 1, 65, 68, 76, 129, 141, 193
 } CharHairStrandTBRB;
 
 typedef enum
@@ -102,7 +83,7 @@ typedef struct
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 2 (GH2/GH2 360), 11 (TBRB)
+    int version; // 2 (GH2/GH2 360), 11 (TBRB/DC2)
     read_metadata(info, super);
 
     float stiffness; // stiffness of each strand

@@ -17,7 +17,7 @@
 
 typedef struct (SystemInfo& info, Bool super, Bool inlined, Bool is_entry)
 {
-    int version; // 16 (GH2 360), 24 (TBRB), 25 (GDRB)
+    int version; // 16 (GH2 360), 24 (TBRB/DC2), 25 (GDRB)
     ObjectDir obj_dir(info, True, inlined);
 
     // Only written when this.data_dir == this
