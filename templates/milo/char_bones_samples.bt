@@ -492,8 +492,9 @@ typedef struct (SystemInfo& info, Bool super, int fake_version)
 
     if (fake_version == -1)
     {
-        // Always same version of parent char clip samples?
-        int version; // 16 (TBRB/GDRB)
+        // Always same version of parent CharClipSamples?
+        // Except in DC because it doesn't use CharClipSamples
+        int version; // 16 (TBRB/GDRB/DC2)
     }
     else
     {

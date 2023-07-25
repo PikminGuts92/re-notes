@@ -16,7 +16,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 2 (TBRB), 4 (GDRB)
+    int version; // 2 (TBRB/DC2), 4 (GDRB)
     read_metadata(info, super);
 
     uint clips_count;

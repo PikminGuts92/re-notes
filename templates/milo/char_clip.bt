@@ -140,7 +140,7 @@ typedef struct
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 5 (GH2/GH2 360), 12 (TBRB/GDRB), 19 (DC1)
+    int version; // 5 (GH2/GH2 360), 12 (TBRB/GDRB), 19 (DC1), 20 (DC2)
     read_metadata(info, super);
 
     // Note: Seems that DC1 switched to using beat time
@@ -169,6 +169,7 @@ typedef struct (SystemInfo& info, Bool super)
         CharBonesSamples full(info, False, -1);
         CharBonesSamples one(info, False, -1);
 
+        // TODO: Figure out rest of data for DC clips
         return;
     }
 
