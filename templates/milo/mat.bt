@@ -114,7 +114,20 @@ typedef struct
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 8 (Amp Demo), 9 (Amp), 15 (AntiGrav), 21 (KRPAI/GH1), 25 (GH2 4-song) 27 (GH2), 28 (GH2 360), 41 (RB1), 47 (RB2), 55 (TBRB), 56 (GDRB), 68 (RB3)
+    //  8 (Amp Demo)
+    //  9 (Amp)
+    // 15 (AntiGrav)
+    // 21 (KRPAI/GH1)
+    // 25 (GH2 4-song)
+    // 27 (GH2)
+    // 28 (GH2 360)
+    // 41 (RB1)
+    // 47 (RB2)
+    // 55 (TBRB)
+    // 56 (GDRB)
+    // 68 (RB3)
+    // 70 (DC2)
+    int version;
 
     // Amp/GH1 mats can linked to many textures
     if (version <= 9)
@@ -129,6 +142,8 @@ typedef struct (SystemInfo& info, Bool super)
     }
     else
     {
+        if (version >= 70) uint always_5; // No idea
+
         read_metadata(info, super);
     }
 
@@ -190,6 +205,15 @@ typedef struct (SystemInfo& info, Bool super)
     Bool intensify;      // Double the intensity of base map - Always false
     Bool cull;           // Cull backface polygons - Always true
 
+    if (version >= 70)
+    {
+        // Not sure of order or placement...
+        // "performance" indent
+        Bool recv_proj_lights;    // Check this option to allow the material to receive projected lighting
+        Bool recv_point_cube_tex; // Check this option to allow the material to receive projected cube maps from a point light
+        Bool ps3_force_trilinear; // Force trilinear filtering of diffuse map (PS3 only)
+    }
+
     float emissive_multiplier; // Multiplier to apply to emission
     Color specular_rgb;        // Color to use; multiplied by specular texture RGB if present
     float specular_power;      // Power to use; multiplied by specular texture Alpha if present - 10.0-50.0 not uncommon
@@ -222,7 +246,7 @@ typedef struct (SystemInfo& info, Bool super)
             PERPIXEL_ENUM per_pixel_lit; // Per-pixel lighting mode for this material
     }
 
-    // TODO: Reverse RB3 mat    
+    // TODO: Reverse RB3/DC2 mat    
     if (version >= 68)
     {
         return;
