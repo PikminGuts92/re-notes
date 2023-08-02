@@ -1,0 +1,79 @@
+// Originally detailed by AerialX on SH: https://rockband.scorehero.com/forum/viewtopic.php?t=28672&start=15#482992
+
+LittleEndian();
+
+const uint RBA_FILE_COUNT = 7;
+
+typedef struct
+{
+    ubyte data[20]<format=hex>;
+} SHA1Hash;
+
+typedef struct (string name, uint size)
+{
+    local string name = name;
+    local uint size = size;
+
+    byte data[size];
+} FileData<read=Str("%s (%d bytes)", this.name, this.size)>;
+
+typedef struct
+{
+    char magic[4]; // RBSF
+    uint version;  // 3 = RBN v1 (RB2), 4 = RBN v2 (RB3)
+
+    uint file_offsets[RBA_FILE_COUNT];
+    uint file_sizes[RBA_FILE_COUNT];
+    SHA1Hash file_hashes[RBA_FILE_COUNT];
+    SHA1Hash header_hash;
+
+    struct StringData
+    {
+        ushort unknown; // Always 2
+        ushort data_size;
+        ubyte data[data_size];
+    } unknown_string_data;
+
+    local uint i;
+    local uint file_offset;
+    local uint file_size;
+    local string file_name;
+
+    for (i = 0; i < RBA_FILE_COUNT; i++)
+    {
+        file_offset = file_offsets[i];
+        file_size = file_sizes[i];
+
+        if (file_offset == 0 || file_size == 0) continue;
+
+        switch (i)
+        {
+            case 0:
+                file_name = "songs.dta";
+                break;
+            case 1:
+                file_name = "song.mid";
+                break;
+            case 2:
+                file_name = "song.ogg";
+                break;
+            case 3:
+                file_name = "song.milo";
+                break;
+            case 4:
+                file_name = "album_art.bmp";
+                break;
+            case 5:
+                file_name = "weights.bin";
+                break;
+            case 6:
+                file_name = "backend.dta";
+                break;
+        }
+
+        FSeek(file_offset);
+        FileData file(file_name, file_size);
+    }
+} RBSF;
+
+RBSF file;
