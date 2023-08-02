@@ -55,7 +55,7 @@ typedef struct
                 file_name = "song.mid";
                 break;
             case 2:
-                file_name = "song.ogg";
+                file_name = "song.mogg";
                 break;
             case 3:
                 file_name = "song.milo";
