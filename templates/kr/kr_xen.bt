@@ -1,18 +1,29 @@
 // Archive format for Karaoke Revolution on 360 (American Idol Encore)
+// Minimal size = 8192
 
 BigEndian();
+
+/*
+Tags:
+ Name  | Prefix | Type
+  TEXR |    t_  |  Texture
+  PSHR |   ps_  |  Pixel Shader?
+  MTRL |  mat_  |  Material
+  VSHR |   vs_  |  Vertex Shader?
+  ACTR |    o_  |  Actor
+*/
 
 struct XenFile;
 
 typedef struct (uint str_table_start) // TODO: Pass in XenFile& instead
 {
     uint num_0; // Block offset
-    uint num_1;
+    uint num_1<format=hex>; // Some hash?
     uint num_2; // File size 1
     uint num_3; // File name string index
 
-    uint num_4; // 0, 1
-    uint num_5; // 0, 4
+    uint num_4; // 0 = sys/dummy, 1 = file
+    uint num_5; // Tag index 0, 4, 8
     uint num_6; // File size 2
     uint num_7<format=hex>; // Sometimes 0?
 
@@ -26,26 +37,33 @@ typedef struct XenFile
 
     uint counts[13];
 
-    //  0 - 0, 22
+    //  0 - Some count? 0, 4, 22
     //  1 - File entry count 
     //  2 - File entry chunk index
     //  * Each entry is 32 bytes in file entry chunk *
-
     
+    // TagTable.pak.sys (Not always present)
     //  3 - Unknown chunk index
+    //  4 - Tag count (4 chars per tag) 3, 5
 
-    // TagTable.pak.sys
-    //  4 - Unknown chunk index
+    //  5 - ??? 0
 
-    //  6 - Chunk index to last piece, not always preset
-    //  7 - Always 1 (Chunk index to first piece?)
+    // Updated:
+    //  6 - Chunk index of file info?
+    //    File structure: int[] { 0, total_chunk_count, 1 }
+    //    ** Little endian for some reason **
+    //    Not in file entries either
+
+    //  6 - Chunk index to last file entry, not always preset
+    //  7 - Always 1 (Chunk index to first file?)
 
     // FilenameTable.pak.sys
     //  8 - String table chunk index
     //  9 - String table size
-    // 10 - Size of data in next chunk. Definitely not chunk index...
+    // 10 - File entries size
 
-    // 12 - Size of chunk? (2933 index)
+    // 11 - ??? 0
+    // 12 - Size of chunk? (2933 index) 140
 
     // Index order: 5 or 11, 7, 4, 3, 8 (str table), 2, 6
 
