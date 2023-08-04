@@ -45,7 +45,7 @@ typedef struct (uint str_table_start, uint tag_table_start) // TODO: Pass in Xen
 typedef struct XenFile
 {
     uint unknown<format=hex>; // Checksum maybe?
-    uint chunk_size; // Always 4096
+    uint chunk_size; // 32 (GC), 2048 (GC), 4096 (X360)
 
     uint counts[13];
 
@@ -83,20 +83,20 @@ typedef struct XenFile
     // Index order: 5 or 11, 7, 4, 3, 8 (str table), 2, 6
 
     // String table
-    local uint str_table_start = counts[8] * 4096;
+    local uint str_table_start = counts[8] * chunk_size;
     FSeek(str_table_start);
     byte string_table[counts[9]];
 
     local uint file_count = counts[1];
 
-    local uint tag_table_start = counts[3] * 4096;
+    local uint tag_table_start = counts[3] * chunk_size;
 
     local uint indices[5] = { 7, 4, 3, 2, 6 };
     local uint i;
 
     for (i = 0; i < 5; i++)
     {
-        FSeek(counts[indices[i]] * 4096);
+        FSeek(counts[indices[i]] * chunk_size);
 
         if (i == 3)
         {
@@ -115,13 +115,13 @@ typedef struct XenFile
 
         struct Chunk
         {
-            byte data[4096];
+            byte data[chunk_size];
         } chunk;
     }
 
     // Read files
 
-    FSeek(4096);
+    FSeek(chunk_size);
     struct Files
     {
         local uint file_offset;
@@ -129,7 +129,7 @@ typedef struct XenFile
 
         for (i = 0; i < file_count; i++)
         {
-            file_offset = file_entries.entries[i].block_offset * 4096;
+            file_offset = file_entries.entries[i].block_offset * chunk_size;
             file_size = file_entries.entries[i].file_size_1;
 
             FSeek(file_offset);
