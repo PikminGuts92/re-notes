@@ -1,0 +1,24 @@
+FSeek(4096);
+
+const uint BUFFER_SIZE = 8;
+
+local byte buffer[BUFFER_SIZE];
+local int i;
+local byte temp;
+
+while (!FEof())
+{
+    ReadBytes(buffer, FTell(), BUFFER_SIZE);
+
+    // Swap bytes
+    for (i = 0; i < BUFFER_SIZE; i += 2)
+    {
+        temp = buffer[i];
+
+        buffer[i] = buffer[i + 1];
+        buffer[i + 1] = temp;
+    }
+
+    WriteBytes(buffer, FTell(), BUFFER_SIZE);
+    FSkip(BUFFER_SIZE);
+}
