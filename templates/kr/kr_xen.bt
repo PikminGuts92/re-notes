@@ -5,30 +5,42 @@ BigEndian();
 
 /*
 Tags:
- Name  | Prefix | Type
-  TEXR |    t_  |  Texture
-  PSHR |   ps_  |  Pixel Shader?
-  MTRL |  mat_  |  Material
-  VSHR |   vs_  |  Vertex Shader?
-  ACTR |    o_  |  Actor
+ Name  | Prefix | Extension | Type
+  _STR |        |  .str     |  Stream
+  @STR |    __  |   __      |  Stream Index?
+  ACTR |    o_  |           |  Actor
+  ASTR |        |  .wav     |  Audio Stream Header?
+  MTRL |  mat_  |           |  Material
+  PSHR |   ps_  |           |  Pixel Shader?
+  SAMP
+  SBNK
+  SPAT
+  TEXR |    t_  |           |  Texture
+  VSHR |   vs_  |           |  Vertex Shader?
 */
 
 struct XenFile;
 
-typedef struct (uint str_table_start) // TODO: Pass in XenFile& instead
+typedef struct (uint str_table_start, uint tag_table_start) // TODO: Pass in XenFile& instead
 {
-    uint num_0; // Block offset
-    uint num_1<format=hex>; // Some hash?
-    uint num_2; // File size 1
-    uint num_3; // File name string index
+    uint block_offset; // Multiply by block size to get index
+    uint hash<format=hex>;
+    uint file_size_1;
+    uint file_name_str_index;
 
-    uint num_4; // 0 = sys/dummy, 1 = file
-    uint num_5; // Tag index 0, 4, 8
-    uint num_6; // File size 2
-    uint num_7<format=hex>; // Sometimes 0?
+    uint entry_type; // 0 = sys/dummy, 1 = file
+    uint tag_index;
+    uint file_size_2;
+    uint unknown<format=hex>; // Sometimes 0?
 
-    local string file_name = ReadString(str_table_start + num_3);
-} FileEntry<read=Str("%s", this.file_name)>;
+    local string file_name = ReadString(str_table_start + file_name_str_index);
+    local string tag = "SYSTEM";
+
+    if (entry_type > 0)
+    {
+        tag = ReadString(tag_table_start + tag_index, 4);
+    }
+} FileEntry<read=Str("%s (%s)", this.file_name, this.tag)>;
 
 typedef struct XenFile
 {
@@ -38,6 +50,9 @@ typedef struct XenFile
     uint counts[13];
 
     //  0 - Some count? 0, 4, 22
+    //    0 - Regular files?
+    //    4 -
+    //   22 -
     //  1 - File entry count 
     //  2 - File entry chunk index
     //  * Each entry is 32 bytes in file entry chunk *
@@ -74,6 +89,8 @@ typedef struct XenFile
 
     local uint file_count = counts[1];
 
+    local uint tag_table_start = counts[3] * 4096;
+
     local uint indices[5] = { 7, 4, 3, 2, 6 };
     local uint i;
 
@@ -90,7 +107,7 @@ typedef struct XenFile
 
                 for (j = 0; j < file_count; j++)
                 {
-                    FileEntry entries(str_table_start);
+                    FileEntry entries(str_table_start, tag_table_start);
                 }
             } file_entries;
             continue;
@@ -112,8 +129,8 @@ typedef struct XenFile
 
         for (i = 0; i < file_count; i++)
         {
-            file_offset = file_entries.entries[i].num_0 * 4096;
-            file_size = file_entries.entries[i].num_2;
+            file_offset = file_entries.entries[i].block_offset * 4096;
+            file_size = file_entries.entries[i].file_size_1;
 
             FSeek(file_offset);
 
@@ -123,9 +140,10 @@ typedef struct XenFile
                 local uint offset = file_offset;
                 local uint size = file_size;
                 local string name = file_entries.entries[i].file_name;
+                local string tag = file_entries.entries[i].tag;
 
                 byte data[size];
-            } file<read=Str("%s", this.name)>;
+            } file<read=Str("%s (%s)", this.name, this.tag)>;
         }
     } files;
 
