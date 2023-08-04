@@ -19,6 +19,8 @@ Tags:
   VSHR |   vs_  |           |  Vertex Shader?
 */
 
+local string root_extension = "";
+
 struct XenFile;
 
 typedef struct (uint str_table_start, uint tag_table_start) // TODO: Pass in XenFile& instead
@@ -42,8 +44,13 @@ typedef struct (uint str_table_start, uint tag_table_start) // TODO: Pass in Xen
     }
 } FileEntry<read=Str("%s (%s)", this.file_name, this.tag)>;
 
-typedef struct XenFile
+typedef struct (string name, string tag)
 {
+    local uint start_offset = FTell();
+
+    local string name = name;
+    local string tag = tag;
+
     uint unknown<format=hex>; // Checksum maybe?
     uint chunk_size; // 32 (GC), 2048 (GC), 4096 (X360)
 
@@ -83,20 +90,20 @@ typedef struct XenFile
     // Index order: 5 or 11, 7, 4, 3, 8 (str table), 2, 6
 
     // String table
-    local uint str_table_start = counts[8] * chunk_size;
+    local uint str_table_start = start_offset + (counts[8] * chunk_size);
     FSeek(str_table_start);
     byte string_table[counts[9]];
 
     local uint file_count = counts[1];
 
-    local uint tag_table_start = counts[3] * chunk_size;
+    local uint tag_table_start = start_offset + (counts[3] * chunk_size);
 
     local uint indices[5] = { 7, 4, 3, 2, 6 };
     local uint i;
 
     for (i = 0; i < 5; i++)
     {
-        FSeek(counts[indices[i]] * chunk_size);
+        FSeek(start_offset + (counts[indices[i]] * chunk_size));
 
         if (i == 3)
         {
@@ -121,33 +128,45 @@ typedef struct XenFile
 
     // Read files
 
-    FSeek(chunk_size);
+    FSeek(start_offset + chunk_size);
     struct Files
     {
         local uint file_offset;
         local uint file_size;
+        local string file_name;
+        local string file_tag;
 
         for (i = 0; i < file_count; i++)
         {
-            file_offset = file_entries.entries[i].block_offset * chunk_size;
+            file_offset = start_offset + (file_entries.entries[i].block_offset * chunk_size);
             file_size = file_entries.entries[i].file_size_1;
+            file_name = file_entries.entries[i].file_name;
+            file_tag = file_entries.entries[i].tag;
 
             FSeek(file_offset);
 
+            if (Strstr(file_name, root_extension) > 0)
+            {
+                // Is nested scene file
+                XenFile xen_file(file_name, file_tag);
+                continue;
+            }
+
             struct File
             {
-                local uint index = i;
                 local uint offset = file_offset;
                 local uint size = file_size;
-                local string name = file_entries.entries[i].file_name;
-                local string tag = file_entries.entries[i].tag;
+                local string name = file_name;
+                local string tag = file_tag;
 
                 byte data[size];
             } file<read=Str("%s (%s)", this.name, this.tag)>;
         }
     } files;
 
-} XenFile;
+} XenFile<read=Str("%s (%s)", this.name, this.tag)>;
 
+local string root_file_name = FileNameGetBase(GetFileName());
+root_extension = FileNameGetExtension(root_file_name);
 
-XenFile file;
+XenFile file(root_file_name, "SYSTEM");
