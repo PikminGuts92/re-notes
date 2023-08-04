@@ -1,0 +1,80 @@
+BigEndian();
+
+typedef struct (ubyte mip, ushort w, ushort h, uint size)
+{
+    local ubyte mip_level = mip;
+    local ushort width = w;
+    local ushort height = h;
+
+    byte data[size];
+} Texture<read=Str("mip #%d: %dx%d", this.mip_level, this.width, this.height)>;
+
+typedef enum <ushort>
+{
+    DXT1 = 18, // 4bpp
+    DXT5 = 20, // 8bpp
+    RGBA = 55  // 32bpp
+} KrTexEncoding;
+
+typedef struct
+{
+    // Read header data
+    ubyte zero_data_1[12];
+    ushort unknown_1; // 0, 1, 2, 4
+    ushort tex_offset; // Always 4096? or file size...
+
+    ubyte zero_data_2[16];
+
+    ushort width;  // 512, 1024
+    ushort height; // 256, 512
+    KrTexEncoding encoding; // 18 = 4bpp, 20 = 8bpp, 55 = 32bpp
+
+    ubyte zero_data_3[6];
+    ubyte tex_count; // Base tex + mip maps 1, 5
+    ubyte unknown_bool;   // Always 1
+
+    ubyte zero_data_4[10];
+    int unknown_whatever<format=hex>;
+
+    ubyte zero_data_5[24];
+    int unknown_number; // Original size with mip maps 8bpp
+    int total_size;
+
+    // Early exit if no texture data
+    if (width == 0 || height == 0) return;
+
+    // Read pixel data
+    FSeek(4096);
+
+    local int bpp;
+    switch (encoding)
+    {
+        case DXT1:
+            bpp = 4;
+            break;
+        case DXT5:
+            bpp = 8;
+            break;
+         case RGBA:
+            bpp = 32;
+            break;
+        // TODO: Log warning for unknown encoding
+    }
+
+    local ubyte i = 0;
+    local ushort w = width;
+    local ushort h = height;
+
+    local uint data_size;
+    while (i < tex_count)
+    {
+        data_size = ((uint)w * (uint)h * (uint)bpp) / 8;
+        Texture textures(i, w, h, data_size);
+
+        w >>= 1;
+        h >>= 1;
+        i++;
+    }
+} KrTexture;
+
+KrTexture file;
