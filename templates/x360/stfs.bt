@@ -1,0 +1,197 @@
+// Resource: https://free60.org/System-Software/Formats/STFS
+
+typedef enum <int>
+{
+    SavedGame          = 0x0000001,
+    MarketplaceContent = 0x0000002,
+    Publisher          = 0x0000003,
+    Xbox360Title       = 0x0001000,
+    IPTVPauseBuffer    = 0x0002000,
+    InstalledGame      = 0x0004000
+    // TODO: Add remaining
+} CONTENT_TYPE_ENUM;
+
+typedef struct
+{
+    ubyte raw[3];
+    local uint value;
+
+    if (IsBigEndian())
+    {
+        value = ((uint)raw[0] << 16) | ((uint)raw[1] << 8) | (uint)raw[2];
+    }
+    else
+    {
+        value = ((uint)raw[2] << 16) | ((uint)raw[1] << 8) | (uint)raw[0];
+    }
+} UInt24<read=Str("%d", this.value)>;
+
+typedef struct
+{
+    wchar_t value[0x40];
+} LocalString<read=Str("%s", this.value)>;
+
+typedef struct
+{
+    ubyte value;
+} TransferFlags<read=read_transfer_flags>;
+
+string read_transfer_flags(TransferFlags& flags)
+{
+    local string s = "";
+
+    if ((flags.value & 0b00000100) != 0) s += "| Deep Link Supported ";
+    if ((flags.value & 0b00001000) != 0) s += "| Disable Network Storage ";
+    if ((flags.value & 0b00010000) != 0) s += "| Kinect Enabled ";
+    if ((flags.value & 0b00100000) != 0) s += "| Move-Only Transfer ";
+    if ((flags.value & 0b01000000) != 0) s += "| Device ID Transfer ";
+    if ((flags.value & 0b10000000) != 0) s += "| Profile ID Transfer ";
+
+    return s;
+}
+
+typedef struct (uint data_size, uint total_size)
+{
+    local uint local_data_size = data_size;
+    local uint padded_size = total_size - data_size;
+
+    ubyte data[data_size];
+    ubyte padding[padded_size];
+} PaddedData<read=Str("(Size: %d)", this.local_data_size)>;
+
+typedef struct
+{
+    BigEndian();
+
+    struct Header
+    {
+        char magic[4]; // "PIRS", "LIVE", or "CON "
+
+        struct Signatures
+        {
+            switch (magic)
+            {
+                case "LIVE":
+                case "PIRS":
+                    ubyte package_signature[0x100];
+                    ubyte padding[0x128];
+                    break;
+                case "CON ":
+                    ubyte public_key_cert_size[0x2];
+                    ubyte cert_owner_console_id[0x5];
+                    ubyte cert_owner_console_part_number[0x14];
+
+                    enum <ubyte> CONSOLE_TYPE_ENUM
+                    {
+                        Devkit = 1,
+                        Retail = 2
+                    } cert_owner_console_type;
+
+                    char cert_date_of_generation[0x8];
+                    ubyte public_exponent[0x4];
+                    ubyte public_modulus[0x80];
+                    ubyte cert_signature[0x100];
+                    ubyte signature[0x80];
+                    break;
+                default:
+                    Printf("Warning: Unknown magic of %s\n", magic);
+                    return;
+            }
+        } signatures;
+    } header;
+
+    struct Metadata
+    {
+        struct LicenseEntries
+        {
+            int64 license_id; // XUID/PUID/Console ID
+            int license_bits;
+            int license_flags;
+        } license_entries[16];
+
+        ubyte header_hash_sha1[0x14];
+        int header_size;
+        CONTENT_TYPE_ENUM content_type;
+        int metadata_version;
+
+        int64 content_size;
+        int media_id<format=hex>;
+
+        int version;
+        int base_version;
+
+        int title_id<format=hex>;
+        enum <ubyte> PLATFORM_ENUM
+        {
+            Xbox360 = 2,
+            PC = 4
+        } platform;
+
+        ubyte executable_type;
+        ubyte disc_number;
+        ubyte disc_in_set;
+
+        int game_save_id;
+        ubyte console_id[5];
+        ubyte profile_id[8];
+
+        struct VolumeDescriptor
+        {
+            ubyte volume_descriptor_size;
+            ubyte reserved;
+            ubyte block_separation;
+
+            LittleEndian(); // Why...?
+            ushort file_table_block_count;
+            UInt24 file_table_block_number;
+
+            BigEndian();
+            ubyte top_hash_table_hash[0x14];
+            uint total_allocated_block_count;
+            uint total_unallocated_block_count;
+        } volume_descriptor;
+
+        uint data_file_count;
+        uint64 data_file_combined_size;
+
+        enum <uint> VOLUME_DESCRIPTOR_ENUM
+        {
+            STFS = 0,
+            SVOD = 1
+        } descriptor_type;
+
+        uint reserved;
+
+        if (metadata_version == 2)
+        {
+            ubyte series_id[0x10];
+            ubyte season_id[0x10];
+
+            short season_number;
+            short episode_number;
+
+            ubyte padding[0x28];
+        }
+        else
+        {
+            ubyte padding[0x4C];
+        }
+
+        ubyte device_id[0x14];
+
+        LocalString display_name[0x12];
+        LocalString display_description[0x12];
+        LocalString publisher_name;
+        LocalString title_name;
+
+        TransferFlags transfer_flags;
+
+        uint thumbnail_image_size;
+        uint title_thumbnail_image_size;
+
+        PaddedData thumbnail_image(thumbnail_image_size, 0x4000);
+        PaddedData title_thumbnail_image(title_thumbnail_image_size, 0x4000);
+    } metadata;
+} STFSPackage;
+
+STFSPackage file;

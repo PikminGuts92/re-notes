@@ -24,4 +24,6 @@ This is just a place for me to dump my reverse engineering notes, templates, sni
   - [Prince of Persia (PC)](templates/pop/)
   - [PopStar Guitar (PS2)](templates/popstar_guitar/)
   - [Rock Revolution](templates/rock_rev/)
+- Platforms
+  - [Xbox 360](templates/x360/)
 - [Uncategorized](templates/)
