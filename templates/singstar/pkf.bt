@@ -1,0 +1,81 @@
+// Archive format for PS3 versions of SingStar. Should work with both .pkf and .themes (not .pkd since that's encrypted).
+
+BigEndian();
+
+typedef struct
+{
+    uint hash<format=hex>;
+    string file_path;
+    uint offset;
+    uint size;
+} FileOffsetEntry<read=Str("%s", this.file_path)>;
+
+typedef struct
+{
+    char magic[4];  // ZLIB
+    uint unknown; // Always 1
+    uint inflated_size;
+} ZlibInfo<read=Str("inflated_size: %d, unknown: %d", this.inflated_size, this.unknown)>;
+
+
+typedef struct (string path, uint offset, uint size)
+{
+    local byte is_compressed = (ReadString(FTell(), 4) == "ZLIB");
+    local uint actual_size = is_compressed ? (size - 12) : size;
+    local string read_str;
+
+    if (is_compressed)
+    {
+        read_str = Str("%s (compressed)", path);
+
+        ZlibInfo zlib_info;
+        byte data[actual_size];
+    }
+    else
+    {
+        read_str = path;
+
+        byte data[actual_size];
+    }
+} FileEntry<read=read_str>;
+
+typedef struct
+{
+    char magic[8]; // "PACKAGE "
+
+    short unknown_1; // 256
+    int unknown_2;   // 7
+
+    int file_start_offset;
+    local int file_start_offset_abs = FTell() + file_start_offset;
+    local uint file_count = 0;
+
+    struct FileOffsets
+    {
+        while (FTell() < file_start_offset_abs)
+        {
+            FileOffsetEntry file_offset_entries;
+            file_count += 1;
+        }
+    } file_offsets<read=Str("(%d files)", parentof(this).file_count)>;
+
+    struct Files
+    {
+        local string file_path;
+        local uint file_offset;
+        local uint file_size;
+
+        local int i;
+        for (i = 0; i < file_count; i++)
+        {
+            file_path = parentof(this).file_offsets.file_offset_entries[i].file_path;
+            file_offset = parentof(this).file_offsets.file_offset_entries[i].offset;
+            file_size = parentof(this).file_offsets.file_offset_entries[i].size;
+
+            FSeek(file_offset);
+            FileEntry file_entries(file_path, file_offset, file_size);
+        }
+    } files<read=Str("(%d files)", parentof(this).file_count)>;
+} PkfFile;
+
+PkfFile file;
