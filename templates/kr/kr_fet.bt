@@ -8,7 +8,7 @@ typedef enum <ubyte>
     Integer8 = 1,
     Integer16 = 3,
     Integer32 = 4,
-    UInteger32 = 5,
+    UInteger32 = 5, // Used as hash key?
     Float = 6,
     String = 7 // Null-terminated
 } KR_NODE_TYPE;
@@ -24,6 +24,12 @@ typedef struct
             break;
         case 1:
             ubyte value;
+
+            /*
+                0 = null/terminate
+                1 = value pair?
+            */
+
             //local uint count = value;
             
             //KrNode children[count]<optimize=false>;
@@ -68,7 +74,7 @@ string read_kr_node(KrNode& node)
             SPrintf(s, "%d (Int32)", node.value);
             break;
         case 5:
-            SPrintf(s, "%d (UInt32)", node.value);
+            SPrintf(s, "%X (UInt32)", node.value);
             break;
         case 6:
             SPrintf(s, "%f (Float)", node.value);
