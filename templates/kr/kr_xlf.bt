@@ -29,7 +29,7 @@ typedef struct
 {
     char magic[4]; // "PLF "
 
-    uint always_0;
+    uint unknown; // 0 (usually, song?), 1 (judge comments)
     uint pose_count;
     
     uint always_16; // Probably start of entries (redundant)
