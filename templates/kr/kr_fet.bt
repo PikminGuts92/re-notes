@@ -13,6 +13,7 @@ typedef enum <ubyte>
     String = 7 // Null-terminated
 } KR_NODE_TYPE;
 
+// fGetNextToken__17CFWorldFileParserPci
 typedef struct
 {
     KR_NODE_TYPE type;
@@ -87,14 +88,222 @@ string read_kr_node(KrNode& node)
     return s;
 }
 
+// CFMode_World::ParseWorldBlock
+typedef struct
+{
+    // Bitfields?
+    KrNode num_1_0; // Int (1)
+    KrNode num_1_1; // Int (1)
+
+    KrNode num_2_0; // Int (0)
+    KrNode num_2_1; // Int (0)
+    KrNode num_2_2; // Int (0)
+    KrNode num_2_3; // Int (0)
+
+    // Skipped tokens
+    KrNode skip_1;
+    KrNode skip_2;
+
+    KrNode num_3_0; // Int (3, 4)
+    KrNode num_3_1; // Int (100, 4096)
+    KrNode num_3_2; // Int (100, 4096)
+    KrNode num_3_3; // Int (0)
+    KrNode num_3_4; // Int (0)
+    KrNode num_3_5; // Int (0)
+
+    KrNode num_4_0; // Float (100)
+
+    KrNode num_5_0; // Int (0)
+    KrNode num_5_1; // Int (0)
+    KrNode num_5_2; // Int (3)
+
+    // if (num_5_2 != 0) CreateLightingRig__12CFMode_WorldiUc
+
+    KrNode some_token; // String (empty)
+
+    KrNode num_6_0; // Do something if not 0
+
+    KrNode some_count; // Int
+
+    KrNode num_7_0; // Float
+    KrNode num_7_1; // Float
+    KrNode num_7_2; // Float
+    KrNode num_7_3; // Float
+    KrNode num_7_4; // Float
+    KrNode num_7_5; // Float
+
+    KrNode num_8_0; // Do something if not 0
+} WorldBlock;
+
+// fGetNextEntityClass__17CFWorldFileParseri
+typedef struct
+{
+    KrNode class; // String (Credits World Sector, null)
+
+    if (class.value != "<noentclass>")
+    {
+        KrNode num_1; // Int (1, 95)
+                
+        KrNode key_1; // Hex (Always 0?)
+        KrNode key_2; // Hex
+
+        // Tokens are skipped if entity factory not resolved
+        KrNode token_count; // Int
+        KrNode skipped_tokens[token_count.value]<optimize=false>;
+    }
+} EntityClass<read=this.class.value>;
+
+struct NodeList;
+
+typedef struct (int input_count_1, int input_count_2)
+{
+    KrNode token_1;    // String
+
+    // Hmm... need fNodeTypeInfo from somewhere...
+
+    KrNode token_2; // String
+    // KrNode token_3; // String (peeked, not taken at this point)
+
+    EntityClass entity;
+
+    KrNode token_3; // String (null)
+
+    // Read children nodes
+    KrNode num_1; // Int
+    local int child_count = num_1.value;
+
+    if (num_1.value != 0)
+    {
+        child_count = input_count_2;
+
+        //KrNode num_2; // Int
+    }
+} Node;
+
+// ParseNodeList__12CFMode_WorldP11CFWorldNodeP13CFWorldSectorP15CFWorldNodeRoom
+typedef struct (int input_count_1, int input_count_2)
+{
+    KrNode node_count; // Int
+
+    local int i = 0;
+    while (i < node_count.value)
+    {
+        Node nodes(input_count_1, input_count_2);
+        i += 1;
+        break;
+    }
+} NodeList;
+
+// CFMode_World::ParseSectorBlock
+typedef struct
+{
+    KrNode unknown_str; // String (World)
+
+    EntityClass entity;
+
+    KrNode unknown_str_2; // String (null)
+
+    // Register new sector factory if not null?
+
+    KrNode num_1_0; // Int
+    KrNode num_1_1; // Int
+    KrNode num_1_2; // Int
+    KrNode num_1_3; // Int
+    KrNode num_1_4; // Int
+    KrNode num_1_5; // Int
+    KrNode num_1_6; // Int
+    KrNode num_1_7; // Int
+
+    KrNode num_2_0; // Float
+    KrNode num_2_1; // Float
+    KrNode num_2_2; // Float
+
+    KrNode num_3_0; // Int
+    KrNode num_3_1; // Int
+    KrNode num_3_2; // Int
+    KrNode num_3_3; // Int
+    KrNode num_3_4; // Int
+
+    KrNode num_4_0; // Int
+    KrNode num_4_1; // Int
+    KrNode num_4_2; // Int
+    KrNode num_4_3; // Int
+    KrNode num_4_4; // Int
+    KrNode num_4_5; // Int
+    KrNode num_4_6; // Int
+    KrNode num_4_7; // Int
+
+    KrNode num_5_0; // Int
+    KrNode num_5_1; // Int
+
+    if ((num_5_1.value & 1) != 0) KrNode num_5_2; // Hex
+
+    // if (unknown_str == "World") update fields...?
+
+    KrNode num_6_0; // Float
+    KrNode num_6_1; // Float
+    KrNode num_6_2; // Float
+    KrNode num_6_3; // Float
+    KrNode num_6_4; // Float
+    KrNode num_6_5; // Float
+
+    KrNode num_7_0; // Int
+    // if (num_7_0 != 0) read a bunch of stuff
+
+    // Parse node list?
+    KrNode num_8_0; // Int
+    if (num_8_0.value != 0)
+    {
+        // ParseNodeList__12CFMode_WorldP11CFWorldNodeP13CFWorldSectorP15CFWorldNodeRoom
+        NodeList node(0, 0);
+    }
+} SectorBlock;
+
 typedef struct
 {
     //KrNode node;
     //return;
 
-    while (!FEof())
+    /*while (!FEof())
     {
         KrNode node;
+    }*/
+
+/*
+    version (int8)
+        124 spongebob cftkk (GC)
+        149 krpaie
+    timestamp (string)
+    minor_version (int8)
+        2
+    unknown_number
+         1000
+        14000
+        95000
+
+    begin world blocks...
+*/
+
+    while (!FEof())
+    {
+        KrNode token;
+
+        // FETData...
+        if (token.type == String)
+        {
+            switch (token.value)
+            {
+                case "world":
+                    WorldBlock world;
+                    break;
+                case "sector":
+                    SectorBlock sector;
+                    //break;
+                    return;
+                case "end":
+                    return;
+            }
+        }
     }
 } KrFetFile;
 
