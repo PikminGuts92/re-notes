@@ -11,6 +11,7 @@ This is just a place for me to dump my reverse engineering notes, templates, sni
 
 # Templates
 - Engines
+  - [BlitzTech (Blitz Games)](templates/blitztech/)
   - [Forge (Harmonix)](templates/forge/)
   - [Milo (Harmonix)](templates/milo/)
 - Games
