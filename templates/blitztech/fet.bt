@@ -69,7 +69,7 @@ string read_token(FetToken& node)
             SPrintf(s, "%d (Int32)", node.value);
             break;
         case 5:
-            SPrintf(s, "%X (Hex)", node.value);
+            SPrintf(s, "%08X (Hex)", node.value);
             break;
         case 6:
             SPrintf(s, "%f (Float)", node.value);
@@ -83,7 +83,7 @@ string read_token(FetToken& node)
 }
 
 // CFMode_World::ParseWorldBlock
-typedef struct
+typedef struct (int version)
 {
     // Bitfields?
     FetToken num_1_0; // Int (1)
@@ -104,6 +104,7 @@ typedef struct
     FetToken num_3_3; // Int (0)
     FetToken num_3_4; // Int (0)
     FetToken num_3_5; // Int (0)
+    if (version >= 149) FetToken num_3_6; // Int (0)
 
     FetToken num_4_0; // Float (100)
 
@@ -442,12 +443,12 @@ typedef struct
     struct FetHeader
     {
         /* 0x84 */ FetToken version;
-        FetToken timestamp; // Max: 132 chars?
+        FetToken timestamp; // String - Max: 132 chars?
 
         if (version.value >= 0x7C) // 124
         {
-            FetToken minor_version;
-            if (minor_version.value >= 2) /* 0x310 */ FetToken unknown;
+            FetToken minor_version; // Int
+            if (minor_version.value >= 2 || version.value >= 149) /* 0x310 */ FetToken unknown; // Int
         }
     } header;
 
@@ -463,7 +464,7 @@ typedef struct
                 switch (token.value)
                 {
                     case "world":
-                        WorldBlock world;
+                        WorldBlock world((int)header.version.value);
                         break;
                     case "sector":
                         SectorBlock sector;
