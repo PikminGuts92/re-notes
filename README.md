@@ -16,7 +16,7 @@ This is just a place for me to dump my reverse engineering notes, templates, sni
   - [Milo (Harmonix)](templates/milo/)
 - Games
   - [BandFuse: Rock Legends](templates/bandfuse/)
-  - [Britney's Dance Beat (PS2)](templates/bnd/)
+  - [Britney's Dance Beat (PS2)](templates/bdb/)
   - [Dance Masters (Xbox 360)](templates/dance_masters)
   - [DJ Hero](templates/djh/)
   - [Karaoke Revolution (Xbox 360)](templates/kr/)
