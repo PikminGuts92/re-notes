@@ -1,7 +1,9 @@
 // Archive format for Karaoke Revolution on 360 (American Idol Encore)
 // Minimal size = 8192
 
+// Detect endianess...
 BigEndian();
+if (ReadInt(4) > 4096) LittleEndian();
 
 /*
 Tags:
@@ -52,7 +54,7 @@ typedef struct (string name, string tag)
     local string tag = tag;
 
     uint unknown<format=hex>; // Checksum maybe?
-    uint chunk_size; // 32 (GC), 2048 (GC), 4096 (X360)
+    uint chunk_size; // 16 (PC), 32 (GC), 2048 (GC), 4096 (X360)
 
     uint counts[13];
 
