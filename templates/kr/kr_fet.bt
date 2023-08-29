@@ -153,11 +153,148 @@ typedef struct
     }
 } EntityClass<read=this.class.value>;
 
+// ParseNode__11CFWorldNodeP12CFMode_World
+typedef struct
+{
+    KrNode type; // 1
+
+    if (type.value == 1)
+    {
+        // CFTransformU 4x4 floats
+        /*
+            0 0 0 1
+            0 0 0 1
+            1 1 1 1
+        */
+        KrNode trans[10]<optimize=false>; // Floats
+    }
+    else if (type.value == 2)
+    {
+        // CFSplineTransformP17CFWorldNodeSpline 10 floats?
+        Printf("TODO: WorldNodeSpline found\n");
+        KrNode unknown_token; // String
+        KrNode unknown_float; // Float
+    }
+
+    KrNode unknown; // Int
+    KrNode num_1[6]<optimize=false>; // Float
+    KrNode num_2[4]<optimize=false>; // Int
+    KrNode num_3; // Hex
+
+    KrNode num_4; // Int
+    KrNode num_5; // Float
+    KrNode num_6; // Int
+    KrNode num_7; // Int
+    KrNode num_8; // Hex
+
+    KrNode num_9[6]<optimize=false>; // Int
+
+    KrNode num_10; // Int
+    KrNode num_11; // Int
+
+    // Do something if either num_10 or num_11 values are not 0...
+    if (num_11.value != 0)
+    {
+        Printf("TODO: fParseActionList__17CFWorldFileParseri\n");
+    }
+
+    KrNode num_12; // Int
+    if (num_12.value != 0)
+    {
+        Printf("TODO: Parse num_12 part of WorldNode\n");
+    }
+} WorldNode;
+
+// ParseNode__19CFWorldNodeAdvancedP12CFMode_World
+typedef struct
+{
+    WorldNode base;
+
+    KrNode num_1; // Int
+    KrNode num_2; // Int
+    // if (num_1 != 0) set 0xb0 = num_2
+
+    KrNode num_3; // Int
+    KrNode num_4; // Int
+    // if (num_3 != 0) set 0xb1 = num_4
+
+    KrNode num_5; // Int
+    KrNode num_6; // Int
+    // if (num_5 != 0) set 0xb2 = num_6
+
+    KrNode num_7; // Int
+    KrNode num_8; // Int
+    // if (num_7 != 0) set 0xb3 = num_8
+
+    KrNode num_9;  // Hex
+    KrNode num_10; // Hex
+
+    KrNode num_11; // Int
+    KrNode num_12; // Float
+    /*
+        if (num_11 == 0) set 0xbc = 0.0
+        else set 0xbc = (num_12 * num_12)
+    */
+
+    EntityClass entity;
+    KrNode num_13; // Int
+} WorldNodeAdvanced;
+
+// ParseNode__21CFWorldNodeOverlaySetP12CFMode_World
+typedef struct
+{
+    WorldNodeAdvanced base;
+
+    KrNode num_1[4]<optimize=false>; // Float
+    KrNode num_2; // Int
+    KrNode num_3; // Int
+
+    // A bunch of floating-point calculations are done conditionally on num_3 value...
+} WorldNodeOverlaySet;
+
+// ParseNode__18CFWorldNodeOverlayP12CFMode_World
+typedef struct
+{
+    WorldNode base;
+
+    KrNode num_1; // Int
+    KrNode num_2; // Int
+    // if (num_1 != 0) set 0x16c = num_2
+
+    EntityClass entity;
+
+    KrNode num_3[4]<optimize=false>; // Float
+    KrNode num_4; // Int
+} WorldNodeOverlay;
+
+// ParseNode__25CFWorldNodeTextureOverlayP12CFMode_World
+typedef struct
+{
+    WorldNodeOverlay base;
+
+    KrNode val_1; // String
+    KrNode val_2[6]<optimize=false>; // Int
+    KrNode val_3[4]<optimize=false>; // Float
+
+    // A bunch more math here too...
+} WorldNodeTextureOverlay;
+
+// ParseNode__20CFWorldNodeDataTableP12CFMode_World
+typedef struct
+{
+    WorldNode base;
+
+    KrNode entity_count; // Int
+    if (entity_count.value > 0) EntityClass entities[entity_count.value]<optimize=false>;
+} WorldNodeDataTable;
+
 struct NodeList;
 
 typedef struct (int input_count_1, int input_count_2)
 {
-    KrNode token_1;    // String
+    local byte is_broken = 0;
+
+    KrNode token_1; // String
 
     // Hmm... need fNodeTypeInfo from somewhere...
 
@@ -168,15 +305,29 @@ typedef struct (int input_count_1, int input_count_2)
 
     KrNode token_3; // String (null)
 
-    // Read children nodes
+    switch (token_1.value)
+    {
+        case "datatable":
+            WorldNodeDataTable data;
+            break;
+        case "overlayset":
+            WorldNodeOverlaySet data;
+            break;
+        case "textureoverlay":
+            WorldNodeTextureOverlay data;
+            break;
+        default:
+            Printf("Warning: Unknown node type of \"%s\"\n", token_1.value);
+            is_broken = 1;
+            return;
+    }
+
+    // Read children nodes?
     KrNode num_1; // Int
-    local int child_count = num_1.value;
 
     if (num_1.value != 0)
     {
-        child_count = input_count_2;
-
-        //KrNode num_2; // Int
+        NodeList node(0, 0);
     }
 } Node;
 
@@ -189,8 +340,11 @@ typedef struct (int input_count_1, int input_count_2)
     while (i < node_count.value)
     {
         Node nodes(input_count_1, input_count_2);
+
+        if (nodes[i].is_broken) break; // Early exit if can't parse
+
         i += 1;
-        break;
+        //break;
     }
 } NodeList;
 
@@ -250,6 +404,11 @@ typedef struct
     KrNode num_7_0; // Int
     // if (num_7_0 != 0) read a bunch of stuff
 
+    if (num_7_0.value != 0)
+    {
+        Printf("TODO: Unknown num_7_0 value of %d\n", num_7_0.value);
+    }
+
     // Parse node list?
     KrNode num_8_0; // Int
     if (num_8_0.value != 0)
@@ -259,6 +418,7 @@ typedef struct
     }
 } SectorBlock;
 
+// CFMode_World::Update_ParsingScript
 typedef struct
 {
     //KrNode node;
@@ -284,27 +444,43 @@ typedef struct
     begin world blocks...
 */
 
-    while (!FEof())
+    // ParseFETHeader__12CFMode_WorldPCcUi
+    struct FetHeader
     {
-        KrNode token;
+        /* 0x84 */ KrNode version;
+        KrNode timestamp; // Max: 132 chars?
 
-        // FETData...
-        if (token.type == String)
+        if (version.value >= 0x7C) // 124
         {
-            switch (token.value)
+            KrNode minor_version;
+            if (minor_version.value >= 2) /* 0x310 */ KrNode unknown;
+        }
+    } header;
+
+    // CFMode_World::ParseFETData
+    struct FetData
+    {
+        while (!FEof())
+        {
+            KrNode token;
+
+            if (token.type == String)
             {
-                case "world":
-                    WorldBlock world;
-                    break;
-                case "sector":
-                    SectorBlock sector;
-                    //break;
-                    return;
-                case "end":
-                    return;
+                switch (token.value)
+                {
+                    case "world":
+                        WorldBlock world;
+                        break;
+                    case "sector":
+                        SectorBlock sector;
+                        //break;
+                        return;
+                    case "end":
+                        return;
+                }
             }
         }
-    }
+    } data;
 } KrFetFile;
 
 KrFetFile file;
