@@ -413,6 +413,16 @@ typedef struct
     }
 } SectorBlock;
 
+typedef struct
+{
+    FetToken num_0; // Int
+} BasicNodesBlock;
+
+typedef struct
+{
+    FetToken num_0; // Int
+} NodeRefsBlock;
+
 // CFMode_World::Update_ParsingScript
 typedef struct
 {
@@ -430,8 +440,9 @@ typedef struct
         149 krpaie
     timestamp (string)
     minor_version (int8)
+        1
         2
-    unknown_number
+    unknown_number (int16)
          1000
         14000
         95000
@@ -468,9 +479,19 @@ typedef struct
                         break;
                     case "sector":
                         SectorBlock sector;
-                        //break;
-                        return;
+                        break;
+                        //return;
+                    case "basicnodes":
+                        BasicNodesBlock basic_nodes;
+                        break;
+                    case "noderefs":
+                        NodeRefsBlock node_refs;
+                        break;
                     case "end":
+                        // End of token stream
+                        return;
+                    default:
+                        Printf("Warning: Unknown block token string \"%s\" \n", token.value);
                         return;
                 }
             }
