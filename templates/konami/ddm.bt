@@ -89,6 +89,8 @@ typedef struct
     ubyte b2;
     ubyte b3;
     ubyte b4;
+
+    uint unknown;
 } DdmVertex64<read=Str("(%06.3f, %06.3f, %06.3f)", this.x, this.y, this.z)>;
 
 typedef struct
