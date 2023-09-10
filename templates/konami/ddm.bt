@@ -19,16 +19,34 @@ typedef struct
     local uint remaining = 256 - (FTell() - start_tex_name);
     FSkip(remaining);
 
-    if (parentof(this).magic == "srdd")
+    if (parentof(this).is_skinned)
     {
         // Read extra data
-        uint extra_num_1;
-        uint extra_index_count; // Should be no more than 30...
-        ushort extra_indices[30];
+        // Has multiple face groups
+        uint extra_count; // 1, 3
+        if (extra_count == 0) return;
+
+        struct FaceGroup
+        {
+            uint extra_index_count; // Should be no more than 30...
+            ushort extra_indices[30];
+
+            // Same properties as below
+            uint num_1;
+            uint num_2;
+        } face_groups[extra_count];
+
+        return;
     }
 
-    uint num_1; // 0, 1, 6
-    uint num_2; // 2, 7, 12, 84
+    // Triangle start pos (0, 6, 12)
+    // Increments
+    uint num_1; // 0, 1, 6, 12
+
+    // Triangle count
+    // Multiply by 3 + triangle start pos = start pos of next part
+    // Sum adds to face count
+    uint num_2; // 2, 7, 12, 84, 88, 150
 } DdmMaterial<read=this.name>;
 
 // 32 bytes
@@ -43,7 +61,35 @@ typedef struct
     float num_3; // -1.0
     float num_4; //
     float num_5; // 0.0
-} DdmVertex<read=Str("(%06.3f, %06.3f, %06.3f)", this.x, this.y, this.z)>;
+} DdmVertex32<read=Str("(%06.3f, %06.3f, %06.3f)", this.x, this.y, this.z)>;
+
+// 64 bytes (for skinned meshes)
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+
+    float num_1; // 0.0
+    float num_2; // 0.0
+    float num_3; // -1.0
+    float num_4; //
+    float num_5; // 0.0
+
+    float f1;
+    float f2;
+    float f3;
+    float f4;
+
+    float u;
+    float v;
+
+    // Maps to bone id probably
+    ubyte b1;
+    ubyte b2;
+    ubyte b3;
+    ubyte b4;
+} DdmVertex64<read=Str("(%06.3f, %06.3f, %06.3f)", this.x, this.y, this.z)>;
 
 typedef struct
 {
@@ -53,6 +99,7 @@ typedef struct
         srdd = shader?
     */
     char magic[4];
+    local byte is_skinned = (magic == "srdd") ? 1 : 0;
 
     int num; // 274
     uint mat_count; // 1, 3
@@ -63,19 +110,36 @@ typedef struct
         DdmMaterial materials[mat_count]<optimize=false>;
     }
 
-    
+    if (is_skinned)
+    {
+        uint bone_count;
+
+        if (bone_count > 0)
+        {
+            struct Bone
+            {
+                float transform[16];
+                char name[64];
+                uint id;
+            } bones[bone_count]<read=Str("%s (%d)", this.name, this.id)>;
+        }
+    }
 
     // Triangles?
-    uint face_count;
-    if (face_count > 0) ushort faces[face_count];
-
-    return;
+    uint face_index_count;
+    if (face_index_count > 0) ushort faces[face_index_count];
 
     // Vertices
     uint vertex_count;
-    if (vertex_count > 0)
+    if (vertex_count == 0) return;
+
+    if (is_skinned)
     {
-        DdmVertex vertices[vertex_count];
+        DdmVertex64 vertices[vertex_count];
+    }
+    else
+    {
+        DdmVertex32 vertices[vertex_count];
     }
 } DdmFile;
 
