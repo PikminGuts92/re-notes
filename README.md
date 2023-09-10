@@ -17,6 +17,7 @@ This is just a place for me to dump my reverse engineering notes, templates, sni
 - Games
   - [BandFuse: Rock Legends](templates/bandfuse/)
   - [Britney's Dance Beat (PS2)](templates/bdb/)
+  - [Dance Dance Revolution Universe 1-3 (Xbox 360)](templates/konami/)
   - [Dance Masters (Xbox 360)](templates/dance_masters)
   - [DJ Hero](templates/djh/)
   - [Karaoke Revolution (Xbox 360)](templates/kr/)

@@ -1,0 +1,82 @@
+LittleEndian();
+
+typedef struct
+{
+    char name[64];
+    int int_1;      // 3
+    ushort short_1; // 2
+    ushort short_2; // 40960
+
+    // [0.0, 0.0, 0.0, 1.0] and [0.0, 0.0, 0.0, 0.0]
+    float floats[16];
+    int int_2; // 0
+
+    local uint start_tex_name = FTell();
+
+    string texture_name;
+    string texture_ext; // tga/bmp
+
+    local uint remaining = 256 - (FTell() - start_tex_name);
+    FSkip(remaining);
+
+    if (parentof(this).magic == "srdd")
+    {
+        // Read extra data
+        uint extra_num_1;
+        uint extra_index_count; // Should be no more than 30...
+        ushort extra_indices[30];
+    }
+
+    uint num_1; // 0, 1, 6
+    uint num_2; // 2, 7, 12, 84
+} DdmMaterial<read=this.name>;
+
+// 32 bytes
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+
+    float num_1; // 0.0
+    float num_2; // 0.0
+    float num_3; // -1.0
+    float num_4; //
+    float num_5; // 0.0
+} DdmVertex<read=Str("(%06.3f, %06.3f, %06.3f)", this.x, this.y, this.z)>;
+
+typedef struct
+{
+    /*
+    Possible:
+        mrdd = mesh?
+        srdd = shader?
+    */
+    char magic[4];
+
+    int num; // 274
+    uint mat_count; // 1, 3
+
+    // There's usually at least one material
+    if (mat_count > 0)
+    {
+        DdmMaterial materials[mat_count]<optimize=false>;
+    }
+
+    
+
+    // Triangles?
+    uint face_count;
+    if (face_count > 0) ushort faces[face_count];
+
+    return;
+
+    // Vertices
+    uint vertex_count;
+    if (vertex_count > 0)
+    {
+        DdmVertex vertices[vertex_count];
+    }
+} DdmFile;
+
+DdmFile file;
