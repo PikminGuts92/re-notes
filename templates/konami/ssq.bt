@@ -1,0 +1,25 @@
+LittleEndian();
+
+typedef struct
+{
+    while (!FEof())
+    {
+        struct SsqChunk
+        {
+            uint size;
+            if (size == 0) break;
+
+            ushort type;
+            ushort parameter;
+
+            switch (type)
+            {
+                default:
+                    byte data[size - 8];
+                    break;
+            }
+        } chunks;
+    }
+} SsqFile;
+
+SsqFile file;
