@@ -1,0 +1,28 @@
+LittleEndian();
+
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+
+    float u0;
+    float u1;
+    float u2;
+    float u3;
+} Frame;
+
+typedef struct
+{
+    char magic[4]; // "mina"
+    uint instance_count;
+    uint keyframe_count;
+
+    struct InstanceKeyframes
+    {
+        char instance_name[64]; // Bone or camera name usually
+        Frame frames[keyframe_count];
+    } keyframe_collections[instance_count]<read=this.instance_name, optimize=false>;
+} AniFile<read=Str("(%d objects, %d frames)", this.instance_count, this.keyframe_count)>;
+
+AniFile file;
