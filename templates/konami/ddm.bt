@@ -29,7 +29,7 @@ typedef struct
         struct FaceGroup
         {
             uint extra_index_count; // Should be no more than 30...
-            ushort extra_indices[30];
+            ushort extra_indices[30]; // Maps to bones?
 
             // Same properties as below
             uint num_1;
@@ -56,11 +56,12 @@ typedef struct
     float y;
     float z;
 
-    float num_1; // 0.0
-    float num_2; // 0.0
-    float num_3; // -1.0
-    float num_4; //
-    float num_5; // 0.0
+    float nx;
+    float ny;
+    float nz;
+
+    float u;
+    float v;
 } DdmVertex32<read=Str("(%06.3f, %06.3f, %06.3f)", this.x, this.y, this.z)>;
 
 // 64 bytes (for skinned meshes)
@@ -70,27 +71,25 @@ typedef struct
     float y;
     float z;
 
-    float num_1; // 0.0
-    float num_2; // 0.0
-    float num_3; // -1.0
-    float num_4; //
-    float num_5; // 0.0
-
-    float f1;
-    float f2;
-    float f3;
-    float f4;
+    float nx;
+    float ny;
+    float nz;
 
     float u;
     float v;
 
-    // Maps to bone id probably
-    ubyte b1;
-    ubyte b2;
-    ubyte b3;
-    ubyte b4;
+    // Floats for some reason...
+    // Maps to indicies defined in face groups
+    float bone_0;
+    float bone_1;
+    float bone_2;
+    float bone_3;
 
-    uint unknown;
+    // Maps to bone id probably
+    float weight_0;
+    float weight_1;
+    float weight_2;
+    float weight_3;
 } DdmVertex64<read=Str("(%06.3f, %06.3f, %06.3f)", this.x, this.y, this.z)>;
 
 typedef struct
