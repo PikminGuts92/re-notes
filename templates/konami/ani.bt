@@ -10,7 +10,7 @@ typedef struct
     float u1;
     float u2;
     float u3;
-} Frame;
+} Frame<read=Str("(%f, %f, %f) (%f, %f, %f, %f)", this.x, this.y, this.z, this.u0, this.u1, this.u2, this.u3)>;
 
 typedef struct
 {
