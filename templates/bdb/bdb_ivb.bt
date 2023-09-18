@@ -3,25 +3,27 @@ LittleEndian();
 typedef struct
 {
     uchar magic[4]; // IVB
-    uint always_2;
+    uint entry_count; // Always 2?
     uint always_8192;
-    uint always_0;
-    
-    uint unknown;
-    uint some_count;
 
-    uint some_size_or_offset;
-    uint always_0;
+    struct EntryCount
+    {
+        uint always_0;
     
-    uint unknown_1;
-    uint unknown_2;
-    uint unknown_3;
+        uint unknown;
+        uint some_count;
 
+        uint some_size_or_offset;
+    } entries[entry_count];
 } IVBHeader;
 
 typedef struct
 {
     IVBHeader header;
+
+    FSeek(2064);
+
+    uint unknown;
 } IVBFile;
 
 
