@@ -1,0 +1,26 @@
+LittleEndian();
+
+typedef struct
+{
+    uint unknown_1; // 14
+    uint unknown_2; // 2885, 2887, 2888, 2889, 2890
+
+    local uint block_count = 0;
+
+    while (!FEof())
+    {
+        if (ReadString(FTell(), 4) != "CYL0") break;
+
+        struct Block
+        {
+            // Use size of 2048 or remaining
+            local uint size = Min(2048, FileSize() - FTell());
+            byte data[size];
+        } blocks;
+
+        block_count += 1;
+    }
+} IVFile<read=Str("(%d blocks)", this.block_count)>;
+
+
+IVFile file;

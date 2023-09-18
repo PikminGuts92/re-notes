@@ -1,0 +1,46 @@
+LittleEndian();
+
+typedef struct
+{
+    // 59392 start DFS
+    struct CMSPChunk
+    {
+        local uint start_offset = FTell();
+
+        char magic[4]; // CMSP
+        float unknown; // 3.33, 5.0, 10.0
+
+        uint unknown_0; // 512
+        uint unknown_1; // 0
+        char name[32]; // stage1_cam1
+
+        ushort num_1; // 9, 15
+        ushort num_2; // 76
+
+        ushort num_1; // 9, 15
+        ushort num_2; // 76
+
+        ushort num_1; // 9, 15
+        ushort num_2; // 76
+
+        ushort num_1; // 9, 15
+        ushort num_2; // 76
+
+        ushort num_1; // 9, 15
+        ushort num_2; // 76
+
+        ushort num_1; // 9, 15
+        ushort num_2; // 76
+
+        ushort num_1; // 9, 15
+        ushort num_2; // 76
+
+        local uint size = 2048 - (FTell() - start_offset);
+        byte data[size];
+    } cmsp_chunks[25]<optimize=false>;
+
+    // 85 | 55 | 105 | 83
+} BinFile;
+
+
+BinFile file;
