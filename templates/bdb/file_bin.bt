@@ -1,5 +1,12 @@
 LittleEndian();
 
+// 8 bytes
+typedef struct 
+{
+    float pos;
+    float value;
+} FloatEntry<read=Str("(%f, %f)", this.pos, this.value)>;
+
 typedef struct
 {
     // 59392 start DFS
@@ -14,29 +21,29 @@ typedef struct
         uint unknown_1; // 0
         char name[32]; // stage1_cam1
 
-        ushort num_1; // 9, 15
-        ushort num_2; // 76
+        struct OffsetEntry
+        {
+            ubyte count;
+            ubyte unknown<format=hex>;
+            ushort offset;
+        } offset_entries[7]<read=Str("count: %d, offset: %d, unknown: %02X", this.count, this.offset, this.unknown)>;
 
-        ushort num_1; // 9, 15
-        ushort num_2; // 76
+        local uint i;
+        for (i = 0; i < 7; i++)
+        {
+            FSeek(start_offset + offset_entries[i].offset);
 
-        ushort num_1; // 9, 15
-        ushort num_2; // 76
+            struct Entry
+            {
+                local ubyte count = offset_entries[i].count;
+                local ubyte unknown = offset_entries[i].unknown;
 
-        ushort num_1; // 9, 15
-        ushort num_2; // 76
-
-        ushort num_1; // 9, 15
-        ushort num_2; // 76
-
-        ushort num_1; // 9, 15
-        ushort num_2; // 76
-
-        ushort num_1; // 9, 15
-        ushort num_2; // 76
+                FloatEntry entries[count];
+            } entries<read=Str("%d entries |%02X|", this.count, this.unknown)>;
+        }
 
         local uint size = 2048 - (FTell() - start_offset);
-        byte data[size];
+        byte padding[size];
     } cmsp_chunks[25]<optimize=false>;
 
     // 85 | 55 | 105 | 83
