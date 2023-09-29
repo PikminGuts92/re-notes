@@ -1,0 +1,62 @@
+// Figure out endian based on file ext
+switch(FileNameGetExtension(GetFileName()))
+{
+    case ".PS2":
+        LittleEndian();
+        break;
+    case ".wii":
+    case ".wil":
+        BigEndian();
+        break;
+}
+
+typedef struct
+{
+    uint num_0<format=hex>; // 0x13BB0203
+    uint num_1; // 1
+    uint num_2; // 0
+
+    ushort num_3; // 5, 503, 1030, 2004
+    ushort num_4; // 0xFFFF, 99
+
+    char str_1[12];
+    char str_2[12]; // "hsm"
+
+    uint num_5;    // 0
+    float unknown; // 30236.85, 30236.95, 30237.24, 30237.66
+
+    uint num_6; // 1
+    uint num_7; // 0
+
+    char str_3[12]; // "Build"
+
+    uint always_ff<format=hex>;
+    struct SomeEntry
+    {
+        uint count;
+
+        uint num_1; // Offset?
+        //ushort num_2; // 0xFF if num_1 == 0
+    } entries[255]<read=Str("(%d, %d)", this.count, this.num_1), optimize=false>;
+} Ps2File;
+
+/*
+SONG_GHG.PS2
+ x 2004
+ 1 2112
+ 1 2120
+ 6 2128
+ 6 2176
+ 7 2224
+ 3 2440
+ 1 2464
+ 1 2472
+ 1 2480
+ 1 2488
+ 1 2496
+ 2 2504
+26 2520
+ 9 2728
+*/
+
+Ps2File file;

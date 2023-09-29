@@ -20,6 +20,7 @@ This is just a place for me to dump my reverse engineering notes, templates, sni
   - [Dance Dance Revolution Universe 1-3 (Xbox 360)](templates/konami/)
   - [Dance Masters (Xbox 360)](templates/dance_masters)
   - [DJ Hero](templates/djh/)
+  - [High School Musical: Sing It! (PS2/Wii)](templates/singit)
   - [Karaoke Revolution (Xbox 360)](templates/kr/)
   - [Persona 4: Dancing All Night](templates/p4d/)
   - [Pistol Whip (PC)](templates/pistol_whip/)
