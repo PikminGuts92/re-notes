@@ -1,0 +1,24 @@
+// Archive format used in DDR X + X2
+
+LittleEndian();
+
+typedef struct
+{
+    uint id1<format=hex>;
+    uint id1_alt<format=hex>;
+    uint id2<format=hex>;
+
+    struct BuildDate
+    {
+        uint year;
+        uint month;
+        uint day;
+
+        uint hour;
+        uint min;
+    } build_date<read=Str("%04d-%02d-%02d %02d:%02d", this.year, this.month, this.day, this.hour, this.min)>;
+
+    // Data starts at offset 2048. File listing is presumed to be in game exe.
+} DatFile;
+
+DatFile file;
