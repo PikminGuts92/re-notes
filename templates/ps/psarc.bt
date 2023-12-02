@@ -1,0 +1,46 @@
+BigEndian();
+
+// 5 bytes
+typedef struct
+{
+    uint i1;
+    ubyte i2;
+    
+    local uint64 value = (uint64)(i1 << 8) | (uint64)i2;
+} UInt40<read=Str("%d", this.value)>;
+
+// 30 bytes
+typedef struct
+{
+    ubyte hash[16]; // MD5
+    uint block_offset;
+
+    UInt40 size_uncompressed;    
+    UInt40 file_offset;
+} TocEntry;
+
+typedef struct
+{
+    char magic[4]; // PSAR
+    ushort major_version; // 1
+    ushort minor_version; // 4
+
+    char compression_type[4]; // zlib, lzma, oodl
+    uint toc_size;
+    uint toc_entry_size; // Always 30?
+    uint toc_entry_count;
+    uint max_block_size; // Always 65536 (0x10000)?
+    uint archive_flags;
+    
+    if (toc_entry_count > 0)
+    {
+        TocEntry toc_entries[toc_entry_count]<optimize=false>;
+    }
+
+    if (max_block_size == 0x10000)
+    {
+        ushort block_sizes[toc_entry_count];
+    }
+} PsArc;
+
+PsArc file;

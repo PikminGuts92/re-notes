@@ -29,5 +29,6 @@ This is just a place for me to dump my reverse engineering notes, templates, sni
   - [Rock Revolution](templates/rock_rev/)
   - [SingStar (PS3)](templates/singstar/)
 - Platforms
+  - [PlayStation](templates/ps/)
   - [Xbox 360](templates/x360/)
 - [Uncategorized](templates/)
