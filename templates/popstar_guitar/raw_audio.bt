@@ -1,92 +1,66 @@
 LittleEndian();
 
-// TODO: Make const
-local uint SIZE_PER_CHUNK = 0x48000; //0x30000; // Guessing...
+const uint CHUNK_SIZE = 0x48000;
+const uint CHUNK_SIZE_BACKING = 0x30000;
+const uint CHUNK_SIZE_GUITAR = 0x18000;
 
-typedef struct
+const uint SAMPLE_RATE = 44100;
+const uint CHANNELS = 3;
+
+typedef struct (uint sample_size, uint sample_count)
 {
-    short value;
-} Sample<read=Str("%d", this.value), bgcolor=get_bgcolor_color>;
-
-int get_bgcolor_color(Sample& s)
-{
-    local int r = (int)Min((Abs(s.value) / 32768.0) * 255.0, 255.0);
-
-    // BGR order
-    return r;
-}
-
-typedef struct (uint sample_size)
-{
-    local uint sample_count = sample_size / 2;
-
     short samples[sample_count];
 
-    // Calculate average...
-    /*local uint i;
-    local double running_avg = 0.0;
-    local double weight = 1.0 / (double)sample_count;
+    local uint padding_size = sample_size - (sample_count * 2);
+    if (padding_size > 0) byte padding[padding_size];
+} ChunkSamples;
 
-    while (i < sample_count)
-    {
-        running_avg += weight * (double)samples[i];
-        i++;
-    }*/
-
-    return;
-
-    local uint i = 0;
-    for (i = 0; i < sample_count; i++)
-    {
-        Sample samples;
-    }
-} ChunkSamples;//<read=Str("Avg: %.02f", running_avg)>;
-
-typedef struct (uint i, uint chunk_size)
+typedef struct (uint i, uint backing_size_current, uint guitar_size_current)
 {
-    // Split evenly between tracks
-    local uint sample_size = chunk_size / 3;
-
-    ChunkSamples backing(sample_size * 2); // Interleaved stereo
-    ChunkSamples guitar(sample_size);  // Mono
-
-    local float start = (float)(i * (SIZE_PER_CHUNK / 4)) / 44100.0;
-    local float length = (sample_size / 2) / 44100.0;
-} Chunk<read=Str("start: %f, length: %f", this.start, this.length)>;
+    if (i == 0)
+    {
+        // Interleaved stereo
+        uint backing_size;
+        ChunkSamples backing(CHUNK_SIZE_BACKING - 4, (Min(backing_size, CHUNK_SIZE_BACKING) - 4) / 2); // -1 sample
+        
+        // Mono
+        uint guitar_size;
+        ChunkSamples guitar(CHUNK_SIZE_GUITAR - 4, (Min(guitar_size, CHUNK_SIZE_GUITAR) - 4) / 2); // -2 samples
+    }
+    else
+    {
+        ChunkSamples backing(CHUNK_SIZE_BACKING, Min(backing_size_current, CHUNK_SIZE_BACKING) / 2); // Interleaved stereo
+        ChunkSamples guitar(CHUNK_SIZE_GUITAR, Min(guitar_size_current, CHUNK_SIZE_GUITAR) / 2); // Mono
+    }
+} Chunk;
 
 typedef struct
 {
-    local uint channels = 3;
-    local uint sample_rate = 44100;
-
-    uint size; // Samples?
-
     local uint sample_count = (FileSize() - FTell()) / 2;
-
-    //Sample samples[sample_count];
-    
-    //Chunk chunks1(200000);
-    //Chunk chunks2(200000);
-    //Chunk chunks3(200000);
-    //Chunk chunks4(200000);
-
     local uint i = 0;
-
-    while ((FileSize() - FTell()) > 6) // (!FEof())
-    {
-        Chunk chunks(i, Min(FileSize() - FTell(), SIZE_PER_CHUNK));
-        i += 1;
-
-        //break;
-    }
     
+    Chunk chunks(i, 0, 0);
+    i += 1;
+    
+    local uint backing_size = chunks[0].backing_size;
+    local uint guitar_size = chunks[0].guitar_size;
+    
+    local int backing_size_current = backing_size - sizeof(chunks[0].backing);
+    local int guitar_size_current = guitar_size - sizeof(chunks[0].guitar);
 
-    local uint total_samples = sample_count / 2; // Split between two tracks
-    local double seconds = (double)total_samples / (double)sample_rate;
-    //Printf("Length: %.02f seconds", seconds);
+    while ((FileSize() - FTell()) > 6)
+    {
+        Chunk chunks(i, backing_size_current, guitar_size_current);
+        
+        backing_size_current -= sizeof(chunks[i].backing);
+        guitar_size_current -= sizeof(chunks[i].guitar);
+        
+        i += 1;
+    }
 
-    //short samples[sample_rate * 2];
-    //short samples2[sample_rate];
+    local uint total_samples = Max(backing_size / 2, guitar_size) / 2;
+    local double seconds = (double)total_samples / (double)SAMPLE_RATE;
+
 } RawAudio<read=Str("length: %.02fs (%d samples)", this.seconds, this.total_samples)>;
 
 RawAudio file;

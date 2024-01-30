@@ -1,56 +1,78 @@
-//if (!exists(file)) return;
-
-//const uint CHUNK_SIZE = 0x30000;
-//const uint CHUNK_SIZE_BACKING = 0x20000;
-//const uint CHUNK_SIZE_GUITAR = 0x10000;
+LittleEndian();
 
 const uint CHUNK_SIZE = 0x48000;
 const uint CHUNK_SIZE_BACKING = 0x30000;
 const uint CHUNK_SIZE_GUITAR = 0x18000;
 
-FSeek(4);
+local byte buffer[CHUNK_SIZE_BACKING];
 
-local byte buffer[CHUNK_SIZE];
-local byte buffer_backing[CHUNK_SIZE_BACKING];
-local byte buffer_guitar[CHUNK_SIZE_GUITAR];
+local uint backing_size = ReadUInt(0);
+local uint guitar_size = ReadUInt(CHUNK_SIZE_BACKING); // Should always be half of backing
 
-local uint count = 1;
-local uint start_pos;
+local uint total_sample_size = Max((backing_size / 2), guitar_size) * 3; // Calc max in case sample sizes are mismatched
+local byte samples[total_sample_size];
+
 local uint i;
+local uint sample_size;
+local uint sample_offset;
 
-while ((FileSize() - FTell()) >= CHUNK_SIZE)
+// Read backing samples
+sample_size = Min(backing_size, CHUNK_SIZE_BACKING) - 4;
+sample_offset = 0;
+
+FSeek(4);
+while (backing_size > 0)
 {
-    start_pos = FTell();
-    Printf("Processing at 0x%x\n", start_pos);
-    //break;
-
-    // Read backing track data
-    ReadBytes(buffer_backing, FTell(), CHUNK_SIZE_BACKING);
-    FSkip(CHUNK_SIZE_BACKING);
-
-    // Read guitar track data
-    ReadBytes(buffer_guitar, FTell(), CHUNK_SIZE_GUITAR);
-    FSkip(CHUNK_SIZE_GUITAR);
-
-    for (i = 0; i < CHUNK_SIZE_BACKING; i += 4)
+    // Copy to buffer
+    ReadBytes(buffer, FTell(), sample_size);
+    for (i = 0; i < sample_size; i += 4)
     {
-        buffer[ (i / 4) * 6     ] = buffer_backing[i    ];
-        buffer[((i / 4) * 6) + 1] = buffer_backing[i + 1];
-        buffer[((i / 4) * 6) + 2] = buffer_backing[i + 2];
-        buffer[((i / 4) * 6) + 3] = buffer_backing[i + 3];
+        samples[sample_offset +  (i / 4) * 6     ] = buffer[i    ];
+        samples[sample_offset + ((i / 4) * 6) + 1] = buffer[i + 1];
+        samples[sample_offset + ((i / 4) * 6) + 2] = buffer[i + 2];
+        samples[sample_offset + ((i / 4) * 6) + 3] = buffer[i + 3];
     }
 
-    for (i = 0; i < CHUNK_SIZE_GUITAR; i += 2)
-    {
-        buffer[((i / 2) * 6) + 4] = buffer_guitar[i    ];
-        buffer[((i / 2) * 6) + 5] = buffer_guitar[i + 1];
-    }
-
-    // OverwriteBytes
-    //OverwriteBytes();
-    //DeleteBytes(start_pos, CHUNK_SIZE);
-    WriteBytes(buffer, start_pos, CHUNK_SIZE);
-
-    //if (count >= 4) break;
-    //count += 1;
+    // Go to next block
+    FSkip(sample_size + CHUNK_SIZE_GUITAR);
+    
+    // Update sizes and offsets
+    sample_offset += sample_size + (sample_size / 2);
+    backing_size -= sample_size;
+    
+    sample_size = Min(backing_size, CHUNK_SIZE_BACKING);
 }
+
+// Read guitar samples
+sample_size = Min(guitar_size, CHUNK_SIZE_GUITAR) - 4;
+sample_offset = 4;
+
+FSeek(CHUNK_SIZE_BACKING + 4);
+while (guitar_size > 0)
+{
+    // Copy to buffer
+    ReadBytes(buffer, FTell(), sample_size);
+    for (i = 0; i < sample_size; i += 2)
+    {
+        samples[sample_offset +  (i / 2) * 6     ] = buffer[i    ];
+        samples[sample_offset + ((i / 2) * 6) + 1] = buffer[i + 1];
+    }
+
+    // Go to next block
+    FSkip(sample_size + CHUNK_SIZE_BACKING);
+    
+    // Update sizes and offsets
+    sample_offset += sample_size + (sample_size * 2);
+    guitar_size -= sample_size;
+    
+    sample_size = Min(guitar_size, CHUNK_SIZE_GUITAR);
+}
+
+// Write out samples
+local uint file_size = FileSize();
+local uint remaining = file_size - total_sample_size;
+
+WriteBytes(samples, 0, total_sample_size);
+if (remaining > 0) DeleteBytes(total_sample_size, remaining);
+
+Printf("Finished unchunking audio samples\n");
