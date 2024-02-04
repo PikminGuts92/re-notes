@@ -1,0 +1,55 @@
+BigEndian();
+
+typedef enum <byte>
+{
+    DXT1 = 0x52,
+    DXT3 = 0x53,
+    DXT5 = 0x54,
+    DXT5N = 0x71, // DXT5 - Packed normal map
+    DXT1N = 0x7C, // DXT1 - Packed normal map
+    RAW = 0x86,   // a8r8g8b8
+} FORMAT;
+
+typedef struct
+{
+    local uint start_offset = FTell();
+    
+    char magic[4]; // "TX2D"
+    
+    uint info_offset;
+    uint unknown; // Always 52?
+    
+    uint max_name_size; // Always 24? Might be an offset
+    uint always_0;
+    char name[max_name_size];
+    
+    FSeek(info_offset + 45);
+    
+    ushort img_multiple;
+    local uint data_offset = (uint)(img_multiple << 8) + 0x80C;
+    
+    FORMAT format;
+    ushort height_num;
+    ushort width_num;
+    
+    local uint height = (uint)(height_num + 1) << 3;
+    local uint width = (uint)(width_num + 1) & 0x1FFF;
+    
+    local uint size = ((parentof(this).tex_size >> 8) - img_multiple) << 8;
+    
+    FSeek(data_offset);
+    byte data[size];
+} Texture<read=Str("%s (%dx%d)", this.name, this.width, this.height)>;
+
+typedef struct
+{
+    char magic[4]; // "XPR2"
+    
+    uint always_2048;
+    uint tex_size;
+    uint tex_count;
+    
+    Texture tex;
+} XprFile;
+
+XprFile file;
