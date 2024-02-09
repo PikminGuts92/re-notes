@@ -72,6 +72,37 @@ uint64 compute_crc64_from_string(string str_value, byte ignore_case)
     return current ^ FINAL;
 }
 
+uint64 compute_crc64_from_string_with_initial(string str_value, uint64 initial, byte ignore_case)
+{
+    local uint64 current = initial ^ FINAL;
+    local uint str_size = Strlen(str_value);
+
+    local uint i = 0;
+    local byte c;
+
+    for (i = 0; i < str_size; i++)
+    {
+        c = str_value[i];
+
+        if (ignore_case)
+        {
+            if (c >= 'A' && c <= 'Z')
+            {
+                // Force lowercase
+                c = c | 0x20;
+            }
+            else if ((c == '\\') || (c == '/'))
+            {
+                c = '.';
+            }
+        }
+
+        current = table_value(c, current);
+    }
+
+    return current ^ FINAL;
+}
+
 init_table(POLYNOMIAL);
 
 #endif

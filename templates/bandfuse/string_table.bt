@@ -12,6 +12,10 @@ typedef struct
 
     local uint str_offset = parentof(this).blob_offset.abs_pos + offset;
     local string str_value = ReadString(str_offset);
+    
+    // Update string value + path key
+    add_string_to_table(parentof(this).header.file_path.value, path.value, str_value);
+    path.str_value = str_value;
 } StringTableEntry<read=Str("%s", this.str_value)>;
 
 typedef struct
@@ -29,6 +33,12 @@ typedef struct
 
     StringTableEntry entries[entries_count]<optimize=false>;
     byte blob[blob_size];
-} StringTable;
+    
+    // Update string table path keys
+    CURRENT_STRING_TABLE_KEY = header.file_path.value;
+    update_hkey(header.file_path);
+    update_hkey(header.dir_path);
+    update_hkey(header.file_type);
+} StringTable<read=this.header.file_path.str_value>;
 
 #endif

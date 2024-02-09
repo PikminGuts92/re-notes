@@ -70,7 +70,7 @@ typedef struct
     int unknown_3;
 
     int64 always_0; // Probably empty HKey...
-} Catalog2Entry<optimize=false>;
+} Catalog2Entry<optimize=false, read=Str("\"%s\" - %s", this.title.str_value, this.artist.str_value)>;
 
 typedef struct
 {    

@@ -3,6 +3,14 @@
 
 #include "constants.bt"
 
+#link "bf_editor_lib.dll"
+    void init_string_tables();
+    void add_string_to_table(uint64 table_id, uint64 string_hash, string string_value);
+    string get_string_from_table(uint64 table_id, uint64 string_hash);
+    string get_string_from_any_table(uint64 string_hash);
+    int string_table_exists(uint64 table_id);
+#endlink
+
 typedef struct
 {
     local uint pos = FTell();
@@ -13,8 +21,29 @@ typedef struct
 
 typedef struct
 {
+    uint64 value<format=hex>;
+    
+    local string str_value = value == 0 ? "" : Str("%016LX", value);
+    local uint64 str_table_key = CURRENT_STRING_TABLE_KEY;
+
+    update_hkey(this);
+} HKey<read=this.str_value, optimize=false>;
+
+void update_hkey(HKey& key)
+{
+    if (CURRENT_STRING_TABLE_KEY == 0) return;
+    
+    local string result = get_string_from_table(key.str_table_key, key.value);
+    if (result != "")
+    {
+        key.str_value = result;
+    }
+}
+
+typedef struct
+{    
     uint64 value;
-} HKey<read=Str("%016LX", this.value)>;
+} HKey_Empty<read=Str("%016LX", this.value)>;
 
 typedef struct
 {

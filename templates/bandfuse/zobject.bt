@@ -28,6 +28,6 @@ typedef struct
             Tuning obj;
             break;
     }
-} ZObject;
+} ZObject<read=this.header.file_path.str_value>;
 
 #endif

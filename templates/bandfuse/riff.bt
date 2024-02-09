@@ -9,10 +9,14 @@
 #include "zobject.bt"
 
 BigEndian();
+init_string_tables();
+
+local uint64 CURRENT_OBJECT_PATH = 0;
+local uint64 CURRENT_STRING_TABLE_KEY = 0;
 
 typedef struct
 {
-    HKey path;
+    HKey_Empty path;
     uint offset;
     uint always_0<hidden=true>;
 } IndxEntry;
@@ -27,7 +31,7 @@ typedef struct
     if (entries_count <= 0) return;
 
     IndxEntry entries[entries_count];
-} Indx;
+} Indx<read=Str("%d entries", this.entries_count)>;
 
 typedef struct
 {
@@ -36,11 +40,12 @@ typedef struct
 
     if (!exists(index.entries)) return;
 
+    local uint i;
     struct Chunks
     {
-        local uint i;
         local string chunk_magic;
 
+        // Read string tables first
         for (i = 0; i < index.entries_count; i++)
         {
             FSeek(index.entries[i].offset);
@@ -51,12 +56,44 @@ typedef struct
                 case MAGIC_STBL:
                     StringTable string_tables;
                     break;
+            }
+        }
+        
+        // Read objects
+        for (i = 0; i < index.entries_count; i++)
+        {
+            FSeek(index.entries[i].offset);
+            chunk_magic = ReadString(FTell(), 4);
+
+            switch (chunk_magic)
+            {
                 case MAGIC_ZOBJ:
+                    CURRENT_OBJECT_PATH = index.entries[i].path.value;
+                    
+                    // Catalog2 uses full path
+                    CURRENT_STRING_TABLE_KEY = compute_crc64_from_string_with_initial(".stringTable@enUS", CURRENT_OBJECT_PATH, true);
+                    
+                    if (!string_table_exists(CURRENT_STRING_TABLE_KEY))
+                    {
+                        // Fallback to dir path if not found
+                        CURRENT_STRING_TABLE_KEY = compute_crc64_from_string_with_initial(".stringTable@enUS", ReadUInt64(FTell() + 16), true);
+                    }
+                    else
+                    {
+                        Printf("Using full path for string table");
+                    }
+                
                     ZObject objects;
                     break;
             }
         }
     } chunks;
+    
+    // Update index path keys
+    for (i = 0; i < index.entries_count; i++)
+    {
+        
+    }
 } RiffFile;
 
 RiffFile file;
