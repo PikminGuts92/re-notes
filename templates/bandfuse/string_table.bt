@@ -39,6 +39,17 @@ typedef struct
     update_hkey(header.file_path);
     update_hkey(header.dir_path);
     update_hkey(header.file_type);
+    
+    // String tables don't have their full path embedded. It must be generated.
+    /*if (header.dir_path.has_str_value && header.dir_path.str_value != "")
+    {
+        local string table_file_path = header.dir_path.str_value + "." + header.file_type.str_value;
+        local uint64 table_file_path_hash = compute_crc64_from_string(table_file_path, true);
+        
+        Printf("Computed table hash: %016LX", table_file_path_hash);
+        
+        add_string_to_table(header.file_path.value, table_file_path_hash, table_file_path);
+    }*/
 } StringTable<read=this.header.file_path.str_value>;
 
 #endif

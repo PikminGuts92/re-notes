@@ -76,11 +76,12 @@ typedef struct
                     if (!string_table_exists(CURRENT_STRING_TABLE_KEY))
                     {
                         // Fallback to dir path if not found
-                        CURRENT_STRING_TABLE_KEY = compute_crc64_from_string_with_initial(".stringTable@enUS", ReadUInt64(FTell() + 16), true);
+                        CURRENT_OBJECT_PATH = ReadUInt64(FTell() + 16);
+                        CURRENT_STRING_TABLE_KEY = compute_crc64_from_string_with_initial(".stringTable@enUS", CURRENT_OBJECT_PATH, true);
                     }
                     else
                     {
-                        Printf("Using full path for string table");
+                        Printf("Using full path for string table\n");
                     }
                 
                     ZObject objects;

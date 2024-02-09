@@ -22,9 +22,8 @@ typedef struct
 typedef struct
 {
     uint64 value<format=hex>;
-    
-    local string str_value = value == 0 ? "" : Str("%016LX", value);
-    local uint64 str_table_key = CURRENT_STRING_TABLE_KEY;
+    local string str_value = (value == 0) ? "" : Str("%016LX", value);
+    local int has_str_value = value == 0;
 
     update_hkey(this);
 } HKey<read=this.str_value, optimize=false>;
@@ -33,10 +32,25 @@ void update_hkey(HKey& key)
 {
     if (CURRENT_STRING_TABLE_KEY == 0) return;
     
-    local string result = get_string_from_table(key.str_table_key, key.value);
+    local string result = get_string_from_table(CURRENT_STRING_TABLE_KEY, key.value);
     if (result != "")
     {
         key.str_value = result;
+        key.has_str_value = 1;
+        return;
+    }
+
+    // Sometimes not all paths are in each localized string string table
+    // English tables seem to lack more stuff
+    result = get_string_from_any_table(key.value);
+    
+    //local uint64 string_table_key = compute_crc64_from_string_with_initial(".stringTable@jaJP", CURRENT_OBJECT_PATH, true);
+    //result = get_string_from_table(string_table_key, key.value);
+    
+    if (result != "")
+    {
+        key.str_value = result;
+        key.has_str_value = 1;
     }
 }
 
