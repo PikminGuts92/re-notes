@@ -1,7 +1,8 @@
 BigEndian();
 
-typedef enum <byte>
+typedef enum <ubyte>
 {
+    // 0xa6?
     DXT1 = 0x52,
     DXT3 = 0x53,
     DXT5 = 0x54,
