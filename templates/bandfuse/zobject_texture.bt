@@ -1,0 +1,12 @@
+#ifndef BANDFUSE_ZOBJECT_TEXTURE
+#define BANDFUSE_ZOBJECT_TEXTURE
+
+#include "common.bt"
+
+typedef struct
+{
+    uint64 always_0; // Probably empty hkey
+    HKey texture_path;
+} Texture<read=Str("texture_path: %s", this.texture_path.str_value)>;
+
+#endif

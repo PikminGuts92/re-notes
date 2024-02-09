@@ -9,9 +9,11 @@ const string MAGIC_STBL = "lbTS";
 const string MAGIC_ZOBJ = "JBOZ";
 
 // TODO: Use HKey instead
+local uint64 ZOBJ_Audio = compute_crc64_from_string("Audio", true);
 local uint64 ZOBJ_Catalog2 = compute_crc64_from_string("Catalog2", true);
 local uint64 ZOBJ_Index2 = compute_crc64_from_string("Index2", true);
 local uint64 ZOBJ_PackageDef = compute_crc64_from_string("PackageDef", true);
+local uint64 ZOBJ_Texture = compute_crc64_from_string("Texture", true);
 local uint64 ZOBJ_Tuning = compute_crc64_from_string("Tuning", true);
 
 #endif

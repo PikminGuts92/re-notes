@@ -3,9 +3,11 @@
 
 #include "common.bt"
 #include "constants.bt"
+#include "zobject_audio.bt"
 #include "zobject_catalog2.bt"
 #include "zobject_index2.bt"
 #include "zobject_packagedef.bt"
+#include "zobject_texture.bt"
 #include "zobject_tuning.bt"
 
 typedef struct
@@ -15,6 +17,9 @@ typedef struct
 
     switch (header.file_type.value)
     {
+        case ZOBJ_Audio:
+            Audio obj;
+            break;
         case ZOBJ_Catalog2:
             Catalog2 obj;
             break;
@@ -23,6 +28,9 @@ typedef struct
             break;
         case ZOBJ_PackageDef:
             PackageDef obj;
+            break;
+        case ZOBJ_Texture:
+            Texture obj;
             break;
         case ZOBJ_Tuning:
             Tuning obj;

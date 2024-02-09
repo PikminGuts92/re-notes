@@ -1,0 +1,13 @@
+#ifndef BANDFUSE_ZOBJECT_AUDIO
+#define BANDFUSE_ZOBJECT_AUDIO
+
+#include "common.bt"
+
+typedef struct
+{
+    uint64 always_0;
+    HKey audio_path;
+    uint64 always_0;
+} Audio<read=Str("audio_path: %s", this.audio_path.str_value)>;
+
+#endif
