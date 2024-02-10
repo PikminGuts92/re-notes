@@ -55,6 +55,27 @@ void update_hkey(HKey& key)
 }
 
 typedef struct
+{
+    uint64 value<format=hex>;
+    local string str_value = (value == 0) ? "" : Str("%016LX", value);
+    local int has_str_value = value == 0;
+
+    update_fstring(this);
+} FString<read=this.str_value, optimize=false>;
+
+void update_fstring(FString& str)
+{
+    if (CURRENT_STRING_TABLE_KEY == 0) return;
+    
+    local string result = get_string_from_table(CURRENT_STRING_TABLE_KEY, str.value);
+    if (result != "")
+    {
+        str.str_value = result;
+        str.has_str_value = 1;
+    }
+}
+
+typedef struct
 {    
     uint64 value;
 } HKey_Empty<read=Str("%016LX", this.value)>;

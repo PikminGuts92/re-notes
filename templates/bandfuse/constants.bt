@@ -19,5 +19,6 @@ local uint64 ZOBJ_Tag = compute_crc64_from_string("Tag", true);
 local uint64 ZOBJ_TagCategory = compute_crc64_from_string("TagCategory", true);
 local uint64 ZOBJ_Texture = compute_crc64_from_string("Texture", true);
 local uint64 ZOBJ_Tuning = compute_crc64_from_string("Tuning", true);
+local uint64 ZOBJ_UILocStrings = compute_crc64_from_string("UILocStrings", true);
 
 #endif

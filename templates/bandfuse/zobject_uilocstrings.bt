@@ -1,0 +1,22 @@
+#ifndef BANDFUSE_ZOBJECT_UILOCSTRINGS
+#define BANDFUSE_ZOBJECT_UILOCSTRINGS
+
+#include "common.bt"
+
+// Same structure as HKeyList
+typedef struct
+{
+    int strings_count;
+    Offset strings_offset;
+
+    if (strings_count > 0)
+    {
+        local uint start_pos = FTell();
+        FSeek(strings_offset.abs_pos);
+
+        FString strings[strings_count];
+        FSeek(start_pos);
+    }
+} UILocStrings<read=Str("%d strings", this.strings_count)>;
+
+#endif

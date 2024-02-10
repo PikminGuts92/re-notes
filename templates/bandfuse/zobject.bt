@@ -13,6 +13,7 @@
 #include "zobject_tagcategory.bt"
 #include "zobject_texture.bt"
 #include "zobject_tuning.bt"
+#include "zobject_uilocstrings.bt"
 
 typedef struct
 {
@@ -50,6 +51,9 @@ typedef struct
             break;
         case ZOBJ_Tuning:
             Tuning obj;
+            break;
+        case ZOBJ_UILocStrings:
+            UILocStrings obj;
             break;
     }
 } ZObject<read=this.header.file_path.str_value>;
