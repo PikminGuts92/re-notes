@@ -3,21 +3,6 @@
 
 #include "common.bt"
 
-typedef struct
-{
-    int keys_count;
-    Offset keys_offset;
-
-    if (keys_count > 0)
-    {
-        local uint start_pos = FTell();
-        FSeek(keys_offset.abs_pos);
-
-        HKey keys[keys_count];
-        FSeek(start_pos);
-    }
-} HKeyCollection;
-
 typedef enum
 {
     Type1 = 1,

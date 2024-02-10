@@ -1,0 +1,42 @@
+#ifndef BANDFUSE_ZOBJECT_SONG
+#define BANDFUSE_ZOBJECT_SONG
+
+#include "common.bt"
+
+typedef struct
+{
+    HKey title;
+    HKey artist;
+    HKey description;
+    HKey album;
+    HKey texture_path;
+    HKey legend_tag;
+    HKey era_tag;
+
+    uint year;
+    float guitar_intensity;
+    float bass_intensity;
+    float vox_intensity;
+
+    HKeyCollection metadata_tags;
+    HKeyCollection genre_tags;
+    HKeyCollection label_tags;
+    
+    float song_length; // In milliseconds
+    uint always_0;
+    
+    HKey preview_path;
+    HKey video_path;
+    uint64 always_0_long;
+    
+    HKeyCollection instrument_tags;
+    
+    HKey backing_audio_path;
+    HKey bass_audio_path;
+    HKey drums_audio_path;
+    HKey lead_guitar_audio_path;
+    HKey rhythm_guitar_audio_path;
+    HKey vox_audio_path;
+} Song<read=Str("\"%s\" - %s", this.title.str_value, this.artist.str_value)>;
+
+#endif

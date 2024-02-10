@@ -10,19 +10,21 @@ typedef struct
     
     uint package_entries_count;
     Offset package_entries_offset;
-} Index2Entry;
+} Index2Entry<read=this.path.str_value>;
 
 typedef struct
 {
     HKey path; // Internal path
     char ext_file_path[240];
-} Index2PackageDefEntry;
+} Index2PackageDefEntry<read=Str("%s (%s)", this.path.str_value, this.ext_file_path)>;
 
 typedef struct (Index2Entry& index_entry)
 {
+    local uint last_idx = index_entry.package_entries_count - 1;
+    
     FSeek(index_entry.package_entries_offset.abs_pos);
     Index2PackageDefEntry entries[index_entry.package_entries_count]<optimize=false>;
-} Index2PackageDefEntries;
+} Index2PackageDefEntries<read=Str("%s (%s)", this.entries[last_idx].path.str_value, this.entries[last_idx].ext_file_path)>;
 
 typedef struct
 {

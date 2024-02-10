@@ -7,6 +7,7 @@
 #include "zobject_catalog2.bt"
 #include "zobject_index2.bt"
 #include "zobject_packagedef.bt"
+#include "zobject_song.bt"
 #include "zobject_texture.bt"
 #include "zobject_tuning.bt"
 
@@ -28,6 +29,9 @@ typedef struct
             break;
         case ZOBJ_PackageDef:
             PackageDef obj;
+            break;
+        case ZOBJ_Song:
+            Song obj;
             break;
         case ZOBJ_Texture:
             Texture obj;

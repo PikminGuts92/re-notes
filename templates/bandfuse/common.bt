@@ -61,6 +61,21 @@ typedef struct
 
 typedef struct
 {
+    int keys_count;
+    Offset keys_offset;
+
+    if (keys_count > 0)
+    {
+        local uint start_pos = FTell();
+        FSeek(keys_offset.abs_pos);
+
+        HKey keys[keys_count];
+        FSeek(start_pos);
+    }
+} HKeyCollection<read=Str("%d keys", this.keys_count)>;
+
+typedef struct
+{
     char magic[4];
     uint size;
 
