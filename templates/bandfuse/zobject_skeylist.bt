@@ -1,5 +1,5 @@
-#ifndef BANDFUSE_ZOBJECT_UILOCSTRINGS
-#define BANDFUSE_ZOBJECT_UILOCSTRINGS
+#ifndef BANDFUSE_ZOBJECT_SKEYLIST
+#define BANDFUSE_ZOBJECT_SKEYLIST
 
 #include "common.bt"
 
@@ -17,6 +17,6 @@ typedef struct
         SKey strings[strings_count];
         FSeek(start_pos);
     }
-} UILocStrings<read=Str("%d strings", this.strings_count)>;
+} SKeyList<read=Str("%d strings", this.strings_count)>;
 
 #endif

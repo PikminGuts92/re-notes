@@ -3,6 +3,7 @@
 
 #include "common.bt"
 #include "zobject_hkeylist.bt"
+#include "zobject_skeylist.bt"
 
 typedef enum
 {
@@ -20,11 +21,11 @@ typedef struct
     SongType song_type;
     int always_0;
 
-    HKey title;
-    HKey artist;
-    HKey album;
-    HKey description;
-    HKey legend;
+    SKey title;
+    SKey artist;
+    SKey album;
+    SKey description;
+    HKey legend_tag;
 
     // Intensity is -1 if no part
     float song_length;
@@ -32,7 +33,7 @@ typedef struct
     float bass_intensity;
     float vocals_intensity;
 
-    HKey era;
+    HKey era_tag;
     int year;
     int always_0;
 
@@ -40,7 +41,7 @@ typedef struct
     InstrumentTuning rhythm_tuning;
     InstrumentTuning bass_tuning;
 
-    HKeyList labels;
+    SKeyList labels;
 
     HKey song_path;
     HKey texture_path;

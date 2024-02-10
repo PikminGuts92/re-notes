@@ -60,18 +60,18 @@ typedef struct
     local string str_value = (value == 0) ? "" : Str("%016LX", value);
     local int has_str_value = value == 0;
 
-    update_fstring(this);
-} FString<read=this.str_value, optimize=false>;
+    update_skey(this);
+} SKey<read=this.str_value, optimize=false>;
 
-void update_fstring(FString& str)
+void update_skey(SKey& key)
 {
     if (CURRENT_STRING_TABLE_KEY == 0) return;
     
-    local string result = get_string_from_table(CURRENT_STRING_TABLE_KEY, str.value);
+    local string result = get_string_from_table(CURRENT_STRING_TABLE_KEY, key.value);
     if (result != "")
     {
-        str.str_value = result;
-        str.has_str_value = 1;
+        key.str_value = result;
+        key.has_str_value = 1;
     }
 }
 

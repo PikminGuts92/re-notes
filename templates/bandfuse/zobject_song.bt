@@ -3,13 +3,14 @@
 
 #include "common.bt"
 #include "zobject_hkeylist.bt"
+#include "zobject_skeylist.bt"
 
 typedef struct
 {
-    HKey title;
-    HKey artist;
-    HKey description;
-    HKey album;
+    SKey title;
+    SKey artist;
+    SKey description;
+    SKey album;
     HKey texture_path;
     HKey legend_tag;
     HKey era_tag;
@@ -21,7 +22,7 @@ typedef struct
 
     HKeyList metadata_tags;
     HKeyList genre_tags;
-    HKeyList label_tags;
+    SKeyList labels;
 
     float song_length; // In milliseconds
     uint always_0;

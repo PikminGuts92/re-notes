@@ -5,7 +5,7 @@
 
 typedef struct
 {
-    HKey name;
+    SKey name;
     uint64 always_0;
 } Tag<read=this.name.str_value>;
 

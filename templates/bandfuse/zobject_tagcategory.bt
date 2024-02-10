@@ -6,7 +6,7 @@
 
 typedef struct
 {
-    HKey name;
+    SKey name;
     HKeyList tags;
 } TagCategory<read=Str("%s (%d tags)", this.name.str_value, this.tags.keys_count)>;
 
