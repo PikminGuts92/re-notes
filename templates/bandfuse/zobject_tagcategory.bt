@@ -1,0 +1,13 @@
+#ifndef BANDFUSE_ZOBJECT_TAGCATEGORY
+#define BANDFUSE_ZOBJECT_TAGCATEGORY
+
+#include "common.bt"
+#include "zobject_hkeylist.bt"
+
+typedef struct
+{
+    HKey name;
+    HKeyList tags;
+} TagCategory<read=Str("%s (%d tags)", this.name.str_value, this.tags.keys_count)>;
+
+#endif

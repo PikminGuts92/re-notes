@@ -1,0 +1,12 @@
+#ifndef BANDFUSE_ZOBJECT_TAG
+#define BANDFUSE_ZOBJECT_TAG
+
+#include "common.bt"
+
+typedef struct
+{
+    HKey name;
+    uint64 always_0;
+} Tag<read=this.name.str_value>;
+
+#endif

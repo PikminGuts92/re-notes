@@ -2,6 +2,7 @@
 #define BANDFUSE_ZOBJECT_CATALOG2
 
 #include "common.bt"
+#include "zobject_hkeylist.bt"
 
 typedef enum
 {
@@ -39,14 +40,14 @@ typedef struct
     InstrumentTuning rhythm_tuning;
     InstrumentTuning bass_tuning;
 
-    HKeyCollection labels;
+    HKeyList labels;
 
     HKey song_path;
     HKey texture_path;
     HKey audio_preview_path;
 
-    HKeyCollection metadata_tags;
-    HKeyCollection genre_tags;
+    HKeyList metadata_tags;
+    HKeyList genre_tags;
 
     int flags; // 1 1 0 0
 

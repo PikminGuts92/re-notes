@@ -2,6 +2,7 @@
 #define BANDFUSE_ZOBJECT_SONG
 
 #include "common.bt"
+#include "zobject_hkeylist.bt"
 
 typedef struct
 {
@@ -18,19 +19,19 @@ typedef struct
     float bass_intensity;
     float vox_intensity;
 
-    HKeyCollection metadata_tags;
-    HKeyCollection genre_tags;
-    HKeyCollection label_tags;
-    
+    HKeyList metadata_tags;
+    HKeyList genre_tags;
+    HKeyList label_tags;
+
     float song_length; // In milliseconds
     uint always_0;
     
     HKey preview_path;
     HKey video_path;
     uint64 always_0_long;
-    
-    HKeyCollection instrument_tags;
-    
+
+    HKeyList instrument_tags;
+
     HKey backing_audio_path;
     HKey bass_audio_path;
     HKey drums_audio_path;

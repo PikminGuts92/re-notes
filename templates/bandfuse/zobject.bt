@@ -5,9 +5,12 @@
 #include "constants.bt"
 #include "zobject_audio.bt"
 #include "zobject_catalog2.bt"
+#include "zobject_hkeylist.bt"
 #include "zobject_index2.bt"
 #include "zobject_packagedef.bt"
 #include "zobject_song.bt"
+#include "zobject_tag.bt"
+#include "zobject_tagcategory.bt"
 #include "zobject_texture.bt"
 #include "zobject_tuning.bt"
 
@@ -24,6 +27,9 @@ typedef struct
         case ZOBJ_Catalog2:
             Catalog2 obj;
             break;
+        case ZOBJ_HKeyList:
+            HKeyList obj;
+            break;
         case ZOBJ_Index2:
             Index2 obj;
             break;
@@ -32,6 +38,12 @@ typedef struct
             break;
         case ZOBJ_Song:
             Song obj;
+            break;
+        case ZOBJ_Tag:
+            Tag obj;
+            break;
+        case ZOBJ_TagCategory:
+            TagCategory obj;
             break;
         case ZOBJ_Texture:
             Texture obj;

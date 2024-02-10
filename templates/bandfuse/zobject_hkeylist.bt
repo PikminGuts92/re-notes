@@ -1,0 +1,21 @@
+#ifndef BANDFUSE_ZOBJECT_HKEYLIST
+#define BANDFUSE_ZOBJECT_HKEYLIST
+
+#include "common.bt"
+
+typedef struct
+{
+    int keys_count;
+    Offset keys_offset;
+
+    if (keys_count > 0)
+    {
+        local uint start_pos = FTell();
+        FSeek(keys_offset.abs_pos);
+
+        HKey keys[keys_count];
+        FSeek(start_pos);
+    }
+} HKeyList<read=Str("%d keys", this.keys_count)>;
+
+#endif
