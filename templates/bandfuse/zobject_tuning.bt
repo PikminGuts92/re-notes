@@ -7,6 +7,6 @@ typedef struct
 {
     uint64 always_0; // Probably empty hkey
     InstrumentTuning instrument_tuning;
-} Tuning;
+} Tuning<read=this.instrument_tuning.name.str_value>;
 
 #endif

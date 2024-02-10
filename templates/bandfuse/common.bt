@@ -171,7 +171,7 @@ typedef struct
         Pitch d; // Alt
     } String<read=Str("%s | %s | %s | %s", read_pitch(this.a), read_pitch(this.b), read_pitch(this.c), read_pitch(this.d))>;
 
-    HKey tuning_name;
+    SKey name;
 
     String string_1;
     String string_2;
@@ -181,7 +181,7 @@ typedef struct
     String string_6;
     String string_7;
     String string_8;
-} InstrumentTuning;
+} InstrumentTuning<read=this.name.str_value>;
 
 typedef struct
 {
