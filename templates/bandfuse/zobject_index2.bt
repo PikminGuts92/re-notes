@@ -5,26 +5,29 @@
 
 typedef struct
 {
+    HKey path; // Internal path
+    char ext_file_path[240];
+} Index2PackageDefEntry<read=Str("%s (%s)", this.path.str_value, this.ext_file_path)>;
+
+typedef struct
+{
     HKey path;
     HKey file_type;
     
     uint package_entries_count;
     Offset package_entries_offset;
-} Index2Entry<read=this.path.str_value>;
-
-typedef struct
-{
-    HKey path; // Internal path
-    char ext_file_path[240];
-} Index2PackageDefEntry<read=Str("%s (%s)", this.path.str_value, this.ext_file_path)>;
-
-typedef struct (Index2Entry& index_entry)
-{
-    local uint last_idx = index_entry.package_entries_count - 1;
     
-    FSeek(index_entry.package_entries_offset.abs_pos);
-    Index2PackageDefEntry entries[index_entry.package_entries_count]<optimize=false>;
-} Index2PackageDefEntries<read=Str("%s (%s)", this.entries[last_idx].path.str_value, this.entries[last_idx].ext_file_path)>;
+    local uint last_idx = package_entries_count - 1;
+    
+    if (package_entries_count > 0)
+    {
+        local uint start_pos = FTell();
+        FSeek(package_entries_offset.abs_pos);
+
+        Index2PackageDefEntry entries[package_entries_count]<optimize=false>;
+        FSeek(start_pos);
+    }
+} Index2Entry<read=Str("%s (%s)", this.entries[last_idx].path.str_value, this.entries[last_idx].ext_file_path)>;
 
 typedef struct
 {
@@ -34,12 +37,6 @@ typedef struct
     Offset entries_offset; // Always 4
 
     Index2Entry entries[entries_count]<optimize=false>;
-
-    local uint i;
-    for (i = 0; i < entries_count; i++)
-    {
-        Index2PackageDefEntries package_entries(entries[i]);
-    }
 } Index2;
 
 #endif
