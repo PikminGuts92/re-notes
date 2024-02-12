@@ -1,0 +1,50 @@
+#ifndef BANDFUSE_ZOBJECT_CREDITSBLOCKLIST
+#define BANDFUSE_ZOBJECT_CREDITSBLOCKLIST
+
+#include "common.bt"
+#include "zobject_skeylist.bt"
+
+typedef struct
+{
+    // Always 1 and 0.0?
+    uint value_1;
+    float value_2;
+} CreditTimeEntry<read=Str("(%d, %f)", this.value_1, this.value_2)>;
+
+typedef struct
+{
+    uint entries_count;
+    Offset entries_offset;
+    
+    if (entries_count == 0) return;
+    
+    local uint start_pos = FTell();
+    FSeek(entries_offset.abs_pos);
+
+    CreditTimeEntry entries[entries_count];
+
+    FSeek(start_pos);
+} CreditTimes<read=Str("%d time entries", this.entries_count)>;
+
+typedef struct
+{
+    CreditTimes times;
+    SKeyList lines;
+} CreditEntry<read=Str("%d time entries, %d lines", this.times.entries_count, this.lines.strings_count)>;
+
+typedef struct
+{
+    uint entries_count;
+    Offset entries_offset;
+    
+    if (entries_count == 0) return;
+    
+    local uint start_pos = FTell();
+    FSeek(entries_offset.abs_pos);
+
+    CreditEntry entries[entries_count]<optimize=false>;
+    
+    FSeek(start_pos);
+} CreditsBlockList;
+
+#endif

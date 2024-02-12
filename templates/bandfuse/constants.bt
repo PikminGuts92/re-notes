@@ -11,6 +11,7 @@ const string MAGIC_ZOBJ = "JBOZ";
 // TODO: Use HKey instead
 local uint64 ZOBJ_Audio = compute_crc64_from_string("Audio", true);
 local uint64 ZOBJ_Catalog2 = compute_crc64_from_string("Catalog2", true);
+local uint64 ZOBJ_CreditsBlockList = compute_crc64_from_string("CreditsBlockList", true);
 local uint64 ZOBJ_HKeyList = compute_crc64_from_string("HKeyList", true);
 local uint64 ZOBJ_Index2 = compute_crc64_from_string("Index2", true);
 local uint64 ZOBJ_PackageDef = compute_crc64_from_string("PackageDef", true);

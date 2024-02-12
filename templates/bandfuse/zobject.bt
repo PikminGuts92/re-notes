@@ -5,6 +5,7 @@
 #include "constants.bt"
 #include "zobject_audio.bt"
 #include "zobject_catalog2.bt"
+#include "zobject_creditsblocklist.bt"
 #include "zobject_hkeylist.bt"
 #include "zobject_index2.bt"
 #include "zobject_packagedef.bt"
@@ -27,6 +28,9 @@ typedef struct
             break;
         case ZOBJ_Catalog2:
             Catalog2 obj;
+            break;
+        case ZOBJ_CreditsBlockList:
+            CreditsBlockList obj;
             break;
         case ZOBJ_HKeyList:
             HKeyList obj;

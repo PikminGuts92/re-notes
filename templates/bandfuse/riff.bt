@@ -36,14 +36,19 @@ typedef struct
 typedef struct
 {
     ChunkInfo chunk_info;
-    Indx index;
-
-    if (!exists(index.entries)) return;
-
+    
+    local string chunk_magic = ReadString(FTell(), 4);
     local uint i;
+    
+    if (chunk_magic != MAGIC_INDX)
+    {
+        return;
+    }
+    
     struct Chunks
     {
-        local string chunk_magic;
+        Indx index;
+        if (!exists(index.entries)) return;
 
         // Read string tables first
         for (i = 0; i < index.entries_count; i++)
@@ -89,12 +94,6 @@ typedef struct
             }
         }
     } chunks;
-    
-    // Update index path keys
-    for (i = 0; i < index.entries_count; i++)
-    {
-        
-    }
 } RiffFile;
 
 RiffFile file;
