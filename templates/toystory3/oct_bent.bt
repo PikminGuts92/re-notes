@@ -1,0 +1,38 @@
+LittleEndian();
+
+typedef struct (uint size)
+{
+    local uint end_offset = FTell() + size;
+    local uint string_count = 0;
+    
+    //char string_table[string_table_size];
+    
+    while (FTell() < end_offset)
+    {
+        struct String
+        {
+            string value;
+        } str<read=this.value>;
+        
+        string_count += 1;
+    }
+} StringTable<read=Str("%d strings", this.string_count)>;
+
+typedef struct
+{
+    uint unknown_1<format=hex>; // 0x45017629
+    uint unknown_2<format=hex>; // 0x3F8CCCCD
+    
+    uint always_0;
+    uint string_table_size;
+    uint remaining_size;
+    
+    FSeek(60);
+    StringTable string_table(string_table_size);
+    
+    uint num_1;
+    uint num_2;
+    uint num_3;
+} OctBentFile;
+
+OctBentFile file;
