@@ -17,7 +17,7 @@ typedef struct
     uint num_2; // 0
 
     ushort num_3; // 5, 503, 1030, 2004
-    ushort num_4; // 0xFFFF, 99
+    ushort max_entry_count; // 0xFFFF, 99
 
     char str_1[12];
     char str_2[12]; // "hsm"
@@ -33,11 +33,36 @@ typedef struct
     uint always_ff<format=hex>;
     struct SomeEntry
     {
-        uint count;
-
-        uint num_1; // Offset?
+        int count;
+        int offset;
         //ushort num_2; // 0xFF if num_1 == 0
-    } entries[255]<read=Str("(%d, %d)", this.count, this.num_1), optimize=false>;
+    } entries[255]<read=Str("(%d, %d)", this.count, this.offset)>;
+
+    struct SubEntries
+    {
+        local int i;
+        local int count;
+        local int offset;
+
+        for (i = 0; i < max_entry_count; i++)
+        {
+            count = entries[i].count;
+            offset = entries[i].offset;
+
+            if (count == 0 || offset == -1) continue;
+
+            FSeek(offset);
+
+            struct SubEntry
+            {
+                struct Entry
+                {
+                    int unknown;
+                    int offset;
+                } entries[count];
+            } sub_entries;
+        }
+    } sub_entries;
 } Ps2File;
 
 /*
