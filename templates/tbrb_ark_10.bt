@@ -1,0 +1,32 @@
+
+typedef struct
+{
+    LittleEndian();
+    local uint start_offset = FTell();
+
+    uint magic<format=hex>;
+    uint block_start_offset;
+    uint block_count;
+    
+    FSkip(4); // Max block inflate size
+    uint block_sizes[block_count];
+    
+    local uint milo_size = block_start_offset;
+    local int i;
+    
+    for (i = 0; i < block_count; i++)
+    {
+        milo_size += block_sizes[i];
+    }
+
+    FSeek(start_offset + milo_size);
+} MiloBytes;
+
+FSeek(0x1134C);
+byte bik_1[37811444];
+
+FSeek(0x2446A09);
+MiloBytes milo_1;
+
+FSeek(0x247CFA3);
+MiloBytes milo_2;
