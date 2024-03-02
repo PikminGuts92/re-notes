@@ -1,0 +1,89 @@
+LittleEndian();
+
+typedef struct
+{
+    ushort value;
+
+    /*local ubyte a = ((value >> 15) & 0x1) * 0xff;
+    local ubyte r = (ubyte)(((float)(value >> 10) / (float)(0x1f)) * (float)0xff);
+    local ubyte g = (ubyte)(((float)(value >>  5) / (float)(0x1f)) * (float)0xff);
+    local ubyte b = (ubyte)(((float)(value >>  0) / (float)(0x1f)) * (float)0xff);*/
+    
+    local ubyte a = ((value >> 15) & 0x1) * 0xff;
+    local ubyte b = (ubyte)(((float)(value >> 10) / (float)(0x1f)) * (float)0xff);
+    local ubyte g = (ubyte)(((float)(value >>  5) / (float)(0x1f)) * (float)0xff);
+    local ubyte r = (ubyte)(((float)(value >>  0) / (float)(0x1f)) * (float)0xff);
+    
+    /*local ubyte a = ((value >> 15) & 0x1) * 0xff;
+    local ubyte r = (ubyte)(((float)(value >> 10) / (float)(0x1f)) * (float)0xff);
+    local ubyte g = (ubyte)(((float)(value >>  5) / (float)(0x1f)) * (float)0xff);
+    local ubyte b = (ubyte)(((float)(value >>  0) / (float)(0x1f)) * (float)0xff);*/
+    
+    local uint rgba_value = ((uint)r << 24) | ((uint)g << 16) | ((uint)b << 8) | (uint)a;
+} RGBColor<read=Str("%08X", this.rgba_value), bgcolor=get_bgcolor_rgbcolor>;
+
+int get_bgcolor_rgbcolor(RGBColor& c)
+{
+    // BGR order
+    return ((int)c.b << 16) | ((int)c.g << 8) | (int)c.r;
+}
+
+typedef struct
+{
+    ubyte v;
+    local ubyte value = (v & 0xe7) | ((v & 0x10) >> 1) | ((v & 0x8) << 1);
+    
+    local ubyte r = parentof(this).palette.colors[value].r;
+    local ubyte g = parentof(this).palette.colors[value].g;
+    local ubyte b = parentof(this).palette.colors[value].b;
+    local ubyte a = parentof(this).palette.colors[value].a;
+    
+    local uint rbga_value = parentof(this).palette.colors[value].rgba_value;
+} Pixel<read=Str("%08X", this.rgba_value), bgcolor=get_bgcolor_pixel>;
+
+int get_bgcolor_pixel(Pixel& p)
+{
+    // BGR order
+    return ((int)p.b << 16) | ((int)p.g << 8) | (int)p.r;
+}
+
+typedef struct
+{
+    struct Header
+    {
+        uint version; // Always 4
+        uint file_id<format=hex>;
+        uint img_type;
+        FSkip(8);
+        
+        uint img_start_offset;
+        
+        uint unknown_1;
+        uint unknown_2;
+        uint unknown_3;
+        uint unknown_4;
+        uint file_size;
+        
+        uint always_0;
+        
+        FSeek(72);
+        ushort width;
+        ushort height;
+        
+        // TODO: Add more values
+    } header;
+
+    // Palette
+    FSeek(192);
+    struct Palette
+    {
+         RGBColor colors[256]<optimize=false>;
+    } palette;
+    
+    // Pixels
+    local uint pixel_count = (uint)header.width * (uint)header.height;
+    FSeek(800);
+    Pixel pixels[pixel_count]<optimize=false>;
+} GH3Img;
+
+GH3Img file;
