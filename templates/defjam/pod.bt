@@ -1,0 +1,27 @@
+LittleEndian();
+
+typedef struct
+{
+    char magic[4]; // POD5
+    int unknown<format=hex>;
+
+    char text[80]; // "Release format assets"
+    
+    uint num_1;
+    uint num_2;
+    uint num_3;
+    uint num_4;
+    
+    byte zero_data[160]<hidden=true>;
+    
+    uint num_5;
+    uint num_6;
+    uint num_7;
+    uint num_8;
+    uint num_9;
+    uint num_10;
+    
+    byte zero_data_2[96];//<hidden=true>;
+} PodFile;
+
+PodFile file;
