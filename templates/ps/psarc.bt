@@ -15,9 +15,9 @@ typedef struct
     ubyte hash[16]; // MD5
     uint block_offset;
 
-    UInt40 size_uncompressed;    
+    UInt40 size_uncompressed;
     UInt40 file_offset;
-} TocEntry;
+} TocEntry<read=Str("block_offset: %d, size: %d, offset: %d", this.block_offset, this.size_uncompressed.value, this.file_offset.value)>;
 
 typedef struct
 {
