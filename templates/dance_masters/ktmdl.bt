@@ -1,0 +1,43 @@
+// Model format
+
+BigEndian();
+
+// 8 bytes
+typedef struct
+{
+    uint count;
+    uint offset;
+} OffsetPair<read=Str("(%d, %d)", this.count, this.offset)>;
+
+typedef struct
+{
+    char magic[8]; //"KTMDL   "
+
+    uint num_1; // 2
+    uint num_2; // 2
+    uint num_3; // 65536
+
+    uint num_4;
+
+    OffsetPair offsets[9];
+
+    uint nums[12]; // [4] == [11]
+    uint file_size;
+
+    // [6] vert offset
+
+    // vert_size: 32, 36 (donut), 44 (rigged)
+
+    // 4x4 transform matrices?
+    // 464, 592 translate positions?
+
+    // File name prefixes:
+    // bb = background band
+    // bd = background dancer
+    // ef = ???
+    // pl = player?
+    //   _[genre][gender]
+
+} KtmdlFile;
+
+KtmdlFile file;
