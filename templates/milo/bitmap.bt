@@ -20,8 +20,9 @@ typedef enum <uint>
     DXT1_BC1 = 8,
     DXT5_BC3 = 24,
     ATI2_BC5 = 32,
-    TPL_CMP = 72,
-    TPL_CMP_ALPHA = 328
+    TPL_CMP = 72,        // 48 00 00 00
+    TPL_CMP_ALPHA = 328, // 48 01 00 00
+    TPL_CMP_2     = 583  // 48 02 00 00 seems to be same as 0x48
 } BITMAP_ENCODING;
 
 typedef struct
@@ -136,7 +137,10 @@ typedef struct
     else
     {
         // 32-byte header
-        if (version == 2) uint hash<format=hex>; // Assumed...
+        local ubyte lookup_bpp = ReadUByte(FTell());
+        local ubyte is_alt_v2 = version == 2 && lookup_bpp != 4 && lookup_bpp != 8;
+
+        if (is_alt_v2) uint hash<format=hex>; // Assumed...
 
         ubyte bpp;
         BITMAP_ENCODING encoding;
@@ -147,7 +151,7 @@ typedef struct
         ushort bpl;
 
         // Skip empty bytes
-        if (version == 1) FSkip(19);
+        if (!is_alt_v2) FSkip(19);
         else FSkip(15);
     }
 
