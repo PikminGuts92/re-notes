@@ -192,6 +192,79 @@ typedef struct
         PaddedData thumbnail_image(thumbnail_image_size, 0x4000);
         PaddedData title_thumbnail_image(title_thumbnail_image_size, 0x4000);
     } metadata;
+
+    local int start_blocks = block_to_offset(file, 0);
+
+    FSeek(start_blocks);
+
+    struct Block
+    {
+        ubyte data[0x1000];
+    } blocks[metadata.volume_descriptor.total_allocated_block_count];
+
+    /*local uint i;
+
+    for (i = 0; i < metadata.volume_descriptor.total_allocated_block_count; i++)
+    {
+        
+    }*/
 } STFSPackage;
 
+int block_to_offset(STFSPackage& package, int x_block)
+{
+    if (x_block > 0xFFFFFF)
+    {
+        return -1;
+    }
+    else
+    {
+        return ((((int)package.metadata.header_size + 0xFFF) & 0xF000) + (x_block << 12));
+    }
+}
+
+int compute_data_block_number(STFSPackage& package, int x_block)
+{
+    local int x_block_shift;
+    local int x_base;
+    local int x_return;
+
+    if ((((int)package.metadata.header_size + 0xFFF) & 0xF000) == 0xB000)
+    {
+        x_block_shift = 1;
+    }
+    else if ((package.metadata.volume_descriptor.block_separation & 1) == 1)
+    {
+        x_block_shift = 0;
+    }
+    else
+    {
+        x_block_shift = 1;
+    }
+
+    x_base = (x_block + 0xAA) / 0xAA;
+    if (package.header.magic == "CON ") x_base <<= x_block_shift;
+
+    x_return = x_base + x_block;
+
+    if (x_block > 0xAA)
+    {
+        x_base = (x_block + 0x70E4) / 0x70E4;
+        if (package.header.magic == "CON ") x_base <<= x_block_shift;
+
+        x_return += x_base;
+
+        if (x_block > 0x70E4)
+        {
+            x_base = (x_block + 0x4AF768) / 0x4AF768;
+            if (package.header.magic == "CON ") x_base <<= x_block_shift;
+
+            x_return += x_base;
+        }
+    }
+
+    return x_return;
+}
+
 STFSPackage file;
+
+//local int result = block_to_offset(file, 0);
