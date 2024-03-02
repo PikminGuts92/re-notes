@@ -1,0 +1,23 @@
+LittleEndian();
+
+typedef struct
+{
+    char magic[4]; // spav
+
+    ushort num_1;
+    ushort num_2;
+
+    uint num_3;
+    uint num_4;
+
+    uint size_1;
+    uint always_0;
+
+    uint unknown<format=hex>;
+
+    uint offset_1;
+
+    uint nums[14];
+} PS2File;
+
+PS2File file;
