@@ -28,6 +28,40 @@ typedef struct
     float nums[5];
 } KrVertex;
 
+// 56 bytes
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+
+    float u;
+    float v;
+
+    float always_0; // 0.0, 0.181, 0.002, 0.005
+
+    ubyte bone_0;
+    ubyte bone_1;
+    ubyte bone_2;
+    ubyte bone_3;
+
+    float nx;
+    float ny;
+    float nz;
+
+    uint unknown<format=hex>;
+
+    float nums[5];
+} KrVertexStatic;
+
+// 12 bytes
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+} KrVertexPoints;
+
 typedef struct
 {
     uint always_0;
@@ -100,6 +134,13 @@ typedef struct
     // Go to face data
     FSeek(face_offset);
     ushort faces[face_count];
+
+    // 52432
+
+    // 8960 vs 803
+    // 856 max
+
+    // Vert start: 4352, vert count: 857
 } KrMesh;
 
 KrMesh file;
