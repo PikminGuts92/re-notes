@@ -1,0 +1,74 @@
+// 36 bytes
+typedef struct
+{
+    uint unknown_1<format=hex>;
+
+    uint num_1;
+    uint num_2;
+    uint num_3;
+
+    ushort short_1;
+    ushort short_2;
+
+    // d4p dxt elif iu xet
+    char ident[4];
+
+    ushort short_3;
+    ushort short_4;
+
+    uint unknown_2<format=hex>;
+    uint always_0;
+} SomeEntry1<read=Str("%s (nums: %d %d %d) (shorts: %d %d %d %d)", this.ident, this.num_1, this.num_2, this.num_3, this.short_1, this.short_2, this.short_3, this.short_4)>;
+
+// 28 bytes
+typedef struct
+{
+    uint unknown_1<format=hex>; // 0x00 B6 40 02
+
+    uint num_1;
+
+    ushort short_1;
+    ushort short_2;
+
+    // d4p dxt elif iu xet
+    char ident[4];
+
+    ushort short_3;
+    ushort short_4;
+
+    uint unknown_2<format=hex>;
+    uint always_0;
+} SomeEntry2<read=Str("%s (nums: %d) (shorts: %d %d %d %d)", this.ident, this.num_1, this.short_1, this.short_2, this.short_3, this.short_4)>;
+
+typedef struct
+{
+    BigEndian();
+    uint magic<format=hex>; // 0x01 B6 40 02
+    
+    ushort short_1;
+    ushort short_2;
+    
+    LittleEndian();
+    
+    uint num_1;
+    uint num_2;
+    uint num_3; // (num_3 + 1) * 2048 = offset to start of entries_2
+    uint num_4;
+    uint num_5;
+    uint num_6;
+    uint num_7; // Start of data offset
+    uint num_8;
+    
+    FSeek(2048);
+
+    uint some_count_1;
+    SomeEntry1 entries_1[some_count_1];
+    
+    FSeek(num_7 + (num_3 * num_7)); // 2048 or 88064/0x15800
+
+    uint size_of_data;
+    //local uint some_count_2
+    SomeEntry2 entries_2[2]; // Count comes from somewhere?
+} P4DFile;
+
+P4DFile file;
