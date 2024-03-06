@@ -151,7 +151,11 @@ typedef struct
         ushort bpl;
 
         // Skip empty bytes
-        if (!is_alt_v2) FSkip(19);
+        if (!is_alt_v2)
+        {
+            ushort wii_alpha_num; // Not sure on byte length
+            FSkip(17);
+        }
         else FSkip(15);
     }
 
@@ -194,6 +198,13 @@ typedef struct
         w >>= 1;
         h >>= 1;
         i++;
+    }
+    
+    // Read hidden alpha data
+    if (encoding == TPL_CMP && exists(wii_alpha_num) && wii_alpha_num == 4)
+    {
+        data_size = ((uint)width * (uint)height * (uint)bpp) / 8;
+        Texture alpha_texture(0, width, height, data_size);
     }
 } Bitmap;
 
