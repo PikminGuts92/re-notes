@@ -149,14 +149,11 @@ typedef struct
         ushort width;
         ushort height;
         ushort bpl;
+        ushort wii_alpha_num; // Not sure on byte length (0 if not used)
 
         // Skip empty bytes
-        if (!is_alt_v2)
-        {
-            ushort wii_alpha_num; // Not sure on byte length
-            FSkip(17);
-        }
-        else FSkip(15);
+        if (!is_alt_v2) FSkip(17);
+        else FSkip(13);
     }
 
     if (encoding == 3 && (bpp == 4 || bpp == 8))
