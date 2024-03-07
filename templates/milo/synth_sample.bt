@@ -17,7 +17,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 5 (GH2 4-song/GH2/GH2 360/TBRB/GDRB)
+    int version; // 5 (GH2 4-song/GH2/GH2 360/RB2/TBRB/GDRB)
     if (version > 1) read_metadata(info, super);
 
     NumString file; // Mono, 16-bit sample file

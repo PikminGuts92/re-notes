@@ -19,13 +19,13 @@ https://github.com/FFmpeg/FFmpeg/blob/master/libavcodec/wmaprodec.c
 
 typedef struct (SystemInfo& info)
 {
-    int version; // 11 (GH2 4-song/GH2/GH2 360), 13 (TBRB/GDRB)
+    int version; // 11 (GH2 4-song/GH2/GH2 360/RB2), 13 (TBRB/GDRB)
 
     // 1 = Uncompressed 16-bit PCM
     // 2 =  ??? (PS2)
     // 3 =  ??? (360) Probably XMA... padded in 2048-sized blocks
     // 5 = MSFC (PS3)
-    // 6 =  ??? (Wii)
+    // 5|6 =  ??? (Wii)
     int encoding;
 
     int sample_count; // Will be half of samples_size if encoding is 1
