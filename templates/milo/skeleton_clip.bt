@@ -1,0 +1,40 @@
+// An animated clip of a skeleton playable in milo
+// Super: Anim
+// Ext: .clp
+// C++ Class: ???
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "SkeletonClip"
+    #endif
+#endif
+
+#ifndef OBJECT_SKELETON_CLIP
+#define OBJECT_SKELETON_CLIP
+
+#include "common.bt"
+#include "prop_anim.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    // 6 (DC1 Beta), 9 (DC1)
+    int version;
+    Anim anim(info, super);
+
+    // TODO
+} SkeletonClip;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "SkeletonClip")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 28;
+
+    SkeletonClip skeleton_clip(info, False);
+}
+
+#endif
+
+#endif
