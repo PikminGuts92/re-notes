@@ -12,6 +12,8 @@
 #ifndef OBJECT_CHAR_BONES_SAMPLES
 #define OBJECT_CHAR_BONES_SAMPLES
 
+#include "common.bt"
+
 struct CharBonesSamples;
 
 typedef enum <uint>
@@ -553,7 +555,7 @@ if (STANDALONE_FILE == "CharBonesSamples")
         info.version = 24;
     }
 
-    CharBonesSamples char_bones_samples(info, False);
+    CharBonesSamples char_bones_samples(info, False, -1);
 }
 
 #endif
