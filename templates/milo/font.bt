@@ -1,0 +1,100 @@
+// N/A
+// Super: Object
+// Ext: .font
+// C++ Class: RndFont
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "Font"
+    #endif
+#endif
+
+#ifndef OBJECT_FONT
+#define OBJECT_FONT
+
+#include "common.bt"
+
+typedef struct (SystemInfo& info, Bool super)
+{
+    int version; // 15 (GH2), 17 (TBRB)
+
+    if (version > 7)
+    {
+        read_metadata(info, super);
+    }
+    
+    NumString mat_name;
+
+    float width;
+    float height;
+    float num_1; // Always 0
+    float num_2; // Always 0
+    
+    uint character_count;
+    if (version > 15)
+    {
+        wchar_t characters[character_count];
+    }
+    else
+    {
+        char characters[character_count];
+    }
+    
+    Bool always_true;
+
+    uint kerning_entries_count;
+    if (version > 15)
+    {
+        struct KerningEntryWide
+        {
+            wchar_t char_1;
+            wchar_t char_2;
+            float space;
+        } kerning_entries[kerning_entries_count]<read=Str("\"%c\" \"%c\" (%f)", this.char_1, this.char_2, this.space)>;
+    }
+    else
+    {
+        struct KerningEntry
+        {
+            char char_1;
+            char char_2;
+            ushort reserved; // Always 0?
+            
+            float space;
+        } kerning_entries[kerning_entries_count]<read=Str("\"%c\" \"%c\" (%f)", this.char_1, this.char_2, this.space)>;
+    }
+
+    NumString font_name;
+    
+    // TODO
+} Font;
+
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "Font")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        // TODO
+        /*if (obj_version <= 12)
+        {
+            info.version = 24;
+        }*/
+    }
+
+    Font font(info, False);
+}
+
+#endif
+
+#endif
