@@ -1,0 +1,134 @@
+// Top-level resource object for UILabels
+// Super: RndDir
+// Ext: (None)
+// C++ Class: UILabelDir
+
+#ifndef IN_MILO_FILE
+    #ifndef STANDALONE_FILE
+        #define STANDALONE_FILE "UILabelDir"
+    #endif
+#endif
+
+#ifndef UI_LABEL_DIR
+#define UI_LABEL_DIR
+
+#include "common.bt"
+#include "rnd_dir.bt"
+
+typedef struct
+{
+    int version; // 9 (RB3)
+
+    Bool include_lower_case;
+    Bool include_upper_case;
+    Bool include_numbers;
+    Bool include_punctuation;
+    Bool include_upper_euro;
+    Bool include_lower_euro;
+    NumString plus_chars;
+    NumString minus_chars;
+    NumString font_name;
+
+    float font_pct_size;
+    int font_weight;
+    
+    Bool is_font_italic;
+
+    int pitch_and_family;
+
+    int font_quality;
+
+    int font_char_set;
+    int font_supersample;
+
+    NumString bitmap_path;
+    NumString bitmap_filename;
+
+    int tex_pad_left;
+    int tex_pad_right;
+    int tex_pad_top;
+    int tex_pad_bottom;
+
+    Bool fill_with_safe_white;
+
+    int gened_fonts_count;
+    NumString gen_fonts[gened_fonts_count] <optimize=false>;
+
+    NumString kerning_reference;
+
+    int mat_variations_count;
+    NumString mat_variations[mat_variations_count] <optimize=false>;
+
+    NumString default_mat;
+
+    NumString handmade_font;
+
+    NumString sync_resource;
+
+    Bool last_gen_was_ng;
+} UIFontImporter;
+
+typedef struct (SystemInfo& info, Bool super, Bool inlined)
+{
+    int version; // 3 (TBRB), 9 (RB3)
+    RndDir rnd_dir(info, False, inlined);
+
+    NumString text_object;
+
+    if(version == 3)
+    {
+        NumString font_ref;
+    }
+
+    NumString focus_anim;
+    NumString pulse_anim;
+
+    if(version == 9)
+    {
+
+        NumString highlight_mesh_group;
+
+        NumString top_left_highlight_bone;
+        NumString top_right_highlight_bone;
+        NumString bottom_left_highlight_bone;
+        NumString bottom_right_highlight_bone;
+
+        NumString focused_background_group;
+        NumString unfocused_background_group;
+
+        Bool allow_edit_text;
+    }
+    
+    NumString default_color;
+    NumString colors[5] <optimize=false>;
+
+    if(version == 9)
+    {
+        UIFontImporter font_importer;
+    }
+} UILabelDir;
+
+#ifdef STANDALONE_FILE
+
+if (STANDALONE_FILE == "UILabelDir")
+{
+    local int obj_version = guess_version();
+    local SystemInfo info;
+    info.version = 25;
+
+    if (IsBigEndian())
+    {
+        info.platform = X360;
+    }
+    else
+    {
+        info.platform = PS2;
+        info.version = 24;
+    }
+
+    UILabelDir label_dir(info, False, False);
+}
+
+#endif
+
+#endif
