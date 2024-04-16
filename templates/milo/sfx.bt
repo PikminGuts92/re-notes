@@ -80,7 +80,7 @@ typedef struct
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 9 (RB2/TBRB/GDRB), 12 (RB3)
+    int version; // 5 (GH2 360), 9 (RB1/RB2/TBRB/GDRB), 12 (RB3)
 
     if(version < 6)
     {
@@ -107,15 +107,20 @@ typedef struct (SystemInfo& info, Bool super)
     {
         NumString send_obj;
     }
+    
+    if(version < 8)
+    {
+        float unknown;
+    }
 
     if(8 < version)
     {
         FaderGroup fader_group;
     }
 
-    if(version > 0xb)
+    if(version > 11)
     {
-        float unk;
+        float unk_float;
         Bool unk_bool;
     }
 
