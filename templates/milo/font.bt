@@ -23,8 +23,9 @@ typedef struct (SystemInfo& info, Bool super)
         read_metadata(info, super);
     }
 
-    NumString mat_name; // RndMat
+    NumString mat; // RndMat
 
+    // Double cell size in pixels. Used for kerning?
     float width;
     float height;
     float num_1; // 0, 32
@@ -78,11 +79,15 @@ typedef struct (SystemInfo& info, Bool super)
     // Matches resolution of texture linked in material
     uint tex_width;
     uint tex_height;
-    
-    float f1;
-    float f2;
+
+    // Multiply by bitmap dimensions to get size in pixels
+    Vector2 cellSize;
 
     // Indexed bounding box dimensions for characters?
+    // x = char abs x_pos in bitmap
+    // y = char abs y_pos in bitmap
+    // w = char width
+    // h = char height
     if (version < 17)
     {
         local uint entry_count = 256;
