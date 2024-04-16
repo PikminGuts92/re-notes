@@ -16,22 +16,22 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 15 (GH2), 17 (TBRB)
+    int version; // 7 (GH1), 15 (GH2/GH2 360), 17 (TBRB)
 
     if (version > 7)
     {
         read_metadata(info, super);
     }
-    
-    NumString mat_name;
+
+    NumString mat_name; // RndMat
 
     float width;
     float height;
-    float num_1; // Always 0
+    float num_1; // 0, 32
     float num_2; // Always 0
-    
+
     uint character_count;
-    if (version > 15)
+    if (version >= 16)
     {
         wchar_t characters[character_count];
     }
@@ -39,34 +39,74 @@ typedef struct (SystemInfo& info, Bool super)
     {
         char characters[character_count];
     }
-    
-    Bool always_true;
 
-    uint kerning_entries_count;
-    if (version > 15)
+    Bool some_bool;
+    if (some_bool != False)
     {
-        struct KerningEntryWide
+        uint kerning_entries_count;
+        if (version < 17)
         {
-            wchar_t char_1;
-            wchar_t char_2;
-            float space;
-        } kerning_entries[kerning_entries_count]<read=Str("\"%c\" \"%c\" (%f)", this.char_1, this.char_2, this.space)>;
+            // 8 bytes
+            struct KerningEntry
+            {
+                char char_1;
+                char char_2;
+                ushort reserved; // Always 0?
+
+                float space;
+            } kerning_entries[kerning_entries_count]<read=Str("\"%c\" \"%c\" (%f)", this.char_1, this.char_2, this.space)>;
+        }
+        else
+        {
+            // 8 bytes
+            struct KerningEntryWide
+            {
+                wchar_t char_1;
+                wchar_t char_2;
+                float space;
+            } kerning_entries[kerning_entries_count]<read=Str("\"%c\" \"%c\" (%f)", this.char_1, this.char_2, this.space)>;
+        }
+    }
+
+    if (version < 8) return; // No more data for GH1 version
+
+    NumString font_name; // RndFont: Owner?
+
+    Bool bool_1;
+    Bool bool_2;
+
+    // Matches resolution of texture linked in material
+    uint tex_width;
+    uint tex_height;
+    
+    float f1;
+    float f2;
+
+    // Indexed bounding box dimensions for characters?
+    if (version < 17)
+    {
+        local uint entry_count = 256;
+        
+        // 16 bytes
+        struct SomeEntry
+        {
+            Vector4 value;
+        } entries[entry_count]<read=Str("%s", readVector4(this.value))>;
     }
     else
     {
-        struct KerningEntry
+        uint entry_count;
+        
+        // 18 bytes
+        struct SomeEntryIndexed
         {
-            char char_1;
-            char char_2;
-            ushort reserved; // Always 0?
-            
-            float space;
-        } kerning_entries[kerning_entries_count]<read=Str("\"%c\" \"%c\" (%f)", this.char_1, this.char_2, this.space)>;
+            ushort index;
+            Vector4 value;
+        } entries[entry_count]<read=Str("%d %s", this.index, readVector4(this.value))>;
     }
 
-    NumString font_name;
-    
-    // TODO
+    // Usually empty
+    if (version > 16) NumString unknown_font; // RndFont ObjPtr
 } Font;
 
 
@@ -86,7 +126,7 @@ if (STANDALONE_FILE == "Font")
     {
         info.platform = PS2;
         // TODO
-        /*if (obj_version <= 12)
+        /*if (obj_version <= 15)
         {
             info.version = 24;
         }*/
