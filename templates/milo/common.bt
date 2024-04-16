@@ -225,7 +225,18 @@ typedef struct
     float g;
     float b;
     float a;
-} Color4<read=readColor4>;
+} Color4<read=readColor4, bgcolor=get_bgcolor4_color>;
+
+int get_bgcolor4_color(Color4& c)
+{
+    local int r = (int)(c.r * 255.0);
+    local int g = (int)(c.g * 255.0);
+    local int b = (int)(c.b * 255.0);
+    local int a = (int)(c.a * 255.0);
+
+    // BGR order
+    return (b << 16) | (g << 8) | r;
+}
 
 string readColor4(Color4& c)
 {
