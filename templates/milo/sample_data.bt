@@ -19,7 +19,7 @@ https://github.com/FFmpeg/FFmpeg/blob/master/libavcodec/wmaprodec.c
 
 typedef struct (SystemInfo& info)
 {
-    int version; // 11 (GH2 4-song/GH2/GH2 360/RB2), 13 (TBRB/GDRB)
+    int version; // 11 (GH2 4-song/GH2/GH2 360/RB2), 13 (TBRB/GDRB) 14 (RB3)
 
     // 1 = Uncompressed 16-bit PCM
     // 2 =  ??? (PS2)
@@ -32,9 +32,14 @@ typedef struct (SystemInfo& info)
     int sample_rate;  // PS2 usually 16kHz (Also observed: 22.05kHz), 360 usually 44.1kHz
     int samples_size;
 
-    Bool some_bool;
+    Bool read_samples; // game will only read samples if this is true, otherwise it will just act like sample byte array is empty
 
     if (samples_size > 0) byte samples[samples_size];
+
+    if(version >= 14)
+    {
+        int unk_int;
+    }
 } SampleData;
 
 
