@@ -1,0 +1,26 @@
+#ifndef FORGE_GROUP
+#define FORGE_GROUP
+
+#include "common.bt"
+#include "draw.bt"
+#include "object.bt"
+#include "trans.bt"
+
+typedef struct (int super)
+{
+    int revision; // 18 (DCS)
+    if (!super) Object object;
+
+    Trans trans(True);
+    Draw draw(True);
+    
+    int objects_count;
+    if (objects_count > 0) FString objects[objects_count]<optimize=false>; // Object
+    
+    float unknown_float;
+} Group;
+
+#endif
+
+//LittleEndian();
+//Group file(False);

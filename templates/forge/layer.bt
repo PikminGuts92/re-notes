@@ -40,7 +40,7 @@ typedef struct
             switch (class)
             {
                 case "Trans":
-                    Trans data;
+                    Trans data(True);
                     break;
                 default:
                     byte data[size];
@@ -74,7 +74,7 @@ typedef struct
     Bool always_1;
     int always_0;
     
-    FString inherited; // Part of entity...
+    FString inherited; // Part of entity/reflection/group/mesh
     
     uint unknown_numbers[3];
     float some_floats[4];

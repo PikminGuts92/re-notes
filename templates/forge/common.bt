@@ -150,4 +150,12 @@ typedef struct
     float m43;
 } Matrix;
 
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+    float radius;
+} Sphere<read=Str("(%f, %f, %f), r=%f", this.x, this.y, this.z, this.radius)>;
+
 #endif

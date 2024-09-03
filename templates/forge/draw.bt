@@ -1,0 +1,24 @@
+#ifndef FORGE_DRAW
+#define FORGE_DRAW
+
+#include "common.bt"
+#include "object.bt"
+
+typedef struct (int super)
+{
+    int revision; // 14 (DCS/FME)
+    if (!super) Object object;
+    
+    Bool showing;
+    uint unknown;
+    
+    FString property_1; // Both usually "inherited"
+    FString property_2;
+    
+    Sphere sphere;
+    
+    float always_1;
+    uint always_0;
+} Draw;
+
+#endif

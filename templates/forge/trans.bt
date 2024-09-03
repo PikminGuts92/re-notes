@@ -4,11 +4,10 @@
 #include "common.bt"
 #include "object.bt"
 
-typedef struct
+typedef struct (int super)
 {
     int revision; // 10 (DCS/FME)
-    
-    Object object;
+    if (!super) Object object;
 
     Matrix localXfm;
     Matrix worldXfm;

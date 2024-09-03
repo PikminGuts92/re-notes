@@ -2,101 +2,30 @@
 #define FORGE_MESH
 
 #include "common.bt"
+#include "draw.bt"
+#include "object.bt"
+#include "trans.bt"
 
-typedef enum <int>
+typedef struct (int super)
 {
-    Invalid = -1,
-    Color = 0,
-    ColorTex = 2,
-    Unskinned = 3,
-    Skinned = 4,
-    PosOnly = 5,
-    Particle = 6,
-    UnskinnedCompressed = 7,
-    SkinnedCompressed = 8
-} VertexType;
+    int revision; // 43 (DCS/FME)
+    if (!super) Object object;
 
-typedef struct
-{
-    float x;
-    float y;
-    float z;
+    Trans trans(True);
+    Draw draw(True);
     
-    char unk;
-    float unk;
-    char unk;
-    hfloat unk;
-    int unk;
-    int unk;
-    int unk;
-    hfloat unk; // Not sure about this one
-    hfloat unk;
-    hfloat unk;
-    hfloat unk;
-    hfloat unk;
-    hfloat unk;
+    FString mat; // RndMat
 
-    // Repeated UV coordinates?
-    hfloat u1;
-    hfloat v1;
-    hfloat u2;
-    hfloat v2;
+    uint always_0;
+    FString mesh_data_name_1; // RndMeshData in embedded files
     
-    switch (parentof(parentof(this)).vertex_type) // Ugh... hacky
-    {
-        case ColorTex:
-            byte unk_color_tex[80 - 52];
-            break;
-        case UnskinnedCompressed:
-            short unk;
-            short unk;
-            int unk;
-            int unk;
-            break;
-    }
-} Vertex<read=Str("(%f, %f, %f)", this.x, this.y, this.z)>;
+    uint usually_0; // 0 or 1
+    Bool unknown_bool;
 
-typedef struct
-{
-    uint v1;
-    uint v2;
-    uint v3;
-} Face<read=Str("[%d %d %d]", this.v1, this.v2, this.v3)>;
-
-typedef struct
-{
-    char id[8]; // "HXMESH"
-    int endian;
-    int revision; // 14 (RB4)
-
-    VertexType vertex_type;
-
-    uint num_verts;
-    uint num_faces;
-
-    Bool some_bools_1[2];
-    Bool some_bools_2[2];
-
-    Bool keep_mesh_data;
-
-    uint vertex_usage_flags;
-    uint face_usage_flags;
-
-    uint unknown<format=hex>;
-    float unknown_floats[4]; // Bounding sphere?
-
-    struct
-    {
-        Vertex vertices[num_verts]<optimize=false>;
-    } vertices<read=Str("(%d vertices)", parentof(this).num_verts)>;
-
-    struct
-    {
-        Face faces[num_faces]<optimize=false>;
-    } faces<read=Str("(%d faces)", parentof(this).num_faces)>;
-} HxMesh<read=Str("(%d vertices, %d faces)", this.num_verts, this.num_faces)>;
+    FString mesh_data_name_2; // // RndMeshData in embedded files
+} Mesh;
 
 #endif
 
-LittleEndian();
-HxMesh mesh;
+//BigEndian();
+//Mesh file(False);
