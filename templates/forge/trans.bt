@@ -1,0 +1,20 @@
+#ifndef FORGE_TRANS
+#define FORGE_TRANS
+
+#include "common.bt"
+#include "object.bt"
+
+typedef struct
+{
+    int revision; // 10 (DCS/FME)
+    
+    Object object;
+
+    Matrix localXfm;
+    Matrix worldXfm;
+    
+    byte empty[9];
+    FString parent;
+} Trans;
+
+#endif

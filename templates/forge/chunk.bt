@@ -1,0 +1,119 @@
+#ifndef FORGE_CHUNK
+#define FORGE_CHUNK
+
+#include "layer.bt"
+#include "milo.bt"
+
+/*
+Extension:
+    .{format}_{platform}
+
+Platforms:
+    xbox (Xbox 360)
+    durango (Xbox One)
+
+Formats:
+    .char
+    .cliptype
+    .dir
+    .entity
+    .layer
+    .scene
+    .song
+    .uiscreen
+    
+    Note: FME doesn't use .char or .entity
+    
+.layer files seems to always start with "LAYR" chunk, otherwise they all start with "MILO"
+*/
+
+// ZLib compressed
+typedef enum <uint>
+{
+    None = 0,
+    Compressed = 1 << 24
+} Compression;
+
+typedef struct
+{
+    char magic[4]; // "CHNK"
+    uint some_flag; // 255 on FME, 511 on DCS
+    
+    local byte is_durango = 0;
+    if (some_flag & 0x0100)
+    {
+        // XB1 uses little endian
+        LittleEndian();
+        is_durango = 1;
+    }
+    
+    uint block_count;
+    uint max_block_size;
+    
+    ushort always_1;
+    ushort always_2; // 2 = FME, 5 = XB1 DCS?
+    
+    if (is_durango)
+    {
+        struct BlockEntryDurango
+        {
+            uint size;
+            uint uncompressed_size;
+            uint offset;
+            Compression compression;
+        } block_entries[block_count];
+    }
+    else
+    {
+        struct BlockEntry
+        {
+            uint size;
+            uint uncompressed_size;
+            Compression compression;
+            uint offset;
+        } block_entries[block_count];
+    }
+    
+    local int i;
+    local byte is_compressed = 0;
+    for (i = 0; i < block_count; i++)
+    {
+        if (block_entries[i].compression == Compressed)
+        {
+            is_compressed = true;
+            Printf("WARNING: Contains compressed block");
+            break;
+        }
+    }
+    
+    if (is_compressed || block_count == 0) return;
+
+    local int start_offset = block_entries[0].offset;
+    FSeek(start_offset);
+    
+    local string type_magic;
+    while (!FEof())
+    {
+        type_magic = ReadString(FTell(), 4);
+
+        switch (type_magic)
+        {
+            case "MILO":
+                MiloFile milo_entry;
+                //LayerFile layer_entry;
+                break;
+            case "LAYR":
+                LayerFile layer_entry;
+                break;
+            default:
+                return;
+        }
+        
+        break;
+    }
+} ChunkFile;
+
+#endif
+
+BigEndian();
+ChunkFile file;

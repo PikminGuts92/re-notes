@@ -31,6 +31,123 @@ typedef enum <byte>
 {
     False = 0,
     True = 1
-} Bool;
+} Bool<read=read_bool_string>;
+
+string read_bool_string(Bool& b)
+{
+    return (b == True)
+        ? "True"
+        : "False";
+}
+
+// DTB
+// 1 = DCS/FME, ...TODO
+typedef struct (int version)
+{
+    struct Node;
+    typedef enum <int>
+    {
+        Int,
+        Float,
+        Variable,
+        Func,
+        Object,
+        Symbol,
+        Unhandled,
+        IfDef,
+        Else,
+        EndIf,
+        Array = 0x10,
+        Command,
+        String,
+        Property,
+        Glob,
+        Define = 0x20,
+        Include,
+        Merge,
+        IfNDef,
+        Autorun,
+        Undef
+    } NodeType;
+
+    typedef struct
+    {
+        uint unknown;
+        uint child_count;
+        ushort id;
+        Node children[child_count]<optimize=false>;
+    } Parent;
+
+    typedef struct
+    {
+        NodeType type;
+    
+        switch(type)
+        {
+            // Integer
+            case 0x00:
+                uint value;
+                break;
+            // Float
+            case 0x01: // Float
+                float value;
+                break;
+            // String
+            case 0x02: // Variable
+            case 0x03: // Func
+            case 0x04: // Object (gh2 milos)
+            case 0x05: // Symbol, Keyword
+            case 0x06: // Unhandled "KDataUnhandled" or "invalid"
+            case 0x07: // IfDef
+            case 0x08: // Else
+            case 0x09: // EndIf
+            case 0x12: // String
+            case 0x20: // Define
+            case 0x21: // Include
+            case 0x22: // Merge
+            case 0x23: // IfNDef
+            case 0x24: // Autorun
+            case 0x25: // Undef
+                FString value;
+                break;
+            case 0x10: // Array
+            case 0x11: // Command, Script
+            case 0x13: // Property (Object Prop Ref)
+                Parent value;
+                break;
+            case 0x14: // Glob <glob 00>
+                // Note: <file.txt> is old syntax for "#include file.dta" so <glob file.bin> *might* be dta syntax for glob
+                struct Glob
+                {
+                    ushort size;
+                    if (size > 0) byte data[size];
+                } value<read=Str("<glob %d>", this.size)>;
+                break;
+        }
+    } Node;
+
+    Bool has_tree;
+    
+    if (has_tree == True)
+    {
+        Parent root;
+    }
+} DTB;
+
+typedef struct
+{
+    float m11;
+    float m12;
+    float m13;
+    float m21;
+    float m22;
+    float m23;
+    float m31;
+    float m32;
+    float m33;
+    float m41;
+    float m42;
+    float m43;
+} Matrix;
 
 #endif

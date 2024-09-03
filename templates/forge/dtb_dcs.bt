@@ -1,0 +1,9 @@
+#ifndef FORGE_DTB_DCS
+#define FORGE_DTB_DCS
+
+#include "common.bt"
+
+LittleEndian();
+DTB file(1);
+
+#endif

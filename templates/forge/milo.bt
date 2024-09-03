@@ -1,0 +1,71 @@
+#ifndef FORGE_MILO
+#define FORGE_MILO
+
+#include "common.bt"
+
+/*
+Revisions:
+    Entity 32
+    Cam 20
+    Group 18
+    Mesh 43
+    MatShaderGraph 0
+    Tex 16
+    TexRenderer 21
+    Mat 106
+    PathCamera 0
+    PropAnim 28
+    Flow 18
+    DCCharacter 3
+    PropertyBlender 7
+    Font 19
+    Trans 10
+    Reflection 7
+    
+    RndTexData 8
+    
+    (FME)
+    DiscoveryNeighborhoodData 0
+    WwiseBankData 1
+    Trans 10
+*/
+
+typedef struct
+{
+    char magic[4]; // "MILO"
+    int always_61;
+
+    uint64 unknown_1; // 8
+    uint64 unknown_2; // 0
+    
+    FString dir_class;
+    FString dir_name;
+    
+    // String table info for names/classes
+    uint string_table_string_count;
+    uint string_table_used_size;
+    
+    uint64 unknown_3; // offset or size?
+    uint unknown_4; // rnd_dir revision
+    uint unknown_5; // obj_dir revision
+    
+    uint unknown_6;
+    uint unknown_7;
+
+    FString type;
+    
+    uint unknown_8;
+    uint unknown_9; // 10 00 00 08
+    
+    uint always_0;
+    
+    
+    // (6 8 0) base object?
+} MiloFile;
+
+#endif
+
+/*if (FTell() == 0)
+{
+    MiloFile file;
+}*/

@@ -1,0 +1,13 @@
+#ifndef FORGE_OBJECT
+#define FORGE_OBJECT
+
+#include "common.bt"
+
+typedef struct
+{    
+    int revision; // 10 (DCS/FME)
+    int always_8;
+    int always_0; // Probably type
+} Object;
+
+#endif

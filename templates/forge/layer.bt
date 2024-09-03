@@ -1,0 +1,88 @@
+#ifndef FORGE_LAYER
+#define FORGE_LAYER
+
+#include "common.bt"
+#include "trans.bt"
+
+typedef struct
+{
+    char magic[4]; // "LAYR"
+    
+    int always_61;
+    
+    Bool has_object_entries; // Always true if .layer file?
+    Bool bool_2;
+
+    // String table info for names/classes
+    // Both 0 if no entries
+    uint string_table_string_count;
+    uint string_table_used_size;
+    
+    uint entry_count;
+    
+    if (entry_count > 0)
+    {
+        struct LayerEntryName
+        {
+            FString file_class;
+            FString file_name;
+        } layer_entry_names[entry_count]<read=Str("%s (%s)", this.file_name.text, this.file_class.text), optimize=false>;
+        
+        local uint i = 0;
+        struct LayerEntry
+        {
+            local string class = layer_entry_names[i].file_class.text;
+            local string name = layer_entry_names[i].file_name.text;
+            i++;
+            
+            uint64 size;
+            
+            switch (class)
+            {
+                case "Trans":
+                    Trans data;
+                    break;
+                default:
+                    byte data[size];
+                    break;
+            }
+        } layer_entries[entry_count]<read=Str("%s (%s)", this.name, this.class), optimize=false>;
+    }
+    
+    while (ReadUInt(FTell()) != 0)
+    {
+        struct EmbeddedFile
+        {
+            FString file_class;
+            FString file_name;
+            
+            uint64 size;
+            byte data[size];
+        } embedded_files<read=Str("%s (%s)", this.file_name.text, this.file_class.text)>;
+    }
+    
+    byte extra_unknown[12];
+    
+    return;
+    
+    uint all_zeros[4];
+    
+    uint always_8;
+    uint unknown_4;   // 0x000
+    uint unknown_5;   // 0x0E
+    
+    Bool always_1;
+    int always_0;
+    
+    FString inherited; // Part of entity...
+    
+    uint unknown_numbers[3];
+    float some_floats[4];
+    
+    //12 bytes remain
+} LayerFile;
+
+#endif
+
+//BigEndian();
+//LayerFile file;
