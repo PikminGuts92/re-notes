@@ -13,13 +13,14 @@ typedef struct (int super)
 
     Trans trans(True);
     Draw draw(True);
-    
+
+    uint always_0;
     FString mat; // RndMat
 
     uint always_0;
     FString mesh_data_name_1; // RndMeshData in embedded files
     
-    uint usually_0; // 0 or 1
+    uint usually_0; // 0.0 or 1.0
     Bool unknown_bool;
 
     FString mesh_data_name_2; // // RndMeshData in embedded files

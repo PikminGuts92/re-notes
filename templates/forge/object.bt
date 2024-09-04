@@ -7,7 +7,16 @@ typedef struct
 {    
     int revision; // 10 (DCS/FME)
     int always_8;
-    int always_0; // Probably type
+
+    uint file_count; // Uusally 0
+    if (file_count == 0) return;
+    
+    struct File
+    {
+        FString name;
+        uint64 size;
+        byte data[size];
+    } files[file_count]<read=this.name.text, optimize=false>;
 } Object;
 
 #endif

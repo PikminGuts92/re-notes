@@ -1,0 +1,24 @@
+#ifndef FORGE_RND_DIR
+#define FORGE_RND_DIR
+
+#include "common.bt"
+#include "draw.bt"
+#include "layer.bt"
+#include "object_dir.bt"
+
+typedef struct (int super)
+{
+    int revision; // 14 (DCS/FME)
+    if (!super) ObjectDir object_dir(False);
+    
+    // TODO: Move to separate file
+    struct Anim
+    {
+        int revision; // 8 (DCS/FME)
+        uint always_0; // Probably anims count
+    } anim;
+    
+    Draw draw(True);
+} RndDir;
+
+#endif

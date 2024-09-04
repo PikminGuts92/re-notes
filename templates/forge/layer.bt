@@ -2,15 +2,15 @@
 #define FORGE_LAYER
 
 #include "common.bt"
+#include "object.bt"
 #include "trans.bt"
 
 typedef struct
 {
     char magic[4]; // "LAYR"
-    
     int always_61;
     
-    Bool has_object_entries; // Always true if .layer file?
+    Bool bool_1; // Always true if .layer file?
     Bool bool_2;
 
     // String table info for names/classes
@@ -39,8 +39,11 @@ typedef struct
             
             switch (class)
             {
+                case "Object":
+                    Object data;
+                    break;
                 case "Trans":
-                    Trans data(True);
+                    Trans data(False);
                     break;
                 default:
                     byte data[size];
@@ -80,7 +83,7 @@ typedef struct
     float some_floats[4];
     
     //12 bytes remain
-} LayerFile;
+} Layer;
 
 #endif
 

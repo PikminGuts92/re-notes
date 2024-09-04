@@ -2,6 +2,7 @@
 #define FORGE_MILO
 
 #include "common.bt"
+#include "rnd_dir.bt"
 
 /*
 Revisions:
@@ -21,6 +22,9 @@ Revisions:
     Font 19
     Trans 10
     Reflection 7
+    
+    (*dirs*)
+    RndDir 8?
     
     (*embedded*)
     RndTexData 8
@@ -44,6 +48,7 @@ typedef struct
     char magic[4]; // "MILO"
     int always_61;
 
+    // read_type?
     uint64 unknown_1; // 8
     uint64 unknown_2; // 0
     
@@ -54,7 +59,32 @@ typedef struct
     uint string_table_string_count;
     uint string_table_used_size;
     
-    uint64 unknown_3; // offset or size?
+    /*
+    RndDir
+        (x 14 35 6 1)
+        (x 14 35 6 2)
+    */
+    
+    uint64 milo_data_size; // offset or size?
+    
+    switch (dir_class.text)
+    {
+        case "RndDir":
+            RndDir dir(False);
+            break;
+        default:
+            Printf("WARNING: Unknown dir class of \"%s\"", dir_class.text);
+            byte milo_data[milo_data_size];
+            break;
+    }
+    
+    uint always_0;
+    
+    return;
+    
+    // RndDir values...
+    // Start of class specific fields?
+    
     uint unknown_4; // rnd_dir revision
     uint unknown_5; // obj_dir revision
     
@@ -70,7 +100,7 @@ typedef struct
     
     
     // (6 8 0) base object?
-} MiloFile;
+} Milo;
 
 #endif
 

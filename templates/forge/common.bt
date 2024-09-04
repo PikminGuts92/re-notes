@@ -1,6 +1,14 @@
 #ifndef FORGE_COMMON
 #define FORGE_COMMON
 
+int is_durango()
+{
+    local int size;
+    local int res = RegExSearch(FileNameGetExtension(GetFileName()), "_durango$", size);
+
+    return res >= 0;
+}
+
 typedef struct
 {
     uint size;

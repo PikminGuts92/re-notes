@@ -1,0 +1,38 @@
+#ifndef FORGE_OBJECT_DIR
+#define FORGE_OBJECT_DIR
+
+#include "common.bt"
+#include "layer.bt"
+
+// Similiar to MiloReferenceType?
+/*typedef enum <uint>
+{
+    DefaultLayer = 1,
+    ImportLayer = 2
+} LayerType;*/
+
+typedef struct (int super)
+{
+    int revision; // 35 (DCS/FME)
+    //if (!super) Object object;
+    
+    uint always_6;
+    uint reference_count; // Usually 1
+
+    // Similiar to MiloReferenceType?
+    if (reference_count > 0)
+    {
+        // First entry is usually "main" + "10 00 00 08" flags
+        struct Reference
+        {
+            FString name;
+            FString file_path;
+            uint flags<format=hex>;
+        } references[reference_count]<read=Str("%s (%s)", this.name.text, this.file_path.text), optimize=false>;
+    }
+    
+    uint always_0;
+    Layer layer;
+} ObjectDir;
+
+#endif

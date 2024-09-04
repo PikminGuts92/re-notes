@@ -91,26 +91,19 @@ typedef struct
     local int start_offset = block_entries[0].offset;
     FSeek(start_offset);
     
-    local string type_magic;
-    while (!FEof())
+    local string type_magic = ReadString(FTell(), 4);
+    switch (type_magic)
     {
-        type_magic = ReadString(FTell(), 4);
-
-        switch (type_magic)
-        {
-            case "MILO":
-                MiloFile milo_entry;
-                //LayerFile layer_entry;
-                break;
-            case "LAYR":
-                LayerFile layer_entry;
-                break;
-            default:
-                return;
+        case "MILO":
+            Milo milo;
+            break;
+        case "LAYR":
+            Layer layer;
+            break;
+        default:
+            Printf("WARNING: Unknown magic of \"%s\"", type_magic);
+            return;
         }
-        
-        break;
-    }
 } ChunkFile;
 
 #endif

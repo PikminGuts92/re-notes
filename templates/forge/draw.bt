@@ -10,15 +10,17 @@ typedef struct (int super)
     if (!super) Object object;
     
     Bool showing;
-    uint unknown;
+    uint unknown; // Always 0?
+
+     // Both usually "inherited"
+    FString property_1;
+    if (!is_durango()) FString property_2; // Repeated on last gen for some reason
     
-    FString property_1; // Both usually "inherited"
-    FString property_2;
+    Sphere sphere; // (0.0, 0.0, 0.0) r = 1.0
     
-    Sphere sphere;
+    float usually_1; // Sometimes 0
     
-    float always_1;
-    uint always_0;
+    if (is_durango()) uint always_0; // Might be property_2...
 } Draw;
 
 #endif
