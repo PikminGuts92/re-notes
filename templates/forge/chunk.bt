@@ -98,7 +98,7 @@ typedef struct
             Milo milo;
             break;
         case "LAYR":
-            Layer layer;
+            Layer layer(False);
             break;
         default:
             Printf("WARNING: Unknown magic of \"%s\"", type_magic);

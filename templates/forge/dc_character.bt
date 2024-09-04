@@ -1,0 +1,15 @@
+#ifndef FORGE_DC_CHARACTER
+#define FORGE_DC_CHARACTER
+
+#include "character.bt"
+#include "common.bt"
+
+typedef struct (int super)
+{
+    int revision; // 3 DCS    
+    if (!super) Character character(False);
+    
+    //Draw draw(True);
+} DCCharacter;
+
+#endif

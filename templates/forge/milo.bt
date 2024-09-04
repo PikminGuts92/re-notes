@@ -1,7 +1,9 @@
 #ifndef FORGE_MILO
 #define FORGE_MILO
 
+#include "character.bt"
 #include "common.bt"
+#include "dc_character.bt"
 #include "rnd_dir.bt"
 
 /*
@@ -65,10 +67,17 @@ typedef struct
         (x 14 35 6 2)
     */
     
-    uint64 milo_data_size; // offset or size?
+    uint64 milo_data_size;
+    local uint64 end_offset = FTell() + milo_data_size;
     
     switch (dir_class.text)
     {
+        case "Character":
+            Character dir(False);
+            break;
+        case "DCCharacter":
+            DCCharacter dir(False);
+            break;
         case "RndDir":
             RndDir dir(False);
             break;
@@ -76,6 +85,12 @@ typedef struct
             Printf("WARNING: Unknown dir class of \"%s\"", dir_class.text);
             byte milo_data[milo_data_size];
             break;
+    }
+    
+    // Help with in-progress templates
+    if (FTell() < end_offset)
+    {
+        byte milo_data_unknown[end_offset - FTell()];
     }
     
     uint always_0;

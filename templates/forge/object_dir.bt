@@ -27,12 +27,17 @@ typedef struct (int super)
         {
             FString name;
             FString file_path;
+            
+            //            0  - No data (layer is part of milo data)
+            // "10 00 00 00" - Embedded import (data directly appended after references?)
+            // "10 00 00 08" - External import
+            // "10 00 00 20" - ???
             uint flags<format=hex>;
         } references[reference_count]<read=Str("%s (%s)", this.name.text, this.file_path.text), optimize=false>;
     }
     
     uint always_0;
-    Layer layer;
+    Layer layer(False);
 } ObjectDir;
 
 #endif

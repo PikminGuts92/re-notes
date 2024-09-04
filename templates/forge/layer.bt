@@ -5,13 +5,15 @@
 #include "object.bt"
 #include "trans.bt"
 
-typedef struct
+struct Layer;
+
+typedef struct (Bool inlined)
 {
     char magic[4]; // "LAYR"
     int always_61;
     
-    Bool bool_1; // Always true if .layer file?
-    Bool bool_2;
+    Bool bool_1; // Always true if .layer file? No...
+    Bool bool_2; // True for layers with embedded references?
 
     // String table info for names/classes
     // Both 0 if no entries
@@ -35,7 +37,24 @@ typedef struct
             local string name = layer_entry_names[i].file_name.text;
             i++;
             
+            local uint is_layer = 0;
+            switch (class)
+            {
+                case "CharAnimDriver":
+                    is_layer = true;
+                    break;
+            }
+            
+            if (is_layer
+                && ReadString(FTell(), 4) == "LAYR") // Hacky way to tell if inlined
+                // neutral_skeleton.char has both inlined and non-lined CharaAnimDriver entries :(
+            {
+                Layer inlined_data(True);
+            }
+            
+            // Read as regular entry
             uint64 size;
+            local uint64 end_offset = FTell() + size;
             
             switch (class)
             {
@@ -49,9 +68,18 @@ typedef struct
                     byte data[size];
                     break;
             }
+
+            // Help with in-progress templates
+            if (FTell() < end_offset)
+            {
+                byte data_unknown[end_offset - FTell()];
+            }
         } layer_entries[entry_count]<read=Str("%s (%s)", this.name, this.class), optimize=false>;
     }
     
+    // No extra files if inlined as entry
+    if (inlined) return;
+
     while (ReadUInt(FTell()) != 0)
     {
         struct EmbeddedFile
@@ -87,5 +115,5 @@ typedef struct
 
 #endif
 
-//BigEndian();
-//LayerFile file;
+//LittleEndian();
+//Layer file;
