@@ -12,8 +12,11 @@ typedef struct (int super)
     Matrix localXfm;
     Matrix worldXfm;
     
-    byte empty[9];
-    FString parent;
+    uint some_enum; // 0, 10
+    FString bone_ref; // Usually empty (bone_pelvis.mesh)
+    Bool always_false;
+
+    FString parent; // Is ".." when bone_ref is given?
 } Trans;
 
 #endif
