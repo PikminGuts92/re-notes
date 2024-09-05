@@ -6,9 +6,13 @@
 #include "trans.bt"
 
 struct Layer;
+struct LayerEntries;
+struct LayerFiles;
 
-typedef struct (Bool inlined)
+typedef struct (string name, Bool inlined)
 {
+    local string name = name;
+    
     char magic[4]; // "LAYR"
     int always_61;
     
@@ -29,89 +33,83 @@ typedef struct (Bool inlined)
             FString file_class;
             FString file_name;
         } layer_entry_names[entry_count]<read=Str("%s (%s)", this.file_name.text, this.file_class.text), optimize=false>;
-        
-        local uint i = 0;
-        struct LayerEntry
-        {
-            local string class = layer_entry_names[i].file_class.text;
-            local string name = layer_entry_names[i].file_name.text;
-            i++;
-            
-            local uint is_layer = 0;
-            switch (class)
-            {
-                case "CharAnimDriver":
-                    is_layer = true;
-                    break;
-            }
-            
-            if (is_layer
-                && ReadString(FTell(), 4) == "LAYR") // Hacky way to tell if inlined
-                // neutral_skeleton.char has both inlined and non-lined CharaAnimDriver entries :(
-            {
-                Layer inlined_data(True);
-            }
-            
-            // Read as regular entry
-            uint64 size;
-            local uint64 end_offset = FTell() + size;
-            
-            switch (class)
-            {
-                case "Object":
-                    Object data;
-                    break;
-                case "Trans":
-                    Trans data(False);
-                    break;
-                default:
-                    byte data[size];
-                    break;
-            }
-
-            // Help with in-progress templates
-            if (FTell() < end_offset)
-            {
-                byte data_unknown[end_offset - FTell()];
-            }
-        } layer_entries[entry_count]<read=Str("%s (%s)", this.name, this.class), optimize=false>;
     }
-    
-    // No extra files if inlined as entry
-    if (inlined) return;
 
+    if (inlined) return;
+    
+    if (entry_count > 0) LayerEntries entries(this);
+    LayerFiles files(this);
+} Layer<read=this.name>;
+
+typedef struct (string class, string name)
+{
+    local string class = class;
+    local string name = name;
+    
+    // Read as regular entry
+    uint64 size;
+    local uint64 end_offset = FTell() + size;
+    
+    if (end_offset > FileSize())
+    {
+        Printf("WARNING: End of file reached for entry %s (%s)\n", name, class);
+        return;
+    }
+           
+    switch (class)
+    {
+        case "Object":
+            Object data;
+            break;
+        case "Trans":
+            Trans data(False);
+            break;
+        default:
+            byte data[size];
+            break;
+        }
+
+    // Help with in-progress templates
+    if (FTell() < end_offset)
+    {
+        byte data_unknown[end_offset - FTell()];
+    }
+} LayerEntry<read=Str("%s (%s)", this.name, this.class)>;
+
+typedef struct (Layer& layer)
+{
+    local string layer_name = layer.name;
+    local uint entry_count = layer.entry_count;
+    
+    local uint i;
+    for (i = 0; i < entry_count; i++)
+    {
+        LayerEntry entries(layer.layer_entry_names[i].file_class.text, layer.layer_entry_names[i].file_name.text);
+    }
+} LayerEntries<read=Str("%s (%d entries)", this.layer_name, this.entry_count)>;
+
+typedef struct
+{
+    FString file_class;
+    FString file_name;
+        
+    uint64 size;
+    byte data[size];
+} EmbeddedFile<read=Str("%s (%s)", this.file_name.text, this.file_class.text)>;
+
+typedef struct (Layer& layer)
+{
+    local string layer_name = layer.name;
+    local uint file_count = 0;
+    
     while (ReadUInt(FTell()) != 0)
     {
-        struct EmbeddedFile
-        {
-            FString file_class;
-            FString file_name;
-            
-            uint64 size;
-            byte data[size];
-        } embedded_files<read=Str("%s (%s)", this.file_name.text, this.file_class.text)>;
+        EmbeddedFile embedded_files;
+        file_count++;
     }
     
-    byte extra_unknown[12];
-    
-    return;
-    
-    uint all_zeros[4];
-    
-    uint always_8;
-    uint unknown_4;   // 0x000
-    uint unknown_5;   // 0x0E
-    
-    Bool always_1;
-    int always_0;
-    
-    FString inherited; // Part of entity/reflection/group/mesh
-    
-    uint unknown_numbers[3];
-    float some_floats[4];
-    
-    //12 bytes remain
-} Layer;
+    byte terminated_data[12];
+} LayerFiles<read=Str("%s (%d files)", this.layer_name, this.file_count)>;
 
 #endif
 

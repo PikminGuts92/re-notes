@@ -32,12 +32,58 @@ typedef struct (int super)
             // "10 00 00 00" - Embedded import (data directly appended after references?)
             // "10 00 00 08" - External import
             // "10 00 00 20" - ???
+            
+            // .. 00 = Don't append files
+            // .. 08 = Append files after all entries?
+            // .. 20 = Append files directly after entries for that layer?
             uint flags<format=hex>;
-        } references[reference_count]<read=Str("%s (%s)", this.name.text, this.file_path.text), optimize=false>;
+        } references[reference_count]<read=Str("%s (%s), flags: %08X", this.name.text, this.file_path.text, this.flags), optimize=false>;
     }
     
     uint always_0;
-    Layer layer(False);
+
+    local uint i;
+    local uint embed_count = 0;
+    
+    // Read layers
+    for (i = 0; i < reference_count; i++)
+    {
+        if ((references[i].flags & 0x10000000) == 0) continue;
+        
+        Layer layers(references[i].name.text, True);        
+        embed_count++;
+    }
+    
+    // Read layer entries
+    local int e = -1;
+    for (i = 0; i < reference_count; i++)
+    {
+        if ((references[i].flags & 0x10000000) == 0) continue;
+        e++;
+        
+        if (layers[e].entry_count > 0) LayerEntries layer_entries(layers[e]);
+        
+        while (ReadUInt(FTell()) != 0)
+        {
+            EmbeddedFile embedded_files;
+        }
+        
+        uint unknown_padding;
+    }
+    
+    // Read layer files
+    // This is assumed... not observed yet
+    e = -1;
+    for (i = 0; i < reference_count; i++)
+    {
+        if ((references[i].flags & 0x10000000) == 0) continue;
+        e++;
+        
+        if ((references[i].flags & 0x00000008) == 0) continue;
+
+        LayerFiles layer_files(layers[e]);
+        uint unknown_padding;
+    }
 } ObjectDir;
 
 #endif

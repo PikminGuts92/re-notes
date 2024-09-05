@@ -81,7 +81,7 @@ typedef struct
         if (block_entries[i].compression == Compressed)
         {
             is_compressed = true;
-            Printf("WARNING: Contains compressed block");
+            Printf("WARNING: Contains compressed block\n");
             break;
         }
     }
@@ -98,10 +98,10 @@ typedef struct
             Milo milo;
             break;
         case "LAYR":
-            Layer layer(False);
+            Layer layer(FileNameGetBase(GetFileName(), false), False);
             break;
         default:
-            Printf("WARNING: Unknown magic of \"%s\"", type_magic);
+            Printf("WARNING: Unknown magic of \"%s\"\n", type_magic);
             return;
         }
 } ChunkFile;

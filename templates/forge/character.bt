@@ -3,6 +3,7 @@
 
 #include "common.bt"
 #include "rnd_dir.bt"
+#include "draw.bt"
 
 typedef struct (int super)
 {
@@ -14,8 +15,19 @@ typedef struct (int super)
     uint num_2; // 34
     
     if (!super) ObjectDir object_dir(False);
+
+    // Probably some other super obj
+    // ...unless obj_dir extra embedded data?
+    //float zero_values[3];
     
-    //Draw draw(True);
+    // TODO: Move to separate file
+    struct Anim2
+    {
+        int revision; // 8 (DCS/FME)
+        uint always_0; // Probably anims count
+    } anim;
+    
+    Draw draw(True);
 } Character;
 
 #endif
