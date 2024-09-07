@@ -1,0 +1,67 @@
+#ifndef FORGE_RND_TEX_DATA
+#define FORGE_RND_TEX_DATA
+
+#include "common.bt"
+
+typedef struct
+{
+    uint magic; // 8 (DCS)
+    uint always_0;
+    
+    uint width;
+    uint height;
+    uint bpp;
+    
+    float some_num; // -8
+    uint always_1;
+    Bool always_true;
+    
+    FString path; // Source image page
+    
+    uint always_0;
+    Bool always_false;
+    uint always_3;
+    uint always_3;
+    
+    uint always_0;
+    uint always_0;
+
+    uint bpp2;
+    uint always_0;
+    uint always_2;
+    
+    uint always_0;
+    
+    enum Encoding
+    {
+        DXT1 = 2,
+        DXT5 = 4
+    } encoding;
+    
+    ubyte mips; // Smaller for smaller textures
+    ushort width2;
+    ushort height2;
+    ushort bpl;
+    
+    local uint i = 0;
+    local uint w = width2;
+    local uint h = height2;
+    
+    while (i <= mips)
+    {
+        struct MipTexture
+        {
+            local uint mip_width = w;
+            local uint mip_height = h;
+            local uint mip_index = i;
+            
+            ubyte tex_data[(mip_width * mip_height * (uint)bpp2) / 8];
+        } mip_textures<read=Str("%dx%d (mip #%d)", this.mip_width, this.mip_height, this.mip_index)>;
+        
+        w >>= 1;
+        h >>= 1;
+        i++;
+    }
+} RndTexData<read=Str("%dx%d texture", this.width, this.height)>;
+
+#endif
