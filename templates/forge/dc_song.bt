@@ -1,0 +1,52 @@
+#ifndef FORGE_DC_SONG
+#define FORGE_DC_SONG
+
+#include "common.bt"
+#include "object_dir.bt"
+
+typedef struct (int super)
+{
+    int revision; // 10 (DCS)
+    uint num_1; // 34
+    
+    if (!super) ObjectDir object_dir(False);
+    
+    // TODO: Move to separate file
+    struct Anim3
+    {
+        int revision; // 8 (DCS/FME)
+        uint anim_count; // Usually 0
+        if (anim_count > 0) FString anims[anim_count]<optimize=false>;
+    } anim<read=Str("(%d animations)", this.anim_count)>;
+    
+    uint always_8;
+    
+    int num_2; // -1 in calibration song
+    int num_3;
+    
+    int num_4;
+    int num_5;
+    
+    Bool unknown; // False for calibration song
+    
+    float float_1; // Always 20.0?
+    FString type_presumed; // "viper"
+    
+    int tags_count;
+    if (tags_count > 0)
+    {
+        // Matches dta
+        // "gritty", "colorful", "tutorial", "average"
+        FString tags[tags_count]<optimize=false>;
+    }
+    
+    int song_id; // Matches dta
+    FString song_name;
+    FString song_artist;
+    
+    Bool bool_1;
+    Bool bool_2;
+    Bool bool_3;
+} DCSong;
+
+#endif
