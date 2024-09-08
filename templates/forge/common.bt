@@ -1,6 +1,8 @@
 #ifndef FORGE_COMMON
 #define FORGE_COMMON
 
+struct Milo;
+
 int is_durango()
 {
     local int size;

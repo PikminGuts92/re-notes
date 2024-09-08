@@ -3,8 +3,10 @@
 
 #include "character.bt"
 #include "common.bt"
-#include "dc_character.bt"
+//#include "dc_character.bt"
+#include "dc_song.bt"
 #include "rnd_dir.bt"
+#include "ui_screen.bt"
 
 /*
 Revisions:
@@ -75,11 +77,17 @@ typedef struct
         case "Character":
             Character dir(False);
             break;
-        case "DCCharacter":
+        /*case "DCCharacter":
             DCCharacter dir(False);
+            break;*/
+        case "DCSong":
+            DCSong dir(False);
             break;
         case "RndDir":
             RndDir dir(False);
+            break;
+        case "UIScreen":
+            UIScreen dir(False);
             break;
         default:
             Printf("WARNING: Unknown dir class of \"%s\"", dir_class.text);

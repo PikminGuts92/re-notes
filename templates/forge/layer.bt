@@ -4,10 +4,12 @@
 #include "common.bt"
 #include "object.bt"
 #include "trans.bt"
+#include "rnd_tex_data.bt"
 
 struct Layer;
 struct LayerEntries;
 struct LayerFiles;
+struct LayerUnknown;
 
 typedef struct (string name, Bool inlined)
 {
@@ -38,11 +40,13 @@ typedef struct (string name, Bool inlined)
     if (inlined) return;
     
     if (entry_count > 0) LayerEntries entries(this);
-    LayerFiles files(this);
+    LayerUnknown unknown(this);
 } Layer<read=this.name>;
 
 typedef struct (string class, string name)
 {
+    #include "dc_character.bt"
+    
     local string class = class;
     local string name = name;
     
@@ -55,9 +59,14 @@ typedef struct (string class, string name)
         Printf("WARNING: End of file reached for entry %s (%s)\n", name, class);
         return;
     }
-           
+
     switch (class)
     {
+        // Milo entries
+        case "DCCharacter":
+            DCCharacter data(False, True);
+            break;
+        // Regular entries
         case "Object":
             Object data;
             break;
@@ -76,6 +85,37 @@ typedef struct (string class, string name)
     }
 } LayerEntry<read=Str("%s (%s)", this.name, this.class)>;
 
+typedef struct
+{
+    FString file_class;
+    FString file_name;
+        
+    uint64 size;
+    local uint64 end_offset = FTell() + size;
+    
+    if (end_offset > FileSize())
+    {
+        Printf("WARNING: End of file reached for embedded file %s (%s)\n", file_name, file_class);
+        return;
+    }
+    
+    switch (file_class.text)
+    {
+        case "RndTexData":
+            RndTexData data;
+            break;
+        default:
+            byte data[size];
+            break;
+        }
+
+    // Help with in-progress templates
+    if (FTell() < end_offset)
+    {
+        byte data_unknown[end_offset - FTell()];
+    }
+} EmbeddedFile<read=Str("%s (%s)", this.file_name.text, this.file_class.text)>;
+
 typedef struct (Layer& layer)
 {
     local string layer_name = layer.name;
@@ -86,30 +126,22 @@ typedef struct (Layer& layer)
     {
         LayerEntry entries(layer.layer_entry_names[i].file_class.text, layer.layer_entry_names[i].file_name.text);
     }
-} LayerEntries<read=Str("%s (%d entries)", this.layer_name, this.entry_count)>;
-
-typedef struct
-{
-    FString file_class;
-    FString file_name;
-        
-    uint64 size;
-    byte data[size];
-} EmbeddedFile<read=Str("%s (%s)", this.file_name.text, this.file_class.text)>;
-
-typedef struct (Layer& layer)
-{
-    local string layer_name = layer.name;
-    local uint file_count = 0;
     
+    local uint file_count = 0;
     while (ReadUInt(FTell()) != 0)
     {
         EmbeddedFile embedded_files;
         file_count++;
     }
     
-    byte terminated_data[12];
-} LayerFiles<read=Str("%s (%d files)", this.layer_name, this.file_count)>;
+    uint embedded_terminated;
+} LayerEntries<read=Str("%s (%d entries, %d files)", this.layer_name, this.entry_count, this.file_count)>;
+
+typedef struct (Layer& layer)
+{
+    local string layer_name = layer.name;   
+    byte unknown_data[8];
+} LayerUnknown<read=Str("%s (unknown data)", this.layer_name)>;
 
 #endif
 

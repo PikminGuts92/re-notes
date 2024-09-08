@@ -4,15 +4,28 @@
 #include "common.bt"
 #include "rnd_dir.bt"
 #include "draw.bt"
+//#include "milo.bt"
+#include "trans.bt"
 
-typedef struct (int super)
+typedef struct (int super, Bool inlined)
 {
     int revision; // 9 DCS
 
     // No RndDir?
     uint num_1; // 32
-    Bool unk_bool; // true
+    Bool unk_bool; // True if root milo? Nope, not always.
+    
+    if (inlined) Trans trans(True);
     uint num_2; // 34
+    
+    if (inlined)
+    {
+        uint always_6; // Part of obj dir?
+        FString file_name;
+        
+        //if (!unk_bool) Milo milo;
+        return;
+    }
     
     if (!super) ObjectDir object_dir(False);
 
@@ -24,8 +37,9 @@ typedef struct (int super)
     struct Anim2
     {
         int revision; // 8 (DCS/FME)
-        uint always_0; // Probably anims count
-    } anim;
+        uint anim_count; // Usually 0
+        if (anim_count > 0) FString anims[anim_count]<optimize=false>;
+    } anim<read=Str("(%d animations)", this.anim_count)>;
     
     Draw draw(True);
 } Character;
