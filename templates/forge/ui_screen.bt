@@ -1,0 +1,23 @@
+#ifndef FORGE_UI_SCREEN
+#define FORGE_UI_SCREEN
+
+#include "common.bt"
+//#include "draw.bt"
+#include "object_dir.bt"
+
+typedef struct (int super)
+{
+    int revision; // 16 (DCS)
+    if (!super) ObjectDir object_dir(False);
+    
+    // TODO: Move to separate file
+    /*struct Anim
+    {
+        int revision; // 8 (DCS/FME)
+        uint always_0; // Probably anims count
+    } anim;
+    
+    Draw draw(True);*/
+} UIScreen;
+
+#endif
