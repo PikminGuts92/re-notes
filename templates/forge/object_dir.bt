@@ -40,7 +40,17 @@ typedef struct (int super)
         } references[reference_count]<read=Str("%s (%s), flags: %08X", this.name.text, this.file_path.text, this.flags), optimize=false>;
     }
     
-    uint always_0;
+    uint reference2_count; // Usually 0
+    if (reference2_count > 0)
+    {
+        struct Reference2
+        {
+            // global_mgrs (../../../globals/main.layer) in main_uiscreen
+            FString name;
+            FString file_path;
+            uint flags<format=hex>; // Always 0?
+        } references2[reference2_count]<read=Str("%s (%s)", this.name.text, this.file_path.text), optimize=false>;
+    }
 
     local uint i;
     local uint embed_count = 0;
@@ -49,40 +59,29 @@ typedef struct (int super)
     for (i = 0; i < reference_count; i++)
     {
         if ((references[i].flags & 0x10000000) == 0) continue;
-        
+
         Layer layers(references[i].name.text, True);        
         embed_count++;
     }
     
     // Read layer entries
-    local int e = -1;
+    local int e = 0;
     for (i = 0; i < reference_count; i++)
     {
         if ((references[i].flags & 0x10000000) == 0) continue;
+        
+        LayerEntries layer_entries(layers[e]);
         e++;
-        
-        if (layers[e].entry_count > 0) LayerEntries layer_entries(layers[e]);
-        
-        while (ReadUInt(FTell()) != 0)
-        {
-            EmbeddedFile embedded_files;
-        }
-        
-        uint unknown_padding;
     }
-    
-    // Read layer files
-    // This is assumed... not observed yet
-    e = -1;
+
+    // Read layer unknowns
+    e = 0;
     for (i = 0; i < reference_count; i++)
     {
         if ((references[i].flags & 0x10000000) == 0) continue;
-        e++;
-        
-        if ((references[i].flags & 0x00000008) == 0) continue;
 
-        LayerFiles layer_files(layers[e]);
-        uint unknown_padding;
+        LayerUnknown layer_unknowns(layers[e]);        
+        e++;
     }
 } ObjectDir;
 
