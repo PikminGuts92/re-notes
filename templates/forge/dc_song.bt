@@ -1,3 +1,7 @@
+// Instance that holds all per-song-routine data
+// Super: Instance Poll
+// Ext: .song
+
 #ifndef FORGE_DC_SONG
 #define FORGE_DC_SONG
 
@@ -18,7 +22,7 @@ typedef struct (int super)
         uint anim_count; // Usually 0
         if (anim_count > 0) FString anims[anim_count]<optimize=false>;
     } anim<read=Str("(%d animations)", this.anim_count)>;
-    
+
     uint always_8;
     
     int num_2; // -1 in calibration song
@@ -30,7 +34,7 @@ typedef struct (int super)
     Bool unknown; // False for calibration song
     
     float float_1; // Always 20.0?
-    FString type_presumed; // "viper"
+    FString game_origin; // "viper"
     
     int tags_count;
     if (tags_count > 0)
@@ -41,12 +45,12 @@ typedef struct (int super)
     }
     
     int song_id; // Matches dta
-    FString song_name;
-    FString song_artist;
+    FString name;
+    FString artist;
     
     Bool bool_1;
     Bool bool_2;
     Bool bool_3;
-} DCSong;
+} DCSong<read=Str("%s - %s", this.name.text, this.artist.text)>;
 
 #endif

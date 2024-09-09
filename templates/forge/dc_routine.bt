@@ -1,0 +1,43 @@
+// Instance that holds all per-song-routine data
+// Super: Object
+// Ext: (None)
+
+#ifndef FORGE_DC_ROUTINE
+#define FORGE_DC_ROUTINE
+
+#include "common.bt"
+#include "object.bt"
+
+typedef struct (int super)
+{
+    int revision; // 18 (DCS)
+    if (!super) Object object;
+    
+    int difficulty_level; // "Absolute difficulty level of this routine, from 1 - 28"
+
+    FString name; // alt, medium, expert, etc.
+    Bool always_true;
+
+    uint move_count;
+    if (move_count > 0)
+    {
+        struct Move
+        {
+            FString name;
+           
+            // All data is empty?
+            uint num_1; // 0, 1, 2, 3
+            uint num_2; // 0, 1, 2, 3
+            uint num_3; // 0, 3, 4, 5, 9, 11
+            uint num_4; // 0, 3, 6
+            
+            Bool bool_1;
+            Bool bool_2;
+            Bool bool_3;
+        } moves[move_count]<read=Str("%s (%d %d %d %d)", this.name.text, this.num_1, this.num_2, this.num_3, this.num_4), optimize=false>;
+    }
+    
+    uint always_0;
+} DCRoutine<read=Str("%s (%d moves)", this.name.text, this.move_count)>;
+
+#endif
