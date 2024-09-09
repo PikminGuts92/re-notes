@@ -5,7 +5,7 @@
 
 typedef struct
 {    
-    int revision; // 10 (DCS/FME)
+    int revision; // 6 (DCS/FME)
     int always_8;
 
     uint file_count; // Uusally 0

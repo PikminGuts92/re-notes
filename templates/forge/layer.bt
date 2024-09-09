@@ -2,6 +2,7 @@
 #define FORGE_LAYER
 
 #include "common.bt"
+#include "dc_routine.bt"
 #include "object.bt"
 #include "trans.bt"
 #include "rnd_tex_data.bt"
@@ -67,6 +68,9 @@ typedef struct (string class, string name)
             DCCharacter data(False, True);
             break;
         // Regular entries
+        case "DCRoutine":
+            DCRoutine data(False);
+            break;
         case "Object":
             Object data;
             break;
@@ -140,7 +144,15 @@ typedef struct (Layer& layer)
 typedef struct (Layer& layer)
 {
     local string layer_name = layer.name;   
-    byte unknown_data[8];
+    //byte unknown_data[8];
+    
+    uint unknown_1;
+    uint unknown_2;
+    
+    if (unknown_1 != 0 || unknown_2 != 0)
+    {
+        Printf("WARNING: Expected unknown data values for layer to be 0\n", file_name, file_class);
+    }
 } LayerUnknown<read=Str("%s (unknown data)", this.layer_name)>;
 
 #endif
