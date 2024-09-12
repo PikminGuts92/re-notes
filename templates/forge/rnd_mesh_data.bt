@@ -18,7 +18,7 @@ typedef struct
     uint face_count;
     
     uint always_21845; // 0x00005555
-    float face_data[face_count * 3];
+    uint face_data[face_count * 3];
 
     //FSeek(start_offset + 582);
     //local uint vert_count = ReadUInt(start_offset + 582);
