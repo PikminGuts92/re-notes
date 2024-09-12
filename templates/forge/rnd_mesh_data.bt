@@ -1,0 +1,71 @@
+#ifndef FORGE_RND_MESH_DATA
+#define FORGE_RND_MESH_DATA
+
+typedef struct
+{
+    local uint start_offset = FTell();
+    uint magic; // 20 (FME), 21 (DCS)
+    // TODO: FME
+    
+    byte empty_data[6];
+    uint always_4;
+    
+    float some_floats[7];
+    uint always_0;
+    
+    //FSeek(start_offset + 46);
+    //local uint face_count = ReadUInt(start_offset + 46);
+    uint face_count;
+    
+    uint always_21845; // 0x00005555
+    float face_data[face_count * 3];
+
+    //FSeek(start_offset + 582);
+    //local uint vert_count = ReadUInt(start_offset + 582);
+    uint vert_count;
+    uint always_2114;
+    
+    Bool use_vert_size;
+
+    local uint vert_size = 114; // Default in DCS at least
+    if (use_vert_size)
+    {
+        uint defined_vert_size; // 40 (FME?), 60 (DCS?)
+        uint some_number; // 2, 4
+        
+        vert_size = defined_vert_size;
+    }
+    
+    switch (vert_size)
+    {
+        case 60:
+            struct Vertex60
+            {
+                float x;
+                float y;
+                float z;
+
+                float unknown[12];
+            } verts[vert_count]<read=Str("(%f, %f, %f)", this.x, this.y, this.z)>;
+            break;
+        case 114:
+            struct Vertex114
+            {
+                float x;
+                float y;
+                float z;
+
+                float unknown_1[25];
+                ushort unknown_2;
+            } verts[vert_count]<read=Str("(%f, %f, %f)", this.x, this.y, this.z)>;
+            break;
+        default:
+            Printf("WARNING: Unknown vert size of %d, at offset %d\n", vert_size, FTell() - 4);
+            break;
+    }
+    
+    uint always_0;
+    uint always_65k;
+} RndMeshData;
+
+#endif

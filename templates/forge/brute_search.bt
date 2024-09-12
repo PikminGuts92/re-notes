@@ -1,0 +1,12 @@
+//#include "rnd_mesh_data.bt"
+//#include "rnd_tex_data.bt"
+#include "common.bt" // EmbeddedFile
+
+local uint i;
+local TFindResults r = FindAll("RndMeshData|RndTexData", true, false, FINDMETHOD_REGEX);
+
+for (i = 0; i < r.count; i++)
+{
+    FSeek(r.start[i] - 4);
+    EmbeddedFile files;
+}

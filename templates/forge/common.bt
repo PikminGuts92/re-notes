@@ -168,4 +168,63 @@ typedef struct
     float radius;
 } Sphere<read=Str("(%f, %f, %f), r=%f", this.x, this.y, this.z, this.radius)>;
 
+typedef struct
+{
+    #include "rnd_mesh_data.bt"
+    #include "rnd_tex_data.bt"
+    
+    FString file_class;
+    FString file_name;
+        
+    uint64 size;
+    local uint64 end_offset = FTell() + size;
+    
+    if (end_offset > FileSize())
+    {
+        Printf("WARNING: End of file reached for embedded file %s (%s)\n", file_name, file_class);
+        return;
+    }
+    
+    switch (file_class.text)
+    {
+        case "RndMeshData":
+            RndMeshData data;
+            break;
+        case "RndTexData":
+            RndTexData data;
+            break;
+        case "ScriptResource": // TODO: Move to separate file
+            //ScriptResource data
+            struct ScriptResource
+            {
+                uint64 always_0;
+                FString file_path; // Source path?
+                
+                DTB script(1);
+            } data<read=Str("%s (%d nodes)", this.file_path.text, this.script.root.child_count)>;
+            break;
+        default:
+            byte data[size];
+            break;
+    }
+
+    // Help with in-progress templates
+    if (FTell() < end_offset)
+    {
+        byte data_unknown[end_offset - FTell()];
+    }
+} EmbeddedFile<read=Str("%s (%s)", this.file_name.text, this.file_class.text)>;
+
+typedef struct
+{
+    local uint file_count = 0;
+    while (ReadUInt(FTell()) != 0)
+    {
+        EmbeddedFile embedded_files;
+        file_count++;
+    }
+    
+    uint embedded_terminated;
+} EmbeddedFiles<read=Str("%d files", this.file_count)>;
+
 #endif
