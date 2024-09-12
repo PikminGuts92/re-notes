@@ -18,7 +18,12 @@ typedef struct
     uint face_count;
     
     uint always_21845; // 0x00005555
-    uint face_data[face_count * 3];
+    struct Face
+    {
+        uint f1;
+        uint f2;
+        uint f3;
+    } faces[face_count]<read=Str("[%d, %d, %d]", this.f1, this.f2, this.f3)>;
 
     //FSeek(start_offset + 582);
     //local uint vert_count = ReadUInt(start_offset + 582);
