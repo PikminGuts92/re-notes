@@ -46,11 +46,51 @@ typedef struct
         case 60:
             struct Vertex60
             {
+                // 12 bytes
                 float x;
                 float y;
                 float z;
 
-                float unknown[12];
+                // 4 bytes
+                short un1; // 4, 8, 191
+                short un2; // -1
+
+                // UVs?
+                // 8 bytes
+                hfloat u;
+                hfloat v;
+                hfloat n1; // Doesn't seem to be floats
+                hfloat n2;
+                
+                // Packed normals?
+                // 16 bytes
+                uint unk; // 0
+                float f1;
+                float f2;
+                float f3;
+                float f4;
+                
+                // 4 bytes
+                short u1; // 1023, -14132
+                short u2; // 0, 12
+
+                // Bones?
+                // 4 bytes
+                ubyte b1; // 4, 5
+                ubyte b2;
+                ubyte b3;
+                ubyte b4;
+                
+                // 4 bytes
+                short uu1;
+                short uu2;
+                
+                // Bones 2?
+                // 4 bytes
+                ubyte bb1; // 0, 1
+                ubyte bb2;
+                ubyte bb3;
+                ubyte bb4;
             } verts[vert_count]<read=Str("(%f, %f, %f)", this.x, this.y, this.z)>;
             break;
         case 114:
