@@ -20,21 +20,12 @@ def find_offsets_in_buffer(buffer, bytes):
     # Go to start and begin search
     i = 0
     while i < buff_length:
-        start_offset = i
-        matched = True
+        bytes_idx = buffer[i:].find(bytes)
+        if bytes_idx == -1:
+            break
 
-        for b in bytes:
-            if i >= buff_length or b != buffer[i]:
-                matched = False
-                i += 1
-                break
-
-            i += 1
-
-        if matched:
-            offsets.append(start_offset)
-        else:
-            i = start_offset + 1
+        offsets.append(i + bytes_idx)
+        i += bytes_idx + len(bytes)
 
     return offsets
 
