@@ -6,6 +6,7 @@ This is just a place for me to dump my reverse engineering notes, templates, sni
 | ------- | ------- |
 | [Dumps](dumps/) | Raw (text) data dumps from various games |
 | [Raw Notes](raw_notes/) | Early RE notes before I started writing 010 templates. Most of this is outdated. Not recommended reading and only kept for posterity. |
+| [Model Researcher](model_researcher) | Python scripts for Model Researcher Pro |
 | [Scripts](scripts/) | Simple python and 010 scripts for various one-off data processing tasks |
 | [Templates](templates/) | 010 templates for various game file formats |
 
