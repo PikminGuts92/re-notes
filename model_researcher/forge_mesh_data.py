@@ -44,7 +44,6 @@ def find_offsets(bf, bytes, max_buffer_size):
     # Get stream length
     bf.seek(0, 2)
     bf_length = bf.tell()
-    print(f'Length: {bf_length}')
 
     bf.seek(0)
     while bf.tell() < bf_length:
@@ -74,7 +73,6 @@ def read_mesh(bf, name, size):
     bf.seek(46, 1) # Skip to face count
     face_count = bf.readint()
     bf.seek(4, 1) # Skip 21845 constant
-    print(f'Face count: {face_count}')
 
     for _ in range(0, face_count):
         face = bf.read3Int()
@@ -84,7 +82,6 @@ def read_mesh(bf, name, size):
     vert_size = 114 # Default size if not specified
     vertex_count = bf.readint()
     bf.seek(4, 1) # Skip 2114 constant
-    print(f'Vert count: {vertex_count}')
 
     if bf.readByte():
         # Use defined vert size
@@ -102,8 +99,6 @@ def read_mesh(bf, name, size):
     mesh.set_faces(faces)
     mesh.set_vertices(vertices, 'YZX', 'x')
 
-    #mrp.print_mesh(name)
-
 # Open file in little endian
 bf = mrp.get_bfile(byte_order = '<')
 
@@ -118,8 +113,6 @@ for mesh_offset in mesh_offsets:
     if len(mesh_name) == 0:
         # Skip unnamed meshes (don't seems to have geometry data anyway)
         continue
-
-    print(mesh_name)
 
     mesh_size = read_uint64(bf)
     read_mesh(bf, mesh_name, mesh_size)
