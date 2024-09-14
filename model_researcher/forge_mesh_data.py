@@ -79,7 +79,7 @@ def read_mesh(bf, name, size):
     # Create mesh
     mesh = mrp.create_mesh(name)
     mesh.set_faces(faces)
-    mesh.set_vertices(vertices)
+    mesh.set_vertices(vertices, 'YZX', 'x')
 
     #mrp.print_mesh(name)
 
