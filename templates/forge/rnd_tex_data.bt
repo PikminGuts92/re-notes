@@ -36,8 +36,21 @@ typedef struct
     {
         Unknown = 1, // 32bpp, some kind of RGBA? Found in testerwhatever.bmp (claptrap)
         DXT1 = 2,
-        DXT5 = 4
+        DXT5 = 4,
+        ATI2 = 5
     } encoding;
+    
+    switch (encoding)
+    {
+        case Unknown:
+        case DXT1:
+        case DXT5:
+        case ATI2:
+            break;
+        default:
+            Printf("WARNING: Unknown texture encoding %d\n", encoding);
+            break;
+    }
     
     ubyte mips; // Smaller for smaller textures
     ushort width2;
