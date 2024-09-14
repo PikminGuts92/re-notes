@@ -10,7 +10,32 @@ def read_uint64(bf):
     (n1, n2) = bf.read2Int()
     return (n2 << 32) | n1
 
-def find_byte_offsets(bf, bytes):
+def find_offsets_in_buffer(buffer, bytes):
+    offsets = []
+    buff_length = len(buffer)
+
+    # Go to start and begin search
+    i = 0
+    while i < buff_length:
+        start_offset = i
+        matched = True
+
+        for b in bytes:
+            if i >= buff_length or b != buffer[i]:
+                matched = False
+                i += 1
+                break
+
+            i += 1
+
+        if matched:
+            offsets.append(start_offset)
+        else:
+            i = start_offset + 1
+
+    return offsets
+
+def find_offsets(bf, bytes, max_buffer_size):
     offsets = []
 
     # Get stream length
@@ -18,30 +43,23 @@ def find_byte_offsets(bf, bytes):
     bf_length = bf.tell()
     print(f'Length: {bf_length}')
 
-    # Go to start and begin search
     bf.seek(0)
     while bf.tell() < bf_length:
-        start_offset = bf.tell()
-        matched = True
+        # Overlap buffer with size of searched bytes
+        buffer_start = max(0, bf.tell() - len(bytes))
+        bf.seek(buffer_start)
 
-        # TODO: Remove after performance fix
-        if len(offsets) > 0:
-            break
+        rem_length = bf_length - buffer_start
+        buffer_size = min(rem_length, max_buffer_size)
+        buffer = bf.read(buffer_size)
 
-        for b in bytes:
-            if bf.tell() >= bf_length:
-                break
+        buffer_offsets = find_offsets_in_buffer(buffer, bytes)
+        for bo in buffer_offsets:
+            offsets.append(buffer_start + bo)
 
-            if b != bf.readByte():
-                matched = False
-                break
-
-        if matched:
-            offsets.append(start_offset)
-        else:
-            bf.seek(start_offset + 1)
-
-    print(f'Offset: {bf.tell()}')
+    # Remove potential duplicates and sort
+    offsets = list(set(offsets))
+    offsets.sort()
 
     return offsets
 
@@ -86,7 +104,7 @@ def read_mesh(bf, name, size):
 # Open file in little endian
 bf = mrp.get_bfile(byte_order = '<')
 
-mesh_offsets = find_byte_offsets(bf, b'RndMeshData')
+mesh_offsets = find_offsets(bf, b'RndMeshData', 0x2000000) # Buffer size of ~32Mb
 print(mesh_offsets)
 
 for mesh_offset in mesh_offsets:
