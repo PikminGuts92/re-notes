@@ -3,6 +3,9 @@ import mrp
 
 def read_string(bf):
     str_length = bf.readint()
+    if str_length <= 0:
+        return b''
+
     return bf.read(str_length).decode('ascii')
 
 def read_uint64(bf):
@@ -111,6 +114,11 @@ for mesh_offset in mesh_offsets:
     # Go to offset and read mesh name
     bf.seek(mesh_offset + len(b'RndMeshData'))
     mesh_name = read_string(bf)
+
+    if len(mesh_name) == 0:
+        # Skip unnamed meshes (don't seems to have geometry data anyway)
+        continue
+
     print(mesh_name)
 
     mesh_size = read_uint64(bf)
