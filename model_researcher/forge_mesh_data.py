@@ -1,6 +1,18 @@
 # templates/forge/rnd_mesh_data.bt
 import mrp
 
+class ForgeMeshData:
+    def __init__(self, name, faces, vertices):
+        self.name = name
+        self.faces = faces
+        self.vertices = vertices
+
+class ForgeMesh:
+    def __init__(self, name, data_name, data=None):
+        self.name = name
+        self.data_name = data_name
+        self.data = data
+
 def read_string(bf):
     str_length = bf.readint()
     if str_length <= 0:
@@ -56,7 +68,55 @@ def find_offsets(bf, bytes, max_buffer_size):
 
     return offsets
 
-def read_mesh(bf, name, size):
+def read_mesh(bf, name):
+    bf.seek(4, 1) # Magic
+
+    # Object
+    bf.seek(4, 1) # Magic
+    bf.seek(4, 1) # 8 constant
+    file_count = bf.readint() # Embedded files
+    for _ in range(0, file_count):
+        read_string(bf)
+        file_size = read_uint64(bf)
+        bf.seek(file_size, 1)
+
+    # Trans
+    bf.seek(4, 1) # Magic
+    bf.seek(2 * 48, 1) # 2x matrix data
+    bf.seek(4, 1) # Some enum
+    read_string(bf) # Bone name
+    bf.readByte() # Some bool
+    read_string(bf) # Parent name
+
+    # Draw
+    bf.seek(4, 1) # Magic
+    bf.readByte() # Showing
+    bf.seek(4, 1) # Some enum
+    read_string(bf) # Property 1
+    read_string(bf) # Property 2
+    bf.seek(16, 1) # Bounding sphere
+    bf.seek(4, 1) # Some float
+
+    bf.seek(4, 1) # Always 0
+    mat_name = read_string(bf)
+
+    bone_count = bf.readint()
+    for _ in range(0, bone_count):
+        read_string(bf) # Name
+        bf.seek(48, 1) # Matrix
+
+    mesh_name = read_string(bf)
+    bf.seek(4, 1) # Some enum
+
+    if bf.readByte():
+        # Rnd mesh data embedded directly
+        mesh_data = read_mesh_data(bf, mesh_name)
+        return ForgeMesh(name, mesh_name, mesh_data)
+    else:
+        rnd_mesh_data_name = read_string(bf)
+        return ForgeMesh(name, rnd_mesh_data_name)
+
+def read_mesh_data(bf, name):
     faces = []
     vertices = []
 
@@ -85,27 +145,62 @@ def read_mesh(bf, name, size):
         vertices.append(vert_xyz)
         bf.seek(extra_vert_data_size, 1)
 
-    # Create mesh
-    mesh = mrp.create_mesh(name)
-    mesh.set_faces(faces)
-    mesh.set_vertices(vertices, 'YZX', 'x')
+    return ForgeMeshData(name, faces, vertices)
 
 # Open file in little endian
 bf = mrp.get_bfile(byte_order = '<')
 
-mesh_offsets = find_offsets(bf, b'RndMeshData', 0x2000000) # Buffer size of ~32Mb
-print(mesh_offsets)
+# Read mesh data
+mesh_data_offsets = find_offsets(bf, b'RndMeshData', 0x2000000) # Buffer size of ~32Mb
+print(f'Mesh data offsets: {mesh_data_offsets}')
 
-for mesh_offset in mesh_offsets:
+mesh_datas = {}
+
+for mesh_data_offset in mesh_data_offsets:
     # Go to offset and read mesh name
-    bf.seek(mesh_offset + len(b'RndMeshData'))
-    mesh_name = read_string(bf)
+    bf.seek(mesh_data_offset + len(b'RndMeshData'))
+    mesh_data_name = read_string(bf)
 
-    if len(mesh_name) == 0:
-        # Skip unnamed meshes (don't seems to have geometry data anyway)
+    if len(mesh_data_name) == 0:
+        # Skip unnamed meshes (doesn't seem to have geometry data anyway)
         continue
 
     mesh_size = read_uint64(bf)
-    read_mesh(bf, mesh_name, mesh_size)
+    mesh_data = read_mesh_data(bf, mesh_data_name)
+
+    mesh_datas[mesh_data_name] = mesh_data
+
+# Read mesh names
+mesh_name_offsets = find_offsets(bf, b'\x04\x00\x00\x00\x4D\x65\x73\x68', 0x2000000) # Buffer size of ~32Mb
+mesh_names = []
+for mesh_name_offset in mesh_name_offsets:
+    bf.seek(mesh_name_offset + 8)
+    mesh_name = read_string(bf)
+    mesh_names.append(mesh_name)
+
+# Read meshes
+mesh_offsets = find_offsets(bf, b'\x2B\x00\x00\x00\x06\x00\x00\x00\x08\x00\x00\x00', 0x2000000) # Buffer size of ~32Mb
+print(f'Mesh offsets: {mesh_offsets}')
+
+meshes = []
+
+for i, mesh_offset in enumerate(mesh_offsets):
+    bf.seek(mesh_offset)
+    mesh_name = mesh_names[i]
+    mesh = read_mesh(bf, mesh_name)
+
+    if mesh.data is None:
+        mesh.data = mesh_datas[mesh.data_name]
+
+    meshes.append(mesh)
+
+for mesh in meshes:
+    #print(f'{mesh.name}/{mesh.data.name} ({len(mesh.data.vertices)} verts, {len(mesh.data.faces)} faces)')
+
+    # Create mesh
+    mr_mesh = mrp.create_mesh(mesh.name)
+    mr_mesh.set_faces(mesh.data.faces)
+    mr_mesh.set_vertices(mesh.data.vertices, 'YZX', 'x')
 
 mrp.render('All')
+print(f'Found {len(meshes)} meshes!')
