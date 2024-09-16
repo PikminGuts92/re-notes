@@ -189,6 +189,10 @@ for i, mesh_offset in enumerate(mesh_offsets):
     mesh_name = mesh_names[i]
     mesh = read_mesh(bf, mesh_name)
 
+    if not mesh.data_name:
+        # Ignore meshes without mesh data
+        continue
+
     if mesh.data is None:
         mesh.data = mesh_datas[mesh.data_name]
 
