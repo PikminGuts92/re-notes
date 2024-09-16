@@ -4,6 +4,7 @@
 #include "common.bt"
 #include "draw.bt"
 #include "object.bt"
+#include "rnd_mesh_data.bt"
 #include "trans.bt"
 
 typedef struct (int super)
@@ -17,13 +18,29 @@ typedef struct (int super)
     uint always_0;
     FString mat; // RndMat
 
-    uint always_0;
-    FString mesh_data_name_1; // RndMeshData in embedded files
-    
-    uint usually_0; // 0.0 or 1.0
-    Bool unknown_bool;
+    uint bone_count;
+    if (bone_count > 0)
+    {
+        struct Bones
+        {
+            FString name;
+            Matrix transform;
+        } bones[bone_count]<read=Str("(%d bones)", parentof(this).bone_count), optimize=false>;
+    }
 
-    FString mesh_data_name_2; // // RndMeshData in embedded files
+    FString mesh_data_name_1; // RndMeshData in embedded files, "UNIQUE__" if directly embedded
+
+    uint usually_0; // 0 or 1
+
+    Bool embed_data_directly; // Usually false
+    if (embed_data_directly)
+    {
+        RndMeshData mesh_data;
+    }
+    else
+    {
+        FString mesh_data_name_2; // RndMeshData in embedded files
+    }
 } Mesh;
 
 #endif
