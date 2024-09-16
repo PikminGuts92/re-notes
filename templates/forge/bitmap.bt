@@ -40,7 +40,7 @@ typedef struct
     
     ubyte zeros_2[16];
     
-    uint always_4; // bpp?
+    uint always_4;
     uint always_0;
     uint always_32;
     
@@ -48,17 +48,26 @@ typedef struct
 
     uint always_6;
     uint always_16;
-    uint always_0;
-    uint always_1;
+    
+
+    enum Encoding
+    {
+        DXT1 = 0,
+        ATI2 = 3
+    } encoding;
+    
+    uint usually_1; // 0, 1
     uint always_1;
     uint always_0;
     
     int neg_1;
     int neg_1;
     
-    uint always_4;
-    uint always_2;
-    uint always_1;
+    uint bpp;
+
+    uint usually_2; // 1 (ATI2), 2 (DXT1)
+    uint usually_1; // 1 (DXT1), 7 (ATI2)
+
     uint always_2;
     uint always_2;
     uint always_0;
