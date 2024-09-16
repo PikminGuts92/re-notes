@@ -31,9 +31,69 @@ string read_texture(Texture& tex)
 
 typedef struct
 {
-    int version;
-    int sub_version;
+    int version; // 6 (RB4)
+    int sub_version; // 9 (RB4)
+    
+    ubyte zeros_1[8];
+    
+    uint some_enum; // 0, 16
+    
+    ubyte zeros_2[16];
+    
+    uint always_4; // bpp?
+    uint always_0;
+    uint always_32;
+    
+    ubyte zeros_3[48];
 
+    uint always_6;
+    uint always_16;
+    uint always_0;
+    uint always_1;
+    uint always_1;
+    uint always_0;
+    
+    int neg_1;
+    int neg_1;
+    
+    uint always_4;
+    uint always_2;
+    uint always_1;
+    uint always_2;
+    uint always_2;
+    uint always_0;
+    uint always_2;
+    
+    uint always_3;
+    ubyte zeros_4[20];
+    
+    uint mip_count;
+    struct MipInfo
+    {
+        uint width;
+        uint height;
+        uint always_1;
+    } mip_infos[mip_count];
+    
+    uint always_6;
+    
+    local uint i = 0;
+    struct MipTexture
+    {
+        local uint width = mip_infos[i].width;
+        local uint height = mip_infos[i].height;
+        
+        uint size;
+        byte data[size];
+        
+        i++;
+    } textures[mip_count]<read=Str("%dx%d (%d bytes)", this.width, this.height, this.size), optimize=false>;
+    
+    uint always_0;
+    uint always_8;
+    
+    float some_floats[4];
+    uint always_8;
 
     return;
     
