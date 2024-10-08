@@ -15,6 +15,7 @@ This is just a place for me to dump my reverse engineering notes, templates, sni
   - [BlitzTech (Blitz Games)](templates/blitztech/)
   - [Forge (Harmonix)](templates/forge/)
   - [Milo (Harmonix)](templates/milo/)
+  - [Quantic Dream](templates/quantic_dream/)
 - Games
   - [BandFuse: Rock Legends](templates/bandfuse/)
   - [Britney's Dance Beat (PS2)](templates/bdb/)

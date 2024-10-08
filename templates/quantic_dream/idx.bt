@@ -1,0 +1,42 @@
+BigEndian();
+
+typedef struct
+{
+    uint size;
+    local string text = "";
+
+    if (size > 0)
+    {
+        char value[size];
+        text = value;
+    }
+} String<read=this.text>;
+
+typedef struct
+{
+    char magic[20]; // QUANTICDREAMTABINDEX
+    uint version; // 13 = Heavy Rain, 17 = Beyond Two Souls, 18 = Detroit Become Human
+
+    uint some_num; // 0 (BTS), 0x0000FFFF (Heavy Rain), 0x00B0385F (DBH)
+    byte zep_data[72];
+    
+    uint entry_count;
+    
+    struct Entries
+    {
+        uint unk_1;
+        uint unk_2; // 1
+        uint unk_3;
+        
+        uint offset;
+        uint size;
+        uint inflated_size; // 0 if not compressed
+        uint dat_index;
+        
+        local string dat_ext = dat_index == 0 ? ".dat" : Str(".d%02d", dat_index);
+        local string compressed = inflated_size == 0 ? "" : " [compressed]";
+        
+    } entries[entry_count]<read=Str("offset: %d, size: %d, ext: %s (%d, %d, %d)%s", this.offset, this.size, this.dat_ext, this.unk_1, this.unk_2, this.unk_3, this.compressed), optimize=false>;
+} IdxFile;
+
+IdxFile file;

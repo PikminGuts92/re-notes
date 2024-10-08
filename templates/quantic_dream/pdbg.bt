@@ -1,0 +1,50 @@
+// BigFile_PC_0101_0102 (BTS)
+
+BigEndian();
+
+typedef struct
+{
+    uint size;
+    local string text = "";
+
+    if (size > 0)
+    {
+        char value[size];
+        text = value;
+    }
+} String<read=this.text>;
+
+typedef struct
+{
+    char magic[20]; // QUANTICDREAMTABINDEX
+    uint version; // 13 = Heavy Rain, 17 = Beyond Two Souls
+
+    uint count_1; // Both same
+    if (version >= 17) uint count_2;
+    
+    struct Entries
+    {
+        uint unk_1; // Flags or index? (3-4011)
+        uint unk_2; // 1
+        uint unk_3; // Size? (1-343575)
+        String name;
+        
+        if (version == 13) byte empty_data[24];
+    } entries[count_1]<read=Str("%s (%d, %d, %d)", this.name.text, this.unk_1, this.unk_2, this.unk_3), optimize=false>;
+    
+    local uint min_unk_1 = 100000; 
+    local uint max_unk_1 = 0;
+    local uint min_unk_3 = 100000;
+    local uint max_unk_3 = 0;
+    local uint i;
+    
+    for (i = 0; i < count_1; i++)
+    {
+        min_unk_1 = Min(entries[i].unk_1, min_unk_1);
+        max_unk_1 = Max(entries[i].unk_1, max_unk_1);
+        min_unk_3 = Min(entries[i].unk_3, min_unk_3);
+        max_unk_3 = Max(entries[i].unk_3, max_unk_3);
+    }
+} PdbgFile;
+
+PdbgFile file;

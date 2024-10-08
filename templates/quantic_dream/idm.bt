@@ -1,0 +1,33 @@
+BigEndian(); // DBH appears to be LE
+
+typedef struct
+{
+    uint size;
+    local string text = "";
+
+    if (size > 0)
+    {
+        char value[size];
+        text = value;
+    }
+} String<read=this.text>;
+
+typedef struct
+{
+    char magic[20]; // QUANTICDREAMTABIDMEM
+    local uint start_offset = FTell();
+    
+    uint version_1; // 0x0000FFFF = Heavy Rain, 0 = Beyond Two Souls
+    uint entry_count;
+    
+    uint version_2; // 0 = Heavy Rain
+    
+    struct Entries
+    {
+        uint unknown;
+        uint file_count;
+        uint offset;
+    } entries[entry_count]<read=Str("unk: %d, files: %d, offset: %d", this.unknown, this.file_count, this.offset), optimize=false>;
+} IdmFile;
+
+IdmFile file;
