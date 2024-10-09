@@ -26,8 +26,28 @@ typedef struct
     {
         uint unknown;
         uint file_count;
-        uint offset;
+        uint offset; // Starts at offset 20, after magic
     } entries[entry_count]<read=Str("unk: %d, files: %d, offset: %d", this.unknown, this.file_count, this.offset), optimize=false>;
+    
+    local uint i = 0;
+    struct EntryFile
+    {
+        local uint file_count = entries[i].file_count;
+
+        uint some_table[256];
+        
+        struct File
+        {
+            uint unknown;
+            uint offset;
+            uint size;
+            uint inflated_size;
+            byte dat_index;
+            byte padding[3];
+        } files[file_count]<read=Str("id: %d", this.unknown)>;
+        
+        i += 1;
+    } entry_files[entry_count]<read=Str("files: %d", this.file_count), optimize=false>;
 } IdmFile;
 
 IdmFile file;
