@@ -1,0 +1,39 @@
+LittleEndian();
+
+typedef struct
+{
+    char magic[4]; // "MPK\0"
+    ushort always_0;
+    ushort always_2;
+    
+    uint entry_count;
+    byte empty_data_1[56]<hidden=true>;
+
+    // 256 bytes
+    struct Entry
+    {
+        uint index; // 0, 1, 2, etc.
+        
+        uint64 offset;
+        uint64 size_1; // Always same?
+        uint64 size_2;
+
+        // .compressed = zlib compressed? Doesn't affect either size value though.
+        char file_path[228];
+    } entries[entry_count]<read=Str("%s (offset: %d, size_1: %d, size_2: %d)", this.file_path, this.offset, this.size_1, this.size_2)>;
+    
+    local uint i;
+    for (i = 0; i < entry_count; i++)
+    {
+        FSeek(entries[i].offset);
+        
+        struct File
+        {
+            local string file_path = entries[i].file_path;
+            
+            byte data[entries[i].size_1];
+        } files<read=this.file_path>;
+    }
+} MpkFile;
+
+MpkFile file;
