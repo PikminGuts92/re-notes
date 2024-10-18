@@ -44,7 +44,11 @@ typedef struct
             uint inflated_size;
             byte dat_index;
             byte padding[3];
-        } files[file_count]<read=Str("id: %d", this.unknown)>;
+            
+            local string dat_ext = dat_index == 0 ? ".dat" : Str(".d%02d", dat_index);
+            local string compressed = inflated_size == 0 ? "" : " [compressed]";
+            
+        } files[file_count]<read=Str("offset: %d, size: %d, ext: %s (%d)%s", this.offset, this.size, this.dat_ext, this.unknown, this.compressed), optimize=false>;
         
         i += 1;
     } entry_files[entry_count]<read=Str("files: %d", this.file_count), optimize=false>;
