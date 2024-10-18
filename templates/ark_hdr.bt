@@ -111,7 +111,7 @@ typedef struct (int version, StringOffsetCollection& stringCollection)
 {
     // TODO: Refactor this to make better sense
     if (version != 4 && version != 5 && version != 6)
-        int offset;
+        uint offset;
     else
         uint64 offset;
 
