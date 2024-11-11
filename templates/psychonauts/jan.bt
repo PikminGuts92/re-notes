@@ -1,0 +1,12 @@
+LittleEndian();
+
+typedef struct
+{
+    char magic[4]; // XAJP
+    uint unknown_num; // 200 or 201
+    
+    ushort num_1;
+    ushort num_2;
+} JanFile;
+
+JanFile file;

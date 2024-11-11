@@ -29,6 +29,7 @@ This is just a place for me to dump my reverse engineering notes, templates, sni
   - [Prince of Persia (PC)](templates/pop/)
   - [PopStar Guitar (PS2)](templates/popstar_guitar/)
   - [Rock Revolution](templates/rock_rev/)
+  - [Psychonauts (PC)](templates/psychonauts/)
   - [SingStar (PS3)](templates/singstar/)
   - [Steins;Gate (PC)](templates/steinsgate/)
 - Platforms

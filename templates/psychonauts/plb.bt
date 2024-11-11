@@ -1,0 +1,116 @@
+LittleEndian();
+
+typedef struct
+{
+    char magic[4]; // CYSP
+    uint unknown_num; // 2F = no extra short, 3B/3F
+    uint always_0;
+    
+    uint texture_count;
+    struct TextureEntry
+    {
+        uint path_length;
+        char path[path_length];
+        ushort always_256;
+    } textures[texture_count]<read=this.path, optimize=false>;
+    
+    // Always "Dummy"?
+    uint name_length;
+    char name[name_length];
+    
+    float some_floats[6];
+    char mesh_magic[4]; // HSEM
+    uint always_1; // Mesh count?
+    
+    uint mesh_name_length;
+    char mesh_name[mesh_name_length];
+    
+    float empty_floats_1[6];
+    float always_1_floats_1[3];
+    
+    float some_floats_2[6];
+    uint unk_always_0_1;
+    uint some_unk_count; // 0 (no trans), 2, 12 (1 trans)
+    uint unk_always_0_2;
+    
+    uint trans_count; // TODO: For bones? Usually 0
+    if (trans_count > 0)
+    {
+        struct TransEntry
+        {
+            uint name_length;
+            char name[name_length];
+            
+            uint total_node_count;
+            
+            /*
+            count id name
+                2  1 rootJ_1
+                2  2 hipsJA_1
+                2  3 legJARt_1
+                1  4 legJBRt_1
+                1  5 footJARt_1
+                1  6 footJBRt_1
+            */
+            struct JointNode;
+            struct JointNode
+            {
+                ushort id;
+
+                uint name_length;
+                char name[name_length];
+
+                float some_floats[6];
+                ushort unknown_always_0;
+
+                uint child_count;
+                if (child_count > 0) JointNode nodes[child_count]<read=this.name, optimize=false>;
+             } root<read=this.name, optimize=false>;
+        } trans_entries[trans_count]<read=Str("%s (%d nodes)", this.name, this.total_node_count), optimize=false>;
+    }
+    
+    return;
+    
+    uint some_count; // 1, 28 (raz)
+    float some_floats_3[6];
+    
+    ushort always_16; // Vert size? or some enum?
+    ushort always_256;
+    
+    byte empty_data[6];
+    float always_1_floats_2[4];
+    
+    uint always_1;
+    uint always_0;
+    int negative_1[2];
+    float always_1_floats_3[3];
+    
+    uint empty_ints[4];
+
+    uint vert_count;
+    struct Vertex
+    {
+        float x;
+        float y;
+        float z;
+        float unknown; // UV?
+    } vertices[vert_count]<read=Str("(%f, %f, %f)", this.x, this.y, this.z)>;
+    
+    uint always_0;
+    uint always_1;
+    
+    float always_1;
+    
+    float vert_floats[vert_count];
+    
+    uint always_0;
+    uint face_count_1;
+    uint face_count_2;
+    
+    // Faces (terminated by 12 empty bytes)
+    ushort faces[face_count_1 + 2]; // Idk why there are 2 more...
+    
+    ubyte empty_data_2[12];
+} PlbFile;
+
+PlbFile file;

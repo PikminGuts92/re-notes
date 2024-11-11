@@ -1,0 +1,76 @@
+LittleEndian();
+
+typedef struct
+{
+    char magic[4]; // ZPKG
+    uint version; // Always 1
+    
+    uint header_size; // Where extension data ends
+    uint file_entries_count;
+    uint unknown_offset; // Starts right after file entries ends
+    uint unknown_count;
+    uint file_names_offset;
+    uint extensions_offset;
+
+    FSeek(512);
+    struct FileEntry
+    {
+        ubyte num_1; // Always 0
+        
+        // File type?
+        /*
+              256  (1) = Action File .asd
+             5376 (21) = EVEp .eve
+             9216 (36) = Armature or Anim .jan?
+            12288 (48) = ABPEd .pba
+            15360 (60) = Shader .vsh
+                       = Model .plb
+        */
+        ushort extension_offset;
+        ubyte num_2; // Always 0
+        
+        uint name_offset;
+        uint offset;
+        uint size;
+        
+        local string name = ReadString(file_names_offset + name_offset);
+        local string ext = ReadString(extensions_offset + extension_offset);
+        
+        local string file_name = name + "." + ext;
+    } file_entries[file_entries_count]<read=Str("%s (%d, %d)", this.file_name, this.num_1, this.num_2), optimize=false>;
+
+    // Should already be at offset...
+    FSeek(unknown_offset);
+    struct UnknownEntry
+    {
+        ushort num_1;
+        ushort num_2;
+
+        uint num_3;
+        uint num_4;
+    } unknown_entries[unknown_count]<read=Str("%d, %d, %d, %d", this.num_1, this.num_2, this.num_3, this.num_4)>;
+    
+    struct Files
+    {
+        local uint i;
+        for (i = 0; i < file_entries_count; i++)
+        {
+            FSeek(file_entries[i].offset);
+        
+            if (file_entries[i].size == 0)
+            {
+                Printf("File \"%s\" (index %d) has empty size\n", file_entries[i].file_name, i);
+                continue;
+            }
+        
+            struct File
+            {
+                local string file_name = file_entries[i].file_name;
+            
+                byte data[file_entries[i].size];
+            } files<read=this.file_name>;
+        }
+    } files;
+} PkgFile;
+
+PkgFile file;
