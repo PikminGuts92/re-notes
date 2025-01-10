@@ -1,0 +1,67 @@
+/*
+Donkey Konga DSP file format seems to be a container format that combines two mono .dsp streams and interleaves the data together.
+hcs has a cli program to combine mono streams together and prepend DK DSP header.
+
+ADPCM encoded with 4:1 compression ratio? Lossy.
+
+Resources:
+    https://gist.github.com/dotcomboom/a0598d954ebf3809d9354a4444514993
+    https://github.com/jackoalan/gc-dspadpcm-encode/tree/master
+    https://www.hcs64.com/vgm_ripping.html
+    http://www.metroid2002.com/retromodding/index.php?title=DSP_(File_Format)&oldid=716
+*/
+
+BigEndian();
+
+typedef struct
+{
+    // 32 bytes
+    struct KongaHeader
+    {
+        char magic[4]; // "Cstr"
+        
+        FSkip(28);
+    } konga_header;
+    
+    // 96 bytes (each)
+    struct DspHeader
+    {
+        uint sample_count;
+        uint nibble_count;
+        uint sample_rate;
+        enum <ushort> LoopFlag
+        {
+            NOT_LOOPED = 0,
+            LOOPED
+        } loop_flag;
+        ushort format; // Always 0
+        
+        uint loop_start_offset;
+        uint loop_end_offset;
+        
+        uint current_address; // "Always 0", but 2 for DK
+        short decode_coefficients[16];
+        ushort gain; // Always 0
+        
+        ushort init_predictor_scale;
+        short init_sample_history_1;
+        short init_sample_history_2;
+
+        ushort loop_context_predictor_scale;
+        short loop_context_sample_history_1;
+        short loop_context_sample_history_2;
+        
+        ushort reserved[11]; // Seems to be used in DK
+    } dsp_headers[2];
+    
+    // Interleave by 0x800 (2048) nibbles
+    local uint block_count = ((dsp_headers[0].nibble_count / 2) / 0x800) + 1;
+    
+    struct AudioStream
+    {
+        ubyte left[0x800];
+        ubyte right[0x800];
+    } stream[block_count];
+} KongaDsp;
+
+KongaDsp file;
