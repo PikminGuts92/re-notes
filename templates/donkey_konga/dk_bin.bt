@@ -24,7 +24,19 @@ typedef struct
     struct KongaSection
     {
         uint address<format=hex>;
-        ubyte data[48];
+        //ubyte data[48];
+        
+        enum <ubyte> KongaNote
+        {
+            EMPTY = 0,
+            LEFT,
+            RIGHT = 0x04,
+            CLAP = 0x0D,
+            BOTH = 0x10,
+            LEFT_ROLL = 0x12,
+            RIGHT_ROLL = 0x13,
+            BOTH_ROLL = 0x17
+        } notes[48];
         
         /*
             Quarter-measure = 12 bytes
