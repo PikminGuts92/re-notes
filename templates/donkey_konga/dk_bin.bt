@@ -1,0 +1,47 @@
+/*
+
+Difficulties:
+    _e.bin = Easy
+    _n.bin = Normal
+    _h.bin = Hard
+*/
+
+BigEndian();
+
+typedef struct
+{
+    uint unknown_constant<format=hex>; // 0x20030730
+    
+    // Compute section count, read until -2 terminator
+    local uint section_count = 0;
+    while (ReadInt() != -2)
+    {
+        section_count += 1;
+        FSkip(52);
+    }
+    
+    FSeek(startof(unknown_constant) + sizeof(unknown_constant));
+    struct KongaSection
+    {
+        uint address<format=hex>;
+        ubyte data[48];
+        
+        /*
+            Quarter-measure = 12 bytes
+            Half-measure    = 24 bytes
+        
+            Notes:
+                0x01 = Left konga pad
+                0x04 = Right konga pad
+                0x0D = Clap
+                0x10 = Both konga pads
+                0x12 = Left konga pad (sustain/roll)
+                0x13 = Right konga pad (sustain/roll)
+                0x17 = Both konga pads (sustain/roll)
+        */
+    } sections[section_count];
+    
+    int terminator; // Always -2
+} KongaBin;
+
+KongaBin file;

@@ -52,7 +52,7 @@ typedef struct
         short loop_context_sample_history_2;
         
         ushort reserved[11]; // Seems to be used in DK
-    } dsp_headers[2];
+    } dsp_headers[2]<read=Str("samples: %d, nibbles: %d, sample rate: %dHz", this.sample_count, this.nibble_count, this.sample_rate)>;
     
     // Interleave by 0x800 (2048) nibbles
     local uint block_count = ((dsp_headers[0].nibble_count / 2) / 0x800) + 1;
