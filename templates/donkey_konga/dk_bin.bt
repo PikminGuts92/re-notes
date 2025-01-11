@@ -8,6 +8,119 @@ Difficulties:
 
 BigEndian();
 
+typedef enum <ubyte> 
+{
+    EMPTY = 0,
+    LEFT,
+    RIGHT = 0x04,
+    CLAP = 0x0D,
+    BOTH = 0x10,
+    LEFT_ROLL = 0x12,
+    RIGHT_ROLL = 0x13,
+    UNKNOWN = 0x16, // Probably clap roll...
+    BOTH_ROLL = 0x17
+} KongaNote<read=read_note>;
+
+string read_note(KongaNote& note)
+{
+    switch (note)
+    {
+        case EMPTY:
+            return "-";
+        case LEFT:
+        case LEFT_ROLL:
+            return "L";
+        case RIGHT:
+        case RIGHT_ROLL:
+            return "R";
+        case CLAP:
+            return "*";
+        case BOTH:
+        case BOTH_ROLL:
+            return "O";
+        default:
+            //Printf("WARNING: Unknown note value 0x%X\n", note);
+            return "#";
+    }
+}
+
+// 52 bytes
+typedef struct
+{
+    ushort offset; // In hundredth of second, cs? Multiple by 10 to get ms.
+    ubyte unk_1;   // Always 1
+    ubyte unk_2;   // Some kind on length?
+    
+    //uint address<format=hex>;
+    KongaNote notes[48];
+
+    /*
+        Quarter-measure = 12 bytes
+        Half-measure    = 24 bytes
+    */
+} KongaSection<read=read_section>;
+
+string read_section(KongaSection& section)
+{
+    local string s = Str("Pos: %.02fs, Unknown: %d ", (float)section.offset / 100.0, section.unk_2);
+
+    local uint i;
+    local ubyte prev_note = 0xFF;
+    local byte same_note;
+    local byte prev_roll = 0;
+    local byte curr_roll;
+
+    for (i = 0; i < 48; i++)
+    {
+        // Add beat marker
+        if ((i % 12) == 0)
+        {
+            s += "|";
+        }
+        
+        same_note = section.notes[i] == prev_note;
+        curr_roll = section.notes[i] == LEFT_ROLL
+            || section.notes[i] == RIGHT_ROLL
+            || section.notes[i] == BOTH_ROLL;
+
+        // Open roll
+        if (!prev_roll && curr_roll)
+        {
+            s += "(";
+        }
+        
+        if (same_note && curr_roll)
+        {
+            // Continue roll
+            s += " ";
+        }
+
+        // Close roll
+        if (prev_roll && !curr_roll)
+        {
+            s += ")";
+        }
+        
+        if (!same_note || !curr_roll)
+        {
+            // Regular note
+            s += read_note(section.notes[i]);
+        }
+        
+        prev_roll = curr_roll;
+        prev_note = section.notes[i];
+    }
+    
+    // Close roll
+    if (prev_roll)
+    {
+        s += "]";
+    }
+
+    s += "|";
+    return s;
+}
+
 typedef struct
 {
     uint unknown_constant<format=hex>; // 0x20030730
@@ -21,37 +134,7 @@ typedef struct
     }
     
     FSeek(startof(unknown_constant) + sizeof(unknown_constant));
-    struct KongaSection
-    {
-        uint address<format=hex>;
-        //ubyte data[48];
-        
-        enum <ubyte> KongaNote
-        {
-            EMPTY = 0,
-            LEFT,
-            RIGHT = 0x04,
-            CLAP = 0x0D,
-            BOTH = 0x10,
-            LEFT_ROLL = 0x12,
-            RIGHT_ROLL = 0x13,
-            BOTH_ROLL = 0x17
-        } notes[48];
-        
-        /*
-            Quarter-measure = 12 bytes
-            Half-measure    = 24 bytes
-        
-            Notes:
-                0x01 = Left konga pad
-                0x04 = Right konga pad
-                0x0D = Clap
-                0x10 = Both konga pads
-                0x12 = Left konga pad (sustain/roll)
-                0x13 = Right konga pad (sustain/roll)
-                0x17 = Both konga pads (sustain/roll)
-        */
-    } sections[section_count];
+    KongaSection sections[section_count];
     
     int terminator; // Always -2
 } KongaBin;
