@@ -230,7 +230,7 @@ typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
             local float tangent_3 = 0.0;
         }
 
-        if (mesh_version >= 34)
+        if (mesh_version >= 33)
         {
             // Bone indices
             ushort bone_0;
@@ -299,7 +299,7 @@ typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
             hfloat nz;
             hfloat nw; // Not 100% sure, maybe some scaler for weight?*/
 
-            struct QTangent
+            /*struct QTangent
             {
                 typedef struct
                 {
@@ -319,13 +319,16 @@ typedef struct (SystemInfo& info, int mesh_version, Bool is_ng, int vert_size)
                 local float tangents[3]<read=Str("(%.3f, %.3f, %.3f)", this[0], this[1], this[2])>;
                 y_axis(this, tangents);
 
-            } q_tangent;
+            } q_tangent;*/
+            SignedCompressedVec4 v1;
+            SignedCompressedVec4 v2;
 
             // Weights
-            ubyte weight_0; // Default: [FF, FF, FF, FF]
+            /*ubyte weight_0; // Default: [FF, FF, FF, FF]
             ubyte weight_1;
             ubyte weight_2;
-            ubyte weight_3;
+            ubyte weight_3;*/
+            UnsignedCompressedVec4 weights;
 
             // Bone indices
             // Can all match like [5, 5, 5, 5]
@@ -477,7 +480,18 @@ typedef enum
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 10 (Freq), 13 (Amp Demo), 14 (Amp), 22 (AntiGrav), 25 (KRPAI/GH1), 28 (GH2/GH2 4-song), 29, 34 (GH2 360/RB1/RB2), 36 (TBRB), 37 (GDRB), 38 (RB3/DC2)
+    // 10 (Freq)
+    // 13 (Amp Demo)
+    // 14 (Amp)
+    // 22 (AntiGrav)
+    // 25 (KRPAI/GH1)
+    // 28 (GH2/GH2 4-song/GH2 360)
+    // 29
+    // 34 (RB1/RB2)
+    // 36 (TBRB)
+    // 37 (GDRB)
+    // 38 (RB3/DC2)
+    int version;
 
     // Read meta if newer than GH1
     if (version > 25)
