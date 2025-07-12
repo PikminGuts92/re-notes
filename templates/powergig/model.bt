@@ -4,6 +4,18 @@ struct Component;
 
 typedef struct
 {
+    local string string_value = "";
+    
+    uint size;
+    if (size > 0)
+    {
+        char value[size];
+        string_value = value;
+    }
+} PrefixedString<read=this.string_value>;
+
+typedef struct
+{
     float x;
     float y;
     float z;
@@ -68,6 +80,36 @@ typedef struct
 } GeometryComponent<read=Str("(%d vertices, %d faces)", this.vert_count, this.face_count)>;
 
 typedef struct
+{
+    ushort always_0;
+    PrefixedString name;
+
+    uint always_10;
+    struct SomeFloats
+    {
+        float f1;
+        float f2;
+        float f3;
+    } some_floats<read=Str("(%f, %f, %f)", this.f1, this.f2, this.f3)>;
+    
+    ushort always_0;
+    
+    PrefixedString diffuse_texture_path;
+    PrefixedString spec_texture_path;
+    PrefixedString norm_texture_path;
+
+    byte empty_data_1[12];
+    uint unknown<format=hex>; // 0xFF000000
+    
+    byte empty_data_2[4];
+    uint unknown<format=hex>; // 0xFF000000
+    
+    float unknown_float_1;
+    float unknown_float_2;
+    float unknown_float_3; // Always 0.0
+} MaterialComponent;
+
+typedef struct
 {    
     char magic_open[4];
 
@@ -76,6 +118,9 @@ typedef struct
     {
         case "MOEG":
             GeometryComponent geometry;
+            break;
+        case "LRTM":
+            MaterialComponent material;
             break;
         default:
             if (size > 0) byte data[size];
