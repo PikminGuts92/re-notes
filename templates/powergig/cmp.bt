@@ -1,0 +1,26 @@
+LittleEndian();
+
+typedef struct (uint block_size)
+{
+    local uint size = block_size;
+    byte data[size];
+} CompressedBlock<read=Str("(%d bytes)", this.size)>;
+
+typedef struct
+{
+    char magic[4]; // "CMP1"
+    uint uncompressed_size;
+    uint block_size;
+
+    local uint block_count = Ceil((double)uncompressed_size / (double)block_size);
+    if (block_count < 1) return; // Shouldn't happen
+    
+    ushort compressed_block_sizes[block_count];
+    local uint i;
+    for (i = 0; i < block_count; i++)
+    {
+        CompressedBlock blocks(compressed_block_sizes[i]);
+    }
+} CmpFile;
+
+CmpFile file;

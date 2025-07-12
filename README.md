@@ -29,6 +29,7 @@ This is just a place for me to dump my reverse engineering notes, templates, sni
   - [Pistol Whip (PC)](templates/pistol_whip/)
   - [Prince of Persia (PC)](templates/pop/)
   - [PopStar Guitar (PS2)](templates/popstar_guitar/)
+  - [Power Gig: Rise of the Sixtring](templates/powergig/)
   - [Rock Revolution](templates/rock_rev/)
   - [Psychonauts (PC)](templates/psychonauts/)
   - [SingStar (PS3)](templates/singstar/)
