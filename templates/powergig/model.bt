@@ -1,0 +1,125 @@
+LittleEndian();
+
+struct Component;
+
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+    
+    byte extra_data[52];
+} Vertex64<read=Str("(x = %f, y = %f, z = %f)", this.x, this.y, this.z)>;
+
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+    
+    byte extra_data[56];
+} Vertex68<read=Str("(x = %f, y = %f, z = %f)", this.x, this.y, this.z)>;
+
+typedef struct
+{
+    uint idx_1;
+    uint idx_2;
+    uint idx_3;
+    
+    ushort padding<hidden=true>; // Always 0
+} Face<read=Str("[%d, %d, %d]", this.idx_1, this.idx_2, this.idx_3)>;
+
+typedef struct
+{
+    ushort always_0;
+    uint material_count;
+    
+    local uint i;
+    for (i = 0; i < material_count; i++)
+    {
+        uint unknown<hidden=true>; // Always 2
+        Component material;
+    }
+    
+    uint vert_count;
+    ushort vert_size_type;
+
+    if (vert_count > 0)
+    {
+        // 1F03 = 64 bytes
+        // 9F03 = 68 bytes (Rigged models)
+        switch (vert_size_type)
+        {
+            case 0x31F:
+                Vertex64 vertices[vert_count];
+                break;
+            case 0x39F:
+                Vertex68 vertices[vert_count];
+                break;
+            default:
+                // Log error
+                Assert(false, Str("Vert size type of %X is not supported", this.vert_size_type));
+                break;
+        }
+    }
+    
+    uint face_count;
+    if (face_count > 0) Face faces[face_count];
+} GeometryComponent<read=Str("(%d vertices, %d faces)", this.vert_count, this.face_count)>;
+
+typedef struct
+{    
+    char magic_open[4];
+
+    uint size;
+    switch (magic_open)
+    {
+        case "MOEG":
+            GeometryComponent geometry;
+            break;
+        default:
+            if (size > 0) byte data[size];
+            break;
+    }
+    uint unknown; // Usually 1. 2 for Material (Element depth?)
+
+    char magic_close[4];
+} Component;
+
+typedef struct
+{
+    local uint has_component = ReadUInt();
+    while (has_component == 1)
+    {
+        uint is_component<hidden=true>;
+        Component components;
+        
+        has_component = ReadUInt();
+    }
+
+    uint has_component_terminator; // Always 0
+} Components;
+
+typedef struct
+{
+    char magic_open[4]; // "LDOM"
+    uint size;
+    //local uint end_position = FTell() + size;
+    ushort always_0;
+    
+    Components components;
+    char magic_close[4]; // "LDOM"
+} Model;
+
+typedef struct
+{
+    char magic[4]; // "VBIN"
+    uint always_65k;
+    uint always_0;
+    
+    Model model;
+    
+    uint always_ffs<format=hex>;
+} VBinFile;
+
+VBinFile file;
