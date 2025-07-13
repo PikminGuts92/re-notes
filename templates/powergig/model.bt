@@ -29,7 +29,11 @@ typedef struct
     float y;
     float z;
     
-    byte extra_data[56];
+    float floats[6];
+    uint separator<format=hex>;
+    
+    float floats_2[6];
+    uint separator_2<format=hex>;
 } Vertex68<read=Str("(x = %f, y = %f, z = %f)", this.x, this.y, this.z)>;
 
 typedef struct
@@ -50,7 +54,7 @@ typedef struct
     for (i = 0; i < material_count; i++)
     {
         uint unknown<hidden=true>; // Always 2
-        Component material;
+        Component materials;
     }
     
     uint vert_count;
@@ -110,17 +114,63 @@ typedef struct
 } MaterialComponent;
 
 typedef struct
-{    
+{
+    uint weight_count;
+    if (weight_count < 1) return;
+
+    // 10 bytes
+    struct Weight
+    {
+        uint vert_index;
+        ushort bone_index;
+        float value;
+    } weights[weight_count]<read=Str("(vertex: %d, bone: %d, weight: %f)", this.vert_index, this.bone_index, this.value)>;
+} WeightComponent;
+
+typedef struct
+{
+    ushort always_0;
+    
+    ushort bone_count;
+    if (bone_count > 0)
+    {
+        struct Bone
+        {
+            PrefixedString name;
+            ushort parent_bone_index; // 0xffff if root
+
+            // pos (xyz) + quart (xyzw)?
+            float mat_1[7]; // World
+            float mat_2[7]; // Local
+        } bones[bone_count]<optimize=false, read=this.name.string_value>;
+    }
+
+    ushort unknown_always_0;
+} SkeletonComponent;
+
+typedef struct
+{
+    local string component_name = "Unknown";
     char magic_open[4];
 
     uint size;
     switch (magic_open)
     {
         case "MOEG":
+            component_name = "Geometry";
             GeometryComponent geometry;
             break;
         case "LRTM":
+            component_name = "Material";
             MaterialComponent material;
+            break;
+        case "THGW":
+            component_name = "Weight";
+            WeightComponent weight;
+            break;
+        case "LEKS":
+            component_name = "Skeleton";
+            SkeletonComponent skeleton;
             break;
         default:
             if (size > 0) byte data[size];
@@ -129,7 +179,7 @@ typedef struct
     uint unknown; // Usually 1. 2 for Material (Element depth?)
 
     char magic_close[4];
-} Component;
+} Component<read=Str("%s (%s)", this.component_name, this.magic_open)>;
 
 typedef struct
 {
