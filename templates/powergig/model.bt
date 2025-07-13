@@ -28,12 +28,26 @@ typedef struct
     float x;
     float y;
     float z;
+
+    float norm_x;
+    float norm_y;
+    float norm_z;
     
-    float floats[6];
-    uint separator<format=hex>;
-    
-    float floats_2[6];
-    uint separator_2<format=hex>;
+    float unknown_x;
+    float unknown_y;
+    float unknown_z;
+
+    uint separator<format=hex>; // Always 0xffffffff
+
+    float u_1;
+    float v_1;
+    float u_2;
+    float v_2;
+
+    float always_0_1;
+    float always_0_2;
+
+    uint maybe_some_index_index<format=hex>; // Usually 0xffffffff
 } Vertex68<read=Str("(x = %f, y = %f, z = %f)", this.x, this.y, this.z)>;
 
 typedef struct
@@ -41,9 +55,9 @@ typedef struct
     uint idx_1;
     uint idx_2;
     uint idx_3;
-    
-    ushort padding<hidden=true>; // Always 0
-} Face<read=Str("[%d, %d, %d]", this.idx_1, this.idx_2, this.idx_3)>;
+
+    ushort material_index;
+} Face<read=Str("[%d, %d, %d] (Material #%d)", this.idx_1, this.idx_2, this.idx_3, this.material_index + 1)>;
 
 typedef struct
 {
@@ -88,13 +102,12 @@ typedef struct
     ushort always_0;
     PrefixedString name;
 
+    // Enum for transparency?
+    // 10 = opaque
     uint always_10;
-    struct SomeFloats
-    {
-        float f1;
-        float f2;
-        float f3;
-    } some_floats<read=Str("(%f, %f, %f)", this.f1, this.f2, this.f3)>;
+    float unknown_float_1;
+    float spec_mul; // Not 100% sure
+    float spec_exp;
     
     ushort always_0;
     
@@ -108,9 +121,9 @@ typedef struct
     byte empty_data_2[4];
     uint unknown<format=hex>; // 0xFF000000
     
-    float unknown_float_1;
-    float unknown_float_2;
-    float unknown_float_3; // Always 0.0
+    float parallax_scale;
+    float parallax_bias;
+    float unknown_float_2; // Always 0.0
 } MaterialComponent;
 
 typedef struct
