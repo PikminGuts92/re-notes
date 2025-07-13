@@ -4,6 +4,13 @@ struct Component;
 
 typedef struct
 {
+    float x;
+    float y;
+    float z;
+} Vertex3<read=Str("(%f, %f, %f)", this.x, this.y, this.z)>;
+
+typedef struct
+{
     local string string_value = "";
     
     uint size;
@@ -163,6 +170,50 @@ typedef struct
 
 typedef struct
 {
+    // Min/max 1
+    float min_x;
+    float min_y;
+    float min_z;
+    float max_x;
+    float max_y;
+    float max_z;
+
+    float origin_x;
+    float origin_y;
+    float origin_z;
+    float origin_distance_to_corner; // (sqrt(3) * max_side_length) / 2
+
+    // Min/max 2 (same as 1)
+    float min_x_2;
+    float min_y_2;
+    float min_z_2;
+    float max_x_2;
+    float max_y_2;
+    float max_z_2;
+} BoundsComponent;
+
+typedef struct
+{    
+    ushort bone_count;
+    if (bone_count < 1) return;
+
+    PrefixedString properties[bone_count]<optimize=false>;
+} CullBonePropertiesComponent;
+
+typedef struct
+{    
+    ushort bone_count;
+    if (bone_count < 1) return;
+
+    struct BoneBoundingBox
+    {
+        Vertex3 corner_1;
+        Vertex3 corner_2;
+    } bone_bounding_boxes[bone_count];
+} BoneBoundingBoxComponent;
+
+typedef struct
+{
     local string component_name = "Unknown";
     char magic_open[4];
 
@@ -184,6 +235,18 @@ typedef struct
         case "LEKS":
             component_name = "Skeleton";
             SkeletonComponent skeleton;
+            break;
+        case "SDNB":
+            component_name = "Bounds";
+            BoundsComponent bounds;
+            break;
+        case "RPBC":
+            component_name = "CullBoneProperties";
+            CullBonePropertiesComponent bone_properties;
+            break;
+        case "XBBB":
+            component_name = "BoneBoundingBoxes";
+            BoneBoundingBoxComponent bone_boxes;
             break;
         default:
             if (size > 0) byte data[size];
