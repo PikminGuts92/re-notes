@@ -1,0 +1,58 @@
+LittleEndian();
+
+typedef struct
+{
+    uint magic<format=hex>; // 0x0000_0745
+    uint version; // 1 = Base game
+    uint block_size;
+
+    uint file_entry_count;
+    uint file_entry_offset;
+
+    uint dir_entry_count;
+    uint dir_entry_offset;
+
+    uint string_count;
+    uint string_table_offset;
+    uint string_table_size;
+
+    uint offset_entry_count;
+
+    // 48 bytes
+    struct FileEntry
+    {
+        uint unknown_1;
+        ushort unknown_2; // Always 0?
+
+        ushort dir_index;
+        uint string_index;
+        uint offset_index;
+        uint64 size;
+
+        byte unknown_hash[16];
+        uint64 timestamp;
+    } file_entries[file_entry_count];
+    
+    // 12 bytes
+    struct DirectoryEntry
+    {
+        uint path_hash<format=hex>;
+        uint parent_index;
+        uint string_index;
+    } directory_entries[dir_entry_count];
+    
+    struct StringTable
+    {
+        byte data[string_table_size];
+    } string_table;
+
+    // 8 bytes
+    struct OffsetEntry
+    {
+        ushort offset;
+        ushort num;
+        uint unknown;
+    } offset_entries[offset_entry_count];
+} HdrFile;
+
+HdrFile file;
