@@ -118,9 +118,9 @@ typedef struct
     
     ushort always_0;
     
-    PrefixedString diffuse_texture_path;
-    PrefixedString spec_texture_path;
-    PrefixedString norm_texture_path;
+    PrefixedString diffuse_path;
+    PrefixedString specular_map_path;
+    PrefixedString normal_map_path;
 
     byte empty_data_1[12];
     uint unknown<format=hex>; // 0xFF000000
