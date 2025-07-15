@@ -10,7 +10,7 @@ typedef struct
 {
     char magic[4]; // "CMP1"
     uint uncompressed_size;
-    uint block_size;
+    uint block_size; // Always 4096?
 
     local uint block_count = Ceil((double)uncompressed_size / (double)block_size);
     if (block_count < 1) return; // Shouldn't happen

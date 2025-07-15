@@ -3,7 +3,7 @@ LittleEndian();
 typedef struct
 {
     uint magic<format=hex>; // 0x0000_0745
-    uint version; // 1 = Base game
+    uint version; // 1 = Base game/patch
     uint block_size;
 
     uint file_entry_count;
@@ -21,38 +21,100 @@ typedef struct
     // 48 bytes
     struct FileEntry
     {
-        uint unknown_1;
-        ushort unknown_2; // Always 0?
+        local string name = "";
+        local string full_path = "";
 
+        enum <ushort> FILE_ATTRIBUTE
+        {
+            Uncompressed = 0,
+            Encrypted = 1, // For Lua scripts. Encrypted audio still 0 + "e.2" extension
+            Compressed = 2 // With CMP compression
+        } attribute;
+
+        if (this.attribute > 2)
+        {
+            Printf("Warning: Uknown file attribute value of %d\n", this.attribute);
+        }
+
+        ushort unknown_1;
+        ushort unknown_2;
         ushort dir_index;
+
         uint string_index;
         uint offset_index;
         uint64 size;
 
         byte unknown_hash[16];
-        uint64 timestamp;
-    } file_entries[file_entry_count];
-    
+        FILETIME timestamp;
+    } file_entries[file_entry_count]<read=Str("%s (%d)", this.full_path, this.attribute), optimize=false>;
+
     // 12 bytes
     struct DirectoryEntry
     {
+        local string name = "";
+        local string full_path = "";
+        
         uint path_hash<format=hex>;
         uint parent_index;
         uint string_index;
-    } directory_entries[dir_entry_count];
+    } directory_entries[dir_entry_count]<read=Str("%s", this.full_path), optimize=false>;
     
     struct StringTable
     {
-        byte data[string_table_size];
+        //byte data[string_table_size];
+
+        struct IndexedString
+        {
+            string value;
+        } strings[string_count]<read=this.value, optimize=false>;
     } string_table;
 
     // 8 bytes
     struct OffsetEntry
     {
-        ushort offset;
-        ushort num;
-        uint unknown;
-    } offset_entries[offset_entry_count];
+        uint offset;
+        ushort package_index;
+        ushort unknown; // 0-18, likely more (sequential order for some reason)
+    } offset_entries[offset_entry_count]<read=Str("offset: %d, package: %d, unknown: %d", this.offset, this.package_index, this.unknown)>;
+
+    // End of structure. The following is just code to add more context to each entry
+    local uint i;
+    for (i = 0; i < dir_entry_count; i++)
+    {
+        directory_entries[i].name = string_table.strings[directory_entries[i].string_index].value;
+    }
+
+    local uint parent_index;
+    for (i = 0; i < dir_entry_count; i++)
+    {
+        parent_index = directory_entries[i].parent_index;
+        directory_entries[i].full_path = directory_entries[i].name;
+
+        while (parent_index != 0 && parent_index != 0xffffffff)
+        {
+            // Prepend parent dir
+            directory_entries[i].full_path = directory_entries[parent_index].name + "/" + directory_entries[i].full_path;
+            parent_index = directory_entries[parent_index].parent_index;
+        }
+    }
+    
+    for (i = 0; i < file_entry_count; i++)
+    {
+        file_entries[i].name = string_table.strings[file_entries[i].string_index].value;
+        if (file_entries[i].dir_index == 0)
+        {
+            file_entries[i].full_path = file_entries[i].name;
+        }
+        else
+        {
+            file_entries[i].full_path = directory_entries[file_entries[i].dir_index].full_path + "/" + file_entries[i].name;
+        }
+
+        /*if (file_entries[i].attribute == 2) // (Strstr(file_entries[i].name, ".e.2") != -1)
+        {
+            Printf("Warning: File with path \"%s\" is compressed\n", file_entries[i].full_path);
+        }*/
+    }
 } HdrFile;
 
 HdrFile file;
