@@ -4,7 +4,7 @@ typedef struct (uint block_size)
 {
     local uint size = block_size;
     byte data[size];
-} CompressedBlock<read=Str("(%d bytes)", this.size)>;
+} DataBlock<read=Str("(%d bytes)", this.size)>;
 
 typedef struct
 {
@@ -19,7 +19,15 @@ typedef struct
     local uint i;
     for (i = 0; i < block_count; i++)
     {
-        CompressedBlock blocks(compressed_block_sizes[i]);
+        // If size is 0 then block is uncompressed
+        if (compressed_block_sizes[i] == 0)
+        {
+            // This block should always be last
+            DataBlock blocks(FileSize() - FTell());
+            break;
+        }
+
+        DataBlock blocks(compressed_block_sizes[i]);
     }
 } CmpFile;
 
