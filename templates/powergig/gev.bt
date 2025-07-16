@@ -1,0 +1,169 @@
+LittleEndian();
+
+#define CHUNK_HEADER { char magic[4]; uint size; }
+
+typedef struct
+{
+    uint value;
+    local string string_value = Str("%d", this.value);
+} IntOrString<read=this.string_value>;
+
+typedef struct
+{
+    CHUNK_HEADER // GEVT
+
+    // In seconds
+    float pos_realtime_1; // Should always be the same?
+    float pos_realtime_2;
+    float length_realtime; // 0.0 for events
+
+    uint always_ff<format=hex>;
+    
+    /*
+        02 = Pitch?
+        14 = Text
+    */
+    uint num_1; // Always 1? Or index...
+    
+    /*
+        02 Pitch/Text
+        09 Text event
+        10
+        11 Track name
+        17 Track end
+        18 Time signature change? Seen on Again
+        20 Tempo change
+    */
+    uint num_2; // Event type?
+
+    IntOrString string_pitch_index; // Definitely for pitch. Not sure about string...
+
+    // 0x64 00 00 00 for text event
+    // Pitch .. .. .. string_index?
+    uint possible_hash<format=hex>; // Maybe velocity/pitch/channel index?
+} GameEventChunk<read=Str("(start: %.3f, end: %.3f, len: %.3f, n1: %d, n2: %d, value: %s, hs: %08X)", this.pos_realtime_1, this.pos_realtime_2, this.length_realtime, this.num_1, this.num_2, this.string_pitch_index.string_value, this.possible_hash)>;
+
+typedef struct
+{
+    CHUNK_HEADER // GELS
+
+    uint event_count;
+    uint track_index;
+    
+    IntOrString track_name_string_index;
+    uint unk_index_2_1;
+    uint unk_index_2_2;
+    float unk_float_1;
+    float unk_float_2;
+    uint always_0;
+} GameEventListChunk;
+
+typedef struct
+{
+    CHUNK_HEADER // GELH
+
+    uint count;
+} GameEventListHeaderChunk<read=Str("(%d event lists)", this.count)>;
+
+typedef struct
+{
+    CHUNK_HEADER // STRS
+
+    local uint blob_size = size - 4;
+    byte string_blob[blob_size];
+    uint unknown;
+} StringsChunk<read=Str("(size: %d, unknown: %d)", this.blob_size, this.unknown)>;
+
+typedef struct
+{
+    // Note: Size will incorrectly say 4 bytes less
+    CHUNK_HEADER // STRH
+
+    local uint string_index_count = (size - 4) / 4;
+    local uint strings_offset = FTell() + size + 4;
+    
+    struct StringIndex
+    {
+        uint index;
+        local string value = ReadString(strings_offset + index);
+    } strings[string_index_count]<read=this.value, optimize=false>;
+} StringHeaderChunk<read=Str("(%d strings)", this.string_index_count)>;
+
+typedef struct
+{
+    CHUNK_HEADER // PCMC
+
+    uint always_1; // Maybe GELH/STRH count?
+    uint unknown<format=hex>; // Possibly ticks or hash?
+    uint always_0;
+
+    string src_mid_path;
+} PcmcChunk<read=this.src_mid_path>;
+
+// TODO: Split into two structs
+typedef struct
+{
+    CHUNK_HEADER // TMPO
+
+    uint midi_resolution; // 960, ticks per quarter note
+    uint some_hash<format=hex>;
+
+    local uint event_count = (size - 8) / 16;
+    if (event_count == 0) return;
+
+    struct TempoEvent
+    {
+        uint64 position_ticks;
+        uint mpq; // Microseconds per quarter note
+        float position_realtime; // In seconds?
+
+        local float bpm = (float)60000000 / (float)mpq; // Microseconds in minute / mpq
+    } tempo_events[event_count]<read=Str("(pos: %.3f, bpm: %.3f)", this.position_realtime, this.bpm), optimize=false>;
+} TempoChunk;
+
+typedef struct
+{    
+    PcmcChunk pcmc; // Something Midi Chuck?
+
+    struct GameEventList
+    {
+        GameEventListHeaderChunk header;
+        if (header.count == 0) return;
+
+        struct EventLists
+        {
+            GameEventListChunk game_event_list;
+
+            if (game_event_list.event_count > 0) GameEventChunk events[game_event_list.event_count]<optimize=false>;
+        } event_lists[header.count]<optimize=false>;
+    } game_event_lists;
+
+    struct Strings
+    {
+        StringHeaderChunk header;
+        StringsChunk strings;
+    } strings;
+
+    TempoChunk tmpo;
+
+    // End of structure. The following is only to add strings to each template. I know it's hacky :/
+    local uint i, j;
+    local uint str_idx;
+    for (i = 0; i < game_event_lists.header.count; i++)
+    {
+        // Update track name
+        str_idx = game_event_lists.event_lists[i].game_event_list.track_name_string_index.value;
+        game_event_lists.event_lists[i].game_event_list.track_name_string_index.string_value = strings.header.strings[str_idx].value;
+        
+        // Update text events
+        for (j = 0; j < game_event_lists.event_lists[i].game_event_list.event_count; j++)
+        {
+            if (game_event_lists.event_lists[i].events[j].num_2 != 9) continue;
+            
+            str_idx = game_event_lists.event_lists[i].events[j].string_pitch_index.value;
+            game_event_lists.event_lists[i].events[j].string_pitch_index.string_value = Str("\"%s\"", strings.header.strings[str_idx].value);
+        }
+    }
+} GevFile;
+
+GevFile file;
