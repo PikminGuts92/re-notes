@@ -1,13 +1,33 @@
 LittleEndian();
 
-struct Component;
+struct Element;
+struct Elements;
+
+typedef struct
+{
+    char raw[4];
+    local string value = Str("%c%c%c%c", this.raw[3], this.raw[2], this.raw[1], this.raw[0]);
+} Magic<read=this.value, optimize=false>;
 
 typedef struct
 {
     float x;
     float y;
     float z;
-} Vertex3<read=Str("(%f, %f, %f)", this.x, this.y, this.z)>;
+} Vector3<read=Str("(%f, %f, %f)", this.x, this.y, this.z)>;
+
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+    float w;
+} Vector4<read=Str("(%f, %f, %f, %f)", this.x, this.y, this.z, this.w)>;
+
+typedef struct
+{
+    float value[7];
+} Transform<read=Str("[%f, %f, %f, %f, %f, %f, %f]", this.value[0], this.value[1], this.value[2], this.value[3], this.value[4], this.value[5], this.value[6])>;
 
 typedef struct
 {
@@ -68,16 +88,101 @@ typedef struct
 
 typedef struct
 {
+    uint count;
+} HeadElement<read=Str("(count: %d)", this.count)>;
+
+typedef struct
+{
+    uint always_0;
+    ushort bone_count;
+    PrefixedString name;
+
+    Elements elements(parentof(this).index_open); // VSBX, BPOS, BROT, EVNT
+} BoneAnimationElement;
+
+typedef struct
+{
+    local uint bone_count = parentof(parentof(parentof(this))).bone_count; // What a hack
+    uint animation_count;
+
+    struct PositionAnimationEntry
+    {
+        float offset; // In seconds, seems to be frame pos
+        Vector3 positions[bone_count];
+    } animation_entries[animation_count]<read=Str("(offset: %f)", this.offset), optimize=false>;
+} BonePositionElement;
+
+typedef struct
+{
+    local uint bone_count = parentof(parentof(parentof(this))).bone_count;
+    uint animation_count;
+
+    struct RotationAnimationEntry
+    {
+        float offset; // In seconds
+        Vector4 positions[bone_count];
+    } animation_entries[animation_count]<read=Str("(offset: %f)", this.offset), optimize=false>;
+} BoneRotationElement;
+
+typedef struct
+{
+    ushort always_0;
+    uint event_count;
+
+    struct EventAnimationEntry
+    {
+        float offset; // In seconds (probably)
+        PrefixedString value;
+    } event_entries[event_count]<read=Str("(offset: %f, value: %s)", this.offset, this.value.string_value), optimize=false>;
+} EventElement;
+
+typedef struct
+{
+    // Currently only seen in "Headliner_Fallen.anim"
+    ushort name_count; // Always 1? Assuming is count
+    if (name_count > 0) PrefixedString names[name_count]<optimize=false>;
+
+    ushort unknown_count; // Not sure
+    Elements elements(parentof(this).index_open); // VDEL, VMSK
+} VAnimationElement;
+
+typedef struct
+{
+    uint some_count;
+    Vector3 some_vector;
+
+    uint entry_count;
+    struct VDelEntry
+    {
+        float offset; // In seconds?
+        Vector3 pos_1;
+        Vector3 pos_2; // Always (0.0, -1.0, -0.0)?
+    } del_entries[entry_count]<optimize=false>;
+} VDelElement;
+
+typedef struct
+{
+    uint unknown_1; // Always 6?
+    uint unknown_2; // Always 63?
+} VMskElement;
+
+typedef struct
+{
+    uint trans_count;
+    Transform transforms[trans_count];
+} VsbxElement<read=Str("(%d transforms)", this.trans_count)>;
+
+typedef struct
+{
     ushort always_0;
     uint material_count;
-    
+
     local uint i;
     for (i = 0; i < material_count; i++)
     {
-        uint unknown<hidden=true>; // Always 2
-        Component materials;
+        Element materials; // MaterialElement
     }
-    
+
     uint vert_count;
     ushort vert_size_type;
 
@@ -99,10 +204,10 @@ typedef struct
                 break;
         }
     }
-    
+
     uint face_count;
     if (face_count > 0) Face faces[face_count];
-} GeometryComponent<read=Str("(%d vertices, %d faces)", this.vert_count, this.face_count)>;
+} GeometryElement<read=Str("(%d vertices, %d faces)", this.vert_count, this.face_count)>;
 
 typedef struct
 {
@@ -131,7 +236,7 @@ typedef struct
     float parallax_scale;
     float parallax_bias;
     float unknown_float_2; // Always 0.0
-} MaterialComponent;
+} MaterialElement;
 
 typedef struct
 {
@@ -145,7 +250,7 @@ typedef struct
         ushort bone_index;
         float value;
     } weights[weight_count]<read=Str("(vertex: %d, bone: %d, weight: %f)", this.vert_index, this.bone_index, this.value)>;
-} WeightComponent;
+} WeightElement;
 
 typedef struct
 {
@@ -160,13 +265,13 @@ typedef struct
             ushort parent_bone_index; // 0xffff if root
 
             // pos (xyz) + quart (xyzw)?
-            float mat_1[7]; // World
-            float mat_2[7]; // Local
+            Transform transform_1; // World
+            Transform transform_2; // Local
         } bones[bone_count]<optimize=false, read=this.name.string_value>;
     }
 
     ushort unknown_always_0;
-} SkeletonComponent;
+} SkeletonElement;
 
 typedef struct
 {
@@ -190,15 +295,15 @@ typedef struct
     float max_x_2;
     float max_y_2;
     float max_z_2;
-} BoundsComponent;
+} BoundsElement;
 
 typedef struct
-{    
+{
     ushort bone_count;
     if (bone_count < 1) return;
 
     PrefixedString properties[bone_count]<optimize=false>;
-} CullBonePropertiesComponent;
+} CullBonePropertiesElement;
 
 typedef struct
 {    
@@ -207,90 +312,148 @@ typedef struct
 
     struct BoneBoundingBox
     {
-        Vertex3 corner_1;
-        Vertex3 corner_2;
+        Vector3 corner_1;
+        Vector3 corner_2;
     } bone_bounding_boxes[bone_count];
-} BoneBoundingBoxComponent;
+} BoneBoundingBoxElement;
+
+// Root elements (typically)
+typedef struct
+{
+    // HEAD
+    ushort always_0;
+    Element head; // Count is number of BoneAnimationElements (BANI)
+
+    // SKEL, BANI, VANI
+    // Note: Skeleton not always present
+    Elements elements(parentof(this).index_open);
+} AnimElement;
 
 typedef struct
 {
-    local string component_name = "Unknown";
-    char magic_open[4];
+    // GEOM, BNDS
+    // SKEL, WGHT, BBBX, CBPR, BNDS (for rigged models)
+    ushort always_0;
+    Elements elements(parentof(this).index_open);
+} ModelElement;
+// End root elements
+
+typedef struct
+{
+    local string element_name = "Unknown";
+    int index_open;
+    Magic magic_open;
 
     uint size;
-    switch (magic_open)
+    switch (magic_open.value)
     {
-        case "MOEG":
-            component_name = "Geometry";
-            GeometryComponent geometry;
+        // Root elements
+        case "ANIM":
+            element_name = "Anim";
+            AnimElement anim;
             break;
-        case "LRTM":
-            component_name = "Material";
-            MaterialComponent material;
+        case "MODL":
+            element_name = "Model";
+            ModelElement model;
             break;
-        case "THGW":
-            component_name = "Weight";
-            WeightComponent weight;
+        // End root elements
+        // Animation related
+        case "HEAD":
+            element_name = "Head";
+            HeadElement head;
             break;
-        case "LEKS":
-            component_name = "Skeleton";
-            SkeletonComponent skeleton;
+        case "BANI":
+            element_name = "BoneAnimation";
+            BoneAnimationElement bone_animation;
             break;
-        case "SDNB":
-            component_name = "Bounds";
-            BoundsComponent bounds;
+        case "VSBX":
+            element_name = "VSBX";
+            VsbxElement vsbx;
             break;
-        case "RPBC":
-            component_name = "CullBoneProperties";
-            CullBonePropertiesComponent bone_properties;
+        case "BPOS":
+            element_name = "BonePosition";
+            BonePositionElement bone_position;
             break;
-        case "XBBB":
-            component_name = "BoneBoundingBoxes";
-            BoneBoundingBoxComponent bone_boxes;
+        case "BROT":
+            element_name = "BoneRotation";
+            BoneRotationElement bone_rotation;
             break;
+        case "EVNT":
+            element_name = "Event";
+            EventElement event;
+            break;
+        case "VANI":
+            element_name = "VAnimation";
+            VAnimationElement v_animation;
+            break;
+        case "VDEL":
+            element_name = "VDelElement";
+            VDelElement v_del;
+            break;
+        case "VMSK":
+            element_name = "VMskElement";
+            VMskElement v_msk;
+            break;
+        // End animation related
+        // Model related
+        case "GEOM":
+            element_name = "Geometry";
+            GeometryElement geometry;
+            break;
+        case "MTRL":
+            element_name = "Material";
+            MaterialElement material;
+            break;
+        case "WGHT":
+            element_name = "Weight";
+            WeightElement weight;
+            break;
+        case "SKEL": // Also used in rigged models
+            element_name = "Skeleton";
+            SkeletonElement skeleton;
+            break;
+        case "BNDS":
+            element_name = "Bounds";
+            BoundsElement bounds;
+            break;
+        case "CBPR":
+            element_name = "CullBoneProperties";
+            CullBonePropertiesElement bone_properties;
+            break;
+        case "BBBX":
+            element_name = "BoneBoundingBoxes";
+            BoneBoundingBoxElement bone_boxes;
+            break;
+        // End model related
         default:
+            Printf("Warning: Uknown element type \"%s\"\n", this.magic_open.value);
             if (size > 0) byte data[size];
             break;
     }
-    uint unknown; // Usually 1. 2 for Material (Element depth?)
 
-    char magic_close[4];
-} Component<read=Str("%s (%s)", this.component_name, this.magic_open)>;
+    // Close tag
+    int index_close;
+    Magic magic_close;
+} Element<read=Str("%s (%s)", this.element_name, this.magic_open.value)>;
 
-typedef struct
+typedef struct (int parent_index)
 {
-    local uint has_component = ReadUInt();
-    while (has_component == 1)
+    local uint peek_index = ReadInt();
+    while (peek_index > parent_index)
     {
-        uint is_component<hidden=true>;
-        Component components;
-        
-        has_component = ReadUInt();
+        Element elements;
+        peek_index = ReadInt();
     }
-
-    uint has_component_terminator; // Always 0
-} Components;
-
-typedef struct
-{
-    char magic_open[4]; // "LDOM"
-    uint size;
-    //local uint end_position = FTell() + size;
-    ushort always_0;
-    
-    Components components;
-    char magic_close[4]; // "LDOM"
-} Model;
+} Elements;
 
 typedef struct
 {
     char magic[4]; // "VBIN"
-    uint always_65k;
-    uint always_0;
-    
-    Model model;
-    
-    uint always_ffs<format=hex>;
+    ushort always_0;
+    ushort always_1; // Could be element count?
+
+    Element root_element;
+    int terminating_index; // Always -1
 } VBinFile;
 
 VBinFile file;
