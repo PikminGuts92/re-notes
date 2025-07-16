@@ -27,6 +27,7 @@ typedef struct
     
     /*
         02 Pitch/Text
+        04 -- Guitar related --
         09 Text event
         10
         11 Track name
@@ -56,7 +57,7 @@ typedef struct
     float unk_float_1;
     float unk_float_2;
     uint always_0;
-} GameEventListChunk;
+} GameEventListChunk<read=Str("(#%d: %d events)", this.track_index, this.event_count)>;
 
 typedef struct
 {
@@ -135,7 +136,7 @@ typedef struct
             GameEventListChunk game_event_list;
 
             if (game_event_list.event_count > 0) GameEventChunk events[game_event_list.event_count]<optimize=false>;
-        } event_lists[header.count]<optimize=false>;
+        } event_lists[header.count]<read=Str("%s (%d events)", this.game_event_list.track_name_string_index.string_value, this.game_event_list.event_count), optimize=false>;
     } game_event_lists;
 
     struct Strings
