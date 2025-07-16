@@ -1,3 +1,9 @@
+/*
+.model
+.anim
+.vres
+*/
+
 LittleEndian();
 
 struct Element;
@@ -317,6 +323,25 @@ typedef struct
     } bone_bounding_boxes[bone_count];
 } BoneBoundingBoxElement;
 
+typedef struct
+{
+    ubyte always_0;
+    uint size;
+
+    if (size > 0) byte data[size];
+} RawBytesElement;
+
+typedef struct
+{
+    uint entry_count;
+    if (entry_count == 0) return;
+    
+    struct ResEntry
+    {
+        int unknown[6]; // Could be sizes or offsets?
+    } res_entries[entry_count];
+} ResourceElement;
+
 // Root elements (typically)
 typedef struct
 {
@@ -343,8 +368,10 @@ typedef struct
     local string element_name = "Unknown";
     int index_open;
     Magic magic_open;
-
     uint size;
+    
+    local uint end_position = FTell() + size;
+    
     switch (magic_open.value)
     {
         // Root elements
@@ -425,10 +452,29 @@ typedef struct
             BoneBoundingBoxElement bone_boxes;
             break;
         // End model related
+        // Resources related
+        case "RAWB":
+            element_name = "RawBytes";
+            RawBytesElement raw_bytes;
+            break;
+        case "RES_":
+            element_name = "Resource";
+            ResourceElement resource;
+            break;
+        // End resources related
         default:
             Printf("Warning: Uknown element type \"%s\"\n", this.magic_open.value);
             if (size > 0) byte data[size];
             break;
+    }
+    
+    if (FTell() < end_position)
+    {
+        // Head element in "resources.vres" files has extra 4 bytes for some reason
+        local uint remaining_size = end_position - FTell();
+        byte extra_bytes[remaining_size];
+
+        Printf("Warning: Unparsed %d bytes in \"%s\" element\n", this.remaining_size, this.element_name);
     }
 
     // Close tag
@@ -450,9 +496,9 @@ typedef struct
 {
     char magic[4]; // "VBIN"
     ushort always_0;
-    ushort always_1; // Could be element count?
+    ushort always_1; // Not element count...
 
-    Element root_element;
+    Elements root_elements(-1);
     int terminating_index; // Always -1
 } VBinFile;
 
