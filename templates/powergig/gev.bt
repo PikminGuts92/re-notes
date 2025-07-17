@@ -26,11 +26,12 @@ typedef struct
     uint num_1; // Always 1? Or index...
     
     /*
-        02 Pitch/Text
-        04 -- Guitar related --
+        02 Note
+        04 CC
         09 Text event
         10
         11 Track name
+        13 Lyric event
         17 Track end
         18 Time signature change? Seen on Again
         20 Tempo change
@@ -69,6 +70,13 @@ typedef struct
 typedef struct
 {
     CHUNK_HEADER // STRS
+    if (size == 0)
+    {
+        // Just here so read doesn't error
+        local uint blob_size = 0;
+        local uint unknown = 0;
+        return;
+    }
 
     local uint blob_size = size - 4;
     byte string_blob[blob_size];
@@ -77,7 +85,7 @@ typedef struct
 
 typedef struct
 {
-    // Note: Size will incorrectly say 4 bytes less
+    // Note: Size will incorrectly say 4 bytes more
     CHUNK_HEADER // STRH
 
     local uint string_index_count = (size - 4) / 4;
@@ -149,6 +157,7 @@ typedef struct
 
     // End of structure. The following is only to add strings to each template. I know it's hacky :/
     local uint i, j;
+    local ubyte is_text_event;
     local uint str_idx;
     for (i = 0; i < game_event_lists.header.count; i++)
     {
@@ -159,7 +168,18 @@ typedef struct
         // Update text events
         for (j = 0; j < game_event_lists.event_lists[i].game_event_list.event_count; j++)
         {
-            if (game_event_lists.event_lists[i].events[j].num_2 != 9) continue;
+            switch (game_event_lists.event_lists[i].events[j].num_2)
+            {
+                case 9:  // Text
+                case 11: // Track name
+                case 13: // Lyric
+                    is_text_event = true;
+                    break;
+                default:
+                    is_text_event = false;
+                    break;
+            }
+            if (!is_text_event) continue; // Can't do stupid continue in switch statement...
             
             str_idx = game_event_lists.event_lists[i].events[j].string_pitch_index.value;
             game_event_lists.event_lists[i].events[j].string_pitch_index.string_value = Str("\"%s\"", strings.header.strings[str_idx].value);
