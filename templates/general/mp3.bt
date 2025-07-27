@@ -95,8 +95,18 @@ string print_channel(int i)
 
 byte is_mp3_frame(uint header)
 {
-    // Check if first 11 bits are 1
-    return ((header >> 20) & 0xFFE) == 0xFFE;
+    local byte correct_frame_sync = ((header >> 20) & 0xFFE) == 0xFFE;    // Check if first 11 bits are 1
+    local byte correct_mpeg_version_id = ((header >> 19) & 0b11) == 0b11; // MPEG Version 1
+    local byte correct_layer = ((header >> 17) & 0b11) == 0b01;           // Layer III
+
+    local byte bitrate_index = (header >> 14) & 0b1111;
+    local byte valid_bitrate = BITRATES[bitrate_index] > 0;
+
+    local byte sample_rate_index = (header >> 10) & 0b11;
+    local byte valid_sample_rate = SAMPLE_RATES[sample_rate_index] > 0;
+    
+    return correct_frame_sync && correct_mpeg_version_id && correct_layer && valid_bitrate && valid_sample_rate;
+    //return correct_frame_sync;
 }
 
 // 4 bytes
@@ -132,15 +142,16 @@ typedef struct (uint remaining_size)
 
     local uint bitrate = BITRATES[header.bitrate_index];
     local uint sample_rate = SAMPLE_RATES[header.frequency_index];
+    local uint is_junk = 0;
 
     if (bitrate == 0 || sample_rate == 0)
     {
         Printf("Warning: Invalid frame size calculated\n");
+        is_junk = 1;
         return;
     }
 
     local uint frame_size = (144 * (bitrate * 1000) / sample_rate) + header.padding;
-    local uint is_junk = 0;
 
     if (remaining_size < frame_size)
     {
