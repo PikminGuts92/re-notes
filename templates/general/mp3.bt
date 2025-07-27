@@ -4,6 +4,7 @@ https://www.multiweb.cz/twoinches/mp3inside.htm
 https://www.mp3-tech.org/programmer/frame_header.html
 https://www.codeproject.com/Articles/8295/MPEG-Audio-Frame-Header
 http://gabriel.mp3-tech.org/mp3infotag.html
+https://www.diva-portal.org/smash/get/diva2:830195/FULLTEXT01.pdf
 */
 
 const int BITRATES[16] = { 0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0 };
@@ -99,14 +100,13 @@ byte is_mp3_frame(uint header)
     local byte correct_mpeg_version_id = ((header >> 19) & 0b11) == 0b11; // MPEG Version 1
     local byte correct_layer = ((header >> 17) & 0b11) == 0b01;           // Layer III
 
-    local byte bitrate_index = (header >> 14) & 0b1111;
+    local byte bitrate_index = (header >> 12) & 0b1111;
     local byte valid_bitrate = BITRATES[bitrate_index] > 0;
 
     local byte sample_rate_index = (header >> 10) & 0b11;
     local byte valid_sample_rate = SAMPLE_RATES[sample_rate_index] > 0;
     
     return correct_frame_sync && correct_mpeg_version_id && correct_layer && valid_bitrate && valid_sample_rate;
-    //return correct_frame_sync;
 }
 
 // 4 bytes
