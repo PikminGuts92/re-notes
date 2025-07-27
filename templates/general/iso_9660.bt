@@ -1,0 +1,130 @@
+/*
+Resources:
+https://wiki.osdev.org/ISO_9660
+https://en.wikipedia.org/wiki/ISO_9660
+http://www.dubeyko.com/development/FileSystems/ISO9960/ISO9960.html
+*/
+
+LittleEndian();
+
+const uint SECTOR_SIZE = 0x800;
+
+typedef struct
+{
+    LittleEndian();
+    uint value_le;
+
+    BigEndian();
+    uint value_be;
+
+    LittleEndian();
+} Value_UInt32<read=Str("%u", this.value_le)>;
+
+typedef struct
+{
+    LittleEndian();
+    ushort value_le;
+
+    BigEndian();
+    ushort value_be;
+    
+    LittleEndian();
+} Value_UInt16<read=Str("%u", this.value_le)>;
+
+typedef struct
+{
+    byte data[SECTOR_SIZE];
+} Sector;
+
+typedef struct
+{
+    //ubyte type;
+    enum <ubyte> Type
+    {
+        BOOT_RECORD,
+        PRIMARY_VOLUME_DESCRIPTOR,
+        SUPPLEMENTARY_VOLUME_DESCRIPTOR,
+        VOLUME_PARTITION_DESCRIPTOR,
+        VOLUME_DESCRIPTOR_SET_TERMINATOR
+    } type;
+    
+    char id[5];
+    ubyte version;
+} VolumeDescriptorHeader;
+
+typedef struct
+{
+    ubyte value;
+    
+    local string flag_names = "";
+    if (value & 0b1) flag_names += "DIRECTORY";
+    if (value & 0b10) flag_names += "|ASSOCIATED_FILE";
+    if (value & 0b100) flag_names += "|EXTENDED_ATTRIBUTE_FILE_FORMAT";
+    if (value & 0b1000) flag_names += "|EXTENDED_ATTRIBUTE_OWNER_GROUP_PERMISSIONS";
+    if (value & 0b1000000) flag_names += "|NOT_FILE_DIRECTORY";
+} FileFlags<read=this.flag_names>;
+
+typedef struct
+{
+    ubyte length;
+    ubyte length_extended;
+    if (length_extended > 0) byte extended_data[length_extended];
+
+    Value_UInt32 extent_location;
+    Value_UInt32 extent_length;
+    
+    struct RecordingDateTime
+    {
+        ubyte year; // Years since 1900
+        ubyte month;
+        ubyte day;
+        ubyte hour;
+        ubyte minute;
+        ubyte second;
+        byte offset; // Offset from GMT in 15min intervals (-48 = west, +52 = east)
+    } recording_datetime<read=Str("%04u-%02u-%02u %02u:%02u:%02u", 1900 + this.year, this.month, this.day, this.hour, this.minute, this.second)>;
+    
+    FileFlags file_flags;
+} Directory;
+
+typedef struct
+{
+    VolumeDescriptorHeader header;
+    ubyte unused;
+    
+    char system_identifier[32];
+    char volume_identifier[32];
+    
+    ubyte unused_field_1[8];
+    Value_UInt32 volume_space_size;
+    
+    ubyte unused_field_2[32];
+    Value_UInt16 volume_set_size;
+    Value_UInt16 volume_sequence_number;
+    Value_UInt16 logical_block_size;
+    
+    Value_UInt32 path_table_size;
+    
+    uint l_path_table;
+    uint l_path_table_optional;
+    
+    BigEndian();
+    uint m_path_table;
+    uint m_path_table_optional;
+    LittleEndian();
+    
+    Directory root_directory;
+} VolumeDescriptor;
+
+typedef struct
+{
+    // Unused by ISO 9660
+    struct SystemArea
+    {
+        Sector sectors[16];
+    } system_area;
+    
+    VolumeDescriptor primary_volume;
+} IsoFile;
+
+IsoFile file;

@@ -37,4 +37,5 @@ This is just a place for me to dump my reverse engineering notes, templates, sni
 - Platforms
   - [PlayStation](templates/ps/)
   - [Xbox 360](templates/x360/)
+- [General](templates/general/)
 - [Uncategorized](templates/)

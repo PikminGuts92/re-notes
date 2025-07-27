@@ -1,0 +1,92 @@
+#include "mp3.bt"
+
+LittleEndian();
+
+const uint SAMPLES_PER_FRAME = 1152;
+
+typedef struct
+{
+    ushort file_entry_size;
+    char file_name[30];
+    uint sample_count;
+    uint compressed_size;
+
+    uint loop_start;
+    uint loop_end;
+
+    // 544,    0
+    // 576,    0
+    // 512, 1024
+    // Mode 2 for TOC frame?
+    ushort mode_1;
+    ushort mode_2; // Related to alignment... 0 is none and 1024 = 128 byte alignment
+
+    uint sample_rate; // 44100
+    ushort volume;    // 255
+    ushort pan;       // 128
+    ushort priority;  // 128
+
+    ushort channels;
+    float min_distance;
+    float max_distance;
+
+    uint variable_frequency; // 80
+    ushort variable_volume;  //  0
+    ushort variable_pan;     //  0
+
+    if (file_entry_size > 80)
+    {
+        uint unknown_1;
+        uint unknown_2;
+        uint unknown_3;
+        uint unknown_4;
+    }
+
+    local uint frame_count_per_channel = (sample_count / SAMPLES_PER_FRAME) / 2;
+    local uint frame_count = channels * frame_count_per_channel + ((channels % 2) * frame_count_per_channel);
+} FSBFileEntry;
+
+typedef struct
+{
+    char magic[4]; // "FSB3" or "FSB4"
+
+    uint file_count;
+    uint directory_size; // Matches file entry size? Could also be data fit size for padding
+    uint data_size;
+
+    ushort unknown; // Ususally 0
+    ushort fsb_version; // Always matches magic?
+
+    /*
+        32 = Extended? Not the case for PG. Maybe for encoding?
+    */
+    uint flags<format=hex>;
+
+    if (fsb_version == 4)
+    {
+        // Both ususally 0
+        uint hash_a<format=hex>;
+        uint hash_b<format=hex>;
+
+        ubyte hash[16];
+    }
+
+    if (file_count > 0) FSBFileEntry file_entries[file_count]<optimize=false>;
+    if (data_size == 0) return;
+
+    // Not sure if stream should go inside file entry or not...
+    if (file_count > 1)
+    {
+        Printf("Warning: FSB with more than one file not currently supported!\n");
+        return;
+    }
+    BigEndian();
+
+    local uint i;
+    for (i = 0; i < file_count; i++)
+    {
+        MP3File mp3s(file_entries[i].compressed_size);
+    }
+} FSBFile<read=Str("(%d files)", this.file_count)>;
+
+FSBFile fsb_file;

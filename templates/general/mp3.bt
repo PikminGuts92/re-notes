@@ -1,0 +1,187 @@
+/*
+Resources:
+https://www.multiweb.cz/twoinches/mp3inside.htm
+https://www.mp3-tech.org/programmer/frame_header.html
+https://www.codeproject.com/Articles/8295/MPEG-Audio-Frame-Header
+http://gabriel.mp3-tech.org/mp3infotag.html
+*/
+
+const int BITRATES[16] = { 0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0 };
+const int SAMPLE_RATES[4] = { 44100, 48000, 32000, 0 };
+
+string print_mpeg_version_id(int i)
+{
+    switch (i)
+    {
+        case 0b00:
+            return "MPEG Version 2.5 (Unofficial)";
+        case 0b01:
+            return "reserved";
+        case 0b10:
+            return "MPEG Version 2";
+        case 0b11:
+            return "MPEG Version 1";
+    }
+}
+
+string print_layer(int i)
+{
+    switch (i)
+    {
+        case 0b00:
+            return "reserved";
+        case 0b01:
+            return "Layer III";
+        case 0b10:
+            return "Layer II";
+        case 0b11:
+            return "Layer I";
+    }
+}
+
+string print_bitrate(int i)
+{
+    switch (i)
+    {
+        case 0b0000:
+            return "free";
+        case 0b0001:
+        case 0b0010:
+        case 0b0011:
+        case 0b0100:
+        case 0b0101:
+        case 0b1110:
+        case 0b0111:
+        case 0b1000:
+        case 0b1001:
+        case 0b1010:
+        case 0b1011:
+        case 0b1100:
+        case 0b1101:
+        case 0b1110:
+            return Str("%d kbps", BITRATES[i]);
+        case 0b1111:
+            return "bad";
+    }
+}
+
+string print_sample_rate(int i)
+{
+    switch (i)
+    {
+        case 0b00:
+        case 0b01:
+        case 0b10:
+            return Str("%d hz", SAMPLE_RATES[i]);
+        case 0b11:
+            return "bad";
+    }
+}
+
+string print_channel(int i)
+{
+    switch (i)
+    {
+        case 0b00:
+            return "Stereo";
+        case 0b01:
+            return "Joint Stereo";
+        case 0b10:
+            return "Dual Mono";
+        case 0b11:
+            return "Mono";
+    }
+}
+
+byte is_mp3_frame(uint header)
+{
+    // Check if first 11 bits are 1
+    return ((header >> 20) & 0xFFE) == 0xFFE;
+}
+
+// 4 bytes
+typedef struct
+{
+    int frame_sync      : 11<format=hex>;
+    int mpeg_version_id :  2<read=print_mpeg_version_id>;
+    int layer           :  2<read=print_layer>;
+
+    int crc_protection  :  1;
+    int bitrate_index   :  4<read=print_bitrate>;
+    int frequency_index :  2<read=print_sample_rate>;
+
+    int padding        : 1;
+    int private        : 1;
+    int channel        : 2<read=print_channel>;
+    int mode_extension : 2;
+    int copyright      : 1;
+    int original       : 1;
+    int emphasis       : 2;
+} MPEGHeader;
+
+typedef struct (uint remaining_size)
+{
+    local uint header_size = 4;
+    MPEGHeader header;
+
+    if (!header.crc_protection)
+    {
+        uint16 checksum<format=hex>;
+        header_size += 2;
+    }
+
+    local uint bitrate = BITRATES[header.bitrate_index];
+    local uint sample_rate = SAMPLE_RATES[header.frequency_index];
+
+    if (bitrate == 0 || sample_rate == 0)
+    {
+        Printf("Warning: Invalid frame size calculated\n");
+        return;
+    }
+
+    local uint frame_size = (144 * (bitrate * 1000) / sample_rate) + header.padding;
+    local uint is_junk = 0;
+
+    if (remaining_size < frame_size)
+    {
+        // Last frame can be truncated?
+        frame_size = remaining_size;
+        is_junk = 1;
+    }
+    
+    byte data[frame_size - header_size];
+} MP3Frame<read=Str("(bitrate: %s, sample rate: %s, channels: \"%s\")", print_bitrate(this.header.bitrate_index), print_sample_rate(this.header.frequency_index), print_channel(this.header.channel))>;
+
+typedef struct (uint file_size)
+{
+    local uint end_offset = FTell() + file_size;
+    local byte is_frame;
+    local uint frame_count = 0;
+
+    while ((FTell() < (end_offset - 4)) && FTell() < (FileSize() - 4))
+    {
+        is_frame = is_mp3_frame(ReadUInt());
+        if (!is_frame)
+        {
+            FSkip(1);
+            continue;
+        }
+
+        MP3Frame frames(end_offset - FTell());
+        if (frames[frame_count].is_junk)
+        {
+            Printf("Warning: Junk frame found at offset: 0x%08X\n", startof(frames[frame_count]));
+            break;
+        }
+
+        frame_count += 1;
+    }
+
+    if (FTell() < end_offset)
+    {
+        local uint junk_size = end_offset - FTell();
+        FSkip(junk_size);
+    }
+} MP3File<read=Str("(%d frames)", this.frame_count)>;
+
+//if (FTell() == 0) MP3File mp3_file(FileSize());
