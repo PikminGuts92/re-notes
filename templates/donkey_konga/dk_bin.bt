@@ -1,5 +1,7 @@
 /*
 
+Audio seems to have 1-3 second intro. Chart offsets start after that.
+
 Difficulties:
     _e.bin = Easy
     _n.bin = Normal
