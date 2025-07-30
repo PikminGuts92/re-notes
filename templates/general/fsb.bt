@@ -22,10 +22,11 @@ typedef struct
 
     // 544, 0
     // 576, 0
-    // 512, 0
+    // 576, 8 (RR PS3)
+    // 512, 1024
+    // 544, 4096
     ushort some_value_1; // Sample count in last frame?
-    ubyte some_value_2; // Related to alignment... 0 is none (or 2 bytes?) and 4 = 128 byte alignment
-    ubyte some_value_3; // 0, 4
+    ushort some_value_2; // Related to alignment... 0 is none (or 2 bytes?) and 1024 = 128 byte alignment?
 
     uint sample_rate; // 44100
     ushort volume;    // 255
@@ -79,7 +80,7 @@ typedef struct
     char magic[4]; // "FSB3" or "FSB4"
 
     uint file_count;
-    uint directory_size; // Matches file entry size? Could also be data fit size for padding
+    uint directory_size; // Matches file entry size? Total size of all entries, sometimes 4 bytes more (in RR)?
     uint data_size;
 
     FMOD_ENCODING encoding; // Ususally 0
