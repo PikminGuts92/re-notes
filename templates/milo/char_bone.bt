@@ -1,6 +1,6 @@
 // A Character system bone, conveys degrees of freedom to animate in a CharClip, lives in CharBoneDir (CharClipSet in GH2)
 // Super: Trans
-// Ext: .mesh
+// Ext: .mesh, .trans
 // C++ Class: ??
 
 #ifndef IN_MILO_FILE

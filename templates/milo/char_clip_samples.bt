@@ -18,7 +18,7 @@
 
 typedef struct (SystemInfo& info, Bool super)
 {
-    int version; // 10 (GH2), 11 (GH2 X60), 13 (RB1), 15 (TBRB), 16 (GDRB)
+    int version; // 10 (GH2), 11 (GH2 X360), 13 (RB1), 15 (TBRB), 16 (GDRB)
     CharClip char_clip(info, False); // Metadata is written for CharClip instead for some reason
 
     if (version >= 16)

@@ -177,7 +177,7 @@ typedef struct (SystemInfo& info, Bool super)
     uint flags;      // default_blend? PLAY_BLEND_FLAGS
     uint play_flags; // default_loop? PLAY_LOOP_FLAGS
 
-    float blend_width; // Usually 2?
+    float blend_width; // 1, 2 (Usually 2?)
 
     if (version > 3)
     {

@@ -26,6 +26,7 @@ typedef struct (SystemInfo& info, Bool super)
     NumString mat; // RndMat
 
     // Double cell size in pixels. Used for kerning?
+    // Hmm... same size in pixels if num_1 is 0? Or maybe just starting with TBRB...
     float width;
     float height;
     float num_1; // 0, 32

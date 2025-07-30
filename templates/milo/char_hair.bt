@@ -52,8 +52,8 @@ typedef struct
 {
     Vector3 unknown_floats; // Origin?
     NumString bone; // Trans - Hair bone we set the transform of
+    float length;   // The length of this strand bone
 
-    float length;                   // The length of this strand bone
     COLLIDE_TYPE_ENUM collide_type; // Type of collision
     NumString collision;            // Trans - Collision sphere
 
