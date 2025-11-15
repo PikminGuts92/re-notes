@@ -1,0 +1,4 @@
+#ifndef NS_CRC32
+#define NS_CRC32
+
+#endif
