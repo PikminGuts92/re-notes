@@ -1,3 +1,8 @@
+#include "common.bt"
+
+local uint LAST_HASH<format=hex> = compute_crc32_hash(".last");
+local uint LAST_HASH_ALT<format=hex> = compute_crc32_hash("last");
+
 BigEndian();
 
 // TODO: Move to common file
@@ -6,24 +11,55 @@ typedef struct
     uint value<format=hex>;
 } Hash<read=Str("%X8", this.value)>;
 
+typedef struct (uint info_start_offset)
+{
+    uint offset;
+    local uint abs_offset = offset + info_start_offset;
+} Offset<read=Str("%d", this.abs_offset)>;
+
 // 32 bytes
 typedef struct
 {
-    Hash file_extension;
-    uint file_offset;
-    uint file_size;
+    Hash extension;
+    Offset offset(startof(this));
+    uint size;
 
     Hash pak_full_file_path;
     Hash pak_file_path;
     Hash file_name_no_extension;
-    
+
     uint unknown;
     uint flags;
 } PakFileInfo;
 
+typedef struct (PakFileInfo& info)
+{
+    local uint size = info.size;
+    byte data[size];
+} PakFileEntry;
+
 typedef struct
 {
-    PakFileInfo info;
+    local uint file_count = 0;
+    local uint file_ext;
+
+    do
+    {
+        PakFileInfo info;
+
+        file_ext = info[file_count].extension.value;
+        file_count += 1;
+    } while (file_ext != LAST_HASH && file_ext != LAST_HASH_ALT);
+    
+    // First file offset is usually 4096 (0x1000) so max entries = 128?
+    // Pak file seems to always be added to 0x1000 bytes
+
+    local uint i;
+    for (i = 0; i < file_count; i++)
+    {
+        FSeek(info[i].offset.abs_offset);
+        PakFileEntry file_entries(info[i]);
+    }
 } PakFile;
 
 PakFile file;

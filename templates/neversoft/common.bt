@@ -1,0 +1,8 @@
+#ifndef NS_COMMON
+#define NS_COMMON
+
+#link "ns_editor_lib.dll"
+    uint compute_crc32_hash(string string_value);
+#endlink
+
+#endif
