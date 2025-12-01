@@ -1,0 +1,53 @@
+LittleEndian();
+
+typedef struct
+{
+    uint mesh_count;
+    uint meta_count; // Materials? Usually at least 1
+
+    // 64 bytes
+    struct FaceMetadata
+    {
+        char some_string[26];
+        ushort pad_zero_1;
+        uint pad_zero_2;
+        
+        uint face_count;
+        float nums[7];
+    } metadata[meta_count];
+    
+    //FSeek(76);    
+    uint vert_size;
+    local uint vert_count = vert_size / 24;
+
+    // 24 bytes
+    struct Vertex
+    {
+        float f1;
+        float f2;
+        float f3;
+        float f4;
+        float f5;
+
+        int always_neg_1;
+    } verts[vert_count];
+    
+    uint face_size;
+    local uint face_count = face_size / 4;
+
+    uint raw_faces[face_count];
+} ZMesh;
+
+typedef struct
+{
+    local uint mesh_count = ReadUInt(); // TODO: Figure out better structure
+    ZMesh meshes[mesh_count]<optimize=false>;
+} ZModel;
+
+typedef struct
+{
+    char magic[4]; // ZMOD
+    ZModel model;
+} ZModFile;
+
+ZModFile file;
