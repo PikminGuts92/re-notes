@@ -1,0 +1,25 @@
+LittleEndian();
+
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+    float w;
+} Vector4<read=Str("(%f, %f, %f, %f)", this.x, this.y, this.z, this.w)>;
+
+typedef struct
+{
+    local uint keyframe_count = parentof(this).keyframe_count;
+    Vector4 keyframes[keyframe_count];
+} ZRotatation;
+
+typedef struct
+{
+    char magic[4]; // ZMOR
+    uint rot_count;
+    uint keyframe_count;
+    ZRotatation rotations[rot_count]<optimize=false>;
+} ZMorFile;
+
+ZMorFile file;
