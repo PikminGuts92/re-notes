@@ -1,0 +1,55 @@
+LittleEndian();
+
+typedef struct
+{
+    char magic[4]; // RBIG
+    ushort file_entry_count;
+    ushort always_16;
+    
+    byte empty_bytes_1[24];
+    
+    struct FileEntry
+    {
+        uint offset; // Relative
+        uint unknown; // 48
+        uint size;
+
+        char file_path[200];
+    } file_entries[file_entry_count]<read=Str("%s (offset: %d, unk: %d, size: %d)", this.file_path, this.offset, this.unknown, this.size)>;
+    
+    byte empty_bytes_2[12];
+    
+    // Segs files
+    // Segs = segments?
+    BigEndian();
+    struct SegsFile
+    {
+        char magic[4]; // segs
+        
+        ushort num_1; // 5
+        ushort num_2; // 1 segment count?
+        
+        uint uncompressed_size;
+        uint segs_data_size; // Remaining segs size
+        
+        // Start of segment data?
+
+        ushort compressed_size;
+        ushort uncompressed_size;
+        
+        uint num_3; // 32 (uncompressed?), 33 (compressed?)
+
+        uint num_4; // 0
+        uint num_5; // 0
+        
+        byte data[compressed_size];
+        
+        local uint padding_size = startof(compressed_size) + segs_data_size - FTell();
+        if (padding_size > 0)
+        {
+            byte padding[padding_size];
+        }
+    } segs[3]<optimize=false>;
+} BigFile;
+
+BigFile file;
