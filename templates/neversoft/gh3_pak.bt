@@ -1,21 +1,16 @@
 #include "common.bt"
 
+#include "gh3_ska.bt"
+
 local uint LAST_HASH<format=hex> = compute_crc32_hash(".last");
 local uint LAST_HASH_ALT<format=hex> = compute_crc32_hash("last");
 
+local uint SKA_EXT_HASH<format=hex> = compute_crc32_hash(".ska");
+local uint SKIN_EXT_HASH<format=hex> = compute_crc32_hash(".skin");
+local uint TEX_EXT_HASH<format=hex> = compute_crc32_hash(".tex");
+local uint QB_EXT_HASH<format=hex> = compute_crc32_hash(".qb");
+
 BigEndian();
-
-// TODO: Move to common file
-typedef struct
-{
-    uint value<format=hex>;
-} Hash<read=Str("%X8", this.value)>;
-
-typedef struct (uint info_start_offset)
-{
-    uint offset;
-    local uint abs_offset = offset + info_start_offset;
-} Offset<read=Str("%d", this.abs_offset)>;
 
 // 32 bytes
 typedef struct
@@ -24,9 +19,20 @@ typedef struct
     Offset offset(startof(this));
     uint size;
 
+    /*
+    extension
+        A7F505C4 .qb
+    pak_full_file_path
+        00000000
+    pak_file_path
+        ??? 0x944dc86b c:/gh3/data/songs/anarchyintheuk.mid.qb.xen
+    file_name_no_extension
+        A86A21FF anarchyintheuk
+    */
+
     Hash pak_full_file_path;
     Hash pak_file_path;
-    Hash file_name_no_extension;
+    Hash file_name_no_extension; // Sometimes matches w/ pak_file_path
 
     uint unknown;
     uint flags;
@@ -35,7 +41,16 @@ typedef struct
 typedef struct (PakFileInfo& info)
 {
     local uint size = info.size;
-    byte data[size];
+    
+    switch (info.extension.value)
+    {
+        case SKA_EXT_HASH:
+            SkaFile file;
+            break;
+        default:
+            byte data[size];
+            break;
+    }
 } PakFileEntry;
 
 typedef struct

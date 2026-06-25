@@ -1,0 +1,15 @@
+#ifndef NS_GH3_SKA
+#define NS_GH3_SKA
+
+#include "common.bt"
+
+typedef struct
+{
+    uint version; // Always 0;
+    int always_neg_1;
+    uint size;
+    
+    Offset offset(startof(this));
+} SkaFile;
+
+#endif

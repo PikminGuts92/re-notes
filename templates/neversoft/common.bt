@@ -5,4 +5,15 @@
     uint compute_crc32_hash(string string_value);
 #endlink
 
+typedef struct
+{
+    uint value<format=hex>;
+} Hash<read=Str("%08X", this.value)>;
+
+typedef struct (uint info_start_offset)
+{
+    uint offset;
+    local uint abs_offset = offset + info_start_offset;
+} Offset<read=Str("%d", this.abs_offset)>;
+
 #endif
