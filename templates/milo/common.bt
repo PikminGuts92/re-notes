@@ -35,6 +35,10 @@ typedef struct
     {
         char text[count]<optimize=false>;
     }
+    else
+    {
+        local string text = "";
+    }
 } NumString<read=read_num_string, write=write_num_string>;
 
 string read_num_string(NumString& ns)
