@@ -1,0 +1,27 @@
+const byte PACKAGE_HEADER[14] = { 0x50, 0x41, 0x43, 0x4B, 0x41, 0x47, 0x45, 0x20, 0x01, 0x00, 0x00, 0x00, 0x00, 0x07 };
+const uint BLOCK_SIZE = 512;
+
+typedef struct
+{
+    byte data[BLOCK_SIZE];
+    local byte decoded_data[BLOCK_SIZE];
+} Block<optimize=false>;
+
+local uint i, b;
+local byte cipher[BLOCK_SIZE];
+
+for (i = 0; i < 14; i++)
+{
+    //cipher[i] = first_block.data[i] ^ PACKAGE_HEADER[i];
+    cipher[i] = ReadByte(i) ^ PACKAGE_HEADER[i];
+}
+
+Block blocks[20];
+
+for (b = 0; b < 20; b++)
+{
+    for (i = 0; i < 14; i++)
+    {
+        blocks[b].decoded_data[i] = blocks[b].data[i] ^ cipher[i];
+    }
+}
