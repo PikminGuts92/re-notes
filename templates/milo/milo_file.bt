@@ -190,7 +190,7 @@ typedef struct (SystemInfo& info, string class_name, string name, Bool is_entry)
             RndDir object(info, False, False);
             is_dir = 1;
 
-            if (object.obj_dir.inline_proxy == True)
+            if (exists(object.obj_dir.inline_proxy) && object.obj_dir.inline_proxy == True)
             {
                 should_read_milo = 1;
             }
