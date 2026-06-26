@@ -79,28 +79,46 @@ typedef struct (SystemInfo& info)
 
     NumString dist_map; // Symbol (none nodes raw) - Displays the transition distance map between clip1 and clip2, raw means the raw graph, no nodes
 
-    if (version <= 6) return;
+    if (version < 6) return;
 
-    int value_0x7c;
-    Bool value_0x80;
-    int value_0x90;
+    NumString transition;          // 0x7c
+    Bool cycle_transition;         // 0x80
+    NumString internal_transition; // 0x90
+    
+    if (version < 10)
+    {
+        uint unknown_1;
+    }
 
-    Bool value_0x81;
-    Bool value_0x82;
-    Bool value_0x83;
+    Bool metronome;        // 0x81
+    Bool zero_travel;      // 0x82
+    Bool show_screen_size; // 0x83
+    
+    if (version < 12)
+    {
+        NumString value_0x84; // Symbol
+    }
+    
+    Bool foot_extents; // 0x88
 
-    NumString value_0x84; // Symbol
+    if (version < 15)
+    {
+        Bool clip2_realtime; // 0x89
+        int bpm;
+    }
 
-    Bool value_0x88;
-    Bool value_0x89;
+    if (version == 6) return;
 
-    int bpm;
+    if (version < 14)
+    {
+        NumString value_0x98; // Symbol
+        float value_0x9c;
+    }
 
-    NumString value_0x98; // Symbol
-
-    float value_0x9c;
-
-    NumString value_0x54; // RndTransformable
+    if (version < 14 && version > 9)
+    {
+        NumString value_0x54; // RndTransformable
+    }
 } CharacterTest; // a.ka. CharacterTesting
 
 typedef struct (SystemInfo& info, Bool super, Bool inlined, Bool is_entry)
