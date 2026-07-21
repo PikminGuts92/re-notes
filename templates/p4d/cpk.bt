@@ -232,22 +232,31 @@ typedef struct (UTFData& data)
     //FSeek(data_offset_abs);
 } UTF;
 
+typedef struct (string dirName, string fileName, uint fileSize, uint extractSize, uint64 fileOffset)
+{
+    local string fullFilePath = (dirName == "") ? fileName : dirName + "/" + fileName;
+    local ubyte isCompressed = extractSize > fileSize;
+
+    byte data[fileSize];
+} CpkFileEntry<read=Str("%s%s", this.fullFilePath, this.isCompressed ? " (Compressed)" : "")>;
+
 typedef struct
 {
     char magic[4]; // "CPK" + \0
-    
+
+    // Should only have one row of data
     UTFData cpk_packet; // CPK HDR
     UTF utf(cpk_packet);
     
     local uint64 contentOffset = 0;
-    local int contentOffsetElementIndex = FindIndexOfColumnElement(utf, "ContentOffset");
+    local int contentOffsetElementIndex = FindIndexOfColumnElement(utf, "ContentOffset", 0);
     if (contentOffsetElementIndex != -1)
     {
         contentOffset = utf.rows[0].elements[contentOffsetElementIndex].value;
     }
 
     // File listing
-    local int tocOffsetElementIndex = FindIndexOfColumnElement(utf, "TocOffset");
+    local int tocOffsetElementIndex = FindIndexOfColumnElement(utf, "TocOffset", 0);
     if (tocOffsetElementIndex != -1)
     {
         local uint64 tocOffset = utf.rows[0].elements[tocOffsetElementIndex].value;
@@ -259,7 +268,7 @@ typedef struct
     }
 
     // Some kind of metadata...    
-    local int etocOffsetElementIndex = FindIndexOfColumnElement(utf, "EtocOffset");
+    local int etocOffsetElementIndex = FindIndexOfColumnElement(utf, "EtocOffset", 0);
     if (etocOffsetElementIndex != -1)
     {
         local uint64 etocOffset = utf.rows[0].elements[etocOffsetElementIndex].value;
@@ -270,33 +279,88 @@ typedef struct
         UTF etoc_utf(etoc_packet);
     }
     
-    local int itocOffsetElementIndex = FindIndexOfColumnElement(utf, "ItocOffset");
+    local int itocOffsetElementIndex = FindIndexOfColumnElement(utf, "ItocOffset", 0);
     if (itocOffsetElementIndex != -1)
     {
         local uint64 itocOffset = utf.rows[0].elements[itocOffsetElementIndex].value;
     }
 
-    local int gtocOffsetElementIndex = FindIndexOfColumnElement(utf, "GtocOffset");
+    local int gtocOffsetElementIndex = FindIndexOfColumnElement(utf, "GtocOffset", 0);
     if (gtocOffsetElementIndex != -1)
     {
         local uint64 gtocOffset = utf.rows[0].elements[gtocOffsetElementIndex].value;
     }
+    
+    if (!exists(toc_utf))
+    {
+        return;
+    }
+    
+    // Read files
+    local uint64 start_file_offset;
+    if (!exists(contentOffset))
+    {
+        start_file_offset = tocOffset;
+    }
+    else
+    {
+        if (!exists(tocOffset))
+        {
+            // Probably invalid...
+            start_file_offset = 0;
+        }
+        else
+        {
+            start_file_offset = (contentOffset < tocOffset) ? contentOffset : tocOffset;
+        }
+    }
+       
+    // Should be same index for all rows...
+    local int dirNameElementIndex = FindIndexOfColumnElement(toc_utf, "DirName", 0);
+    local int fileNameElementIndex = FindIndexOfColumnElement(toc_utf, "FileName", 0);
+    local int fileSizeElementIndex = FindIndexOfColumnElement(toc_utf, "FileSize", 0);
+    local int extractElementIndex = FindIndexOfColumnElement(toc_utf, "ExtractSize", 0);
+    local int fileOffsetElementIndex = FindIndexOfColumnElement(toc_utf, "FileOffset", 0);
+    
+    local string dirName;
+    local string fileName;
+    local uint fileSize;
+    local uint extractSize;
+    local uint64 fileOffset;
+    
+    local uint64 fileOffsetAbs;
+
+    local uint i;
+    for (i = 0; i < toc_utf.num_rows; i++)
+    {
+        dirName = toc_utf.rows[i].elements[dirNameElementIndex].value;
+        fileName = toc_utf.rows[i].elements[fileNameElementIndex].value;
+        fileSize = toc_utf.rows[i].elements[fileSizeElementIndex].value;
+        extractSize = toc_utf.rows[i].elements[extractElementIndex].value;
+        fileOffset = toc_utf.rows[i].elements[fileOffsetElementIndex].value;
+
+        // Note: Might be relative to tocOffset if contentOffset isn't found...
+        fileOffsetAbs = start_file_offset + fileOffset;
+
+        FSeek(fileOffsetAbs);
+        CpkFileEntry files(dirName, fileName, fileSize, extractSize, fileOffset);
+    }
 } CpkFile;
 
-int FindIndexOfColumnElement(UTF& utf, string name)
+int FindIndexOfColumnElement(UTF& utf, string name, int row_idx)
 {
     local int i;
     local int map_idx;
     
     for (i = 0; i < utf.num_columns; i++)
     {
-        map_idx = utf.rows[0].index_mapper[i];
+        map_idx = utf.rows[row_idx].index_mapper[i];
         if (map_idx == -1)
         {
             continue;
         }
         
-        if (utf.rows[0].elements[map_idx].name == name)
+        if (utf.rows[row_idx].elements[map_idx].name == name)
         {
             return map_idx;
         }
