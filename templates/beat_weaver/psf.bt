@@ -1,0 +1,130 @@
+LittleEndian();
+
+struct PvblSection;
+
+typedef struct (uint offset)
+{
+    uint position;
+    
+    local string value = ReadString(offset + position);
+} StringOffset<read=this.value>;
+
+typedef struct
+{
+    char name[60];
+    
+    ubyte zero_data[3];
+    ubyte name_size; // Includes terminating 0
+
+    uint offset;
+    uint size;
+} PbvlProperty<read=Str("%s (%d)", this.name, this.name_size)>;
+
+typedef struct (PbvlProperty& property)
+{
+    local string property_name = property.name;
+    
+    local string magic = ReadString(FTell(), 4);
+    if (magic == "PVBL")
+    {
+        PvblSection section(property.size);
+    }
+    else
+    {
+        byte data[property.size];
+    }
+} PbvlPropertyValue<read=Str("%s Value", this.property_name)>;
+
+typedef struct (uint section_size)
+{
+    char magic[4]; // "PVBL"
+    int version; // Always 1
+    
+    //StringOffset name(startof(this));
+    
+    uint properties_offset;
+    int always_0;
+
+    // Read properties
+    local uint property_count = 0;
+    FSeek(startof(this) + properties_offset);
+    
+    while (FTell() < (startof(this) + section_size))
+    {
+        PbvlProperty properties;
+        property_count += 1;
+    }
+    
+    // Read property values
+    local uint i;
+    for (i = 0; i < property_count; i++)
+    {
+        if (properties[i].size == 0)
+        {
+            continue;
+        }
+        
+        FSeek(startof(this) + properties[i].offset);
+        PbvlPropertyValue values(properties[i]);
+    }
+    
+    //PbvlProperty property[4]<optimize=false>;
+
+    //FSeek(startof(this.properties_offset) + sizeof(properties_offset));
+    
+    /*ushort unknown_major; // Both always 1?
+    ushort unknown_minor;
+    
+    int always_0_2;*/
+} PvblSection;
+
+typedef struct
+{
+    /*
+    Section 1:
+        Version
+        Metadata
+        Chart
+        Audio
+
+    Section 2:
+        Artist
+        Title
+        Description
+
+    Section 3:
+        Header
+        Instrument
+        Tempo
+        Chord
+        Speed_Factor
+        Time_Signature
+        Intensity
+        Section
+        Solo
+        Loop
+        Destination
+        Fork
+        Routes
+        Marked
+        Secret
+        Keys
+        Stream
+        
+    Section 4:
+        Easy
+        Medium
+        Hard
+        Expert
+
+    Section 5:
+        FMOD_Bank_AES
+    */
+    
+    PvblSection song(FileSize());
+    //PvblSection artist;
+    
+    // Version, Artist, Header, Easy, FMOD_Bank_AES
+} PsfFile;
+
+PsfFile file;

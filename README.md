@@ -19,6 +19,7 @@ This is just a place for me to dump my reverse engineering notes, templates, sni
   - [Quantic Dream](templates/quantic_dream/)
 - Games
   - [BandFuse: Rock Legends](templates/bandfuse/)
+  - [Beat Weaver](templates/beat_weaver/)
   - [Britney's Dance Beat (PS2)](templates/bdb/)
   - [Croc Legend of the Gobbos - Remaster (PC)](templates/croc/)
   - [Dance Dance Revolution Universe 1-3 (Xbox 360)](templates/konami/)
