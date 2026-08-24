@@ -2,6 +2,16 @@ LittleEndian();
 
 struct PvblSection;
 
+struct StreamEvent;
+
+string read_string_event(StreamEvent& ev)
+{
+    local ubyte track = ev.num_1 & 0b1111;
+    local ubyte gem = (ev.num_1 >> 4) & 0b1111;
+    
+    return Str("[%8d, %3d, %2d, %2d, %5d]", ev.pos, ev.length, track, gem, ev.num_2);
+}
+
 typedef struct (uint offset)
 {
     uint position;
@@ -28,6 +38,43 @@ typedef struct (PbvlProperty& property)
     if (magic == "PVBL")
     {
         PvblSection section(property.size);
+        return;
+    }
+    else if (exists(parentof(parentof(this)))
+        && exists(parentof(parentof(this)).property_name)
+        && parentof(parentof(this)).property_name == "Stream"
+        )
+    {
+        //byte data[property.size];
+        
+        switch (property_name)
+        {
+            case "Easy":
+            case "Medium":
+            case "Hard":
+            case "Expert":
+                local uint ev_count = property.size / 8;
+
+                struct StreamEvent
+                {
+                    uint pos;
+                    ushort length; // Regular notes are no greater than 24 ticks
+                    
+                    /* 4 bits each...
+                    * [gem, track, v3, v4]
+                    
+                    Gem: 0-15 (left to right)
+                    Track: 0-15 (left to right)
+                    
+                    */
+                    ubyte num_1;
+                    ubyte num_2;
+                } stream_events[ev_count]<read=read_string_event>;
+                break;
+            default:
+                byte data[property.size];
+                break;
+        }
     }
     else
     {
