@@ -1,0 +1,1372 @@
+[
+  {
+    "id": "billiejoe",
+    "values": [
+      {
+        "property": "add_face_clip_billiejoe",
+        "property_short": "add_face_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_Brow_openmouthed",
+          "ADD_Brow_pouty",
+          "ADD_bj_asym_01",
+          "ADD_bj_asym_02",
+          "ADD_bj_brow_up_01",
+          "ADD_bj_brows_dn_03",
+          "ADD_bj_brows_dn_04",
+          "ADD_bj_brows_up_02",
+          "ADD_bj_brows_up_04",
+          "ADD_bj_eye_closed_01",
+          "ADD_bj_eye_wide_01",
+          "ADD_bj_grimace_02",
+          "ADD_bj_grimace_03",
+          "ADD_bj_grimace_05",
+          "ADD_bj_grimace_08",
+          "ADD_bj_l_jaw_01",
+          "ADD_bj_openmouth_04",
+          "ADD_bj_r_jaw_01",
+          "ADD_bj_smile_02",
+          "ADD_bj_smile_04",
+          "ADD_bj_snarl_01",
+          "ADD_bj_snarl_02",
+          "ADD_bj_snarl_03",
+          "ADD_bj_snarl_04",
+          "BLEND_bj_closed_eyes",
+          "BLEND_bj_eye_wide_01"
+        ]
+      },
+      {
+        "property": "add_face_weight_billiejoe",
+        "property_short": "add_face_weight",
+        "interpolation": 4,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "attention_billiejoe",
+        "property_short": "attention",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "FOCUS_Crowd_Interest01.intr",
+          "FOCUS_Crowd_Interest02.intr",
+          "FOCUS_Crowd_Interest03.intr",
+          "FOCUS_Crowd_Interest04.intr",
+          "FOCUS_WorldCamInterest.intr"
+        ]
+      },
+      {
+        "property": "body_billiejoe",
+        "property_short": "body",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "idle",
+          "start_fret_fingers_but_not_ik_and_mocap",
+          "start_fret_ik_and_mocap",
+          "start_fret_ik_only",
+          "start_fret_mocap_only"
+        ]
+      },
+      {
+        "property": "brow_clip_billiejoe",
+        "property_short": "brow_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_Brow_aggressive",
+          "ADD_Brow_down",
+          "ADD_bj_asym_02",
+          "ADD_bj_brow_Lasym_01",
+          "ADD_bj_brow_RAsym_01",
+          "ADD_bj_brow_dn_01",
+          "ADD_bj_brow_evil_01",
+          "ADD_bj_brow_evil_02",
+          "ADD_bj_brow_up_01",
+          "ADD_bj_brows_dn_02",
+          "ADD_bj_brows_dn_04",
+          "ADD_bj_brows_dn_05",
+          "ADD_bj_brows_up_01",
+          "ADD_bj_evil_01",
+          "ADD_bj_evil_02",
+          "ADD_bj_eye_wide_01",
+          "ADD_bj_snarl_01",
+          "BLEND_bj_brow_up_01",
+          "BLEND_bj_brows_up_01",
+          "BLEND_bj_brows_up_02",
+          "BLEND_bj_evil_01"
+        ]
+      },
+      {
+        "property": "brow_clip_b_billiejoe",
+        "property_short": "brow_clip_b",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_Brow_aggressive",
+          "ADD_Brow_pouty",
+          "ADD_bj_brow_dn_01",
+          "ADD_bj_brow_evil_01",
+          "ADD_bj_brow_evil_02",
+          "ADD_bj_brow_up_01",
+          "ADD_bj_brows_dn_01",
+          "ADD_bj_brows_up_03",
+          "ADD_bj_eye_squint_01",
+          "ADD_bj_snarl_02",
+          "BLEND_bj_brows_dn_01"
+        ]
+      },
+      {
+        "property": "brow_clip_balance_billiejoe",
+        "property_short": "brow_clip_balance",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "brow_weight_billiejoe",
+        "property_short": "brow_weight",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "face_clip_billiejoe",
+        "property_short": "face_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_bj_grimace_02",
+          "BLEND_Brow_pouty",
+          "BLEND_Oat_lo",
+          "BLEND_Ox_hi",
+          "BLEND_Ox_lo",
+          "BLEND_Wet_hi",
+          "BLEND_bj_closed_eyes",
+          "BLEND_bj_evil_02",
+          "BLEND_bj_grimace_01",
+          "BLEND_bj_grimace_02",
+          "BLEND_bj_grimace_03",
+          "BLEND_bj_grimace_04",
+          "BLEND_bj_grimace_05",
+          "BLEND_bj_grimace_06",
+          "BLEND_bj_grimace_07",
+          "BLEND_bj_grimace_08",
+          "BLEND_bj_openmouth_01",
+          "BLEND_bj_openmouth_02",
+          "BLEND_bj_openmouth_03",
+          "BLEND_bj_openmouth_04",
+          "BLEND_bj_relaxed_01",
+          "BLEND_bj_relaxed_02",
+          "BLEND_bj_relaxed_03",
+          "BLEND_bj_relaxed_04",
+          "BLEND_bj_smile_02",
+          "BLEND_bj_smile_03",
+          "BLEND_bj_smile_04",
+          "BLEND_bj_snarl_03",
+          "BLEND_bj_surprised_01",
+          "BLEND_bj_surprised_02",
+          "BLEND_smile_01"
+        ]
+      },
+      {
+        "property": "face_clip_b_billiejoe",
+        "property_short": "face_clip_b",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_bj_grimace_04",
+          "ADD_bj_snarl_04",
+          "BLEND_Blink",
+          "BLEND_Brow_pouty",
+          "BLEND_Oat_hi",
+          "BLEND_bj_brow_up_01",
+          "BLEND_bj_closed_eyes",
+          "BLEND_bj_evil_01",
+          "BLEND_bj_grimace_01",
+          "BLEND_bj_grimace_02",
+          "BLEND_bj_grimace_03",
+          "BLEND_bj_grimace_04",
+          "BLEND_bj_grimace_05",
+          "BLEND_bj_grimace_06",
+          "BLEND_bj_grimace_07",
+          "BLEND_bj_grimace_08",
+          "BLEND_bj_openmouth_01",
+          "BLEND_bj_openmouth_02",
+          "BLEND_bj_openmouth_03",
+          "BLEND_bj_openmouth_04",
+          "BLEND_bj_relaxed_01",
+          "BLEND_bj_relaxed_02",
+          "BLEND_bj_relaxed_03",
+          "BLEND_bj_relaxed_04",
+          "BLEND_bj_smile_02",
+          "BLEND_bj_smile_03",
+          "BLEND_bj_smile_04",
+          "BLEND_bj_surprised_01",
+          "BLEND_bj_surprised_02",
+          "BLEND_smile_02"
+        ]
+      },
+      {
+        "property": "face_clip_balance_billiejoe",
+        "property_short": "face_clip_balance",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "face_weight_billiejoe",
+        "property_short": "face_weight",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "hist_clip_billiejoe",
+        "property_short": "hist_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "song_mk_left_ramp_runs_points"
+        ]
+      },
+      {
+        "property": "lid_clip_billiejoe",
+        "property_short": "lid_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_Wide_eyed",
+          "ADD_bj_eye_wide_01"
+        ]
+      },
+      {
+        "property": "lid_clip_b_billiejoe",
+        "property_short": "lid_clip_b",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_bj_closed_eyes",
+          "ADD_bj_eye_closed_01",
+          "ADD_bj_eye_closed_02",
+          "ADD_bj_eye_squint_01",
+          "BLEND_bj_eye_closed_02"
+        ]
+      },
+      {
+        "property": "lid_clip_balance_billiejoe",
+        "property_short": "lid_clip_balance",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "lid_weight_billiejoe",
+        "property_short": "lid_weight",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "lookat_billiejoe",
+        "property_short": "lookat",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "procedural_blink_billiejoe_enabled",
+        "property_short": "procedural_blink_enabled",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      }
+    ]
+  },
+  {
+    "id": "mikedirnt",
+    "values": [
+      {
+        "property": "add_face_clip_mikedirnt",
+        "property_short": "add_face_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_Brow_dramatic",
+          "ADD_Brow_pouty",
+          "ADD_Oat_hi",
+          "ADD_md_brows_up_01",
+          "ADD_md_eyes_closed_01",
+          "ADD_md_eyes_open_01",
+          "ADD_md_grimace_01",
+          "ADD_md_grimace_02",
+          "BLEND_Brow_openmouthed",
+          "BLEND_md_eyebrows_up_01"
+        ]
+      },
+      {
+        "property": "add_face_weight_mikedirnt",
+        "property_short": "add_face_weight",
+        "interpolation": 4,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "attention_mikedirnt",
+        "property_short": "attention",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "FOCUS_Crowd_Interest01.intr",
+          "FOCUS_Crowd_Interest03.intr",
+          "FOCUS_Crowd_Interest04.intr",
+          "FOCUS_WorldCamInterest.intr",
+          "FOCUS_billiejoe_between_eyes.intr"
+        ]
+      },
+      {
+        "property": "body_mikedirnt",
+        "property_short": "body",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "hide_on",
+          "idle",
+          "start_fret_fingers_but_not_ik_and_mocap",
+          "start_fret_ik_and_mocap",
+          "start_fret_ik_only",
+          "start_fret_mocap_only"
+        ]
+      },
+      {
+        "property": "brow_clip_mikedirnt",
+        "property_short": "brow_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_Brow_pouty",
+          "ADD_md_brows_dn_02",
+          "ADD_md_brows_up_01",
+          "ADD_md_brows_up_03",
+          "ADD_md_evil_01",
+          "ADD_md_eyebrows_up_01",
+          "ADD_md_eyes_open_01",
+          "BLEND_md_brows_up_01",
+          "BLEND_md_evil_01"
+        ]
+      },
+      {
+        "property": "brow_clip_b_mikedirnt",
+        "property_short": "brow_clip_b",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_md_brows_dn_01",
+          "ADD_md_brows_dn_02",
+          "ADD_md_eyebrows_down_01",
+          "BLEND_md_brows_dn_01",
+          "BLEND_md_brows_dn_02"
+        ]
+      },
+      {
+        "property": "brow_clip_balance_mikedirnt",
+        "property_short": "brow_clip_balance",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "brow_weight_mikedirnt",
+        "property_short": "brow_weight",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "face_clip_mikedirnt",
+        "property_short": "face_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_Oat_lo",
+          "ADD_Ox_hi",
+          "ADD_Wet_hi",
+          "ADD_md_grimace_02",
+          "ADD_md_grimace_03",
+          "ADD_md_grimace_04",
+          "ADD_md_grimace_05",
+          "ADD_md_grimace_06",
+          "ADD_md_neutral_01",
+          "ADD_md_smile_01",
+          "ADD_md_smile_02",
+          "ADD_md_smile_03",
+          "BLEND_Bump_lo",
+          "BLEND_Eat_hi",
+          "BLEND_If_hi",
+          "BLEND_If_lo",
+          "BLEND_Neutral_hi",
+          "BLEND_Neutral_lo",
+          "BLEND_Oat_hi",
+          "BLEND_Oat_lo",
+          "BLEND_Ox_hi",
+          "BLEND_Ox_lo",
+          "BLEND_Wet_hi",
+          "BLEND_md_evil_01",
+          "BLEND_md_grimace_01",
+          "BLEND_md_grimace_02",
+          "BLEND_md_grimace_03",
+          "BLEND_md_grimace_04",
+          "BLEND_md_grimace_05",
+          "BLEND_md_grimace_06",
+          "BLEND_md_grimace_07",
+          "BLEND_md_grimace_08",
+          "BLEND_md_grimace_09",
+          "BLEND_md_neutral_01",
+          "BLEND_md_neutral_02",
+          "BLEND_md_relaxed_01",
+          "BLEND_md_relaxed_02",
+          "BLEND_md_smile_01",
+          "BLEND_md_smile_02",
+          "BLEND_md_smile_03"
+        ]
+      },
+      {
+        "property": "face_clip_b_mikedirnt",
+        "property_short": "face_clip_b",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_md_grimace_01",
+          "ADD_md_grimace_07",
+          "BLEND_Bump_lo",
+          "BLEND_Cage_hi",
+          "BLEND_Eat_hi",
+          "BLEND_Eat_lo",
+          "BLEND_If_hi",
+          "BLEND_If_lo",
+          "BLEND_New_hi",
+          "BLEND_Oat_hi",
+          "BLEND_Oat_lo",
+          "BLEND_Ox_hi",
+          "BLEND_Ox_lo",
+          "BLEND_Roar_hi",
+          "BLEND_Roar_lo",
+          "BLEND_Told_hi",
+          "BLEND_Told_lo",
+          "BLEND_Wet_hi",
+          "BLEND_md_grimace_01",
+          "BLEND_md_grimace_02",
+          "BLEND_md_grimace_03",
+          "BLEND_md_grimace_04",
+          "BLEND_md_grimace_05",
+          "BLEND_md_grimace_06",
+          "BLEND_md_grimace_07",
+          "BLEND_md_grimace_08",
+          "BLEND_md_grimace_09",
+          "BLEND_md_neutral_01",
+          "BLEND_md_neutral_02",
+          "BLEND_md_relaxed_01",
+          "BLEND_md_relaxed_02",
+          "BLEND_md_smile_01",
+          "BLEND_md_smile_02",
+          "BLEND_md_smile_03",
+          "BLEND_smile_01"
+        ]
+      },
+      {
+        "property": "face_clip_balance_mikedirnt",
+        "property_short": "face_clip_balance",
+        "interpolation": 4,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "face_weight_mikedirnt",
+        "property_short": "face_weight",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "hist_clip_mikedirnt",
+        "property_short": "hist_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "song_mk_right_ramp_playing"
+        ]
+      },
+      {
+        "property": "lid_clip_mikedirnt",
+        "property_short": "lid_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_Wide_eyed",
+          "ADD_md_eyes_open_01",
+          "BLEND_md_eyes_open_01"
+        ]
+      },
+      {
+        "property": "lid_clip_b_mikedirnt",
+        "property_short": "lid_clip_b",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_md_eyes_closed_01"
+        ]
+      },
+      {
+        "property": "lid_clip_balance_mikedirnt",
+        "property_short": "lid_clip_balance",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "lid_weight_mikedirnt",
+        "property_short": "lid_weight",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "lookat_mikedirnt",
+        "property_short": "lookat",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "procedural_blink_mikedirnt_enabled",
+        "property_short": "procedural_blink_enabled",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "vox_clone_mikedirnt_enabled",
+        "property_short": "vox_clone_enabled",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      }
+    ]
+  },
+  {
+    "id": "trecool",
+    "values": [
+      {
+        "property": "add_face_clip_trecool",
+        "property_short": "add_face_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_Brow_dramatic",
+          "ADD_Brow_pouty",
+          "ADD_Oat_hi",
+          "ADD_Ox_hi",
+          "ADD_Wide_eyed",
+          "ADD_tc_brows_asym_01",
+          "ADD_tc_brows_down_01",
+          "ADD_tc_eyes_open_01",
+          "ADD_tc_grimace_01",
+          "ADD_tc_sneer_01",
+          "BLEND_tc_sneer_01"
+        ]
+      },
+      {
+        "property": "add_face_weight_trecool",
+        "property_short": "add_face_weight",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "attention_trecool",
+        "property_short": "attention",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "FOCUS_WorldCamInterest.intr",
+          "FOCUS_billiejoe_between_eyes.intr"
+        ]
+      },
+      {
+        "property": "body_trecool",
+        "property_short": "body",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "idle",
+          "play_energetic",
+          "start_fret_ik_and_mocap",
+          "step_out"
+        ]
+      },
+      {
+        "property": "brow_clip_trecool",
+        "property_short": "brow_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_Brow_pouty",
+          "ADD_tc_brows_up_01",
+          "ADD_tc_eyes_open_01"
+        ]
+      },
+      {
+        "property": "brow_clip_b_trecool",
+        "property_short": "brow_clip_b",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_tc_brows_down_01"
+        ]
+      },
+      {
+        "property": "brow_clip_balance_trecool",
+        "property_short": "brow_clip_balance",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "brow_weight_trecool",
+        "property_short": "brow_weight",
+        "interpolation": 4,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "face_clip_trecool",
+        "property_short": "face_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_Oat_lo",
+          "ADD_Ox_hi",
+          "ADD_tc_angry_01",
+          "ADD_tc_goofy_01",
+          "ADD_tc_grimace_01",
+          "ADD_tc_grimace_02",
+          "ADD_tc_oooh_01",
+          "ADD_tc_oooh_02",
+          "ADD_tc_smile_01",
+          "ADD_tc_smile_02",
+          "ADD_tc_smile_03",
+          "ADD_tc_smile_05",
+          "ADD_tc_smile_06",
+          "BLEND_Brow_openmouthed",
+          "BLEND_Bump_lo",
+          "BLEND_Oat_hi",
+          "BLEND_Ox_hi",
+          "BLEND_Roar_hi",
+          "BLEND_Wet_hi",
+          "BLEND_tc_angry_01",
+          "BLEND_tc_crazy_01",
+          "BLEND_tc_drum_01",
+          "BLEND_tc_drum_02",
+          "BLEND_tc_drum_03",
+          "BLEND_tc_drum_04",
+          "BLEND_tc_drum_05",
+          "BLEND_tc_drum_06",
+          "BLEND_tc_goofy_01",
+          "BLEND_tc_grimace_01",
+          "BLEND_tc_grimace_02",
+          "BLEND_tc_grimace_03",
+          "BLEND_tc_grimace_05",
+          "BLEND_tc_meditate_01",
+          "BLEND_tc_meditate_02",
+          "BLEND_tc_meditate_03",
+          "BLEND_tc_oooh_01",
+          "BLEND_tc_oooh_02",
+          "BLEND_tc_relaxed_01",
+          "BLEND_tc_smile_01",
+          "BLEND_tc_smile_02",
+          "BLEND_tc_smile_03",
+          "BLEND_tc_smile_04",
+          "BLEND_tc_smile_05",
+          "BLEND_tc_smile_06",
+          "BLEND_tc_smile_07",
+          "BLEND_tc_smile_08",
+          "BLEND_tc_smile_09",
+          "BLEND_tc_smile_10",
+          "BLEND_tc_smile_11",
+          "BLEND_tc_smile_12",
+          "BLEND_tc_smile_13",
+          "BLEND_tc_smile_14",
+          "BLEND_tc_smile_15",
+          "BLEND_tc_smile_16",
+          "BLEND_tc_sneer_01",
+          "BLEND_tc_wry_01"
+        ]
+      },
+      {
+        "property": "face_clip_b_trecool",
+        "property_short": "face_clip_b",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_tc_smile_06",
+          "ADD_tc_wry_01",
+          "BLEND_Earth_hi",
+          "BLEND_Eat_hi",
+          "BLEND_Ox_hi",
+          "BLEND_Roar_hi",
+          "BLEND_Told_lo",
+          "BLEND_Wet_lo",
+          "BLEND_tc_angry_01",
+          "BLEND_tc_crazy_01",
+          "BLEND_tc_drum_01",
+          "BLEND_tc_drum_02",
+          "BLEND_tc_drum_03",
+          "BLEND_tc_drum_04",
+          "BLEND_tc_drum_05",
+          "BLEND_tc_drum_06",
+          "BLEND_tc_goofy_01",
+          "BLEND_tc_grimace_01",
+          "BLEND_tc_grimace_02",
+          "BLEND_tc_grimace_03",
+          "BLEND_tc_grimace_05",
+          "BLEND_tc_meditate_01",
+          "BLEND_tc_meditate_02",
+          "BLEND_tc_meditate_03",
+          "BLEND_tc_oooh_01",
+          "BLEND_tc_oooh_02",
+          "BLEND_tc_relaxed_01",
+          "BLEND_tc_smile_01",
+          "BLEND_tc_smile_02",
+          "BLEND_tc_smile_03",
+          "BLEND_tc_smile_04",
+          "BLEND_tc_smile_05",
+          "BLEND_tc_smile_06",
+          "BLEND_tc_smile_07",
+          "BLEND_tc_smile_08",
+          "BLEND_tc_smile_09",
+          "BLEND_tc_smile_10",
+          "BLEND_tc_smile_11",
+          "BLEND_tc_smile_13",
+          "BLEND_tc_smile_14",
+          "BLEND_tc_smile_15",
+          "BLEND_tc_smile_16",
+          "BLEND_tc_sneer_01",
+          "BLEND_tc_wry_01"
+        ]
+      },
+      {
+        "property": "face_clip_balance_trecool",
+        "property_short": "face_clip_balance",
+        "interpolation": 4,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "face_weight_trecool",
+        "property_short": "face_weight",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "hist_clip_trecool",
+        "property_short": "hist_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": []
+      },
+      {
+        "property": "lid_clip_trecool",
+        "property_short": "lid_clip",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_Brow_pouty",
+          "ADD_Wide_eyed",
+          "ADD_tc_eyes_open_01"
+        ]
+      },
+      {
+        "property": "lid_clip_b_trecool",
+        "property_short": "lid_clip_b",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "ADD_tc_eyes_closed_01"
+        ]
+      },
+      {
+        "property": "lid_clip_balance_trecool",
+        "property_short": "lid_clip_balance",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "lid_weight_trecool",
+        "property_short": "lid_weight",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "lookat_trecool",
+        "property_short": "lookat",
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "procedural_blink_trecool_enabled",
+        "property_short": "procedural_blink_enabled",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "vox_clone_trecool_enabled",
+        "property_short": "vox_clone_enabled",
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      }
+    ]
+  },
+  {
+    "id": "venue",
+    "values": [
+      {
+        "property": "configuration",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 6,
+        "type": "symbol",
+        "values": [
+          "kWaypointConfigLegacy",
+          "kWaypointConfigMocap",
+          "kWaypointConfigMocap_BJBack",
+          "kWaypointConfigMocap_BJCat",
+          "kWaypointConfigMocap_BJCatFront",
+          "kWaypointConfigMocap_BJGenLeftRamp",
+          "kWaypointConfigMocap_BJOuterRamp",
+          "kWaypointConfigMocap_BJRamp",
+          "kWaypointConfigMocap_BJRamp_MDRamp",
+          "kWaypointConfigMocap_MDRamp"
+        ]
+      },
+      {
+        "property": "crash_ignore_triggers",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "crowd_anim_override",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "airpunch",
+          "bad",
+          "carry_surfer",
+          "clap_double",
+          "clap_single",
+          "combo_excited",
+          "crowd_reaching",
+          "fistpump_long",
+          "fistpump_short",
+          "great",
+          "great_realtime",
+          "horns",
+          "lighters",
+          "mosh",
+          "ok",
+          "ok_realtime",
+          "pogo",
+          "realtime_idle",
+          "wave_one_hand",
+          "wave_one_hand_JoS",
+          "wave_one_hand_beatmatch",
+          "wave_two_hands",
+          "wave_two_hands_beatmatch",
+          "win"
+        ]
+      },
+      {
+        "property": "crowd_extras_command",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "stagediver_left_anim1_START",
+          "stagediver_left_anim1_STOP",
+          "stagediver_left_anim2_START",
+          "stagediver_left_anim2_STOP",
+          "stagediver_left_anim3_STOP",
+          "stagediver_left_anim4_START",
+          "stagediver_left_anim4_STOP",
+          "stagediver_left_anim5_START",
+          "stagediver_left_anim5_STOP",
+          "stagediver_left_anim6_START",
+          "stagediver_left_anim6_STOP",
+          "stagediver_left_anim7_START",
+          "stagediver_left_anim7_STOP",
+          "stagediver_right_anim1_START",
+          "stagediver_right_anim1_STOP",
+          "stagediver_right_anim2_START",
+          "stagediver_right_anim2_STOP",
+          "stagediver_right_anim3_START",
+          "stagediver_right_anim3_STOP",
+          "stagediver_right_anim7_START",
+          "stagediver_right_anim7_STOP",
+          "surfer_START",
+          "surfer_STOP",
+          "surfer_left_START",
+          "surfer_left_STOP",
+          "surfer_right_START",
+          "surfer_right_STOP"
+        ]
+      },
+      {
+        "property": "crowd_preset",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": []
+      },
+      {
+        "property": "floortom_ignore_triggers",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "hihat_clip",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "hit_closed",
+          "hit_open"
+        ]
+      },
+      {
+        "property": "hihat_ignore_triggers",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "jumbotron_post_proc",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": []
+      },
+      {
+        "property": "jumbotron_shot",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": []
+      },
+      {
+        "property": "kick_ignore_triggers",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "left_crash_clip",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "cymbal_grab_01",
+          "norm",
+          "side_fast",
+          "tap"
+        ]
+      },
+      {
+        "property": "left_crash_ignore_triggers",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "left_crash_weight",
+        "property_short": null,
+        "interpolation": 1,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "float",
+        "values": []
+      },
+      {
+        "property": "left_floortom_ignore_triggers",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "left_foot_ignore_triggers",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "left_tom_ignore_triggers",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "lighting_preset",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": []
+      },
+      {
+        "property": "lighting_preset_modifier",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "Back_Spot_Override_Flash_Green.pst_START",
+          "Back_Spot_Override_Flash_Green.pst_STOP",
+          "Back_Spot_Override_Flash_Red.pst_START",
+          "Back_Spot_Override_Flash_Red.pst_STOP",
+          "Back_Spot_Override_Flash_Yellow.pst_START",
+          "Back_Spot_Override_Flash_Yellow.pst_STOP",
+          "Back_Spot_Override_Pan_01.pst_START",
+          "Back_Spot_Override_Pan_01.pst_STOP",
+          "Back_Spot_Override_Pan_02.pst_START",
+          "Back_Spot_Override_Pan_02.pst_STOP",
+          "Back_Spot_Override_Pan_03.pst_START",
+          "Back_Spot_Override_Pan_03.pst_STOP",
+          "Back_Spot_Override_Pan_03_Slow.pst_START",
+          "Back_Spot_Override_Pan_03_Slow.pst_STOP",
+          "Back_Spot_Override_Radius_01.pst_START",
+          "Back_Spot_Override_Radius_01.pst_STOP",
+          "Back_Spot_Override_Radius_02.pst_START",
+          "Back_Spot_Override_Radius_02.pst_STOP",
+          "Front_Top_Middle_Override_01.pst_START",
+          "Front_Top_Middle_Override_01.pst_STOP",
+          "Front_Top_Middle_Override_02.pst_START",
+          "Front_Top_Middle_Override_02.pst_STOP",
+          "Front_Top_Middle_Override_03.pst_START",
+          "Front_Top_Middle_Override_03.pst_STOP",
+          "OVERRIDE_ Color_toWhite_Motion_01.pst_START",
+          "OVERRIDE_ Color_toWhite_Motion_01.pst_STOP",
+          "OVERRIDE_Kicker_Sweepin_01.pst_START",
+          "OVERRIDE_Kicker_Sweepin_01.pst_STOP",
+          "OVERRIDE_Kicker_Sweepin_02.pst_START",
+          "OVERRIDE_Kicker_Sweepin_02.pst_STOP",
+          "OVERRIDE_Strobe_Flicker_(1fpb).pst_START",
+          "OVERRIDE_Strobe_Flicker_(1fpb).pst_STOP",
+          "OVERRIDE_Strobe_Flicker_(2fpb).pst_START",
+          "OVERRIDE_Strobe_Flicker_(2fpb).pst_STOP",
+          "RapidSpot_Green_[4fpb].pst_START",
+          "RapidSpot_Green_[4fpb].pst_STOP",
+          "START_Back_Spot_Override_Flash_01.pst",
+          "START_Back_Spot_Override_Pan_01.pst",
+          "START_Burst_Flash.pst",
+          "START_Front_Top_Middle_Override_01.pst",
+          "START_Front_Top_Middle_Override_02.pst",
+          "START_Stage_Back_Spotlights.pst",
+          "STOP_Back_Spot_Override_Flash_01.pst",
+          "STOP_Back_Spot_Override_Pan_01.pst",
+          "STOP_Burst_Flash.pst",
+          "STOP_Front_Top_Middle_Override_01.pst",
+          "STOP_Front_Top_Middle_Override_02.pst",
+          "STOP_Stage_Back_Spotlights.pst",
+          "Strobe_Stage_(8fpb).pst_START",
+          "Strobe_Stage_(8fpb).pst_STOP",
+          "Warm_Red_Magenta_Strobe_[4fpb].pst_START",
+          "Warm_Red_Magenta_Strobe_[4fpb].pst_STOP"
+        ]
+      },
+      {
+        "property": "mic_stand_visibility",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "hide_bj_detachable_mic",
+          "hide_bj_mic_stand",
+          "hide_runway_mic_stand",
+          "show_bj_detachable_mic",
+          "show_bj_mic_stand",
+          "show_tc_mic_stand"
+        ]
+      },
+      {
+        "property": "postproc",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": "postproc_interp",
+        "unknown_enum": 5,
+        "type": "object",
+        "values": []
+      },
+      {
+        "property": "postproc_blending_enabled",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "ride_clip",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "tap"
+        ]
+      },
+      {
+        "property": "ride_ignore_triggers",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "right_crash_clip",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "big",
+          "cymbal_grab_01",
+          "norm",
+          "tap"
+        ]
+      },
+      {
+        "property": "right_crash_ignore_triggers",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "right_tom_ignore_triggers",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "shot",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": [
+          "BalconyCvFrontC.shot",
+          "Mocap_BJLeftRampRunPoints_Cam1.shot",
+          "Mocap_MDRightRampPlaying_Cam1.shot"
+        ]
+      },
+      {
+        "property": "snare_ignore_triggers",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "bool",
+        "values": []
+      },
+      {
+        "property": "trigger_group",
+        "property_short": null,
+        "interpolation": 0,
+        "interp_handler": null,
+        "unknown_enum": 0,
+        "type": "symbol",
+        "values": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,1169 @@
+{
+  "songs": [
+    {
+      "id": "goodriddance",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_goodriddance"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": []
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_goodriddance"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2000lightyears",
+      "values": []
+    },
+    {
+      "id": "21guns",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_21guns"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_21guns"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_21guns"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "21stcenturybreakdown",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_21stcenturybreakdown"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_21stcenturybreakdown"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_21stcenturybreakdown"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "allbymyself",
+      "values": []
+    },
+    {
+      "id": "americaneulogy",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_americaneulogy"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_americaneulogy"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_americaneulogy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "americanidiot",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_americanidiot",
+            "song_americanidiot_ramp"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_americanidiot",
+            "song_americanidiot_ramp"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_americanidiot"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "arewethewaitingstjimmy",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_arewethewaitingstjimmy"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_arewethewaitingstjimmy"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_arewethewaitingstjimmy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "basketcase",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_basketcase"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_basketcase"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_basketcase"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "boulevardof",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_boulevard_ramp_ending_solo",
+            "song_boulevardof"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_boulevardof"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_boulevardof"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "brainstewjaded",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_brainstewjaded"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_brainstewjaded"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_brainstewjaded"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "burnout",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_burnout"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_burnout"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_burnout"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "christiansinferno",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_christiansinferno"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_christiansinferno"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_christiansinferno"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chump",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_chump"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_chump"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_chump"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "comingclean",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_comingclean"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_comingclean"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_comingclean"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eastjesusnowhere",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_eastjesusnowhere"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_eastjesusnowhere"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_eastjesusnowhere"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emeniussleepus",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_emeniussleepus"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_emeniussleepus"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_emeniussleepus"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "extraordinarygirl",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_extraordinarygirl"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_extraordinarygirl"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_extraordinarygirl"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fod",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_fod"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_fod"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_fod"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "geekstink",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_geekstink"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_geekstink"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_geekstink"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "goingtopasalaqua",
+      "values": []
+    },
+    {
+      "id": "havingablast",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_havingablast"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_havingablast"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_havingablast"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hitchinaride",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_hitchinaride"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_hitchinaride"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_hitchinaride"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "holiday",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_holiday"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_holiday"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_holiday"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homecoming",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_homecoming"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_homecoming"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_homecoming"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "horseshoes",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_horseshoes"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_horseshoes"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_horseshoes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "intheend",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_intheend"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_intheend"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_intheend"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jesusofsuburbia",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_jesusofsuburbia"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_jesusofsuburbia"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_jesusofsuburbia"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "knowyourenemy",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_knowyourenemy"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_knowyourenemy"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_knowyourenemy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lastnightonearth",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_lastnightonearth"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_lastnightonearth"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_lastnightonearth"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lastoftheamerican",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_lastoftheamerican"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_lastoftheamerican"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_lastoftheamerican"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "letterbomb",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_letterbomb"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_letterbomb"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_letterbomb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "littlegirl",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_littlegirl"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_littlegirl"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_littlegirl"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lobotomy",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_lobotomy"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_lobotomy"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_lobotomy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "longview",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_longview"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_longview"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_longview"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minority",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_minority"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_minority"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_minority"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "murdercity",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_murdercity"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_murdercity"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_murdercity"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "niceguys",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_niceguys"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_niceguys"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_niceguys"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "novacaineshesarebel",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_novacaineshesarebel"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_novacaineshesarebel"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_novacaineshesarebel"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "peacemaker",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_peacemaker"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_peacemaker"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_peacemaker"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pullingteeth",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_pullingteeth"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_pullingteeth"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_pullingteeth"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "restlessheart",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_restlessheart"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_restlessheart"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_restlessheart"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sassafrasroots",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_sassafrasroots"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_sassafrasroots"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_sassafrasroots"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "seethelight",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_seethelight"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_seethelight"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_seethelight"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "she",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_she"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_she"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_she"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "songofthecentury",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_songofthecentury"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_songofthecentury"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_songofthecentury"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thestaticage",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_thestaticage"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_thestaticage"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_thestaticage"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vivalagloria",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_vivialagloria"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_vivalagloria"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_vivalagloria"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wakemeup",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_wakemeup",
+            "song_wakemeup_cat_solo"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_wakemeup"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_wakemeup"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "warning",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_warning"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_warning"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_warning"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "welcometoparadise",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_welcometoparadise"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_welcometoparadise"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_welcometoparadise"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "whatsername",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_whatsername",
+            "song_whatsername_cat"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_whatsername"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_whatsername"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "whenicomearound",
+      "values": [
+        {
+          "id": "billiejoe",
+          "values": [
+            "song_whenicomearound"
+          ]
+        },
+        {
+          "id": "mikedirnt",
+          "values": [
+            "song_whenicomearound"
+          ]
+        },
+        {
+          "id": "trecool",
+          "values": [
+            "song_whenicomearound"
+          ]
+        }
+      ]
+    }
+  ]
+}
